@@ -15,12 +15,12 @@ $fa-font-path:        "../webfonts";
 @import '~@fortawesome/fontawesome-free/scss/regular.scss';
 
 .router-link-exact-active{
-	background-color: white;
-	color: black;
+	background-color: #aa49ca;
+	color: white;
 }
 
 .router-link-exact-active:hover{
-	background-color: white;
-	color: black;
+	background-color: #aa49ca !important;
+	color: white;
 	opacity: 0.7;
 }

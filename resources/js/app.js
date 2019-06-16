@@ -29,7 +29,9 @@ Vue.use(VueRouter)
  */
 let routes = [
   { path: '/dashboard', component: require('./components/Dashboard.vue').default },
-  { path: '/profile', component: require('./components/Profile.vue').default }
+  { path: '/profile', component: require('./components/Profile.vue').default },
+  { path: '/paket-tour', component: require('./components/PaketTour.vue').default },
+  { path: '/booking-list', component: require('./components/BookingList/BookingList.vue').default }
 ]
 
 const router = new VueRouter({

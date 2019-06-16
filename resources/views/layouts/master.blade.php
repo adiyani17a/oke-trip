@@ -44,15 +44,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
       </div>
     </form>
-
-    <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto">
-      <!-- Messages Dropdown Menu -->
-      <li class="nav-item">
-        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"><i
-            class="fas fa-th-large"></i></a>
-      </li>
-    </ul>
   </nav>
   <!-- /.navbar -->
 
@@ -82,7 +73,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item has-treeview menu-open">
+          <li class="nav-item">
+            <a href="{{ url('/') }}" class="nav-link ">
+              <i class="nav-icon fas fa-home"></i>
+              <p>Paket Tour</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <router-link to="/booking-list" class="nav-link ">
+              <i class="nav-icon fas fa-list"></i>
+              <p>Booking List</p>
+            </router-link>
+          </li>
+          <li class="nav-item has-treeview">
             <a class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
@@ -168,5 +171,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <!-- jQuery -->
 <script src="/js/app.js"></script>
+
+<script type="text/javascript">
+  
+</script>
 </body>
 </html>
