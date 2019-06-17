@@ -211,7 +211,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><router-link to="/home">Home</router-link></li>
               <li class="breadcrumb-item active" id="crumb"></li>
-            </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->

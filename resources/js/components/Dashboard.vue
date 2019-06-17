@@ -4,7 +4,6 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">Home Component</div>
-
                     <div class="card-body">
                         I'm an example component.
                     </div>
@@ -17,9 +16,7 @@
 <script>
     export default {
         mounted() {
-            let breadcrumb = '';
-            console.log(breadcrumb);
-            $('#crumb').html(breadcrumb);
+           
         }
     }
 </script>

@@ -19,9 +19,10 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.compoent(key.split('/').pop().split('.')[0], files(key).default));
 import VueRouter from 'vue-router'
+import BootstrapVue from 'bootstrap-vue'
 
 Vue.use(VueRouter)
-
+Vue.use(BootstrapVue)
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -64,10 +65,15 @@ const router = new VueRouter({
   routes // short for `routes: routes`
 })
 
-
+Vue.prototype.$globals = 'tes';
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('datatable-component', require('./components/Datatable.vue').default);
 
-const app = new Vue({
+let app = new Vue({
     el: '#app',
     router,
+    data:{
+      checkChild:true,
+      checkParent:false,
+    }
 });

@@ -18,4 +18,13 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('{path}', 'HomeController@index')->where('path','([A-z\d-\/_.]+)');
+Route::get('{path}', 'HomeController@index')->where('all', '^(?!api).*$');
+
+Route::group(["prefix" => "api"], function(){
+    Route::get('/destination/datatable', [
+      'uses' => "apiController@datatableDestination",
+      'as' => "datatableDestination"
+    ]);
+});
+
+// Route::get('/api/destination/datatable', 'apiController@datatableDestination');
