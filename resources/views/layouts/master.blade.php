@@ -10,8 +10,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>AdminLTE 3 | Starter</title>
+
+  <title>oke-trip.com | ADMIN</title>
   <link rel="stylesheet" href="/css/app.css">
+  <link rel="icon" href="dist/img/AdminLTELogo.png" type="image/gif" sizes="16x16">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
@@ -86,24 +88,106 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </router-link>
           </li>
           <li class="nav-item has-treeview">
-            <a class="nav-link active">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
+            <a class="nav-link active" >
+              <i class="nav-icon fab fa-product-hunt"></i>
               <p>
-                Starter
+                Product
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <router-link to="/dashboard" class="nav-link ">
+                <router-link to="/destination" class="nav-link ">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard</p>
+                  <p>Destination</p>
                 </router-link>
               </li>
               <li class="nav-item">
-                <router-link to ="/profile" class="nav-link">
+                <router-link to ="/additional" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Profile</p>
+                  <p>Additional</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to ="/itinerary" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Itinerary</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to ="/tour-leader" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Tour Leader</p>
+                </router-link>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <router-link to="/agent" class="nav-link ">
+              <i class="nav-icon fas fa-users"></i>
+              <p>Agent</p>
+            </router-link>
+          </li>
+          <li class="nav-item has-treeview">
+            <a class="nav-link active" >
+              <i class="nav-icon fas fa-chart-line"></i>
+              <p>
+                Finance
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <router-link to="/income-report" class="nav-link ">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Income Report</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to ="/income-statement" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Income Statement</p>
+                </router-link>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a class="nav-link active" >
+              <i class="nav-icon fas fa-chart-pie"></i>
+              <p>
+                Report
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <router-link to="/customer-statistic" class="nav-link ">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Customer Statistic</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to ="/sales-statistic" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>sales statistics</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to ="/customer-report" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Customer Report</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to ="/sales-report" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Sales Report</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to ="/payment-report" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Payment Report</p>
                 </router-link>
               </li>
             </ul>
@@ -114,7 +198,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </div>
     <!-- /.sidebar -->
   </aside>
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -126,8 +209,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Starter Page</li>
+              <li class="breadcrumb-item"><router-link to="/home">Home</router-link></li>
+              <li class="breadcrumb-item active" id="crumb"></li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -171,9 +254,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <!-- jQuery -->
 <script src="/js/app.js"></script>
-
 <script type="text/javascript">
-  
+
 </script>
 </body>
 </html>

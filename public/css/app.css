@@ -29600,13 +29600,25 @@ readers do not read off random characters that represent icons */
 }
 
 .router-link-exact-active {
-  background-color: #aa49ca;
-  color: white;
+  background-color: #fff;
+  color: black !important;
 }
 
 .router-link-exact-active:hover {
-  background-color: #aa49ca !important;
-  color: white;
+  background-color: #fff !important;
+  color: black !important;
   opacity: 0.7;
+}
+
+.nav-link {
+  cursor: pointer;
+}
+
+.pull-right {
+  float: right;
+}
+
+.pull-left {
+  float: left;
 }
 

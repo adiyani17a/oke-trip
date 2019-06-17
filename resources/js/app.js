@@ -17,7 +17,7 @@ window.Vue = require('vue');
  */
 
 // const files = require.context('./', true, /\.vue$/i);
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
+// files.keys().map(key => Vue.compoent(key.split('/').pop().split('.')[0], files(key).default));
 import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
@@ -28,10 +28,35 @@ Vue.use(VueRouter)
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 let routes = [
-  { path: '/dashboard', component: require('./components/Dashboard.vue').default },
-  { path: '/profile', component: require('./components/Profile.vue').default },
-  { path: '/paket-tour', component: require('./components/PaketTour.vue').default },
-  { path: '/booking-list', component: require('./components/BookingList/BookingList.vue').default }
+  { path: '/home', component: require('./components/Dashboard.vue').default },
+  { path: '/paket-tour', component: require('./components/paketTour.vue').default },
+  { path: '/booking-list',
+    meta: {
+        breadcrumb: 'Booking List',
+      },
+    component: require('./components/BookingList/bookingList.vue').default },
+  { path: '/destination',
+    name:'Destination',
+    meta: {
+        breadcrumb: 'Destination',
+      },
+    component: require('./components/Destination/destination.vue').default },
+  { path: '/additional',
+    name:'Additional',
+    meta: {
+        breadcrumb: 'additional',
+      },
+    component: require('./components/Additional/additional.vue').default },
+  { path: '/itinerary', component: require('./components/Itinerary/Itinerary.vue').default },
+  { path: '/tour-leader', component: require('./components/TourLeader/tourLeader.vue').default },
+  { path: '/agent', component: require('./components/Agent/Agent.vue').default },
+  { path: '/income-report', component: require('./components/Finance/incomeReport.vue').default },
+  { path: '/income-statement', component: require('./components/Finance/incomeStatement.vue').default },
+  { path: '/customer-statistic', component: require('./components/Report/customerStatistic.vue').default },
+  { path: '/sales-statistic', component: require('./components/Report/salesStatistic.vue').default },
+  { path: '/customer-report', component: require('./components/Report/customerReport.vue').default },
+  { path: '/sales-report', component: require('./components/Report/salesReport.vue').default },
+  { path: '/payment-report', component: require('./components/Report/paymentReport.vue').default },
 ]
 
 const router = new VueRouter({

@@ -3,7 +3,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Booking List Component</div>
+                    <div class="card-header">Tour Leader Component</div>
 
                     <div class="card-body">
                         I'm an example component.
@@ -17,9 +17,7 @@
 <script>
     export default {
         mounted() {
-            let breadcrumb = '<router-link to="/booking-list">Booking List</router-link>';
-            console.log(breadcrumb);
-            $('#crumb').html(breadcrumb);
+            console.log('Component mounted.')
         }
     }
 </script>
