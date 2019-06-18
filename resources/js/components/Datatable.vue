@@ -1,43 +1,29 @@
 <template>
 	<div>
-		{{ firstName }}
+		<table class="table">
+			<thead >
+				<th v-for="(field, index) in this.fields">
+					<div v-html="field">
+						{{ field }}
+					</div>
+				</th>
+				<tr>
+			{{-- 		<td v-for="(item, index) in this.items">
+						
+					</td> --}}
+				</tr>
+			</thead>
+		</table>
 	</div>
 </template>
 <script type="text/javascript">
 	export default {
 	    data() {
-	        return {
-	            items: [{
-	                age: 40,
-	                first_name: 'Dickerson',
-	                last_name: 'Macdonald',
-	                last_name1: 'Macdonald',
-	                last_name2: 'Macdonald',
-	            }, {
-	                age: 21,
-	                first_name: 'Larsen',
-	                last_name: 'Macdonald',
-	                last_name1: 'Macdonald',
-	                last_name2: 'Macdonald',
-	            }, {
-	                age: 89,
-	                first_name: 'Geneva',
-	                last_name: 'Macdonald',
-	                last_name1: 'Macdonald',
-	                last_name2: 'Macdonald',
-	            }, {
-	                age: 38,
-	                first_name: 'Jami',
-	                last_name: 'Macdonald',
-	                last_name1: 'Macdonald',
-	                last_name2: 'Macdonald',
-	            }],
-	            FirstName:this.firstName
-	        }
+	    	console.log(items);
 	    },
 	    props: {
-            firstName: String,
-            lastName: String
+            fields: Array,
+            items: Object,
         },
 	}
 </script>

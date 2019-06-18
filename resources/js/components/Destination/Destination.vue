@@ -9,7 +9,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <datatable-component v-bind:firstName="coba"></datatable-component>
+                            <datatable-component v-bind:fields="field" v-bind:items="item"></datatable-component>
                         </div>
                     </div>
                 </div>
@@ -22,9 +22,9 @@
         mounted() {
             let breadcrumb = '<router-link to="/destination">Destination</router-link>';
             $('#crumb').html(breadcrumb);
-            axios.get('/api/destination/datatable?page=2')
+            axios.get('/api/destination/datatable?page=1')
             .then(response => {
-                this.posts = response.data
+                this.item = response.data
             })
             .catch(e => {
                 this.errors.push(e)
@@ -33,7 +33,8 @@
         data() {
             return {
                 namaFitur: this.$route.name,
-                coba: 'Coba',
+                field: ['<input type="checkbox">','tes1','tes2'],
+                item:Array
             }
         },
     }

@@ -1852,40 +1852,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {
-      items: [{
-        age: 40,
-        first_name: 'Dickerson',
-        last_name: 'Macdonald',
-        last_name1: 'Macdonald',
-        last_name2: 'Macdonald'
-      }, {
-        age: 21,
-        first_name: 'Larsen',
-        last_name: 'Macdonald',
-        last_name1: 'Macdonald',
-        last_name2: 'Macdonald'
-      }, {
-        age: 89,
-        first_name: 'Geneva',
-        last_name: 'Macdonald',
-        last_name1: 'Macdonald',
-        last_name2: 'Macdonald'
-      }, {
-        age: 38,
-        first_name: 'Jami',
-        last_name: 'Macdonald',
-        last_name1: 'Macdonald',
-        last_name2: 'Macdonald'
-      }],
-      FirstName: this.firstName
-    };
+    console.log(items);
   },
   props: {
-    firstName: String,
-    lastName: String
+    fields: Array,
+    items: Object
   }
 });
 
@@ -1925,8 +1911,8 @@ __webpack_require__.r(__webpack_exports__);
 
     var breadcrumb = '<router-link to="/destination">Destination</router-link>';
     $('#crumb').html(breadcrumb);
-    axios.get('/api/destination/datatable?page=2').then(function (response) {
-      _this.posts = response.data;
+    axios.get('/api/destination/datatable?page=1').then(function (response) {
+      _this.item = response.data;
     })["catch"](function (e) {
       _this.errors.push(e);
     });
@@ -1934,7 +1920,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       namaFitur: this.$route.name,
-      coba: 'Coba'
+      field: ['<input type="checkbox">', 'tes1', 'tes2'],
+      item: Array
     };
   }
 }); // new Vue({
@@ -66522,7 +66509,35 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("\n\t" + _vm._s(_vm.firstName) + "\n")])
+  return _c("div", [
+    _c("table", { staticClass: "table" }, [
+      _c(
+        "thead",
+        [
+          _vm._l(this.fields, function(field, index) {
+            return _c("th", [
+              _c("div", { domProps: { innerHTML: _vm._s(field) } }, [
+                _vm._v("\n\t\t\t\t\t" + _vm._s(field) + "\n\t\t\t\t")
+              ])
+            ])
+          }),
+          _vm._v(" "),
+          _c(
+            "tr",
+            [
+              _vm._v("\n\t\t{{-- \t\t"),
+              _vm._l(this.items, function(item, index) {
+                return _c("td")
+              }),
+              _vm._v(" --}}\n\t\t\t")
+            ],
+            2
+          )
+        ],
+        2
+      )
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -66565,7 +66580,11 @@ var render = function() {
               _c(
                 "div",
                 { staticClass: "table-responsive" },
-                [_c("datatable-component", { attrs: { firstName: _vm.coba } })],
+                [
+                  _c("datatable-component", {
+                    attrs: { fields: _vm.field, items: _vm.item }
+                  })
+                ],
                 1
               )
             ])
@@ -82503,15 +82522,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!******************************************************!*\
   !*** ./resources/js/components/ExampleComponent.vue ***!
   \******************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ExampleComponent_vue_vue_type_template_id_299e239e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ExampleComponent.vue?vue&type=template&id=299e239e& */ "./resources/js/components/ExampleComponent.vue?vue&type=template&id=299e239e&");
 /* harmony import */ var _ExampleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ExampleComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _ExampleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _ExampleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -82541,7 +82559,7 @@ component.options.__file = "resources/js/components/ExampleComponent.vue"
 /*!*******************************************************************************!*\
   !*** ./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js& ***!
   \*******************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
