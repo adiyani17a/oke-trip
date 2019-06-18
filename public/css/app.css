@@ -30720,3 +30720,15 @@ input[type=color].form-control:disabled {
   float: left;
 }
 
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
+.left {
+  text-align: left;
+}
+

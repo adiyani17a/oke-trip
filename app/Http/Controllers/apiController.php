@@ -16,8 +16,12 @@ class apiController extends Controller
 
     public function datatableDestination(Request $req)
     {	
-    	$data =  $this->model->destination()->paginate(10);
+    	$data =  $this->model->destination()
+    				  ->select('id','name','slug')->paginate(10);
     	
+    	foreach ($data as $i => $d) {
+    		$data[$i]->checkbox = '<input type="checkbox">';
+    	}
     	return Response::json($data);
     }
 }

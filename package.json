@@ -22,11 +22,14 @@
     "sass": "^1.15.2",
     "sass-loader": "^7.1.0",
     "vue": "^2.6.10",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.10",
+    "vuetable-2": "^1.7.5"
   },
   "dependencies": {
+    "accounting": "^0.4.1",
     "admin-lte": "^3.0.0-alpha.2",
     "bootstrap-vue": "^2.0.0-rc.23",
+    "moment": "^2.24.0",
     "vue-router": "^3.0.6"
   }
 }
