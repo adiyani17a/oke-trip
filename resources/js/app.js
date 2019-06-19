@@ -67,6 +67,7 @@ const router = new VueRouter({
 Vue.prototype.$globals = 'tes';
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('datatable-component', require('./components/Datatable.vue').default);
+Vue.component('filter-bar-component', require('./components/FilterBar.vue').default);
 
 let app = new Vue({
     el: '#app',

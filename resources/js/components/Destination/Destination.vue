@@ -9,6 +9,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
+                            <filter-bar-component @keyupSearchinBox="onClickChild"></filter-bar-component>
                             <datatable-component :fields="fields"
                                                  :dataItems="dataItems"
                                                  :api="api"  
@@ -54,6 +55,11 @@
                 }, ],
                 dataItems: null,
                 api: '/api/destination/datatable?page=1'
+            }
+        },
+        methods:{
+            onClickChild(value){
+                console.log(value);
             }
         }
     }

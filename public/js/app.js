@@ -2268,7 +2268,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var accounting__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(accounting__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _FilterBar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./FilterBar */ "./resources/js/components/FilterBar.vue");
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
@@ -2290,8 +2289,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-
 
 
 
@@ -2301,7 +2298,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   components: {
     Vuetable: vuetable_2_src_components_Vuetable__WEBPACK_IMPORTED_MODULE_0__["default"],
     VuetablePaginationInfo: vuetable_2_src_components_VuetablePaginationInfo__WEBPACK_IMPORTED_MODULE_2__["default"],
-    FilterBar: _FilterBar__WEBPACK_IMPORTED_MODULE_5__["default"],
     VuetablePagination: vuetable_2_src_components_VuetablePagination__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
@@ -2404,6 +2400,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function () {
     var _mounted = _asyncToGenerator(
@@ -2460,12 +2457,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       dataItems: null,
       api: '/api/destination/datatable?page=1'
     };
-  }
-}); // new Vue({
-//   beforeCreate: function() {
-//     console.log(this.$appName)
-//   }
-// })
+  },
+  methods: {
+    onClickChild: function onClickChild(value) {
+      console.log(value);
+    }
+  } // new Vue({
+  //   beforeCreate: function() {
+  //     console.log(this.$appName)
+  //   }
+  // })
+
+});
 
 /***/ }),
 
@@ -2535,23 +2538,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      filterText: ''
+      paramSearchBox: ''
     };
   },
+  props: {
+    placeholder: String
+  },
   methods: {
-    doFilter: function doFilter() {
-      console.log('doFilter:', this.filterText);
-    },
-    resetFilter: function resetFilter() {
-      this.filterText = '';
-      console.log('resetFilter');
+    searchBox: function searchBox() {
+      this.$emit('keyupSearchinBox', this.paramSearchBox);
     }
   }
 });
@@ -88858,8 +88856,6 @@ var render = function() {
         "div",
         { staticClass: "ui container" },
         [
-          _c("filter-bar"),
-          _vm._v(" "),
           _c("vuetable", {
             ref: "vuetable",
             attrs: {
@@ -88936,6 +88932,10 @@ var render = function() {
                 "div",
                 { staticClass: "table-responsive" },
                 [
+                  _c("filter-bar-component", {
+                    on: { keyupSearchinBox: _vm.onClickChild }
+                  }),
+                  _vm._v(" "),
                   _c("datatable-component", {
                     attrs: {
                       fields: _vm.fields,
@@ -89033,56 +89033,39 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "filter-bar ui basic segment grid" }, [
-    _c("div", { staticClass: "ui form" }, [
-      _c("div", { staticClass: "inline field" }, [
-        _c("label", [_vm._v("Search for:")]),
-        _vm._v(" "),
+  return _c("div", { staticClass: "col-md-12" }, [
+    _c(
+      "div",
+      {
+        staticStyle: { width: "40%", float: "right", "margin-bottom": "20px" }
+      },
+      [
+        _vm._v("\n\t\tSearch \n\t\t"),
         _c("input", {
           directives: [
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.filterText,
-              expression: "filterText"
+              value: _vm.paramSearchBox,
+              expression: "paramSearchBox"
             }
           ],
-          staticClass: "three wide column form-control-navbar",
-          staticStyle: { display: "inline-block", width: "200px" },
-          attrs: { type: "text", placeholder: "name, nickname, or email" },
-          domProps: { value: _vm.filterText },
+          staticClass: "form-control",
+          staticStyle: { width: "86%", display: "inline-block" },
+          attrs: { type: "text", placeholder: _vm.placeholder },
+          domProps: { value: _vm.paramSearchBox },
           on: {
-            keyup: function($event) {
-              if (
-                !$event.type.indexOf("key") &&
-                _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
-              ) {
-                return null
-              }
-              return _vm.doFilter($event)
-            },
+            keyup: _vm.searchBox,
             input: function($event) {
               if ($event.target.composing) {
                 return
               }
-              _vm.filterText = $event.target.value
+              _vm.paramSearchBox = $event.target.value
             }
           }
-        }),
-        _vm._v(" "),
-        _c(
-          "button",
-          { staticClass: "btn btn-primary", on: { click: _vm.doFilter } },
-          [_vm._v("Go")]
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          { staticClass: "ui button", on: { click: _vm.resetFilter } },
-          [_vm._v("Reset")]
-        )
-      ])
-    ])
+        })
+      ]
+    )
   ])
 }
 var staticRenderFns = []
@@ -106448,6 +106431,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
 Vue.prototype.$globals = 'tes';
 Vue.component('example-component', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue")["default"]);
 Vue.component('datatable-component', __webpack_require__(/*! ./components/Datatable.vue */ "./resources/js/components/Datatable.vue")["default"]);
+Vue.component('filter-bar-component', __webpack_require__(/*! ./components/FilterBar.vue */ "./resources/js/components/FilterBar.vue")["default"]);
 var app = new Vue({
   el: '#app',
   router: router,

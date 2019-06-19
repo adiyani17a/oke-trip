@@ -1,6 +1,5 @@
 <template>
 	<div v-if="this.api !== null" class="ui container">
-		<filter-bar></filter-bar>
 		<vuetable ref="vuetable"
 			:api-url="api"
 			:fields="fields"
@@ -24,12 +23,10 @@ import VuetablePagination from 'vuetable-2/src/components/VuetablePagination'
 import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo'
 import accounting from 'accounting'
 import moment from 'moment'
-import FilterBar from './FilterBar'
 	export default {
 	    components: {
 	        Vuetable,
 	        VuetablePaginationInfo,
-	        FilterBar,
 	        VuetablePagination
 	    },
 	    data() {
