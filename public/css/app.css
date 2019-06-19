@@ -30732,3 +30732,7 @@ input[type=color].form-control:disabled {
   text-align: left;
 }
 
+.index-checkbox {
+  width: 10px;
+}
+

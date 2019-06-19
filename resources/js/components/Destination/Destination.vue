@@ -4,13 +4,15 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <span style="margin-top: 10px;">{{ namaFitur }}</span>
+                        <h5 style="margin-top: 10px;display: inline-block;"><b>{{ namaFitur }}</b></h5>
                         <button class="btn btn-primary pull-right">Create <i class="fas fa-plus"></i></button>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <datatable-component :fields="field"
-                                                 :dataItems="dataItem" >
+                            <datatable-component :fields="fields"
+                                                 :dataItems="dataItems"
+                                                 :api="api"  
+                                                 >
                             </datatable-component>
                         </div>
                     </div>
@@ -24,20 +26,34 @@
         async mounted() {
             let breadcrumb = '<router-link to="/destination">Destination</router-link>';
             $('#crumb').html(breadcrumb);
-            axios.get('/api/destination/datatable?page=1')
-            .then(response => {
-                this.dataItem = response.data;
-            })
-            .catch(e => {
-                this.errors.push(e)
-            })
-            console.log(this.dataItem);
         },
         data() {
             return {
                 namaFitur: this.$route.name,
-                field: ['<input type="checkbox">','tes1','tes2'],
-                dataItem: null
+                fields: [{
+                  name: '__checkbox',   // <----
+                  titleClass: 'center aligned parent-checker',
+                  dataClass: 'center aligned child-checker'
+                },{
+                    name: 'name',
+                    callback: 'allcap'
+                }, {
+                    name: 'slug',
+                }, {
+                    name: 'created_at',
+                    title: 'Date',
+                    titleClass: 'left aligned',
+                    dataClass: 'left aligned',
+                    sortField: 'created_at',
+                    callback: 'formatDate|DD-MM-YYYY'
+                }, {
+                    name: 'created_by',
+                    title: 'Created By',
+                    titleClass: 'left aligned',
+                    dataClass: 'left aligned',
+                }, ],
+                dataItems: null,
+                api: '/api/destination/datatable?page=1'
             }
         }
     }

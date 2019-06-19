@@ -1,65 +1,51 @@
 <template>
-	<div class="ui container">
+	<div v-if="this.api !== null" class="ui container">
+		<filter-bar></filter-bar>
 		<vuetable ref="vuetable"
-			api-url="https://vuetable.ratiw.net/api/users"
+			:api-url="api"
 			:fields="fields"
 			pagination-path="" 
+		    :css="css.table"
 			@vuetable:pagination-data="onPaginationData"
 		></vuetable>
-		<vuetable-pagination ref="pagination"
-							 @vuetable-pagination:change-page="onChangePage"
-							 :css="css.pagination">
-		</vuetable-pagination>
+		<div class="vuetable-pagination ui basic segment grid">
+			<vuetable-pagination-info ref="paginationInfo"></vuetable-pagination-info>
+			<vuetable-pagination ref="pagination"
+								 @vuetable-pagination:change-page="onChangePage"
+								 :css="css.pagination">
+			</vuetable-pagination>	
+		</div>
 	</div>
 </template>
 
 <script>
 import Vuetable from 'vuetable-2/src/components/Vuetable'
 import VuetablePagination from 'vuetable-2/src/components/VuetablePagination'
+import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo'
 import accounting from 'accounting'
 import moment from 'moment'
+import FilterBar from './FilterBar'
 	export default {
 	    components: {
 	        Vuetable,
+	        VuetablePaginationInfo,
+	        FilterBar,
 	        VuetablePagination
 	    },
 	    data() {
 	        return {
-	            fields: [
-	                //...
-	                {
-	                    name: 'nickname',
-	                    callback: 'allcap'
-	                }, {
-	                    name: 'salary',
-	                    titleClass: 'center aligned',
-	                    dataClass: 'right aligned',
-	                    callback: 'formatNumber'
-	                }, {
-	                    name: 'gender',
-	                    titleClass: 'center aligned',
-	                    dataClass: 'center aligned',
-	                    callback: 'genderLabel'
-	                }, {
-	                    name: 'birthdate',
-	                    titleClass: 'center aligned',
-	                    dataClass: 'center aligned',
-	                    callback: 'formatDate|DD-MM-YYYY'
-	                },
-	                //...
-	            ],
 	            css: {
 	                table: {
 	                    tableClass: 'table table-striped table-bordered table-hovered',
 	                    loadingClass: 'loading',
-	                    ascendingIcon: 'glyphicon glyphicon-chevron-up',
-	                    descendingIcon: 'glyphicon glyphicon-chevron-down',
-	                    handleIcon: 'glyphicon glyphicon-menu-hamburger',
+	                    ascendingIcon: 'fas fa-arrow-up',
+	                    descendingIcon: 'fas fa-arrow-down',
+	                    handleIcon: 'fas fa-arrow-down'
 	                },
 	                pagination: {
 	                    infoClass: 'pull-left',
 	                    wrapperClass: 'vuetable-pagination pull-right',
-	                    activeClass: 'btn-primary',
+	                    activeClass: 'btn-primary text-light',
 	                    disabledClass: 'disabled',
 	                    pageClass: 'btn btn-border',
 	                    linkClass: 'btn btn-border',
@@ -72,6 +58,11 @@ import moment from 'moment'
 	                }
 	            }
 	        }
+	    },
+	    props: {
+	        fields: Array,
+	        dataItems: Object,
+	        api: String,
 	    },
 	    methods: {
 	        allcap(value) {
@@ -95,7 +86,11 @@ import moment from 'moment'
 	        },
 	        onChangePage(page) {
 	            this.$refs.vuetable.changePage(page)
-	        }
+	        },
+	        onPaginationData(paginationData) {
+	            this.$refs.pagination.setPaginationData(paginationData)
+	            this.$refs.paginationInfo.setPaginationData(paginationData) // <----
+	        },
 	    }
 	}
 </script>
