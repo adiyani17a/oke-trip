@@ -59,7 +59,7 @@
         },
         methods:{
             onClickChild(value){
-                console.log(value);
+                this.api = '/api/destination/datatable?page=1'
             }
         }
     }
