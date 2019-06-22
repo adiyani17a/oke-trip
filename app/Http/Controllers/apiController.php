@@ -18,9 +18,6 @@ class apiController extends Controller
     {	
     	$data =  $this->model->destination()->paginate(10);
     	
-    	foreach ($data as $i => $d) {
-    		$data[$i]->checkbox = '<input type="checkbox">';
-    	}
     	return Response::json($data);
     }
 }

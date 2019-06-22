@@ -20,6 +20,9 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.compoent(key.split('/').pop().split('.')[0], files(key).default));
 import VueRouter from 'vue-router'
 import BootstrapVue from 'bootstrap-vue'
+import Vuetify from 'vuetify'
+
+Vue.use(Vuetify)
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
 /**
