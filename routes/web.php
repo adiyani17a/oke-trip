@@ -17,6 +17,14 @@ Route::get('/', function () {
 
 Auth::routes();
 Route::post('/api/generate-token', 'ApiTokenController@generateToken');
+Route::group(['middleware' => 'auth'], function () {
+	Route::get('api/get-token', [
+      'uses' => "ApiTokenController@getToken",
+      'as' => "logout"
+    ]);
+});
+
+
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('{path}', 'HomeController@index')->where('all', '^(?!api).*$');
 

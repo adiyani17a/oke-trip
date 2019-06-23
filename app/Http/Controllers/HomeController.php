@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\TokenManagement;
+use Auth;
 class HomeController extends Controller
 {
     /**
@@ -23,6 +24,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $user = Auth::user();
+        $token = TokenManagement::where('user_id',$user->id)->first()->access_token;
+        return view('home',compact('token'));
     }
 }

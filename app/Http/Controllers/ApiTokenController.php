@@ -6,9 +6,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Validator;
 use App\User;
+use Auth;
 use App\TokenManagement;
 class ApiTokenController extends Controller
 {
+    public function getToken()
+    {
+        $user = Auth::user();
+        $data = TokenManagement::where('user_id',$user->id)->first();
+        return response()->json($data);
+    }
+
     public function generateToken(Request $request){
     	//expect request : email + password.
     	//if fail will return json response

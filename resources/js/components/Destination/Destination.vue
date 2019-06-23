@@ -47,6 +47,7 @@
             console.log('Intialize Main Page...')
             let breadcrumb = '<router-link to="/destination">Destination</router-link>';
             $('#crumb').html(breadcrumb);
+            axios.defaults.headers.common['Authorization'] = 'Bearer ';
             this.callingApi()
         },
         data() {
@@ -78,10 +79,12 @@
                 this.select = selected;
             },
             callingApi(page,show){
-                console.log(page)
-                console.log(show)
                 if (show == undefined) {
                     show = 10;
+                }
+
+                if (page == undefined) {
+                    page = 1;
                 }
                 axios
                   .get('/api/destination/datatable?page='+page+'&showing='+show)

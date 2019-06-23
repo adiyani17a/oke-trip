@@ -69,6 +69,7 @@ const router = new VueRouter({
   routes // short for `routes: routes`
 })
 
+
 Vue.prototype.$globals = 'tes';
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('datatable-component', require('./components/Datatable.vue').default);

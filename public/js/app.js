@@ -2228,9 +2228,10 @@ Vue.component('create-destination', __webpack_require__(/*! ./CreateDestination.
               console.log('Intialize Main Page...');
               breadcrumb = '<router-link to="/destination">Destination</router-link>';
               $('#crumb').html(breadcrumb);
+              axios.defaults.headers.common['Authorization'] = 'Bearer ';
               this.callingApi();
 
-            case 4:
+            case 5:
             case "end":
               return _context.stop();
           }
@@ -2282,11 +2283,12 @@ Vue.component('create-destination', __webpack_require__(/*! ./CreateDestination.
     callingApi: function callingApi(page, show) {
       var _this = this;
 
-      console.log(page);
-      console.log(show);
-
       if (show == undefined) {
         show = 10;
+      }
+
+      if (page == undefined) {
+        page = 1;
       }
 
       axios.get('/api/destination/datatable?page=' + page + '&showing=' + show).then(function (response) {
