@@ -1,6 +1,6 @@
-<template>
+<template id="datatable">
 	<v-card>
-	  <div>
+	  <div >
 	  	<v-card-title>
         <v-select
           :items="showingPage"
@@ -37,8 +37,8 @@
 		          hide-details
 		        ></v-checkbox>
 	     	 	</td>
-	        <td v-for="header in headers" v-html='props.item[header.value]' :class="header.class">
-	        	{{ props.item[header.value] }}
+	        <td v-for="header in headers" :class="header.class">
+            {{ props.item[header.value] }}
 	      	</td>
 	      </template>
 	    </v-data-table>
@@ -46,8 +46,9 @@
         <div class="text-xs-center" style="margin-top: 20px;">
           <v-pagination
             v-model="page"
-            :length="4"
+            :length="this.pagination.total"
             circle
+            :total-visible="12"
             @input="$emit('callingApi',page,show)"
           ></v-pagination>
         </div>
@@ -56,6 +57,7 @@
 	</v-card>
 </template>
 <script>
+
   export default {
   	data() {
       return {

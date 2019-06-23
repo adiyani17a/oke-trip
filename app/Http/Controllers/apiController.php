@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\models;
 use Response;
+use Auth;
 class apiController extends Controller
 {
 	protected $model;
@@ -18,21 +19,10 @@ class apiController extends Controller
     {	
         $data =  $this->model->destination()->paginate($req->showing);
         
+
         foreach ($data as $i => $d) {
-
-
-            $data[$i]->action =     '<div class="dropdown">
-                                      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Dropdown button
-                                      </button>
-                                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="#">Action</a>
-                                        <a class="dropdown-item" href="#">Another action</a>
-                                        <a class="dropdown-item" href="#">Something else here</a>
-                                      </div>
-                                    </div>';
-        }  
-
+            $data[$i]->action = '';
+        }
     	return Response::json($data);
     }
 }

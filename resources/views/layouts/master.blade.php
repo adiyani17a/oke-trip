@@ -46,6 +46,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
       </div>
     </form>
+    {{-- NAVBAR RIGHT --}}
+
+    <ul class="navbar-nav ml-auto">
+      <!-- Messages Dropdown Menu -->
+      <li class="nav-item d-none d-sm-inline-block">
+        <a href="{{ url('api/logout') }}" class="nav-link">
+          <i class="fas fa-power-off"></i>
+        </a>
+      </li>
+    </ul>
   </nav>
   <!-- /.navbar -->
 
@@ -65,7 +75,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="image">
           <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
-        <div class="info">
+        <div style="overflow: hidden; white-space: nowrap;display: inline-block;padding: 5px 5px 5px 10px;transition: margin-left .3s linear,opacity .3s ease,visibility .3s ease;">
           <a href="#" class="d-block">Alexander Pierce</a>
         </div>
       </div>
