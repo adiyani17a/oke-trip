@@ -2198,6 +2198,8 @@ __webpack_require__.r(__webpack_exports__);
           }
         })["catch"](function (error) {
           console.log(error);
+          _this.snackbar = true;
+          _this.text = error;
           _this.errored = true;
         })["finally"](function () {
           return _this.$emit('closeDialog', _this.dialogs);
@@ -2228,6 +2230,54 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2318,19 +2368,17 @@ Vue.component('create-destination', __webpack_require__(/*! ./CreateDestination.
       dataItem: [],
       select: [],
       dialog: false,
+      dialogDelete: false,
       headers: [{
         text: 'Name',
         value: 'name',
         "class": 'text-xs-left'
       }, {
-        text: 'Slug',
-        value: 'slug'
+        text: 'Note',
+        value: 'note'
       }, {
         text: 'Created At',
         value: 'created_at'
-      }, {
-        text: 'Action',
-        value: 'action'
       }],
       loadingDataTable: false,
       apiReady: false,
@@ -2339,7 +2387,7 @@ Vue.component('create-destination', __webpack_require__(/*! ./CreateDestination.
         total: 0
       },
       totalItem: 0
-    }, _defineProperty(_ref, "dialog", false), _defineProperty(_ref, "idData", []), _ref;
+    }, _defineProperty(_ref, "dialog", false), _defineProperty(_ref, "idData", []), _defineProperty(_ref, "param", ''), _defineProperty(_ref, "snackbar", false), _defineProperty(_ref, "color", 'success'), _defineProperty(_ref, "mode", ''), _defineProperty(_ref, "timeout", 6000), _defineProperty(_ref, "text", 'Hello, I\'m a snackbar'), _ref;
   },
   watch: {
     apiReady: function apiReady() {
@@ -2384,8 +2432,27 @@ Vue.component('create-destination', __webpack_require__(/*! ./CreateDestination.
         return _this2.loadingDataTable = true;
       });
     },
-    deleteData: function deleteData(param) {
-      console.log(this.select);
+    deleteData: function deleteData() {
+      var _this3 = this;
+
+      axios["delete"]('/api/destination/delete', {
+        data: {
+          data: this.select
+        }
+      }).then(function (response) {
+        _this3.snackbar = true;
+        _this3.text = response.data.message;
+
+        _this3.callingApi();
+
+        _this3.dialogDelete = false;
+      })["catch"](function (error) {
+        console.log(error);
+        _this3.snackbar = true;
+        _this3.text = error;
+        _this3.errored = true;
+        _this3.dialogDelete = false;
+      });
     },
     editData: function editData() {
       this.idData = '';
@@ -2395,6 +2462,13 @@ Vue.component('create-destination', __webpack_require__(/*! ./CreateDestination.
     closeDialog: function closeDialog(param) {
       this.dialog = false;
       this.callingApi();
+    },
+    confirmationDelete: function confirmationDelete(param) {
+      if (param == 'confirm') {
+        this.deleteData();
+      } else {
+        this.dialogDelete = false;
+      }
     }
   } // new Vue({
   //   beforeCreate: function() {
@@ -22128,7 +22202,7 @@ var VBTooltip = {
 /*!*************************************************!*\
   !*** ./node_modules/bootstrap-vue/esm/index.js ***!
   \*************************************************/
-/*! exports provided: BVConfigPlugin, BVConfig, BootstrapVue, install, setConfig, default, componentsPlugin, BVModalPlugin, BVToastPlugin, AlertPlugin, BAlert, BadgePlugin, BBadge, BreadcrumbPlugin, BBreadcrumb, BBreadcrumbItem, ButtonPlugin, BButton, BButtonClose, ButtonGroupPlugin, BButtonGroup, ButtonToolbarPlugin, BButtonToolbar, CardPlugin, BCard, BCardBody, BCardFooter, BCardGroup, BCardHeader, BCardImg, BCardImgLazy, BCardSubTitle, BCardText, BCardTitle, CarouselPlugin, BCarousel, BCarouselSlide, CollapsePlugin, BCollapse, DropdownPlugin, BDropdown, BDropdownItem, BDropdownItemButton, BDropdownDivider, BDropdownForm, BDropdownGroup, BDropdownHeader, BDropdownText, EmbedPlugin, BEmbed, FormPlugin, BForm, BFormDatalist, BFormText, BFormInvalidFeedback, BFormValidFeedback, FormCheckboxPlugin, BFormCheckbox, BFormCheckboxGroup, FormFilePlugin, BFormFile, FormGroupPlugin, BFormGroup, FormInputPlugin, BFormInput, FormRadioPlugin, BFormRadio, BFormRadioGroup, FormSelectPlugin, BFormSelect, FormTextareaPlugin, BFormTextarea, ImagePlugin, BImg, BImgLazy, InputGroupPlugin, BInputGroup, BInputGroupAddon, BInputGroupAppend, BInputGroupPrepend, BInputGroupText, JumbotronPlugin, BJumbotron, LayoutPlugin, BContainer, BRow, BCol, BFormRow, LinkPlugin, BLink, ListGroupPlugin, BListGroup, BListGroupItem, MediaPlugin, BMedia, BMediaAside, BMediaBody, ModalPlugin, BModal, NavPlugin, BNav, BNavForm, BNavItem, BNavItemDropdown, BNavText, NavbarPlugin, BNavbar, BNavbarBrand, BNavbarNav, BNavbarToggle, PaginationPlugin, BPagination, PaginationNavPlugin, BPaginationNav, PopoverPlugin, BPopover, ProgressPlugin, BProgress, BProgressBar, SpinnerPlugin, BSpinner, TablePlugin, BTable, BTableLite, TabsPlugin, BTabs, BTab, ToastPlugin, BToast, BToaster, TooltipPlugin, BTooltip, directivesPlugin, VBModalPlugin, VBModal, VBPopoverPlugin, VBPopover, VBScrollspyPlugin, VBScrollspy, VBTogglePlugin, VBToggle, VBTooltipPlugin, VBTooltip */
+/*! exports provided: componentsPlugin, BVModalPlugin, BVToastPlugin, AlertPlugin, BAlert, BadgePlugin, BBadge, BreadcrumbPlugin, BBreadcrumb, BBreadcrumbItem, ButtonPlugin, BButton, BButtonClose, ButtonGroupPlugin, BButtonGroup, ButtonToolbarPlugin, BButtonToolbar, CardPlugin, BCard, BCardBody, BCardFooter, BCardGroup, BCardHeader, BCardImg, BCardImgLazy, BCardSubTitle, BCardText, BCardTitle, CarouselPlugin, BCarousel, BCarouselSlide, CollapsePlugin, BCollapse, DropdownPlugin, BDropdown, BDropdownItem, BDropdownItemButton, BDropdownDivider, BDropdownForm, BDropdownGroup, BDropdownHeader, BDropdownText, EmbedPlugin, BEmbed, FormPlugin, BForm, BFormDatalist, BFormText, BFormInvalidFeedback, BFormValidFeedback, FormCheckboxPlugin, BFormCheckbox, BFormCheckboxGroup, FormFilePlugin, BFormFile, FormGroupPlugin, BFormGroup, FormInputPlugin, BFormInput, FormRadioPlugin, BFormRadio, BFormRadioGroup, FormSelectPlugin, BFormSelect, FormTextareaPlugin, BFormTextarea, ImagePlugin, BImg, BImgLazy, InputGroupPlugin, BInputGroup, BInputGroupAddon, BInputGroupAppend, BInputGroupPrepend, BInputGroupText, JumbotronPlugin, BJumbotron, LayoutPlugin, BContainer, BRow, BCol, BFormRow, LinkPlugin, BLink, ListGroupPlugin, BListGroup, BListGroupItem, MediaPlugin, BMedia, BMediaAside, BMediaBody, ModalPlugin, BModal, NavPlugin, BNav, BNavForm, BNavItem, BNavItemDropdown, BNavText, NavbarPlugin, BNavbar, BNavbarBrand, BNavbarNav, BNavbarToggle, PaginationPlugin, BPagination, PaginationNavPlugin, BPaginationNav, PopoverPlugin, BPopover, ProgressPlugin, BProgress, BProgressBar, SpinnerPlugin, BSpinner, TablePlugin, BTable, BTableLite, TabsPlugin, BTabs, BTab, ToastPlugin, BToast, BToaster, TooltipPlugin, BTooltip, directivesPlugin, VBModalPlugin, VBModal, VBPopoverPlugin, VBPopover, VBScrollspyPlugin, VBScrollspy, VBTogglePlugin, VBToggle, VBTooltipPlugin, VBTooltip, BVConfigPlugin, BVConfig, BootstrapVue, install, setConfig, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -68144,138 +68218,259 @@ var render = function() {
       { staticClass: "row justify-content-center", attrs: { id: "apps" } },
       [
         _c("div", { staticClass: "col-md-12" }, [
-          _c("div", { staticClass: "card" }, [
-            _c(
-              "div",
-              { staticClass: "card-header" },
-              [
-                _c(
-                  "h5",
-                  {
-                    staticStyle: {
-                      "margin-top": "10px",
-                      display: "inline-block"
-                    }
-                  },
-                  [_c("b", [_vm._v(_vm._s(_vm.namaFitur))])]
-                ),
-                _vm._v(" "),
-                _vm.select.length == 0
-                  ? _c(
-                      "v-btn",
-                      {
-                        attrs: { color: "primary pull-right", dark: "" },
-                        on: {
-                          click: function($event) {
-                            _vm.dialog = true
-                          }
-                        }
-                      },
-                      [
-                        _vm._v("Create\n                        "),
-                        _c("v-icon", { attrs: { dark: "", right: "" } }, [
-                          _vm._v("fas fa-plus")
-                        ])
-                      ],
-                      1
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.select.length == 1
-                  ? _c(
-                      "v-btn",
-                      {
-                        attrs: { color: "warning pull-right" },
-                        on: { click: _vm.editData }
-                      },
-                      [
-                        _vm._v("Edit\n                        "),
-                        _c("v-icon", { attrs: { dark: "", right: "" } }, [
-                          _vm._v("fas fa-pencil-alt")
-                        ])
-                      ],
-                      1
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.select.length == 1
-                  ? _c(
-                      "v-btn",
-                      {
-                        attrs: { color: "error pull-right" },
-                        on: {
-                          click: function($event) {
-                            return _vm.deleteData("single")
-                          }
-                        }
-                      },
-                      [
-                        _vm._v("Delete\n                        "),
-                        _c("v-icon", { attrs: { dark: "", right: "" } }, [
-                          _vm._v("fas fa-trash-alt")
-                        ])
-                      ],
-                      1
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm.select.length > 1
-                  ? _c(
-                      "v-btn",
-                      {
-                        attrs: { color: "error pull-right" },
-                        on: {
-                          click: function($event) {
-                            return _vm.deleteData("bulk")
-                          }
-                        }
-                      },
-                      [
-                        _vm._v("Bulk Delete\n                        "),
-                        _c("v-icon", { attrs: { dark: "", right: "" } }, [
-                          _vm._v("fas fa-trash")
-                        ])
-                      ],
-                      1
-                    )
-                  : _vm._e()
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "card-body" },
-              [
-                _c(
-                  "div",
-                  { staticClass: "table-responsive" },
-                  [
-                    _c("datatable-component", {
-                      attrs: {
-                        dataItem: _vm.dataItem,
-                        headers: _vm.headers,
-                        loadingDataTable: _vm.loadingDataTable,
-                        pagination: _vm.pagination,
-                        totalItem: _vm.totalItem
-                      },
-                      on: {
-                        selectedCheckbox: _vm.selectedCheckbox,
-                        callingApi: _vm.callingApi
+          _c(
+            "div",
+            { staticClass: "card" },
+            [
+              _c(
+                "div",
+                { staticClass: "card-header" },
+                [
+                  _c(
+                    "h5",
+                    {
+                      staticStyle: {
+                        "margin-top": "10px",
+                        display: "inline-block"
                       }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c("create-destination", {
-                  attrs: { dialog: _vm.dialog, idData: _vm.idData },
-                  on: { closeDialog: _vm.closeDialog }
-                })
-              ],
-              1
-            )
-          ])
+                    },
+                    [_c("b", [_vm._v(_vm._s(_vm.namaFitur))])]
+                  ),
+                  _vm._v(" "),
+                  _vm.select.length == 0
+                    ? _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "primary pull-right", dark: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.dialog = true
+                            }
+                          }
+                        },
+                        [
+                          _vm._v("Create\n                        "),
+                          _c("v-icon", { attrs: { dark: "", right: "" } }, [
+                            _vm._v("fas fa-plus")
+                          ])
+                        ],
+                        1
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.select.length == 1
+                    ? _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "warning pull-right" },
+                          on: { click: _vm.editData }
+                        },
+                        [
+                          _vm._v("Edit\n                        "),
+                          _c("v-icon", { attrs: { dark: "", right: "" } }, [
+                            _vm._v("fas fa-pencil-alt")
+                          ])
+                        ],
+                        1
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.select.length == 1
+                    ? _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "error pull-right" },
+                          on: {
+                            click: function($event) {
+                              _vm.dialogDelete = true
+                            }
+                          }
+                        },
+                        [
+                          _vm._v("Delete\n                        "),
+                          _c("v-icon", { attrs: { dark: "", right: "" } }, [
+                            _vm._v("fas fa-trash-alt")
+                          ])
+                        ],
+                        1
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.select.length > 1
+                    ? _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "error pull-right" },
+                          on: {
+                            click: function($event) {
+                              _vm.dialogDelete = true
+                            }
+                          }
+                        },
+                        [
+                          _vm._v("Bulk Delete\n                        "),
+                          _c("v-icon", { attrs: { dark: "", right: "" } }, [
+                            _vm._v("fas fa-trash")
+                          ])
+                        ],
+                        1
+                      )
+                    : _vm._e()
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "card-body" },
+                [
+                  _c(
+                    "div",
+                    { staticClass: "table-responsive" },
+                    [
+                      _c("datatable-component", {
+                        attrs: {
+                          dataItem: _vm.dataItem,
+                          headers: _vm.headers,
+                          loadingDataTable: _vm.loadingDataTable,
+                          pagination: _vm.pagination,
+                          totalItem: _vm.totalItem
+                        },
+                        on: {
+                          selectedCheckbox: _vm.selectedCheckbox,
+                          callingApi: _vm.callingApi
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("create-destination", {
+                    attrs: { dialog: _vm.dialog, idData: _vm.idData },
+                    on: { closeDialog: _vm.closeDialog }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-dialog",
+                {
+                  attrs: { "max-width": "290" },
+                  model: {
+                    value: _vm.dialogDelete,
+                    callback: function($$v) {
+                      _vm.dialogDelete = $$v
+                    },
+                    expression: "dialogDelete"
+                  }
+                },
+                [
+                  _c(
+                    "v-card",
+                    [
+                      _c("v-card-title", { staticClass: "headline" }, [
+                        _vm._v("Are You Sure Deleting Data?")
+                      ]),
+                      _vm._v(" "),
+                      _c("v-card-text", [
+                        _vm._v(
+                          "\n                      This Action Cannot Be Undo.\n                    "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: {
+                                color: "default darken-1",
+                                flat: "flat"
+                              },
+                              on: {
+                                click: function($event) {
+                                  return _vm.confirmationDelete("cancel")
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Cancel\n                      "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "green darken-1", flat: "flat" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.confirmationDelete("confirm")
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                        Yes, Delete\n                      "
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-snackbar",
+                {
+                  attrs: {
+                    color: _vm.color,
+                    "multi-line": _vm.mode === "multi-line",
+                    timeout: _vm.timeout,
+                    vertical: _vm.mode === "vertical"
+                  },
+                  model: {
+                    value: _vm.snackbar,
+                    callback: function($$v) {
+                      _vm.snackbar = $$v
+                    },
+                    expression: "snackbar"
+                  }
+                },
+                [
+                  _vm._v(
+                    "\n                  " +
+                      _vm._s(_vm.text) +
+                      "\n                  "
+                  ),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { dark: "", flat: "" },
+                      on: {
+                        click: function($event) {
+                          _vm.snackbar = false
+                        }
+                      }
+                    },
+                    [_vm._v("\n                    Close\n                  ")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
         ])
       ]
     )
@@ -112186,14 +112381,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!*************************************************************!*\
   !*** ./resources/js/components/Destination/destination.vue ***!
   \*************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _destination_vue_vue_type_template_id_70ccbf1c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./destination.vue?vue&type=template&id=70ccbf1c& */ "./resources/js/components/Destination/destination.vue?vue&type=template&id=70ccbf1c&");
 /* harmony import */ var _destination_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./destination.vue?vue&type=script&lang=js& */ "./resources/js/components/Destination/destination.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _destination_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _destination_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -112223,7 +112419,7 @@ component.options.__file = "resources/js/components/Destination/destination.vue"
 /*!**************************************************************************************!*\
   !*** ./resources/js/components/Destination/destination.vue?vue&type=script&lang=js& ***!
   \**************************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

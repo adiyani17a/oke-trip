@@ -127,6 +127,8 @@
             })
             .catch(error => {
               console.log(error)
+              this.snackbar =  true;
+              this.text =  error;
               this.errored = true
             })
             .finally(() => this.$emit('closeDialog',this.dialogs))

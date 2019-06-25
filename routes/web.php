@@ -47,6 +47,11 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "saveDestination"
       ]);
 
+      Route::delete('/delete', [
+        'uses' => "apiController@deleteDestination",
+        'as' => "deleteDestination"
+      ]);
+
     });
 	});
 });

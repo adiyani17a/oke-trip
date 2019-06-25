@@ -15,7 +15,7 @@ class AddNoteToDestinationTable extends Migration
     {
         Schema::table('destination', function (Blueprint $table) {
             Schema::table('destination', function (Blueprint $table) {
-                $table->string('note')->after('name');
+                $table->string('note')->after('name')->nullable();
             });
         });
     }

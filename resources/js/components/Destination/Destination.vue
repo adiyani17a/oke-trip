@@ -11,10 +11,10 @@
                         <v-btn v-if="select.length == 1" color="warning pull-right" @click="editData">Edit
                             <v-icon dark right>fas fa-pencil-alt</v-icon>
                         </v-btn>
-                        <v-btn v-if="select.length == 1" color="error pull-right" @click="deleteData('single')">Delete
+                        <v-btn v-if="select.length == 1" color="error pull-right" @click="dialogDelete = true">Delete
                             <v-icon dark right>fas fa-trash-alt</v-icon>
                         </v-btn>
-                        <v-btn v-if="select.length > 1" color="error pull-right" @click="deleteData('bulk')">Bulk Delete
+                        <v-btn v-if="select.length > 1" color="error pull-right" @click="dialogDelete = true">Bulk Delete
                             <v-icon dark right>fas fa-trash</v-icon>
                         </v-btn>
 
@@ -35,6 +35,54 @@
                                             :idData="idData" 
                                             @closeDialog="closeDialog"></create-destination>
                     </div>
+                    <v-dialog
+                      v-model="dialogDelete"
+                      max-width="290"
+                    >
+                      <v-card>
+                        <v-card-title class="headline">Are You Sure Deleting Data?</v-card-title>
+
+                        <v-card-text>
+                          This Action Cannot Be Undo.
+                        </v-card-text>
+
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+
+                          <v-btn
+                            color="default darken-1"
+                            flat="flat"
+                            @click="confirmationDelete('cancel')"
+                          >
+                            Cancel
+                          </v-btn>
+
+                          <v-btn
+                            color="green darken-1"
+                            flat="flat"
+                            @click="confirmationDelete('confirm')"
+                          >
+                            Yes, Delete
+                          </v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
+                    <v-snackbar
+                      v-model="snackbar"
+                      :color="color"
+                      :multi-line="mode === 'multi-line'"
+                      :timeout="timeout"
+                      :vertical="mode === 'vertical'"
+                    >
+                      {{ text }}
+                      <v-btn
+                        dark
+                        flat
+                        @click="snackbar = false"
+                      >
+                        Close
+                      </v-btn>
+                    </v-snackbar>
                 </div>
             </div>
         </div>  
@@ -68,11 +116,11 @@
                 dataItem: [],
                 select: [],
                 dialog: false,
+                dialogDelete: false,
                 headers:[
                     { text: 'Name', value: 'name',class:'text-xs-left'},
-                    { text: 'Slug', value: 'slug' },
+                    { text: 'Note', value: 'note' },
                     { text: 'Created At', value: 'created_at' },
-                    { text: 'Action',value:'action'},
                 ],
                 loadingDataTable:false,
                 apiReady:false,
@@ -83,6 +131,12 @@
                 totalItem:0,
                 dialog:false,
                 idData:[],
+                param:'',
+                snackbar: false,
+                color: 'success',
+                mode: '',
+                timeout: 6000,
+                text: 'Hello, I\'m a snackbar'
 
             }
         },
@@ -130,8 +184,28 @@
                   })
                   .finally(() => this.loadingDataTable = true)
             },
-            deleteData(param){
-                console.log(this.select)
+            deleteData(){
+
+                axios
+                    .delete('/api/destination/delete',{
+                        data:{
+                            data:this.select,
+                        }
+                    })
+                    .then(response => {
+
+                        this.snackbar =  true;
+                        this.text =  response.data.message;
+                        this.callingApi();
+                        this.dialogDelete = false;
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        this.snackbar =  true;
+                        this.text =  error;
+                        this.errored = true
+                        this.dialogDelete = false;
+                    })
             },
             editData(){
                 this.idData = '';
@@ -142,6 +216,13 @@
             closeDialog(param){
                 this.dialog = false;
                 this.callingApi();
+            },
+            confirmationDelete(param){
+                if (param == 'confirm') {
+                    this.deleteData();
+                }else{
+                    this.dialogDelete = false;
+                }
             }
         }
     }

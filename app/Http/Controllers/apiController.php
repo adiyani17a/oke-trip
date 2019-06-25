@@ -45,4 +45,15 @@ class apiController extends Controller
             }
         });
     }
+
+    public function deleteFactoryDestination(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+            foreach ($req->data as $i => $d) {
+                $this->model->destination()->where('id',$req->data[$i]['id'])->delete();
+            }
+
+            return Response::json(['status'=>1,'message'=>'Success deleting data']);
+        });
+    }
 }
