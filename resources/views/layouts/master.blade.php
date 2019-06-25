@@ -51,7 +51,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <ul class="navbar-nav ml-auto">
       <!-- Messages Dropdown Menu -->
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{ url('api/logout') }}" class="nav-link">
+        <a href="{{ url('/logout') }}" class="nav-link">
           <i class="fas fa-power-off"></i>
         </a>
       </li>

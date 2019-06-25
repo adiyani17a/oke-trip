@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDestinationTable extends Migration
+class AddNoteToDestinationTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateDestinationTable extends Migration
      */
     public function up()
     {
-        Schema::create('destination', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name');
-            $table->timestamps();
+        Schema::table('destination', function (Blueprint $table) {
+            Schema::table('destination', function (Blueprint $table) {
+                $table->string('note')->after('name');
+            });
         });
     }
 
@@ -27,6 +27,8 @@ class CreateDestinationTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('destination');
+        Schema::table('destination', function (Blueprint $table) {
+            //
+        });
     }
 }

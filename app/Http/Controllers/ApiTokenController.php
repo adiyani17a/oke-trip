@@ -10,9 +10,18 @@ use Auth;
 use App\TokenManagement;
 class ApiTokenController extends Controller
 {
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect('/');
+    }
     public function getToken()
     {
         $user = Auth::user();
+        TokenManagement::where('user_id',$user->id)->delete();
+
+        generateToken();
         $data = TokenManagement::where('user_id',$user->id)->first();
         return response()->json($data);
     }

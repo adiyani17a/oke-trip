@@ -24,8 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // $user = Auth::user();
-        // $token = TokenManagement::where('user_id',$user->id)->first()->access_token;
-        return view('home);
+        generateToken();
+        return view('home',compact('token'));
     }
 }

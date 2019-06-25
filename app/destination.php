@@ -15,8 +15,10 @@ class destination extends Model
     protected $fillable = [
 							'id',
 							'name',
-							'slug',
+							'note',
 							'created_at',
-							'updated_at',
+                            'updated_at',
+                            'created_by',
+							'updated_by',
     					];
 }	

@@ -16,29 +16,38 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-Route::post('/api/generate-token', 'ApiTokenController@generateToken');
-Route::group(['middleware' => 'auth'], function () {
-	Route::get('api/get-token', [
-      'uses' => "ApiTokenController@getToken",
-      'as' => "logout"
-    ]);
-});
-
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('{path}', 'HomeController@index')->where('all', '^(?!api).*$');
 
+Route::post('/api/generate-token', 'ApiTokenController@generateToken');
+Route::group(['middleware' => 'auth'], function () {
+	Route::get('api/get-token', [
+      'uses' => "ApiTokenController@getToken",
+      'as' => "getToken"
+    ]);
+
+    Route::get('/logout', [
+      'uses' => "ApiTokenController@logout",
+      'as' => "logout"
+    ]);
+});
+
 Route::group(['middleware' => 'check-token'], function () {
 	Route::group(["prefix" => "api"], function(){
-	    Route::get('/destination/datatable', [
-	      'uses' => "apiController@datatableDestination",
-	      'as' => "datatableDestination"
-	    ]);
+    Route::group(["prefix" => "destination"], function(){
 
-	    Route::get('/logout', [
-	      'uses' => "ApiTokenController@logout",
-	      'as' => "logout"
-	    ]);
+      Route::get('/datatable', [
+        'uses' => "apiController@datatableDestination",
+        'as' => "datatableDestination"
+      ]);
+
+      Route::post('/save', [
+        'uses' => "apiController@saveDestination",
+        'as' => "saveDestination"
+      ]);
+
+    });
 	});
 });
 

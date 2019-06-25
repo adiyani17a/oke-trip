@@ -78,8 +78,4 @@ Vue.component('filter-bar-component', require('./components/FilterBar.vue').defa
 let app = new Vue({
     el: '#app',
     router,
-    data:{
-      checkChild:true,
-      checkParent:false,
-    }
 });

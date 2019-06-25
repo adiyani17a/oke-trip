@@ -5,7 +5,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h5 style="margin-top: 10px;display: inline-block;"><b>{{ namaFitur }}</b></h5>
-                        <v-btn color="primary pull-right" dark @click="dialog = true">Create
+                        <v-btn v-if="select.length == 0" color="primary pull-right" dark @click="dialog = true">Create
                             <v-icon dark right>fas fa-plus</v-icon>
                         </v-btn>
                         <v-btn v-if="select.length == 1" color="warning pull-right" @click="editData">Edit
@@ -31,7 +31,9 @@
                                                  >
                             </datatable-component>
                         </div>
-                        <create-destination :dialog="dialog" @closeDialog="closeDialog"></create-destination>
+                        <create-destination :dialog="dialog" 
+                                            :idData="idData" 
+                                            @closeDialog="closeDialog"></create-destination>
                     </div>
                 </div>
             </div>
@@ -42,13 +44,23 @@
 <script>
 
     Vue.component('create-destination', require('./CreateDestination.vue').default)
+
+
     export default {
         async mounted() {
             console.log('Intialize Main Page...')
             let breadcrumb = '<router-link to="/destination">Destination</router-link>';
             $('#crumb').html(breadcrumb);
-            axios.defaults.headers.common['Authorization'] = 'Bearer ';
-            this.callingApi()
+            axios
+                .get('/api/get-token')
+                .then(response => {
+                  axios.defaults.headers.common['Authorization'] = 'Bearer '+response.data.access_token;
+                })
+                .catch(error => {
+                  console.log(error)
+                  this.errored = true
+                })
+                .finally(() => this.apiReady = true)
         },
         data() {
             return {
@@ -63,13 +75,22 @@
                     { text: 'Action',value:'action'},
                 ],
                 loadingDataTable:false,
+                apiReady:false,
                 pagination:{
                     current: 1,
                     total: 0
                 },
                 totalItem:0,
                 dialog:false,
+                idData:[],
+
             }
+        },
+        watch:{
+            apiReady:function(){
+                console.log('Generate Token...')
+                this.callingApi();
+            },
         },
         methods:{
             onClickChild(value){
@@ -77,6 +98,7 @@
             },
             selectedCheckbox(selected){
                 this.select = selected;
+                this.idData = selected;
             },
             callingApi(page,show){
                 if (show == undefined) {
@@ -112,10 +134,14 @@
                 console.log(this.select)
             },
             editData(){
-                console.log(this.select)
+                this.idData = '';
+                this.idData = this.select;
+                this.dialog = true;
+
             },
             closeDialog(param){
                 this.dialog = false;
+                this.callingApi();
             }
         }
     }

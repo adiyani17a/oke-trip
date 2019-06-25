@@ -7,18 +7,21 @@
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>
-            <v-layout wrap>
-              <v-flex xs12>
-                <v-text-field label="Name" v-model="name" required :counter="20" @blur="$v.name.$touch()" :error-messages="nameErrors"></v-text-field>
-              </v-flex>
-              <v-flex xs12>
-                <v-textarea
-                  name="input-7-1"
-                  label="Note"
-                  v-model="note"
-                ></v-textarea>
-              </v-flex>
-            </v-layout>
+            <form id="saveData">
+              <v-layout wrap>
+                <v-flex xs12>
+                  <v-text-field label="Name" v-model="name" required :counter="20" name="name" @blur="$v.name.$touch()" :error-messages="nameErrors"></v-text-field>
+                  <input type="hidden" name="id" v-model="id">
+                </v-flex>
+                <v-flex xs12>
+                  <v-textarea
+                    name="note"
+                    label="Note"
+                    v-model="note"
+                  ></v-textarea>
+                </v-flex>
+              </v-layout>
+            </form>
           </v-container>
           <small>*indicates required field</small>
         </v-card-text>
@@ -29,6 +32,22 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-snackbar
+      v-model="snackbar"
+      :color="color"
+      :multi-line="mode === 'multi-line'"
+      :timeout="timeout"
+      :vertical="mode === 'vertical'"
+    >
+      {{ text }}
+      <v-btn
+        dark
+        flat
+        @click="snackbar = false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-layout>
 </template>
 <script>
@@ -36,6 +55,7 @@
   import { required, maxLength, email } from 'vuelidate/lib/validators'
   export default {
     data: () => ({
+      id: '',
       name: '',
       note: '',
       dialogs:false,
@@ -43,6 +63,11 @@
         v => !!v || 'Name is required',
         v => v.length <= 20 || 'Name must be less than 10 characters'
       ],
+      snackbar: false,
+      color: 'success',
+      mode: '',
+      timeout: 6000,
+      text: 'Hello, I\'m a snackbar'
     }),
     validations: {
       name: { required, maxLength: maxLength(20) },
@@ -58,10 +83,18 @@
     },
     props:{
       dialog: false,
+      idData:Array,
     },
     watch:{
       dialog:function(){
         this.dialogs = this.dialog
+      },
+      idData:function(){
+        if (this.idData.length == 1) {
+          this.id = this.idData[0].id
+          this.name = this.idData[0].name
+          this.note = this.idData[0].note
+        }
       }
     },
     methods:{
@@ -69,12 +102,34 @@
         if (param == 'close') {
           this.dialogs = false;
           this.$emit('closeDialog',this.dialogs)
+          this.name = ''
+          this.note = ''
+          this.id = ''
         }else{
           this.$v.$touch()
           if (this.$v.$anyError == true) {
             return false;
           }
-          this.$emit('closeDialog',this.dialogs)
+
+          axios
+            .post('/api/destination/save',$('#saveData').serialize())
+            .then(response => {
+              this.snackbar =  true;
+              this.text =  response.data.message;
+              if (response.data.status == 1) {
+                this.color = 'success'
+                this.name = ''
+                this.note = ''
+                this.id = ''
+              }else{
+                this.color = 'error'
+              }
+            })
+            .catch(error => {
+              console.log(error)
+              this.errored = true
+            })
+            .finally(() => this.$emit('closeDialog',this.dialogs))
         }
       }
     }
