@@ -32,37 +32,84 @@ Vue.use(BootstrapVue)
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-let routes = [
-  { path: '/home', component: require('./components/Dashboard.vue').default },
-  { path: '/paket-tour', component: require('./components/paketTour.vue').default },
-  { path: '/booking-list',
+let routes = [{
+    path: '/home',
+    component: require('./components/Dashboard.vue').default
+}, {
+    path: '/paket-tour',
+    component: require('./components/paketTour.vue').default
+}, {
+    path: '/booking-list',
     meta: {
         breadcrumb: 'Booking List',
-      },
-    component: require('./components/BookingList/bookingList.vue').default },
-  { path: '/destination',
-    name:'Destination',
+    },
+    component: require('./components/BookingList/bookingList.vue').default
+}, {
+    path: '/group-menu',
+    name: 'Group Menu',
+    meta: {
+        breadcrumb: 'Group Menu',
+    },
+    component: require('./components/GroupMenu/groupMenu.vue').default
+}, {
+    path: '/menu-list',
+    name: 'Menu List',
+    meta: {
+        breadcrumb: 'Menu List',
+    },
+    component: require('./components/MenuList/menuList.vue').default
+}, {
+    path: '/privilege',
+    name: 'Privilege',
+    meta: {
+        breadcrumb: 'Privilege',
+    },
+    component: require('./components/Privilege/Privilege.vue').default
+}, {
+    path: '/destination',
+    name: 'Destination',
     meta: {
         breadcrumb: 'Destination',
-      },
-    component: require('./components/Destination/destination.vue').default },
-  { path: '/additional',
-    name:'Additional',
+    },
+    component: require('./components/Destination/destination.vue').default
+}, {
+    path: '/additional',
+    name: 'Additional',
     meta: {
         breadcrumb: 'additional',
-      },
-    component: require('./components/Additional/additional.vue').default },
-  { path: '/itinerary', component: require('./components/Itinerary/Itinerary.vue').default },
-  { path: '/tour-leader', component: require('./components/TourLeader/tourLeader.vue').default },
-  { path: '/agent', component: require('./components/Agent/Agent.vue').default },
-  { path: '/income-report', component: require('./components/Finance/incomeReport.vue').default },
-  { path: '/income-statement', component: require('./components/Finance/incomeStatement.vue').default },
-  { path: '/customer-statistic', component: require('./components/Report/customerStatistic.vue').default },
-  { path: '/sales-statistic', component: require('./components/Report/salesStatistic.vue').default },
-  { path: '/customer-report', component: require('./components/Report/customerReport.vue').default },
-  { path: '/sales-report', component: require('./components/Report/salesReport.vue').default },
-  { path: '/payment-report', component: require('./components/Report/paymentReport.vue').default },
-]
+    },
+    component: require('./components/Additional/additional.vue').default
+}, {
+    path: '/itinerary',
+    component: require('./components/Itinerary/Itinerary.vue').default
+}, {
+    path: '/tour-leader',
+    component: require('./components/TourLeader/tourLeader.vue').default
+}, {
+    path: '/agent',
+    component: require('./components/Agent/Agent.vue').default
+}, {
+    path: '/income-report',
+    component: require('./components/Finance/incomeReport.vue').default
+}, {
+    path: '/income-statement',
+    component: require('./components/Finance/incomeStatement.vue').default
+}, {
+    path: '/customer-statistic',
+    component: require('./components/Report/customerStatistic.vue').default
+}, {
+    path: '/sales-statistic',
+    component: require('./components/Report/salesStatistic.vue').default
+}, {
+    path: '/customer-report',
+    component: require('./components/Report/customerReport.vue').default
+}, {
+    path: '/sales-report',
+    component: require('./components/Report/salesReport.vue').default
+}, {
+    path: '/payment-report',
+    component: require('./components/Report/paymentReport.vue').default
+}, ]
 
 const router = new VueRouter({
   mode:'history',

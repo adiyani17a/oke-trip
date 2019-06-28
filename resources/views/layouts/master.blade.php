@@ -99,6 +99,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>
           <li class="nav-item has-treeview">
             <a class="nav-link active" >
+              <i class="nav-icon fas fa-cogs"></i>
+              <p>
+                Setting
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <router-link to="/group-menu" class="nav-link ">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Group Menu</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to ="/menu-list" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Menu List</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to ="/privilege" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Privilege</p>
+                </router-link>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a class="nav-link active" >
               <i class="nav-icon fab fa-product-hunt"></i>
               <p>
                 Product
