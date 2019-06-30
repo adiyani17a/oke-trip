@@ -53,6 +53,44 @@ Route::group(['middleware' => 'check-token'], function () {
       ]);
 
     });
+
+    Route::group(["prefix" => "group-menu"], function(){
+
+      Route::get('/datatable', [
+        'uses' => "apiController@datatableGroupMenu",
+        'as' => "datatableGroupMenu"
+      ]);
+
+      Route::post('/save', [
+        'uses' => "apiController@saveGroupMenu",
+        'as' => "saveGroupMenu"
+      ]);
+
+      Route::delete('/delete', [
+        'uses' => "apiController@deleteGroupMenu",
+        'as' => "deleteGroupMenu"
+      ]);
+
+    });
+
+    Route::group(["prefix" => "menu-list"], function(){
+
+      Route::get('/datatable', [
+        'uses' => "apiController@datatableMenuList",
+        'as' => "datatableMenuList"
+      ]);
+
+      Route::post('/save', [
+        'uses' => "apiController@saveMenuList",
+        'as' => "saveMenuList"
+      ]);
+
+      Route::delete('/delete', [
+        'uses' => "apiController@deleteMenuList",
+        'as' => "deleteMenuList"
+      ]);
+
+    });
 	});
 });
 

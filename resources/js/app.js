@@ -22,7 +22,8 @@ import VueRouter from 'vue-router'
 import BootstrapVue from 'bootstrap-vue'
 import Vuetify from 'vuetify'
 import Vuelidate from 'vuelidate'
-
+import Vue from 'vue'
+ 
 Vue.use(Vuelidate)
 Vue.use(Vuetify)
 Vue.use(VueRouter)

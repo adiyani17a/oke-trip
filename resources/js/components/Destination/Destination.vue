@@ -28,7 +28,7 @@
                             <datatable-component :dataItem="dataItem"
                                                  :headers="headers"
                                                  :loadingDataTable="loadingDataTable"
-                                                 :pagination="pagination"
+                                                 :paginations="pagination"
                                                  :totalItem="totalItem"
                                                  @selectedCheckbox="selectedCheckbox"
                                                  @callingApi="callingApi"
@@ -137,7 +137,9 @@
                 apiReady:false,
                 pagination:{
                     current: 1,
-                    total: 0
+                    total: 0,
+                    rowsPerPage:10, 
+                    totalItem:0, 
                 },
                 totalItem:0,
                 dialog:false,
@@ -180,6 +182,8 @@
                     this.dataItem = response.data.data
                     this.pagination.current = response.data.current_page;
                     this.pagination.total = response.data.last_page;
+                    this.pagination.rowsPerPage = show;
+                    this.pagination.totalItem = response.data.total;
                     this.totalItem = response.data.total;
 
                     for (var i = 0; i < this.dataItem.length; i++) {

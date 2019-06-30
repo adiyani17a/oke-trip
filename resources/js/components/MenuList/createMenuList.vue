@@ -19,6 +19,16 @@
                 <v-flex xs12>
                   <v-text-field label="Url*" v-model="url" required name="url" @blur="$v.url.$touch()" :error-messages="urlErrors"></v-text-field>
                 </v-flex>
+                <v-flex xs12>
+                  <v-select
+                    v-model="groupMenuId"
+                    :items="options"
+                    label="Group Menu*"
+                    item-text="state"
+                    item-value="abbr"
+                    @blur="$v.groupMenu.$touch()" :error-messages="groupMenuErrors"
+                  ></v-select>
+                </v-flex>
               </v-layout>
             </form>
           </v-container>
@@ -68,12 +78,21 @@
       mode: '',
       namaFitur: '',
       timeout: 6000,
+      groupMenuId:'',
+      options: [
+            { state: 'Florida', abbr: 'FL' },
+            { state: 'Georgia', abbr: 'GA' },
+            { state: 'Nebraska', abbr: 'NE' },
+            { state: 'California', abbr: 'CA' },
+            { state: 'New York', abbr: 'NY' }
+      ],
       text: 'Hello, I\'m a snackbar'
     }),
     validations: {
       name: { required, maxLength: maxLength(20) },
       slug: { required },
       url: { required },
+      groupMenu: { required },
     },
     computed:{
       nameErrors () {
@@ -93,6 +112,13 @@
         const errors = []
         if (!this.$v.url.$dirty) return errors
         !this.$v.url.required && errors.push('Url is required.')
+        return errors
+      },
+      groupMenuErrors () {
+        console.log(this.groupMenuId);
+        const errors = []
+        if (!this.$v.groupMenu.$dirty) return errors
+        !this.$v.groupMenu.required && errors.push('Group Menu is required.')
         return errors
       },
     },
@@ -142,7 +168,7 @@
           }
 
           axios
-            .post('/api/group-menu/save',$('#saveData').serialize())
+            .post('/api/menu-list/save',$('#saveData').serialize())
             .then(response => {
               this.snackbar =  true;
               this.text =  response.data.message;

@@ -4,6 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\destination;
+use App\groupMenu;
+use App\menuList;
+use App\privilege;
 class models extends Model
 {
     public function destination()
@@ -11,5 +14,26 @@ class models extends Model
     	$destination = new destination();
 
     	return $destination; 
+    }
+
+    public function groupMenu()
+    {
+    	$groupMenu = new groupMenu();
+
+    	return $groupMenu; 
+    }
+
+    public function menuList()
+    {
+    	$menuList = new menuList();
+
+    	return $menuList; 
+    }
+
+    public function privilege()
+    {
+    	$privilege = new privilege();
+
+    	return $privilege; 
     }
 }

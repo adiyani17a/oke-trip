@@ -17,7 +17,7 @@ class CreateGroupMenuTable extends Migration
             $table->bigIncrements('id');
             $table->string('name'); //related to table users
             $table->string('slug');
-            $table->string('icon');
+            $table->string('icon')->default('-');
             $table->string('url')->nullable();
             $table->string('created_by');
             $table->string('updated_by');

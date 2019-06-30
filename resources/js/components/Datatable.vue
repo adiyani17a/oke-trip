@@ -22,6 +22,7 @@
 	    <v-data-table
 	      :headers="headers"
 	      :items="dataItems"
+        :pagination.sync="pagination"
 	      :total-items="totalItems"
 	      :loading="loading"
 	      v-model="selected"
@@ -43,10 +44,10 @@
 	      </template>
 	    </v-data-table>
       <template>
-        <div class="text-xs-center" style="margin-top: 20px;">
+        <div class="text-xs-center" style="margin-top: 20px;" >
           <v-pagination
             v-model="page"
-            :length="this.pagination.total"
+            :length.sync="this.paginations.total"
             circle
             :total-visible="12"
             @input="$emit('callingApi',page,show)"
@@ -63,7 +64,8 @@
       return {
       	dataItems: [],
         totalItems: 0,
-  			search:'',
+        search:'',
+  			pagination:{},
         page: 1,
       	selected: [],
         loading:true,
@@ -75,13 +77,16 @@
       dataItem: Array,
   		headers:Array,
   		loadingDataTable:false,
-      pagination: Object,
+      paginations: Object,
       totalItem: 0,
   	},
     watch: {
       params: {
         handler () {
-          console.log(this.pagination)
+          this.pagination.current = this.paginations.current
+          this.pagination.total = this.paginations.total
+          this.pagination.rowsPerPage = this.paginations.rowsPerPage
+          this.pagination.totalItems = this.paginations.totalItems
           this.getDataFromApi()
             .then(data => {
               this.dataItems = data.items
@@ -137,6 +142,7 @@
           let search = this.search.trim().toLowerCase();
           let items = this.dataItem
           const total = this.totalItem
+          console.log(this.pagination);
           if (this.pagination.sortBy) {
             items = items.sort((a, b) => {
               const sortA = a[sortBy]

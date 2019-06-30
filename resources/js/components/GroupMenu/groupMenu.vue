@@ -28,16 +28,17 @@
                             <datatable-component :dataItem="dataItem"
                                                  :headers="headers"
                                                  :loadingDataTable="loadingDataTable"
-                                                 :pagination="pagination"
+                                                 :paginations="pagination"
                                                  :totalItem="totalItem"
+                                                 :namaFitur="namaFitur"
                                                  @selectedCheckbox="selectedCheckbox"
                                                  @callingApi="callingApi"
                                                  >
                             </datatable-component>
                         </div>
-                        <create-destination :dialog="dialog" 
+                        <create-group-menu :dialog="dialog" 
                                             :idData="idData" 
-                                            @closeDialog="closeDialog"></create-destination>
+                                            @closeDialog="closeDialog"></create-group-menu>
                     </div>
                     <v-dialog
                       v-model="dialogDelete"
@@ -130,14 +131,17 @@
                 dialogDelete: false,
                 headers:[
                     { text: 'Name', value: 'name',class:'text-xs-left'},
-                    { text: 'Note', value: 'note' },
+                    { text: 'Slug', value: 'slug' },
+                    { text: 'Url', value: 'url' },
                     { text: 'Created At', value: 'created_at' },
                 ],
                 loadingDataTable:false,
                 apiReady:false,
                 pagination:{
                     current: 1,
-                    total: 0
+                    total: 0,
+                    rowsPerPage:10, 
+                    totalItem:0, 
                 },
                 totalItem:0,
                 dialog:false,
@@ -159,7 +163,7 @@
         },
         methods:{
             onClickChild(value){
-                this.api = '/api/destination/datatable'
+                this.api = '/api/group-menu/datatable'
             },
             selectedCheckbox(selected){
                 this.select = selected;
@@ -174,12 +178,14 @@
                     page = 1;
                 }
                 axios
-                  .get('/api/destination/datatable?page='+page+'&showing='+show)
+                  .get('/api/group-menu/datatable?page='+page+'&showing='+show)
                   .then(response => {
                     this.loadingDataTable = false
                     this.dataItem = response.data.data
                     this.pagination.current = response.data.current_page;
                     this.pagination.total = response.data.last_page;
+                    this.pagination.rowsPerPage = show;
+                    this.pagination.totalItem = response.data.total;
                     this.totalItem = response.data.total;
 
                     for (var i = 0; i < this.dataItem.length; i++) {
@@ -198,7 +204,7 @@
             deleteData(){
 
                 axios
-                    .delete('/api/destination/delete',{
+                    .delete('/api/group-menu/delete',{
                         data:{
                             data:this.select,
                         }
