@@ -10,7 +10,7 @@
             <form id="saveData">
               <v-layout wrap>
                 <v-flex xs12>
-                  <v-text-field label="Name*" v-model="name" required :counter="20" name="name" @blur="$v.name.$touch()" :error-messages="nameErrors"></v-text-field>
+                  <v-text-field label="Name*" v-model="name" required name="name" @blur="$v.name.$touch()" :error-messages="nameErrors"></v-text-field>
                   <input type="hidden" name="id" v-model="id">
                 </v-flex>
                 <v-flex xs12>

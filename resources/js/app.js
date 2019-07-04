@@ -67,6 +67,27 @@ let routes = [{
     },
     component: require('./components/Privilege/Privilege.vue').default
 }, {
+    path: '/role',
+    name: 'Role',
+    meta: {
+        breadcrumb: 'Role',
+    },
+    component: require('./components/Role/Role.vue').default
+},{
+    path: '/administrator',
+    name: 'Administrator',
+    meta: {
+        breadcrumb: 'Administrator',
+    },
+    component: require('./components/Administrator/Administrator.vue').default
+}, {
+    path: '/agent',
+    name: 'Agent',
+    meta: {
+        breadcrumb: 'Agent',
+    },
+    component: require('./components/Agent/Agent.vue').default
+},{
     path: '/destination',
     name: 'Destination',
     meta: {

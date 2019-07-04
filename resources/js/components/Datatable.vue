@@ -101,6 +101,7 @@
             .then(data => {
               this.dataItems = data.items
               this.totalItems = data.total
+              this.$emit('getCurrentPage',this.page)
               console.log('Loading Datatable Complete...')
             })
       	}
