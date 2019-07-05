@@ -27,6 +27,7 @@
 	      :loading="loading"
 	      v-model="selected"
 	      class="elevation-1"
+        item-key="id"
 	      select-all
         hide-actions
 	    >
@@ -38,8 +39,14 @@
 		          hide-details
 		        ></v-checkbox>
 	     	 	</td>
-	        <td v-for="header in headers" :class="header.class">
-            {{ props.item[header.value] }}
+	        <td v-for="header in headers" :class="header.class" >
+            <div v-if="header.type == 'switch'" class="text-xs-center">
+              <v-switch  @change="switchChange(props.index)" v-model="switching[props.index].value" style="margin-left: 100px;margin-top: 15px;" class="text-xs-center">
+              </v-switch>
+            </div>
+            <div v-if="header.type == 'default' || header.type == undefined">
+              {{ props.item[header.value] }}
+            </div>
 	      	</td>
 	      </template>
 	    </v-data-table>
@@ -67,10 +74,11 @@
         search:'',
   			pagination:{},
         page: 1,
-      	selected: [],
+      	selected: ['true'],
         loading:true,
         showingPage: [10, 20, 50, 100, 1000],
         show: 10,
+        switching:[] = [],
       }
     },
   	props:{
@@ -79,10 +87,10 @@
   		loadingDataTable:false,
       paginations: Object,
       totalItem: 0,
+      switchs:Array,
   	},
     watch: {
-      params: {
-        handler () {
+      pagination:function() {
           this.pagination.current = this.paginations.current
           this.pagination.total = this.paginations.total
           this.pagination.rowsPerPage = this.paginations.rowsPerPage
@@ -92,7 +100,6 @@
               this.dataItems = data.items
               this.totalItems = data.total
             })
-        },
         deep: true
       },
       loadingDataTable:function() {
@@ -102,6 +109,7 @@
               this.dataItems = data.items
               this.totalItems = data.total
               this.$emit('getCurrentPage',this.page)
+              this.switching = this.switchs
               console.log('Loading Datatable Complete...')
             })
       	}
@@ -183,6 +191,12 @@
           }, 1000)
         })
       },
+      switchChange(index){
+        this.$emit('switchChange',this.switching[index]);
+      },
+      checkboxChange(data,id){
+        this.$emit('checkboxChange',data.id)
+      }
     }
   }
 </script>

@@ -14,10 +14,10 @@ class CreateRoleTable extends Migration
     public function up()
     {
         Schema::create('role', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('name'); //related to table users
+            $table->integer('id');
+            $table->string('name'); //related to table users
             $table->string('note');
-            $table->boolean('active');
+            $table->string('active')->default('0');
             $table->string('created_by');
             $table->string('updated_by');
             $table->timestamps();

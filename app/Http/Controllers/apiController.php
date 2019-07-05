@@ -151,7 +151,7 @@ class apiController extends Controller
         
     }
 
-    public function savPrivilege(Request $req)
+    public function savePrivilege(Request $req)
     {
         return DB::transaction(function() use ($req) {  
             if (!isset($req->id) or $req->id == '' or $req->id == null) {
@@ -185,15 +185,48 @@ class apiController extends Controller
         return Response::json($data);
     }
 
+    public function chageStatusRole(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+
+            $input['active'] = $req->data['value'];
+            $input['updated_by'] = Auth::user()->name;
+            $this->model->role()->where('id',$req->data['id'])->update($input);
+            if ($req->data['value'] == false) {
+                return Response::json(['status'=>1,'message'=>'Success deactivate data']);
+            }else{
+                return Response::json(['status'=>1,'message'=>'Success activate data']);
+            }
+        });
+    }
+
     public function saveRole(Request $req)
     {
         return DB::transaction(function() use ($req) {  
             if (!isset($req->id) or $req->id == '' or $req->id == null) {
+                $id = $this->model->role()->max('id')+1;
                 $input = $req->all();
+                $input['id'] = $id;
                 $input['created_by'] = Auth::user()->name;
                 $input['updated_by'] = Auth::user()->name;
                 $input['name'] = ucwords($input['name']);
                 $this->model->role()->create($input);
+
+
+                $menuList = $this->model->menuList()->get();
+                foreach ($menuList as $key => $value) {
+                    $idMenu = $this->model->privilege()->max('id')+1;
+                        
+                    $menu['id'] = $idMenu;
+                    $menu['role_id'] = $id;
+                    $menu['role_name'] = $req->name;
+                    $menu['menu_list_id'] = $value->id;
+                    $menu['menu_list_name'] = $value->name;
+                    $menu['create'] = 0;
+                    $menu['create'] = 0;
+
+                    $this->model->privilege()->create($menu);
+                }
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
                 $input = $req->all();

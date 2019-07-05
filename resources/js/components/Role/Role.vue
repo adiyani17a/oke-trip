@@ -31,8 +31,10 @@
                                                  :paginations="pagination"
                                                  :totalItem="totalItem"
                                                  :namaFitur="namaFitur"
+                                                 :switchs="switchs"
                                                  @selectedCheckbox="selectedCheckbox"
                                                  @callingApi="callingApi"
+                                                 @switchChange="switchChange"
                                                  >
                             </datatable-component>
                         </div>
@@ -131,10 +133,10 @@
                 dialog: false,
                 dialogDelete: false,
                 headers:[
-                    { text: 'Name', value: 'name',class:'text-xs-left'},
-                    { text: 'Slug', value: 'slug' },
-                    { text: 'Url', value: 'url' },
-                    { text: 'Created At', value: 'created_at' },
+                    { text: 'Name', value: 'name',class:'text-xs-left',type:'default'},
+                    { text: 'Note', value: 'note' ,type:'default'},
+                    { text: 'Active', value: 'active' ,type:'switch',class:'text-xs-center'},
+                    { text: 'Created At', value: 'created_at',type:'default' },
                 ],
                 loadingDataTable:false,
                 apiReady:false,
@@ -152,9 +154,10 @@
                 snackbar: false,
                 color: 'success',
                 mode: '',
+                tes: '',
+                switchs:[],
                 timeout: 6000,
                 text: 'Hello, I\'m a snackbar'
-
             }
         },
         watch:{
@@ -165,7 +168,7 @@
         },
         methods:{
             onClickChild(value){
-                this.api = '/api/group-menu/datatable'
+                this.api = '/api/role/datatable'
             },
             selectedCheckbox(selected){
                 this.select = selected;
@@ -180,7 +183,7 @@
                     page = this.currentPage;
                 }
                 axios
-                  .get('/api/group-menu/datatable?page='+page+'&showing='+show)
+                  .get('/api/role/datatable?page='+page+'&showing='+show)
                   .then(response => {
                     this.loadingDataTable = false
                     this.dataItem = response.data.data
@@ -189,24 +192,26 @@
                     this.pagination.rowsPerPage = show;
                     this.pagination.totalItem = response.data.total;
                     this.totalItem = response.data.total;
-
-                    for (var i = 0; i < this.dataItem.length; i++) {
-                        let html = 'tes';
-
-                        this.dataItem[i].action = html
+                    for (var i = 0; i < response.data.data.length; i++) {
+                        this.switchs[i] = {value:null,id:null}; 
+                        if (response.data.data[i].active == '1') {
+                            this.switchs[i].value = true 
+                        }else{
+                            this.switchs[i].value = false 
+                        }
+                        this.switchs[i].id = response.data.data[i].id 
                     }
-                    this.isLoading = false;
                   })
                   .catch(error => {
                     console.log(error)
                     this.errored = true
                   })
-                  .finally(() => this.loadingDataTable = true)
+                  .finally(() => this.loadingDataTable = true,this.isLoading = false)
             },
             deleteData(){
 
                 axios
-                    .delete('/api/group-menu/delete',{
+                    .delete('/api/role/delete',{
                         data:{
                             data:this.select,
                         }
@@ -256,6 +261,26 @@
             getCurrentPage(page){
                 this.currentPage  = page;
                 console.log(this.currentPage);
+            },
+            switchChange(data){
+                console.log(data);
+                axios
+                    .post('/api/role/change-status',{
+                        data:data,
+                    })
+                    .then(response => {
+                        this.snackbar =  true;
+                        this.text =  response.data.message;
+                        this.callingApi();
+                        this.dialogDelete = false;
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        this.snackbar =  true;
+                        this.text =  error;
+                        this.errored = true
+                        this.dialogDelete = false;
+                    })
             }
         }
     }

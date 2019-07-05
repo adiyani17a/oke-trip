@@ -118,6 +118,11 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "datatableRole"
       ]);
 
+      Route::post('/change-status', [
+        'uses' => "apiController@chageStatusRole",
+        'as' => "chageStatusRole"
+      ]);
+
       Route::post('/save', [
         'uses' => "apiController@saveRole",
         'as' => "saveRole"
