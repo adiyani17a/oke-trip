@@ -216,14 +216,28 @@ class apiController extends Controller
                 $menuList = $this->model->menuList()->get();
                 foreach ($menuList as $key => $value) {
                     $idMenu = $this->model->privilege()->max('id')+1;
-                        
                     $menu['id'] = $idMenu;
                     $menu['role_id'] = $id;
                     $menu['role_name'] = $req->name;
                     $menu['menu_list_id'] = $value->id;
                     $menu['menu_list_name'] = $value->name;
-                    $menu['create'] = 0;
-                    $menu['create'] = 0;
+
+                    if ($req->name == 'Administrator') {
+                        $menu['create'] = 1;
+                        $menu['edit'] = 1;
+                        $menu['delete'] = 1;
+                        $menu['validation'] = 1;    
+                    }else{
+                        $menu['create'] = 0;
+                        $menu['edit'] = 0;
+                        $menu['delete'] = 0;
+                        $menu['validation'] = 0;
+                    }
+
+                    $menu['created_by'] = Auth::user()->name;
+                    $menu['updated_by'] = Auth::user()->name;
+                    $menu['created_at'] = carbon::now();
+                    $menu['updated_at'] = carbon::now();
 
                     $this->model->privilege()->create($menu);
                 }
@@ -232,6 +246,14 @@ class apiController extends Controller
                 $input = $req->all();
                 $input['updated_by'] = Auth::user()->name;
                 $this->model->role()->where('id',$req->id)->update($input);
+
+                $menu['id'] = $idMenu;
+                $menu['role_id'] = $id;
+                $menu['role_name'] = $req->name;
+                $menu['updated_by'] = Auth::user()->m_name;
+                $menu['updated_at'] = carbon::now();
+
+                $this->model->privilege()->where('role_id',$req->id)->update($menu);
                 return Response::json(['status'=>1,'message'=>'Success updating data']);
             }
         });

@@ -41,7 +41,7 @@
 	     	 	</td>
 	        <td v-for="header in headers" :class="header.class" >
             <div v-if="header.type == 'switch'" class="text-xs-center">
-              <v-switch  @change="switchChange(props.index)" v-model="switching[props.index].value" style="margin-left: 100px;margin-top: 15px;" class="text-xs-center">
+              <v-switch  @change="switchChange(switching[props.index])" v-model="switching[props.index].value" style="margin-left: 80px;margin-top: 15px;" class="text-xs-center">
               </v-switch>
             </div>
             <div v-if="header.type == 'default' || header.type == undefined">
@@ -191,8 +191,8 @@
           }, 1000)
         })
       },
-      switchChange(index){
-        this.$emit('switchChange',this.switching[index]);
+      switchChange(data){
+        this.$emit('switchChange',data);
       },
       checkboxChange(data,id){
         this.$emit('checkboxChange',data.id)
