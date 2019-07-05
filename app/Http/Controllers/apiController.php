@@ -151,7 +151,7 @@ class apiController extends Controller
         
     }
 
-    public function saveMenuList(Request $req)
+    public function savPrivilege(Request $req)
     {
         return DB::transaction(function() use ($req) {  
             if (!isset($req->id) or $req->id == '' or $req->id == null) {
