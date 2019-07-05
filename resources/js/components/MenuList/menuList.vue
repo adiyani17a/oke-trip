@@ -31,6 +31,7 @@
                                                  :paginations="pagination"
                                                  :totalItem="totalItem"
                                                  :namaFitur="namaFitur"
+                                                 @getCurrentPage="getCurrentPage"
                                                  @selectedCheckbox="selectedCheckbox"
                                                  @callingApi="callingApi"
                                                  >
@@ -38,6 +39,7 @@
                         </div>
                         <create-menu-list :dialog="dialog" 
                                             :idData="idData" 
+                                            :options="options" 
                                             @closeDialog="closeDialog"></create-menu-list>
                     </div>
                     <v-dialog
@@ -109,7 +111,6 @@
                 .get('/api/get-token')
                 .then(response => {
                   axios.defaults.headers.common['Authorization'] = 'Bearer '+response.data.access_token;
-
                 })
                 .catch(error => {
                   console.log(error)
@@ -133,6 +134,7 @@
                     { text: 'Name', value: 'name',class:'text-xs-left'},
                     { text: 'Slug', value: 'slug' },
                     { text: 'Url', value: 'url' },
+                    { text: 'Group Menu', value: 'group_menu_name' },
                     { text: 'Created At', value: 'created_at' },
                 ],
                 loadingDataTable:false,
@@ -150,9 +152,10 @@
                 snackbar: false,
                 color: 'success',
                 mode: '',
+                options:[],
+                currentPage:1,
                 timeout: 6000,
                 text: 'Hello, I\'m a snackbar'
-
             }
         },
         watch:{
@@ -175,18 +178,24 @@
                 }
 
                 if (page == undefined) {
-                    page = 1;
+                    page = this.currentPage;
                 }
                 axios
                   .get('/api/menu-list/datatable?page='+page+'&showing='+show)
                   .then(response => {
                     this.loadingDataTable = false
-                    this.dataItem = response.data.data
-                    this.pagination.current = response.data.current_page;
-                    this.pagination.total = response.data.last_page;
+                    this.dataItem = response.data.data.data
+                    this.pagination.current = response.data.data.current_page;
+                    this.pagination.total = response.data.data.last_page;
                     this.pagination.rowsPerPage = show;
-                    this.pagination.totalItem = response.data.total;
-                    this.totalItem = response.data.total;
+                    this.pagination.totalItem = response.data.data.total;
+                    this.totalItem = response.data.data.total;
+                    for (var i = 0; i < response.data.groupMenuList.length; i++) {
+                        this.options.push({
+                            text:response.data.groupMenuList[i].name,
+                            value:response.data.groupMenuList[i].id
+                        })
+                    }
 
                     for (var i = 0; i < this.dataItem.length; i++) {
                         let html = 'tes';
@@ -202,7 +211,6 @@
                   .finally(() => this.loadingDataTable = true)
             },
             deleteData(){
-
                 axios
                     .delete('/api/menu-list/delete',{
                         data:{
@@ -232,6 +240,7 @@
             },
             closeDialog(param){
                 this.dialog = false;
+                console.log(this);
                 this.callingApi();
             },
             confirmationDelete(param){
@@ -250,6 +259,10 @@
             },
             onCancel() {
               console.log('User cancelled the loader.')
+            },
+            getCurrentPage(page){
+                this.currentPage  = page;
+                console.log(this.currentPage);
             }
         }
     }

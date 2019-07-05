@@ -15,7 +15,9 @@ class privilege extends Model
     protected $fillable = [
 							'id',
 							'role_id',
+							'role_name',
 							'menu_list_id',
+							'menu_list_name',
 							'create',
 							'edit',
 							'delete' ,

@@ -100,13 +100,16 @@ class apiController extends Controller
     // MENU LIST
     public function datatableMenuList(Request $req)
     {
-        $data =  $this->model->menuList()->paginate($req->showing);
+        $data =  $this->model->menuList()
+                     ->paginate($req->showing);
         
-
         foreach ($data as $i => $d) {
             $data[$i]->action = '';
+            $data[$i]->group_menu_name = $d->groupMenu->name;
         }
-        return Response::json($data);
+
+        $groupMenu = $this->model->groupMenu()->get();
+        return Response::json(['data'=>$data,'groupMenuList'=>$groupMenu]);
     }
 
     public function saveMenuList(Request $req)
@@ -117,10 +120,14 @@ class apiController extends Controller
                 $input['created_by'] = Auth::user()->name;
                 $input['updated_by'] = Auth::user()->name;
                 $input['name'] = ucwords($input['name']);
+                $input['slug'] = strtolower(str_replace(' ','-',$input['slug']));
+                $input['url'] = strtolower(str_replace(' ','-',$input['url']));
                 $this->model->menuList()->create($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
                 $input = $req->all();
+                $input['slug'] = strtolower(str_replace(' ','-',$input['slug']));
+                $input['url'] = strtolower(str_replace(' ','-',$input['url']));
                 $input['updated_by'] = Auth::user()->name;
                 $this->model->menuList()->where('id',$req->id)->update($input);
                 return Response::json(['status'=>1,'message'=>'Success updating data']);
@@ -138,4 +145,129 @@ class apiController extends Controller
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
         });
     }
+    // PRIVILEGE
+    public function getDataPrivilege()
+    {
+        
+    }
+
+    public function savePrivilege(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+            if (!isset($req->id) or $req->id == '' or $req->id == null) {
+                $input = $req->all();
+                $input['created_by'] = Auth::user()->name;
+                $input['updated_by'] = Auth::user()->name;
+                $input['name'] = ucwords($input['name']);
+                $input['slug'] = strtolower(str_replace(' ','-',$input['slug']));
+                $input['url'] = strtolower(str_replace(' ','-',$input['url']));
+                $this->model->menuList()->create($input);
+                return Response::json(['status'=>1,'message'=>'Success saving data']);
+            }else{
+                $input = $req->all();
+                $input['slug'] = strtolower(str_replace(' ','-',$input['slug']));
+                $input['url'] = strtolower(str_replace(' ','-',$input['url']));
+                $input['updated_by'] = Auth::user()->name;
+                $this->model->menuList()->where('id',$req->id)->update($input);
+                return Response::json(['status'=>1,'message'=>'Success updating data']);
+            }
+        });
+    }
+    // ROLE
+    public function datatableRole(Request $req)
+    {
+        $data =  $this->model->role()->paginate($req->showing);
+        
+
+        foreach ($data as $i => $d) {
+            $data[$i]->action = '';
+        }
+        return Response::json($data);
+    }
+
+    public function chageStatusRole(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+
+            $input['active'] = $req->data['value'];
+            $input['updated_by'] = Auth::user()->name;
+            $this->model->role()->where('id',$req->data['id'])->update($input);
+            if ($req->data['value'] == false) {
+                return Response::json(['status'=>1,'message'=>'Success deactivate data']);
+            }else{
+                return Response::json(['status'=>1,'message'=>'Success activate data']);
+            }
+        });
+    }
+
+    public function saveRole(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+            if (!isset($req->id) or $req->id == '' or $req->id == null) {
+                $id = $this->model->role()->max('id')+1;
+                $input = $req->all();
+                $input['id'] = $id;
+                $input['created_by'] = Auth::user()->name;
+                $input['updated_by'] = Auth::user()->name;
+                $input['name'] = ucwords($input['name']);
+                $this->model->role()->create($input);
+
+
+                $menuList = $this->model->menuList()->get();
+                foreach ($menuList as $key => $value) {
+                    $idMenu = $this->model->privilege()->max('id')+1;
+                    $menu['id'] = $idMenu;
+                    $menu['role_id'] = $id;
+                    $menu['role_name'] = $req->name;
+                    $menu['menu_list_id'] = $value->id;
+                    $menu['menu_list_name'] = $value->name;
+
+                    if ($req->name == 'Administrator') {
+                        $menu['create'] = 1;
+                        $menu['edit'] = 1;
+                        $menu['delete'] = 1;
+                        $menu['validation'] = 1;    
+                    }else{
+                        $menu['create'] = 0;
+                        $menu['edit'] = 0;
+                        $menu['delete'] = 0;
+                        $menu['validation'] = 0;
+                    }
+
+                    $menu['created_by'] = Auth::user()->name;
+                    $menu['updated_by'] = Auth::user()->name;
+                    $menu['created_at'] = carbon::now();
+                    $menu['updated_at'] = carbon::now();
+
+                    $this->model->privilege()->create($menu);
+                }
+                return Response::json(['status'=>1,'message'=>'Success saving data']);
+            }else{
+                $input = $req->all();
+                $input['updated_by'] = Auth::user()->name;
+                $this->model->role()->where('id',$req->id)->update($input);
+
+                $menu['id'] = $idMenu;
+                $menu['role_id'] = $id;
+                $menu['role_name'] = $req->name;
+                $menu['updated_by'] = Auth::user()->m_name;
+                $menu['updated_at'] = carbon::now();
+
+                $this->model->privilege()->where('role_id',$req->id)->update($menu);
+                return Response::json(['status'=>1,'message'=>'Success updating data']);
+            }
+        });
+    }
+
+    public function deleteRole(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+            foreach ($req->data as $i => $d) {
+                $this->model->role()->where('id',$req->data[$i]['id'])->delete();
+            }
+
+            return Response::json(['status'=>1,'message'=>'Success deleting data']);
+        });
+    }
+
 }

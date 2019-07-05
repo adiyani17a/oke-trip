@@ -128,6 +128,35 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>
           <li class="nav-item has-treeview">
             <a class="nav-link active" >
+              <i class="nav-icon fas fa-user"></i>
+              <p>
+                User
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <router-link to="/role" class="nav-link ">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Role</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/administrator" class="nav-link ">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Administrator</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to ="/agent" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Agent</p>
+                </router-link>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a class="nav-link active" >
               <i class="nav-icon fab fa-product-hunt"></i>
               <p>
                 Product
@@ -160,12 +189,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </router-link>
               </li>
             </ul>
-          </li>
-          <li class="nav-item">
-            <router-link to="/agent" class="nav-link ">
-              <i class="nav-icon fas fa-users"></i>
-              <p>Agent</p>
-            </router-link>
           </li>
           <li class="nav-item has-treeview">
             <a class="nav-link active" >

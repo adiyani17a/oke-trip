@@ -10,7 +10,7 @@
             <form id="saveData">
               <v-layout wrap>
                 <v-flex xs12>
-                  <v-text-field label="Name*" v-model="name" required :counter="20" name="name" @blur="$v.name.$touch()" :error-messages="nameErrors"></v-text-field>
+                  <v-text-field label="Name*" v-model="name" required name="name" @blur="$v.name.$touch()" :error-messages="nameErrors"></v-text-field>
                   <input type="hidden" name="id" v-model="id">
                 </v-flex>
                 <v-flex xs12>
@@ -24,10 +24,12 @@
                     v-model="groupMenuId"
                     :items="options"
                     label="Group Menu*"
-                    item-text="state"
-                    item-value="abbr"
-                    @blur="$v.groupMenu.$touch()" :error-messages="groupMenuErrors"
+                    item-text="text"
+                    item-value="value"
+                    @blur="$v.groupMenuId.$touch()"
+                    :error-messages="groupMenuErrors"
                   ></v-select>
+                  <input type="hidden" v-model="groupMenuId" class="group_menu_id" name="group_menu_id">
                 </v-flex>
               </v-layout>
             </form>
@@ -60,7 +62,6 @@
   </v-layout>
 </template>
 <script>
-
   import { required, maxLength, email } from 'vuelidate/lib/validators'
   export default {
     data: () => ({
@@ -78,21 +79,14 @@
       mode: '',
       namaFitur: '',
       timeout: 6000,
-      groupMenuId:'',
-      options: [
-            { state: 'Florida', abbr: 'FL' },
-            { state: 'Georgia', abbr: 'GA' },
-            { state: 'Nebraska', abbr: 'NE' },
-            { state: 'California', abbr: 'CA' },
-            { state: 'New York', abbr: 'NY' }
-      ],
+      groupMenuId:null,
       text: 'Hello, I\'m a snackbar'
     }),
     validations: {
       name: { required, maxLength: maxLength(20) },
       slug: { required },
       url: { required },
-      groupMenu: { required },
+      groupMenuId: { required },
     },
     computed:{
       nameErrors () {
@@ -115,16 +109,16 @@
         return errors
       },
       groupMenuErrors () {
-        console.log(this.groupMenuId);
         const errors = []
-        if (!this.$v.groupMenu.$dirty) return errors
-        !this.$v.groupMenu.required && errors.push('Group Menu is required.')
+        if (!this.$v.groupMenuId.$dirty) return errors
+        !this.$v.groupMenuId.required && errors.push('Group Menu is required.')
         return errors
       },
     },
     props:{
       dialog: false,
       idData:Array,
+      options:Array,
     },
     watch:{
       dialog:function(){
@@ -136,11 +130,13 @@
           this.name = this.idData[0].name
           this.slug = this.idData[0].slug
           this.url = this.idData[0].url
+          this.groupMenuId = this.idData[0].group_menu_id
         }else{
           this.id = ''
           this.name = ''
           this.slug = ''
           this.url = ''
+          this.groupMenuId = null
         }
       }
     },
@@ -154,13 +150,14 @@
             this.slug = this.idData[0].slug
             this.url = this.idData[0].url
             this.id = this.idData[0].id
+            this.groupMenuId = this.idData[0].group_menu_id
           }else{
             this.name = ''
             this.slug = ''
             this.url = ''
             this.id = ''
+            this.groupMenuId = null
           }
-          
         }else{
           this.$v.$touch()
           if (this.$v.$anyError == true) {
@@ -168,7 +165,7 @@
           }
 
           axios
-            .post('/api/menu-list/save',$('#saveData').serialize())
+            .post('/api/menu-list/save',$('#saveData :input').serialize())
             .then(response => {
               this.snackbar =  true;
               this.text =  response.data.message;
@@ -177,6 +174,7 @@
                 this.name = ''
                 this.slug = ''
                 this.url = ''
+                this.groupMenuId = null
                 this.id = ''
               }else{
                 this.color = 'error'

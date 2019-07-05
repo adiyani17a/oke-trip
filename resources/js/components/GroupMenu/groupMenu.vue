@@ -116,6 +116,7 @@
                   this.errored = true
                 })
                 .finally(() => this.apiReady = true)
+
         },
         components: {
             Loading
@@ -144,6 +145,7 @@
                     totalItem:0, 
                 },
                 totalItem:0,
+                currentPage:1,
                 dialog:false,
                 idData:[],
                 param:'',
@@ -175,7 +177,7 @@
                 }
 
                 if (page == undefined) {
-                    page = 1;
+                    page = this.currentPage;
                 }
                 axios
                   .get('/api/group-menu/datatable?page='+page+'&showing='+show)
@@ -250,6 +252,10 @@
             },
             onCancel() {
               console.log('User cancelled the loader.')
+            },
+            getCurrentPage(page){
+                this.currentPage  = page;
+                console.log(this.currentPage);
             }
         }
     }

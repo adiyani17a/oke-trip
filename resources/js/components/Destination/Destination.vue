@@ -143,6 +143,7 @@
                 },
                 totalItem:0,
                 dialog:false,
+                currentPage:1,
                 idData:[],
                 param:'',
                 snackbar: false,
@@ -173,7 +174,7 @@
                 }
 
                 if (page == undefined) {
-                    page = 1;
+                    page = this.currentPage;
                 }
                 axios
                   .get('/api/destination/datatable?page='+page+'&showing='+show)
@@ -249,6 +250,10 @@
             },
             onCancel() {
               console.log('User cancelled the loader.')
+            },
+            getCurrentPage(page){
+                this.currentPage  = page;
+                console.log(this.currentPage);
             }
         }
     }
