@@ -205,7 +205,7 @@
             deleteData(){
 
                 axios
-                    .delete('/api/group-menu/delete',{
+                    .delete('/api/destination/delete',{
                         data:{
                             data:this.select,
                         }
