@@ -143,11 +143,13 @@ class apiController extends Controller
                     $menu['menu_list_name'] = ucwords($input['name']);
 
                     if ($value->id == 1) {
+                        $menu['view'] = 'true';
                         $menu['create'] = 'true';
                         $menu['edit'] = 'true';
                         $menu['delete'] = 'true';
                         $menu['validation'] = 'true';    
                     }else{
+                        $menu['view'] = 'false';
                         $menu['create'] = 'false';
                         $menu['edit'] = 'false';
                         $menu['delete'] = 'false';
@@ -274,11 +276,13 @@ class apiController extends Controller
                     $menu['menu_list_name'] = $value->name;
 
                     if ($req->name == 'Administrator') {
+                        $menu['view'] = 'true';
                         $menu['create'] = 'true';
                         $menu['edit'] = 'true';
                         $menu['delete'] = 'true';
                         $menu['validation'] = 'true';    
                     }else{
+                        $menu['view'] = 'false';
                         $menu['create'] = 'false';
                         $menu['edit'] = 'false';
                         $menu['delete'] = 'false';

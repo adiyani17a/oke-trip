@@ -105,7 +105,7 @@
     export default {
         mounted() {
             console.log('Intialize Main Page...')
-            let breadcrumb = '<router-link to="/menu-list">Destination</router-link>';
+            let breadcrumb = '<router-link to="/menu-list">Menu List</router-link>';
             $('#crumb').html(breadcrumb);
             axios
                 .get('/api/get-token')

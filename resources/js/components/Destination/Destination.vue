@@ -30,6 +30,7 @@
                                                  :loadingDataTable="loadingDataTable"
                                                  :paginations="pagination"
                                                  :totalItem="totalItem"
+                                                 :namaFitur="namaFitur"
                                                  @selectedCheckbox="selectedCheckbox"
                                                  @callingApi="callingApi"
                                                  >
@@ -115,6 +116,7 @@
                   this.errored = true
                 })
                 .finally(() => this.apiReady = true)
+
         },
         components: {
             Loading
@@ -130,7 +132,7 @@
                 dialogDelete: false,
                 headers:[
                     { text: 'Name', value: 'name',class:'text-xs-left'},
-                    { text: 'Note', value: 'note' },
+                    { text: 'note', value: 'note' },
                     { text: 'Created At', value: 'created_at' },
                 ],
                 loadingDataTable:false,
@@ -142,8 +144,8 @@
                     totalItem:0, 
                 },
                 totalItem:0,
-                dialog:false,
                 currentPage:1,
+                dialog:false,
                 idData:[],
                 param:'',
                 snackbar: false,
@@ -192,7 +194,6 @@
 
                         this.dataItem[i].action = html
                     }
-                    console.log('asdasd');
                     this.isLoading = false;
                   })
                   .catch(error => {
@@ -204,17 +205,25 @@
             deleteData(){
 
                 axios
-                    .delete('/api/destination/delete',{
+                    .delete('/api/group-menu/delete',{
                         data:{
                             data:this.select,
                         }
                     })
                     .then(response => {
-
-                        this.snackbar =  true;
-                        this.text =  response.data.message;
-                        this.callingApi();
-                        this.dialogDelete = false;
+                        if (response.data.status == 1) {
+                            this.snackbar =  true;
+                            this.text =  response.data.message;
+                            this.callingApi();
+                            this.dialogDelete = false;
+                            this.color = 'success';
+                        }else{
+                            this.snackbar =  true;
+                            this.text =  response.data.message;
+                            this.callingApi();
+                            this.dialogDelete = false;
+                            this.color = 'error';
+                        }
                     })
                     .catch(error => {
                         console.log(error)
@@ -222,6 +231,7 @@
                         this.text =  error;
                         this.errored = true
                         this.dialogDelete = false;
+                        this.color = 'error';
                     })
             },
             editData(){

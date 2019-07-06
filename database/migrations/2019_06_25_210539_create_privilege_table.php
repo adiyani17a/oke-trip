@@ -19,6 +19,7 @@ class CreatePrivilegeTable extends Migration
             $table->string('role_name'); //related to table users
             $table->integer('menu_list_id'); //related to table users
             $table->string('menu_list_name'); //related to table users
+            $table->string('view');
             $table->string('create');
             $table->string('edit');
             $table->string('delete');

@@ -98,25 +98,37 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </router-link>
           </li>
           @foreach ($groupMenu as $i => $d)
-            <li class="nav-item has-treeview">
-              <a class="nav-link active" >
-                <i class="nav-icon {{ $d->icon }}"></i>
-                <p>
-                  {{ $d->name }}
-                  <i class="right fas fa-angle-left"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                @foreach ($d->menuList as $i1 => $d1)
-                  <li class="nav-item">
-                    <router-link to="/{{ $d1->url }}" class="nav-link ">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>{{ $d1->name }}</p>
-                    </router-link>
-                  </li>
-                @endforeach
-              </ul>
-            </li>
+            @php
+              $hasFeature = 0;
+              foreach ($d->menuList as $i1 => $d1) {
+                if (Auth::user()->hasAkses($d1->id,'view')){
+                  $hasFeature+=1;
+                }  
+              }
+            @endphp
+            @if ($hasFeature > 0)
+              <li class="nav-item has-treeview">
+                <a class="nav-link active" >
+                  <i class="nav-icon {{ $d->icon }}"></i>
+                  <p>
+                    {{ $d->name }}
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  @foreach ($d->menuList as $i1 => $d1)
+                    @if (Auth::user()->hasAkses($d1->id,'view'))
+                      <li class="nav-item">
+                        <router-link to="/{{ $d1->url }}" class="nav-link ">
+                          <i class="far fa-circle nav-icon"></i>
+                          <p>{{ $d1->name }}</p>
+                        </router-link>
+                      </li>
+                    @endif
+                  @endforeach
+                </ul>
+              </li>
+            @endif
           @endforeach
         </ul>
       </nav>

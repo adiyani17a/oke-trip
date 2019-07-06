@@ -103,7 +103,7 @@
     export default {
         mounted() {
             console.log('Intialize Main Page...')
-            let breadcrumb = '<router-link to="/destination">Destination</router-link>';
+            let breadcrumb = '<router-link to="/group-menu">Group Menu</router-link>';
             $('#crumb').html(breadcrumb);
             axios
                 .get('/api/get-token')
@@ -132,7 +132,6 @@
                 dialogDelete: false,
                 headers:[
                     { text: 'Name', value: 'name',class:'text-xs-left'},
-                    { text: 'Icon', value: 'icon' },
                     { text: 'Slug', value: 'slug' },
                     { text: 'Url', value: 'url' },
                     { text: 'Created At', value: 'created_at' },
