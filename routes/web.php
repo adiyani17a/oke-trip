@@ -92,25 +92,6 @@ Route::group(['middleware' => 'check-token'], function () {
 
     });
 
-    Route::group(["prefix" => "privilege"], function(){
-
-      Route::get('/get-data', [
-        'uses' => "apiController@getDataPrivilege",
-        'as' => "getDataPrivilege"
-      ]);
-
-      Route::post('/save', [
-        'uses' => "apiController@savePrivilege",
-        'as' => "savePrivilege"
-      ]);
-
-      Route::delete('/delete', [
-        'uses' => "apiController@deletePrivilege",
-        'as' => "deletePrivilege"
-      ]);
-
-    });
-
     Route::group(["prefix" => "role"], function(){
 
       Route::get('/datatable', [
@@ -131,6 +112,20 @@ Route::group(['middleware' => 'check-token'], function () {
       Route::delete('/delete', [
         'uses' => "apiController@deleteRole",
         'as' => "deleteRole"
+      ]);
+
+    });
+
+    Route::group(["prefix" => "privilege"], function(){
+
+      Route::get('/datatable', [
+        'uses' => "apiController@datatablePrivilege",
+        'as' => "datatablePrivilege"
+      ]);
+
+      Route::post('/change-status', [
+        'uses' => "apiController@chageStatusPrivilege",
+        'as' => "chageStatusPrivilege"
       ]);
 
     });

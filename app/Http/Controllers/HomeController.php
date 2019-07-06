@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\TokenManagement;
 use Auth;
+use App\models;
 class HomeController extends Controller
 {
     /**
@@ -12,9 +13,11 @@ class HomeController extends Controller
      *
      * @return void
      */
+    protected $model;
     public function __construct()
     {
         $this->middleware('auth');
+        $this->model = new models();
     }
 
     /**
@@ -25,6 +28,7 @@ class HomeController extends Controller
     public function index()
     {
         generateToken();
-        return view('home',compact('token'));
+        $groupMenu = $this->model->groupMenu()->get();
+        return view('home',compact('token','groupMenu'));
     }
 }

@@ -14,6 +14,9 @@
                   <input type="hidden" name="id" v-model="id">
                 </v-flex>
                 <v-flex xs12>
+                  <v-text-field label="Icon*" v-model="icon" required name="icon" @blur="$v.icon.$touch()" :error-messages="iconErrors"></v-text-field>
+                </v-flex>
+                <v-flex xs12>
                   <v-text-field label="Slug*" v-model="slug" required name="slug" @blur="$v.slug.$touch()" :error-messages="slugErrors"></v-text-field>
                 </v-flex>
                 <v-flex xs12>
@@ -57,6 +60,7 @@
       id: '',
       name: '',
       slug: '',
+      icon: '',
       url: '',
       dialogs:false,
       nameRules: [
@@ -74,6 +78,7 @@
       name: { required, maxLength: maxLength(20) },
       slug: { required },
       url: { required },
+      icon: { required },
     },
     computed:{
       nameErrors () {
@@ -95,6 +100,11 @@
         !this.$v.url.required && errors.push('Url is required.')
         return errors
       },
+      iconErrors () {
+        const errors = []
+        !this.$v.icon.required && errors.push('Icon is required.')
+        return errors
+      },
     },
     props:{
       dialog: false,
@@ -110,11 +120,13 @@
           this.name = this.idData[0].name
           this.slug = this.idData[0].slug
           this.url = this.idData[0].url
+          this.icon = this.idData[0].icon
         }else{
           this.id = ''
           this.name = ''
           this.slug = ''
           this.url = ''
+          this.icon = ''
         }
       }
     },
@@ -128,10 +140,12 @@
             this.slug = this.idData[0].slug
             this.url = this.idData[0].url
             this.id = this.idData[0].id
+            this.icon = this.idData[0].icon
           }else{
             this.name = ''
             this.slug = ''
             this.url = ''
+            this.icon = ''
             this.id = ''
           }
           
@@ -151,6 +165,7 @@
                 this.name = ''
                 this.slug = ''
                 this.url = ''
+                this.icon = ''
                 this.id = ''
               }else{
                 this.color = 'error'

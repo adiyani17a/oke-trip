@@ -17,6 +17,9 @@
                   <v-text-field label="Slug*" v-model="slug" required name="slug" @blur="$v.slug.$touch()" :error-messages="slugErrors"></v-text-field>
                 </v-flex>
                 <v-flex xs12>
+                  <v-text-field label="Icon*" v-model="icon" required name="icon" @blur="$v.icon.$touch()" :error-messages="iconErrors"></v-text-field>
+                </v-flex>
+                <v-flex xs12>
                   <v-text-field label="Url*" v-model="url" required name="url" @blur="$v.url.$touch()" :error-messages="urlErrors"></v-text-field>
                 </v-flex>
                 <v-flex xs12>
@@ -68,6 +71,7 @@
       id: '',
       name: '',
       slug: '',
+      icon: '',
       url: '',
       dialogs:false,
       nameRules: [
@@ -87,6 +91,7 @@
       slug: { required },
       url: { required },
       groupMenuId: { required },
+      icon: { required },
     },
     computed:{
       nameErrors () {
@@ -114,6 +119,11 @@
         !this.$v.groupMenuId.required && errors.push('Group Menu is required.')
         return errors
       },
+      iconErrors () {
+        const errors = []
+        !this.$v.icon.required && errors.push('Icon is required.')
+        return errors
+      },
     },
     props:{
       dialog: false,
@@ -131,13 +141,15 @@
           this.slug = this.idData[0].slug
           this.url = this.idData[0].url
           this.groupMenuId = this.idData[0].group_menu_id
+          this.icon = this.idData[0].icon
         }else{
           this.id = ''
           this.name = ''
           this.slug = ''
           this.url = ''
           this.groupMenuId = null
-        }
+          this.icon = ''
+        }    
       }
     },
     methods:{
@@ -151,12 +163,14 @@
             this.url = this.idData[0].url
             this.id = this.idData[0].id
             this.groupMenuId = this.idData[0].group_menu_id
+            this.icon = this.idData[0].icon
           }else{
             this.name = ''
             this.slug = ''
             this.url = ''
             this.id = ''
             this.groupMenuId = null
+            this.icon = ''
           }
         }else{
           this.$v.$touch()
@@ -176,6 +190,7 @@
                 this.url = ''
                 this.groupMenuId = null
                 this.id = ''
+                this.icon = ''
               }else{
                 this.color = 'error'
               }

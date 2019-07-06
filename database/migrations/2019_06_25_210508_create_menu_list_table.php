@@ -14,8 +14,9 @@ class CreateMenuListTable extends Migration
     public function up()
     {
         Schema::create('menu_list', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->integer('id');
             $table->string('name'); //related to table users
+            $table->string('icon');
             $table->string('slug');
             $table->unsignedBigInteger('group_menu_id');
             $table->string('url')->nullable();

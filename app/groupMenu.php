@@ -23,4 +23,9 @@ class groupMenu extends Model
 							'created_at',
 							'updated_at'
     					];
+
+    public function menuList()
+    {
+      return $this->hasMany('App\menuList', 'group_menu_id', 'id');
+    }
 }

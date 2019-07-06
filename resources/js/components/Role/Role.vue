@@ -31,7 +31,6 @@
                                                  :paginations="pagination"
                                                  :totalItem="totalItem"
                                                  :namaFitur="namaFitur"
-                                                 :switchs="switchs"
                                                  @selectedCheckbox="selectedCheckbox"
                                                  @callingApi="callingApi"
                                                  @switchChange="switchChange"
@@ -155,7 +154,6 @@
                 color: 'success',
                 mode: '',
                 tes: '',
-                switchs:[],
                 timeout: 6000,
                 text: 'Hello, I\'m a snackbar'
             }
@@ -192,14 +190,12 @@
                     this.pagination.rowsPerPage = show;
                     this.pagination.totalItem = response.data.total;
                     this.totalItem = response.data.total;
-                    for (var i = 0; i < response.data.data.length; i++) {
-                        this.switchs[i] = {value:null,id:null}; 
-                        if (response.data.data[i].active == '1') {
-                            this.switchs[i].value = true 
+                    for (var i = 0; i < this.dataItem.length; i++) {
+                        if (this.dataItem[i].active == 'true') {
+                            this.dataItem[i].active = true 
                         }else{
-                            this.switchs[i].value = false 
+                            this.dataItem[i].active = false 
                         }
-                        this.switchs[i].id = response.data.data[i].id 
                     }
                   })
                   .catch(error => {
@@ -217,11 +213,19 @@
                         }
                     })
                     .then(response => {
-
-                        this.snackbar =  true;
-                        this.text =  response.data.message;
-                        this.callingApi();
-                        this.dialogDelete = false;
+                        if (response.data.status == 1) {
+                            this.snackbar =  true;
+                            this.text =  response.data.message;
+                            this.callingApi();
+                            this.dialogDelete = false;
+                            this.color = 'success';
+                        }else{
+                            this.snackbar =  true;
+                            this.text =  response.data.message;
+                            this.callingApi();
+                            this.dialogDelete = false;
+                            this.color = 'error';
+                        }
                     })
                     .catch(error => {
                         console.log(error)
@@ -262,11 +266,12 @@
                 this.currentPage  = page;
                 console.log(this.currentPage);
             },
-            switchChange(data){
-                console.log(data);
+            switchChange(data,id,param){
                 axios
                     .post('/api/role/change-status',{
                         data:data,
+                        id:id,
+                        param:param,
                     })
                     .then(response => {
                         this.snackbar =  true;

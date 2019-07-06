@@ -97,163 +97,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <p>Booking List</p>
             </router-link>
           </li>
-          <li class="nav-item has-treeview">
-            <a class="nav-link active" >
-              <i class="nav-icon fas fa-cogs"></i>
-              <p>
-                Setting
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <router-link to="/group-menu" class="nav-link ">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Group Menu</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to ="/menu-list" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Menu List</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to ="/privilege" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Privilege</p>
-                </router-link>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item has-treeview">
-            <a class="nav-link active" >
-              <i class="nav-icon fas fa-user"></i>
-              <p>
-                User
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <router-link to="/role" class="nav-link ">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Role</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to="/administrator" class="nav-link ">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Administrator</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to ="/agent" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Agent</p>
-                </router-link>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item has-treeview">
-            <a class="nav-link active" >
-              <i class="nav-icon fab fa-product-hunt"></i>
-              <p>
-                Product
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <router-link to="/destination" class="nav-link ">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Destination</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to ="/additional" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Additional</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to ="/itinerary" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Itinerary</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to ="/tour-leader" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Tour Leader</p>
-                </router-link>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item has-treeview">
-            <a class="nav-link active" >
-              <i class="nav-icon fas fa-chart-line"></i>
-              <p>
-                Finance
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <router-link to="/income-report" class="nav-link ">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Income Report</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to ="/income-statement" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Income Statement</p>
-                </router-link>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item has-treeview">
-            <a class="nav-link active" >
-              <i class="nav-icon fas fa-chart-pie"></i>
-              <p>
-                Report
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <router-link to="/customer-statistic" class="nav-link ">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Customer Statistic</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to ="/sales-statistic" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>sales statistics</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to ="/customer-report" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Customer Report</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to ="/sales-report" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Sales Report</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to ="/payment-report" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Payment Report</p>
-                </router-link>
-              </li>
-            </ul>
-          </li>
+          @foreach ($groupMenu as $i => $d)
+            <li class="nav-item has-treeview">
+              <a class="nav-link active" >
+                <i class="nav-icon {{ $d->icon }}"></i>
+                <p>
+                  {{ $d->name }}
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                @foreach ($d->menuList as $i1 => $d1)
+                  <li class="nav-item">
+                    <router-link to="/{{ $d1->url }}" class="nav-link ">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>{{ $d1->name }}</p>
+                    </router-link>
+                  </li>
+                @endforeach
+              </ul>
+            </li>
+          @endforeach
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

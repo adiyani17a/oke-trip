@@ -41,7 +41,7 @@
 	     	 	</td>
 	        <td v-for="header in headers" :class="header.class" >
             <div v-if="header.type == 'switch'" class="text-xs-center">
-              <v-switch  @change="switchChange(switching[props.index])" v-model="switching[props.index].value" style="margin-left: 80px;margin-top: 15px;" class="text-xs-center">
+              <v-switch  @change="switchChange(dataItem[props.index][header.value],props.item.id,header.value)" v-model="dataItem[props.index][header.value]" style="margin-left: 35px;margin-top: 15px;" class="text-xs-center">
               </v-switch>
             </div>
             <div v-if="header.type == 'default' || header.type == undefined">
@@ -87,14 +87,9 @@
   		loadingDataTable:false,
       paginations: Object,
       totalItem: 0,
-      switchs:Array,
   	},
     watch: {
       pagination:function() {
-          this.pagination.current = this.paginations.current
-          this.pagination.total = this.paginations.total
-          this.pagination.rowsPerPage = this.paginations.rowsPerPage
-          this.pagination.totalItems = this.paginations.totalItems
           this.getDataFromApi()
             .then(data => {
               this.dataItems = data.items
@@ -103,13 +98,17 @@
         deep: true
       },
       loadingDataTable:function() {
+        this.pagination.current = this.paginations.current
+        this.pagination.total = this.paginations.total
+        this.pagination.rowsPerPage = this.paginations.rowsPerPage
+        this.pagination.totalItems = this.paginations.totalItems
       	if (this.loadingDataTable) {
       		this.getDataFromApi()
             .then(data => {
               this.dataItems = data.items
               this.totalItems = data.total
+
               this.$emit('getCurrentPage',this.page)
-              this.switching = this.switchs
               console.log('Loading Datatable Complete...')
             })
       	}
@@ -150,8 +149,8 @@
           const { sortBy, descending, page, rowsPerPage } = this.pagination
           let search = this.search.trim().toLowerCase();
           let items = this.dataItem
+          this.switching = this.dataItem
           const total = this.totalItem
-          console.log(this.pagination);
           if (this.pagination.sortBy) {
             items = items.sort((a, b) => {
               const sortA = a[sortBy]
@@ -191,8 +190,11 @@
           }, 1000)
         })
       },
-      switchChange(data){
-        this.$emit('switchChange',data);
+      switchChange(data,id,param){
+        console.log(data)
+        console.log(id)
+        console.log(param)
+        this.$emit('switchChange',data,id,param);
       },
       checkboxChange(data,id){
         this.$emit('checkboxChange',data.id)

@@ -132,6 +132,7 @@
                 dialogDelete: false,
                 headers:[
                     { text: 'Name', value: 'name',class:'text-xs-left'},
+                    { text: 'Icon', value: 'icon' },
                     { text: 'Slug', value: 'slug' },
                     { text: 'Url', value: 'url' },
                     { text: 'Created At', value: 'created_at' },
@@ -212,11 +213,19 @@
                         }
                     })
                     .then(response => {
-
-                        this.snackbar =  true;
-                        this.text =  response.data.message;
-                        this.callingApi();
-                        this.dialogDelete = false;
+                        if (response.data.status == 1) {
+                            this.snackbar =  true;
+                            this.text =  response.data.message;
+                            this.callingApi();
+                            this.dialogDelete = false;
+                            this.color = 'success';
+                        }else{
+                            this.snackbar =  true;
+                            this.text =  response.data.message;
+                            this.callingApi();
+                            this.dialogDelete = false;
+                            this.color = 'error';
+                        }
                     })
                     .catch(error => {
                         console.log(error)
@@ -224,6 +233,7 @@
                         this.text =  error;
                         this.errored = true
                         this.dialogDelete = false;
+                        this.color = 'error';
                     })
             },
             editData(){

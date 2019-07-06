@@ -79,6 +79,9 @@ class apiController extends Controller
                 $this->model->groupMenu()->create($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
+                if(Auth::user()->role_id != 1){
+                    return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Update This Data']);
+                } 
                 $input = $req->all();
                 $input['updated_by'] = Auth::user()->name;
                 $this->model->groupMenu()->where('id',$req->id)->update($input);
@@ -89,7 +92,10 @@ class apiController extends Controller
 
     public function deleteGroupMenu(Request $req)
     {
-        return DB::transaction(function() use ($req) {  
+        return DB::transaction(function() use ($req) { 
+            if(Auth::user()->role_id != 1){
+                return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
+            } 
             foreach ($req->data as $i => $d) {
                 $this->model->groupMenu()->where('id',$req->data[$i]['id'])->delete();
             }
@@ -116,15 +122,50 @@ class apiController extends Controller
     {
         return DB::transaction(function() use ($req) {  
             if (!isset($req->id) or $req->id == '' or $req->id == null) {
+                $id = $this->model->menuList()->max('id')+1;
                 $input = $req->all();
+                $input['id'] = $id;
                 $input['created_by'] = Auth::user()->name;
                 $input['updated_by'] = Auth::user()->name;
                 $input['name'] = ucwords($input['name']);
                 $input['slug'] = strtolower(str_replace(' ','-',$input['slug']));
                 $input['url'] = strtolower(str_replace(' ','-',$input['url']));
                 $this->model->menuList()->create($input);
+
+                $role = $this->model->role()->get();
+
+                foreach ($role as $key => $value) {
+                    $idPrivilege = $this->model->privilege()->max('id')+1;
+                    $menu['id'] = $idPrivilege;
+                    $menu['role_id'] = $value->id;
+                    $menu['role_name'] = $value->name;
+                    $menu['menu_list_id'] = $id;
+                    $menu['menu_list_name'] = ucwords($input['name']);
+
+                    if ($value->id == 1) {
+                        $menu['create'] = 'true';
+                        $menu['edit'] = 'true';
+                        $menu['delete'] = 'true';
+                        $menu['validation'] = 'true';    
+                    }else{
+                        $menu['create'] = 'false';
+                        $menu['edit'] = 'false';
+                        $menu['delete'] = 'false';
+                        $menu['validation'] = 'false';
+                    }
+
+                    $menu['created_by'] = Auth::user()->name;
+                    $menu['updated_by'] = Auth::user()->name;
+                    $menu['created_at'] = carbon::now();
+                    $menu['updated_at'] = carbon::now();
+                    $this->model->privilege()->create($menu);
+                }
+
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
+                if(Auth::user()->role_id != 1){
+                    return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Update This Data']);
+                } 
                 $input = $req->all();
                 $input['slug'] = strtolower(str_replace(' ','-',$input['slug']));
                 $input['url'] = strtolower(str_replace(' ','-',$input['url']));
@@ -138,6 +179,11 @@ class apiController extends Controller
     public function deleteMenuList(Request $req)
     {
         return DB::transaction(function() use ($req) {  
+
+            if(Auth::user()->role_id != 1){
+                return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
+            } 
+
             foreach ($req->data as $i => $d) {
                 $this->model->menuList()->where('id',$req->data[$i]['id'])->delete();
             }
@@ -146,33 +192,33 @@ class apiController extends Controller
         });
     }
     // PRIVILEGE
-    public function getDataPrivilege()
+    public function datatablePrivilege(Request $req)
     {
+        $data =  $this->model->privilege()
+                     ->paginate($req->showing);
         
+        return Response::json($data);
     }
 
-    public function savePrivilege(Request $req)
+    public function chageStatusPrivilege(Request $req)
     {
         return DB::transaction(function() use ($req) {  
-            if (!isset($req->id) or $req->id == '' or $req->id == null) {
-                $input = $req->all();
-                $input['created_by'] = Auth::user()->name;
-                $input['updated_by'] = Auth::user()->name;
-                $input['name'] = ucwords($input['name']);
-                $input['slug'] = strtolower(str_replace(' ','-',$input['slug']));
-                $input['url'] = strtolower(str_replace(' ','-',$input['url']));
-                $this->model->menuList()->create($input);
-                return Response::json(['status'=>1,'message'=>'Success saving data']);
+            if ($req->data == true) {
+                $input[$req->param] = 'true';
             }else{
-                $input = $req->all();
-                $input['slug'] = strtolower(str_replace(' ','-',$input['slug']));
-                $input['url'] = strtolower(str_replace(' ','-',$input['url']));
-                $input['updated_by'] = Auth::user()->name;
-                $this->model->menuList()->where('id',$req->id)->update($input);
-                return Response::json(['status'=>1,'message'=>'Success updating data']);
+                $input[$req->param] = 'false';
+            }
+            $input['updated_by'] = Auth::user()->name;
+            $input['updated_at'] = carbon::now();
+            $this->model->privilege()->where('id',$req->id)->update($input);
+            if ($req->data == null) {
+                return Response::json(['status'=>1,'message'=>'Success deactivate data']);
+            }else{
+                return Response::json(['status'=>1,'message'=>'Success activate data']);
             }
         });
     }
+
     // ROLE
     public function datatableRole(Request $req)
     {
@@ -189,10 +235,15 @@ class apiController extends Controller
     {
         return DB::transaction(function() use ($req) {  
 
-            $input['active'] = $req->data['value'];
+            if ($req->data == true) {
+                $input['active'] = 'true';
+            }else{
+                $input['active'] = 'false';
+            }
             $input['updated_by'] = Auth::user()->name;
-            $this->model->role()->where('id',$req->data['id'])->update($input);
-            if ($req->data['value'] == false) {
+            $input['updated_at'] = carbon::now();
+            $this->model->role()->where('id',$req->id)->update($input);
+            if ($req->data == null) {
                 return Response::json(['status'=>1,'message'=>'Success deactivate data']);
             }else{
                 return Response::json(['status'=>1,'message'=>'Success activate data']);
@@ -223,15 +274,15 @@ class apiController extends Controller
                     $menu['menu_list_name'] = $value->name;
 
                     if ($req->name == 'Administrator') {
-                        $menu['create'] = 1;
-                        $menu['edit'] = 1;
-                        $menu['delete'] = 1;
-                        $menu['validation'] = 1;    
+                        $menu['create'] = 'true';
+                        $menu['edit'] = 'true';
+                        $menu['delete'] = 'true';
+                        $menu['validation'] = 'true';    
                     }else{
-                        $menu['create'] = 0;
-                        $menu['edit'] = 0;
-                        $menu['delete'] = 0;
-                        $menu['validation'] = 0;
+                        $menu['create'] = 'false';
+                        $menu['edit'] = 'false';
+                        $menu['delete'] = 'false';
+                        $menu['validation'] = 'false';
                     }
 
                     $menu['created_by'] = Auth::user()->name;
@@ -264,6 +315,7 @@ class apiController extends Controller
         return DB::transaction(function() use ($req) {  
             foreach ($req->data as $i => $d) {
                 $this->model->role()->where('id',$req->data[$i]['id'])->delete();
+                $this->model->privilege()->where('role_id',$req->data[$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
