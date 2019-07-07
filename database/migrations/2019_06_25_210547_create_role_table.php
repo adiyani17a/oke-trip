@@ -17,7 +17,7 @@ class CreateRoleTable extends Migration
             $table->integer('id');
             $table->string('name'); //related to table users
             $table->string('note');
-            $table->string('active')->default('0');
+            $table->string('active')->default('true');
             $table->string('created_by');
             $table->string('updated_by');
             $table->timestamps();

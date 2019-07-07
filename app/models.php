@@ -8,6 +8,7 @@ use App\groupMenu;
 use App\menuList;
 use App\privilege;
 use App\role;
+use App\User;
 class models extends Model
 {
     public function destination()
@@ -43,5 +44,12 @@ class models extends Model
         $role = new role();
 
         return $role; 
+    }
+
+    public function user()
+    {
+        $user = new User();
+
+        return $user; 
     }
 }

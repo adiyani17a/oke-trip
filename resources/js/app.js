@@ -23,6 +23,7 @@ import BootstrapVue from 'bootstrap-vue'
 import Vuetify from 'vuetify'
 import Vuelidate from 'vuelidate'
 import Vue from 'vue'
+import VImageInput from 'vuetify-image-input';
  
 Vue.use(Vuelidate)
 Vue.use(Vuetify)
@@ -60,6 +61,13 @@ let routes = [{
     },
     component: require('./components/MenuList/menuList.vue').default
 }, {
+    path: '/role',
+    name: 'Role',
+    meta: {
+        breadcrumb: 'Role',
+    },
+    component: require('./components/Role/Role.vue').default
+}, {
     path: '/privilege',
     name: 'Privilege',
     meta: {
@@ -67,26 +75,19 @@ let routes = [{
     },
     component: require('./components/Privilege/Privilege.vue').default
 }, {
-    path: '/role',
-    name: 'Role',
+    path: '/administrator-user',
+    name: 'Administrator User',
     meta: {
-        breadcrumb: 'Role',
+        breadcrumb: 'Administrator User',
     },
-    component: require('./components/Role/Role.vue').default
-},{
-    path: '/administrator',
-    name: 'Administrator',
-    meta: {
-        breadcrumb: 'Administrator',
-    },
-    component: require('./components/Administrator/Administrator.vue').default
+    component: require('./components/AdministratorUser/AdministratorUser.vue').default
 }, {
-    path: '/agent',
-    name: 'Agent',
+    path: '/agent-user',
+    name: 'Agent User',
     meta: {
-        breadcrumb: 'Agent',
+        breadcrumb: 'Agent User',
     },
-    component: require('./components/Agent/Agent.vue').default
+    component: require('./components/AgentUser/AgentUser.vue').default
 },{
     path: '/destination',
     name: 'Destination',
@@ -107,9 +108,6 @@ let routes = [{
 }, {
     path: '/tour-leader',
     component: require('./components/TourLeader/tourLeader.vue').default
-}, {
-    path: '/agent',
-    component: require('./components/Agent/Agent.vue').default
 }, {
     path: '/income-report',
     component: require('./components/Finance/incomeReport.vue').default
@@ -143,6 +141,7 @@ Vue.prototype.$globals = 'tes';
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('datatable-component', require('./components/Datatable.vue').default);
 Vue.component('filter-bar-component', require('./components/FilterBar.vue').default);
+Vue.component(VImageInput.name, VImageInput);
 
 let app = new Vue({
     el: '#app',

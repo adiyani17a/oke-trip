@@ -18,6 +18,7 @@ class privilege extends Model
 							'role_name',
 							'menu_list_id',
 							'menu_list_name',
+							'view',
 							'create',
 							'edit',
 							'delete' ,

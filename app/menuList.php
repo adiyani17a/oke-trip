@@ -14,7 +14,8 @@ class menuList extends Model
     const CREATED_AT = 'created_at';
     protected $fillable = [
 							'id',
-							'name',
+                            'name',
+							'icon',
 							'slug',
 							'group_menu_id',
 							'url',

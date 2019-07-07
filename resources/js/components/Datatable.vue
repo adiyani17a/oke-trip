@@ -40,6 +40,9 @@
 		        ></v-checkbox>
 	     	 	</td>
 	        <td v-for="header in headers" :class="header.class" >
+            <div v-if="header.type == 'image'" class="text-xs-center">
+              <v-img src="https://picsum.photos/510/300?random" aspect-ratio="1.7"></v-img>
+            </div>
             <div v-if="header.type == 'switch'" class="text-xs-center">
               <v-switch  @change="switchChange(dataItem[props.index][header.value],props.item.id,header.value)" v-model="dataItem[props.index][header.value]" style="margin-left: 35px;margin-top: 15px;" class="text-xs-center">
               </v-switch>

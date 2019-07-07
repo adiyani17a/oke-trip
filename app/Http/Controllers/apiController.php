@@ -8,6 +8,8 @@ use Response;
 use Auth;
 use DB;
 use carbon\carbon;
+use Storage;
+use Image;
 class apiController extends Controller
 {
 	protected $model;
@@ -181,7 +183,6 @@ class apiController extends Controller
     public function deleteMenuList(Request $req)
     {
         return DB::transaction(function() use ($req) {  
-
             if(Auth::user()->role_id != 1){
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             } 
@@ -257,6 +258,11 @@ class apiController extends Controller
     {
         return DB::transaction(function() use ($req) {  
             if (!isset($req->id) or $req->id == '' or $req->id == null) {
+
+                if(!Auth::user()->hasAkses('Role','create')){
+                    return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Create This Data']);
+                } 
+
                 $id = $this->model->role()->max('id')+1;
                 $input = $req->all();
                 $input['id'] = $id;
@@ -275,7 +281,7 @@ class apiController extends Controller
                     $menu['menu_list_id'] = $value->id;
                     $menu['menu_list_name'] = $value->name;
 
-                    if ($req->name == 'Administrator') {
+                    if ($req->name == 'Developer') {
                         $menu['view'] = 'true';
                         $menu['create'] = 'true';
                         $menu['edit'] = 'true';
@@ -298,6 +304,11 @@ class apiController extends Controller
                 }
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
+
+                if(!Auth::user()->hasAkses('Role','edit')){
+                    return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Update This Data']);
+                } 
+
                 $input = $req->all();
                 $input['updated_by'] = Auth::user()->name;
                 $this->model->role()->where('id',$req->id)->update($input);
@@ -317,6 +328,11 @@ class apiController extends Controller
     public function deleteRole(Request $req)
     {
         return DB::transaction(function() use ($req) {  
+
+            if(!Auth::user()->hasAkses('Role','delete')){
+                return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
+            } 
+
             foreach ($req->data as $i => $d) {
                 $this->model->role()->where('id',$req->data[$i]['id'])->delete();
                 $this->model->privilege()->where('role_id',$req->data[$i]['id'])->delete();
@@ -325,5 +341,100 @@ class apiController extends Controller
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
         });
     }
+    // ADMINISTRATOR USER
+    public function datatableAdministratorUser(Request $req)
+    {
+        $data =  $this->model->user()->where('type_user','ADMIN')->paginate($req->showing);
+            
+        foreach ($data as $i => $d) {
+            $data[$i]->action = '';
+            $data[$i]->role_name = $d->role->name;
+        }
 
+        return Response::json($data);
+    }
+
+    public function chageStatusAdministratorUser(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+
+            if(!Auth::user()->hasAkses('Administrator User','validation')){
+                return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Validate This Data']);
+            } 
+
+            if ($req->data == true) {
+                $input['active'] = 'true';
+            }else{
+                $input['active'] = 'false';
+            }
+            $input['updated_by'] = Auth::user()->name;
+            $input['updated_at'] = carbon::now();
+            $this->model->user()->where('id',$req->id)->update($input);
+            if ($req->data == null) {
+                return Response::json(['status'=>1,'message'=>'Success deactivate data']);
+            }else{
+                return Response::json(['status'=>1,'message'=>'Success activate data']);
+            }
+        });
+    }
+
+    public function saveAdministratorUser(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+            if (!isset($req->id) or $req->id == '' or $req->id == null) {
+                if(!Auth::user()->hasAkses('Administrator User','create')){
+                    return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Create This Data']);
+                }
+
+                $id = $this->model->user()->max('id')+1;
+
+                $file = $req->gambar;
+                if ($file != null) {
+                    $filename = 'admin_'.$id.'.'.'jpg';
+                    $path = storage_path().'/app/user';
+                    if (!file_exists($path)) {
+                        mkdir($path, 777, true);
+                    }
+                    $path = storage_path().'/app/user/' . $filename;
+                    Image::make(file_get_contents($file))->save($path);  
+                }else{
+                    $filename = null;
+                }
+                return 'true';
+
+                $id = $this->model->user()->max('id')+1;
+                $input = $req->all();
+                $input['id'] = $id;
+                $input['created_by'] = Auth::user()->name;
+                $input['updated_by'] = Auth::user()->name;
+                $input['name'] = ucwords($input['name']);
+                $this->model->user()->create($input);
+                return Response::json(['status'=>1,'message'=>'Success saving data']);
+            }else{
+                if(!Auth::user()->hasAkses('Administrator User','edit')){
+                    return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Edit This Data']);
+                }
+                $input = $req->all();
+                $input['updated_by'] = Auth::user()->name;
+                $this->model->user()->where('id',$req->id)->update($input);
+                return Response::json(['status'=>1,'message'=>'Success updating data']);
+            }
+        });
+    }
+
+    public function deleteAdministratorUser(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+
+            if(!Auth::user()->hasAkses('Administrator User','delete')){
+                return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
+            }
+
+            foreach ($req->data as $i => $d) {
+                $this->model->user()->where('id',$req->data[$i]['id'])->delete();
+            }
+
+            return Response::json(['status'=>1,'message'=>'Success deleting data']);
+        });
+    }
 }

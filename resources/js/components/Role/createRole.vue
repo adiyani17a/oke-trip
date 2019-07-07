@@ -10,7 +10,7 @@
             <form id="saveData">
               <v-layout wrap>
                 <v-flex xs12>
-                  <v-text-field label="Name" v-model="name" required :counter="20" name="name" @blur="$v.name.$touch()" :error-messages="nameErrors"></v-text-field>
+                  <v-text-field label="Name" v-model="name" required name="name" @blur="$v.name.$touch()" :error-messages="nameErrors"></v-text-field>
                   <input type="hidden" name="id" v-model="id">
                 </v-flex>
                 <v-flex xs12>
@@ -70,13 +70,12 @@
       text: 'Hello, I\'m a snackbar'
     }),
     validations: {
-      name: { required, maxLength: maxLength(20) },
+      name: { required },
     },
     computed:{
       nameErrors () {
         const errors = []
         if (!this.$v.name.$dirty) return errors
-        !this.$v.name.maxLength && errors.push('Name must be at most 10 characters long')
         !this.$v.name.required && errors.push('Name is required.')
         return errors
       },

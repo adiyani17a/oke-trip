@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','role_id','type_user','active','image'
     ];
 
     /**
@@ -38,6 +38,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function role()
+    {
+      return $this->belongsTo('App\role', 'role_id', 'id');
+    }
+
     public function hasAkses($fitur,$aksi){
       // select * from  join  on = where ubah =true
         
@@ -48,10 +53,23 @@ class User extends Authenticatable
                 ->where('users.id', '=', Auth::user()->id)             
                 ->first();   
 
+
+
         if ($cek != null) {
             return true;
         }else{
-            return false;
+            $cek = DB::table('users')
+                ->join('privilege', 'privilege.role_id', '=', 'users.role_id')
+                ->where('menu_list_name', '=', $fitur)
+                ->where($aksi, '=', 'true') 
+                ->where('users.id', '=', Auth::user()->id)             
+                ->first();  
+
+            if ($cek != null) {
+                return true;
+            }else{
+                return false;
+            }
         }
     }
 }
