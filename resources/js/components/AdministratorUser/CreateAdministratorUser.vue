@@ -16,11 +16,14 @@
                 <v-flex xs12>
                   <v-image-input
                     v-model="imageData"
-                    :image-quality="0.85"
+                    :image-quality="1"
                     clearable
-                    :imageWidth="imageWidth"
-                    :imageHeight="imageHeight"
+                    minScaling="contain"
+                    hide-actions="true"
                     image-format="jpeg"
+                    :fullWidth="true"
+               
+                    :fullHeight="true"
                     name="image"
                   />
                 </v-flex>
@@ -61,7 +64,7 @@
       id: '',
       name: '',
       imageWidth:400,
-      imageHeight:100,
+      imageHeight:300,
       slug: '',
       imageData: '',
       icon: '',
