@@ -14,15 +14,31 @@
                   <input type="hidden" name="id" v-model="id">
                 </v-flex>
                 <v-flex xs12>
+                  <v-text-field label="Email*" v-model="email" required name="email" @blur="$v.email.$touch()" :error-messages="emailErrors"></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field label="Password*" v-model="password"  required name="password" @blur="$v.password.$touch()" :error-messages="passwordErrors"></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-select
+                    v-model="role"
+                    :items="options"
+                    label="Role*"
+                    item-text="text"
+                    item-value="value"
+                    @blur="$v.role.$touch()"
+                    :error-messages="roleErrors"
+                  ></v-select>
+                </v-flex>
+                <v-flex xs12>
                   <v-image-input
                     v-model="imageData"
                     :image-quality="1"
                     clearable
                     minScaling="contain"
-                    hide-actions="true"
+                    :hide-actions="true"
                     image-format="jpeg"
                     :fullWidth="true"
-               
                     :fullHeight="true"
                     name="image"
                   />
@@ -63,12 +79,12 @@
     data: () => ({
       id: '',
       name: '',
+      email: '',
+      password: '',
+      role: '',
       imageWidth:400,
       imageHeight:300,
-      slug: '',
-      imageData: '',
-      icon: '',
-      url: '',
+      imageData: null,
       dialogs:false,
       nameRules: [
         v => !!v || 'Name is required',
@@ -83,14 +99,35 @@
       text: 'Hello, I\'m a snackbar'
     }),
     validations: {
-      name: { required, maxLength: maxLength(20) },
+      name: { required },
+      email: { required, email },
+      password: { required },
+      role: { required },
     },
     computed:{
       nameErrors () {
         const errors = []
         if (!this.$v.name.$dirty) return errors
-        !this.$v.name.maxLength && errors.push('Name must be at most 10 characters long')
         !this.$v.name.required && errors.push('Name is required.')
+        return errors
+      },
+      emailErrors () {
+        const errors = []
+        if (!this.$v.email.$dirty) return errors
+        !this.$v.email.email && errors.push('Must be valid e-mail')
+        !this.$v.email.required && errors.push('Email is required.')
+        return errors
+      },
+      passwordErrors () {
+        const errors = []
+        if (!this.$v.password.$dirty) return errors
+        !this.$v.password.required && errors.push('Password is required.')
+        return errors
+      },
+      roleErrors () {
+        const errors = []
+        if (!this.$v.role.$dirty) return errors
+        !this.$v.role.required && errors.push('Role is required.')
         return errors
       },
     },
@@ -107,18 +144,17 @@
         if (this.idData.length == 1) {
           this.id = this.idData[0].id
           this.name = this.idData[0].name
-          this.slug = this.idData[0].slug
-          this.url = this.idData[0].url
-          this.groupMenuId = this.idData[0].group_menu_id
-          this.icon = this.idData[0].icon
+          this.email = this.idData[0].email
+          this.role = this.idData[0].role_id
+          this.password =  this.idData[0].password;
+          this.imageData = this.idData[0].image
         }else{
-          this.id = ''
-          this.name = ''
-          this.image = ''
-          this.slug = ''
-          this.url = ''
-          this.groupMenuId = null
-          this.icon = ''
+          this.id =  '';
+          this.name =  '';
+          this.email =  '';
+          this.role =  '';
+          this.imageData =  '';
+          this.password =  '';
         }    
       }
     },
@@ -137,20 +173,19 @@
           this.dialogs = false;
           this.$emit('closeDialog',this.dialogs)
           if (this.idData.length != 0) {
-            this.name = this.idData[0].name
-            this.slug = this.idData[0].slug
-            this.url = this.idData[0].url
             this.id = this.idData[0].id
-            this.groupMenuId = this.idData[0].group_menu_id
-            this.icon = this.idData[0].icon
+            this.name = this.idData[0].name
+            this.email = this.idData[0].email
+            this.role = this.idData[0].role_id
+            this.password =  this.idData[0].password;
+            this.imageData = this.idData[0].image
           }else{
-            this.name = ''
-            this.image = ''
-            this.slug = ''
-            this.url = ''
-            this.id = ''
-            this.groupMenuId = null
-            this.icon = ''
+            this.id =  '';
+            this.name =  '';
+            this.email =  '';
+            this.password =  '';
+            this.role =  null;
+            this.imageData =  '';
           }
         }else{
           this.$v.$touch()
@@ -160,9 +195,11 @@
 
           let formData = new FormData();
 
-          formData.append('name',this.file)
+          formData.append('name',this.name)
+          formData.append('email',this.email)
+          formData.append('password',this.password)
+          formData.append('role_id',this.role)
           formData.append('gambar',this.imageData)
-          console.log(this.imageData)
           axios.post( '/api/administrator-user/save',
               formData,
               {
@@ -176,16 +213,16 @@
               this.text =  response.data.message;
               if (response.data.status == 1) {
                 this.color = 'success'
-                this.name = ''
-                this.slug = ''
-                this.url = ''
-                this.groupMenuId = null
-                this.id = ''
-                this.icon = ''
-                this.image = ''
+                this.id =  '';
+                this.name =  '';
+                this.email =  '';
+                this.role =  null;
+                this.imageData =  null;
+                this.password =  '';
               }else{
                 this.color = 'error'
               }
+              console.log(this.imageData)
             })
             .catch(error => {
               console.log(error)

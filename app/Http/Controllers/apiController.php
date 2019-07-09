@@ -10,6 +10,8 @@ use DB;
 use carbon\carbon;
 use Storage;
 use Image;
+use Illuminate\Support\Facades\Hash;
+
 class apiController extends Controller
 {
 	protected $model;
@@ -351,7 +353,9 @@ class apiController extends Controller
             $data[$i]->role_name = $d->role->name;
         }
 
-        return Response::json($data);
+        $role = $this->model->role()->where('active','true')->get();
+
+        return Response::json(['data'=>$data,'role'=>$role]);
     }
 
     public function chageStatusAdministratorUser(Request $req)
@@ -386,28 +390,35 @@ class apiController extends Controller
                     return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Create This Data']);
                 }
 
-                $id = $this->model->user()->max('id')+1;
+                $check = $this->model->user()->where('email',$req->email)->first();
+                
+                if($check != null){
+                    return Response::json(['status'=>0,'message'=>'Email Has Been Taken']);
+                }
 
                 $file = $req->gambar;
                 if ($file != null) {
-                    $filename = 'admin_'.$id.'.'.'jpg';
+                    $filename = 'admin_'.$req->name.'_'.carbon::now()->format('Y-m-d').'.'.'jpg';
                     $path = storage_path().'/app/user';
                     if (!file_exists($path)) {
                         mkdir($path, 777, true);
                     }
                     $path = storage_path().'/app/user/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
+                    $path = '/app/user/' . $filename;
                 }else{
                     $filename = null;
                 }
-                return 'true';
 
-                $id = $this->model->user()->max('id')+1;
                 $input = $req->all();
-                $input['id'] = $id;
                 $input['created_by'] = Auth::user()->name;
                 $input['updated_by'] = Auth::user()->name;
-                $input['name'] = ucwords($input['name']);
+                $input['created_at'] = carbon::now();
+                $input['updated_at'] = carbon::now();
+                $input['password'] =  Hash::make($req->password);
+                $input['type_user'] = 'ADMIN';
+                $input['active'] = 'true';
+                $input['image'] = $path;
                 $this->model->user()->create($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{

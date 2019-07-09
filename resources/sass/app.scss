@@ -15,6 +15,8 @@ $fa-font-path:"../webfonts";
 @import '~@fortawesome/fontawesome-free/scss/regular.scss';
 @import '~vuetify/dist/vuetify.min.css';
 @import '~bootstrap-vue/src/index.scss';
+@import '~dropify/dist/css/dropify.min.css';
+
 .router-link-exact-active{
 	background-color: #fff;
 	color: black !important;

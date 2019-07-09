@@ -39,6 +39,7 @@
                         </div>
                         <create-administrator-user :dialog="dialog" 
                                             :idData="idData" 
+                                            :options="options"
                                             @closeDialog="closeDialog"></create-administrator-user>
                     </div>
                     <v-dialog
@@ -156,6 +157,7 @@
                 color: 'success',
                 mode: '',
                 tes: '',
+                options: [],
                 timeout: 6000,
                 text: 'Hello, I\'m a snackbar'
             }
@@ -186,12 +188,12 @@
                   .get('/api/administrator-user/datatable?page='+page+'&showing='+show)
                   .then(response => {
                     this.loadingDataTable = false
-                    this.dataItem = response.data.data
-                    this.pagination.current = response.data.current_page;
-                    this.pagination.total = response.data.last_page;
+                    this.dataItem = response.data.data.data
+                    this.pagination.current = response.data.data.current_page;
+                    this.pagination.total = response.data.data.last_page;
                     this.pagination.rowsPerPage = show;
-                    this.pagination.totalItem = response.data.total;
-                    this.totalItem = response.data.total;
+                    this.pagination.totalItem = response.data.data.total;
+                    this.totalItem = response.data.data.total;
                     for (var i = 0; i < this.dataItem.length; i++) {
                         if (this.dataItem[i].active == 'true') {
                             this.dataItem[i].active = true 
@@ -199,6 +201,15 @@
                             this.dataItem[i].active = false 
                         }
                     }
+
+                    for (var i = 0; i < response.data.role.length; i++) {
+                        this.options.push({
+                            text:response.data.role[i].name,
+                            value:response.data.role[i].id
+                        })
+                    }
+
+
                   })
                   .catch(error => {
                     console.log(error)
