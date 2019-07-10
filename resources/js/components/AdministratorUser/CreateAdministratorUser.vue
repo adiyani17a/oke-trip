@@ -19,7 +19,7 @@
                 <v-flex xs12>
                   <v-text-field label="Password*" v-model="password"  required name="password" @blur="$v.password.$touch()" :error-messages="passwordErrors"></v-text-field>
                 </v-flex>
-                <v-flex xs12>
+                <v-flex xs12 :if="imageReady == true">
                   <v-select
                     v-model="role"
                     :items="options"
@@ -31,17 +31,7 @@
                   ></v-select>
                 </v-flex>
                 <v-flex xs12>
-                  <v-image-input
-                    v-model="imageData"
-                    :image-quality="1"
-                    clearable
-                    minScaling="contain"
-                    :hide-actions="true"
-                    image-format="jpeg"
-                    :fullWidth="true"
-                    :fullHeight="true"
-                    name="image"
-                  />
+                  <vue-dropify ref="tes"></vue-dropify>
                 </v-flex>
               </v-layout>
             </form>
@@ -75,6 +65,7 @@
 </template>
 <script>
   import { required, maxLength, email } from 'vuelidate/lib/validators'
+  import VueDropify from 'vue-dropify';
   export default {
     data: () => ({
       id: '',
@@ -84,7 +75,7 @@
       role: '',
       imageWidth:400,
       imageHeight:300,
-      imageData: null,
+      imageReady: false,
       dialogs:false,
       nameRules: [
         v => !!v || 'Name is required',
@@ -136,9 +127,13 @@
       idData:Array,
       options:Array,
     },
+    components: {
+      'vue-dropify': VueDropify
+    },
     watch:{
       dialog:function(){
         this.dialogs = this.dialog
+        this.imageReady = true;
       },
       idData:function(){
         if (this.idData.length == 1) {
@@ -159,15 +154,6 @@
       }
     },
     methods:{
-      onChange (image) {
-        console.log('New picture selected!')
-        if (image) {
-          console.log('Picture loaded.')
-          this.image = image
-        } else {
-          console.log('FileReader API not supported: use the <form>, Luke!')
-        }
-      },
       saveAndCloseDialog(param){
         if (param == 'close') {
           this.dialogs = false;
@@ -199,7 +185,7 @@
           formData.append('email',this.email)
           formData.append('password',this.password)
           formData.append('role_id',this.role)
-          formData.append('gambar',this.imageData)
+          formData.append('gambar',this.$refs.tes.images)
           axios.post( '/api/administrator-user/save',
               formData,
               {
@@ -218,11 +204,13 @@
                 this.email =  '';
                 this.role =  null;
                 this.imageData =  null;
+                this.$refs.tes.images = [];
                 this.password =  '';
               }else{
                 this.color = 'error'
               }
-              console.log(this.imageData)
+              this.imageReady = false;
+              console.log(this.$refs.tes)
             })
             .catch(error => {
               console.log(error)

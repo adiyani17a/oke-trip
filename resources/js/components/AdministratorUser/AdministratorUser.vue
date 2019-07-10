@@ -200,6 +200,8 @@
                         }else{
                             this.dataItem[i].active = false 
                         }
+
+                        this.dataItem[i].image = '.'+this.dataItem[i].image;
                     }
 
                     for (var i = 0; i < response.data.role.length; i++) {

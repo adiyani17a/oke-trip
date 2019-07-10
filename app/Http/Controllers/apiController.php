@@ -351,6 +351,7 @@ class apiController extends Controller
         foreach ($data as $i => $d) {
             $data[$i]->action = '';
             $data[$i]->role_name = $d->role->name;
+
         }
 
         $role = $this->model->role()->where('active','true')->get();
@@ -389,7 +390,6 @@ class apiController extends Controller
                 if(!Auth::user()->hasAkses('Administrator User','create')){
                     return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Create This Data']);
                 }
-
                 $check = $this->model->user()->where('email',$req->email)->first();
                 
                 if($check != null){
@@ -399,13 +399,13 @@ class apiController extends Controller
                 $file = $req->gambar;
                 if ($file != null) {
                     $filename = 'admin_'.$req->name.'_'.carbon::now()->format('Y-m-d').'.'.'jpg';
-                    $path = storage_path().'/app/user';
+                    $path = './dist/img/user';
                     if (!file_exists($path)) {
                         mkdir($path, 777, true);
                     }
-                    $path = storage_path().'/app/user/' . $filename;
+                    $path = 'dist/img/user/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
-                    $path = '/app/user/' . $filename;
+                    $path = '/dist/img/user/' . $filename;
                 }else{
                     $filename = null;
                 }
