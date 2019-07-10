@@ -390,6 +390,7 @@ class apiController extends Controller
                 if(!Auth::user()->hasAkses('Administrator User','create')){
                     return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Create This Data']);
                 }
+
                 $check = $this->model->user()->where('email',$req->email)->first();
                 
                 if($check != null){
@@ -411,9 +412,7 @@ class apiController extends Controller
                 }
 
                 $input = $req->all();
-                $input['created_by'] = Auth::user()->name;
                 $input['updated_by'] = Auth::user()->name;
-                $input['created_at'] = carbon::now();
                 $input['updated_at'] = carbon::now();
                 $input['password'] =  Hash::make($req->password);
                 $input['type_user'] = 'ADMIN';
@@ -425,8 +424,31 @@ class apiController extends Controller
                 if(!Auth::user()->hasAkses('Administrator User','edit')){
                     return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Edit This Data']);
                 }
+
+                $file = $req->gambar;
+                if ($file != null) {
+                    $filename = 'admin_'.$req->name.'_'.carbon::now()->format('Y-m-d').'.'.'jpg';
+                    $path = './dist/img/user';
+                    if (!file_exists($path)) {
+                        mkdir($path, 777, true);
+                    }
+                    $path = 'dist/img/user/' . $filename;
+                    Image::make(file_get_contents($file))->save($path);  
+                    $path = '/dist/img/user/' . $filename;
+                }else{
+                    $filename = null;
+                }
+
                 $input = $req->all();
-                $input['updated_by'] = Auth::user()->name;
+                $input['updated_at'] = carbon::now();
+                unset($input['password']);
+                unset($input['gambar']);
+                if ($req->password != null) {
+                    $input['password'] =  Hash::make($req->password);
+                }
+                $input['type_user'] = 'ADMIN';
+                $input['active'] = 'true';
+                $input['image'] = $path;
                 $this->model->user()->where('id',$req->id)->update($input);
                 return Response::json(['status'=>1,'message'=>'Success updating data']);
             }

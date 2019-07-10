@@ -181,6 +181,7 @@
 
           let formData = new FormData();
 
+          formData.append('id',this.id)
           formData.append('name',this.name)
           formData.append('email',this.email)
           formData.append('password',this.password)
