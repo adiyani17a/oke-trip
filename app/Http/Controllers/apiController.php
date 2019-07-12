@@ -351,7 +351,7 @@ class apiController extends Controller
         foreach ($data as $i => $d) {
             $data[$i]->action = '';
             $data[$i]->role_name = $d->role->name;
-
+            $data[$i]->image = $data[$i]->image.'?'.time(); 
         }
 
         $role = $this->model->role()->where('active','true')->get();
@@ -372,7 +372,6 @@ class apiController extends Controller
             }else{
                 $input['active'] = 'false';
             }
-            $input['updated_by'] = Auth::user()->name;
             $input['updated_at'] = carbon::now();
             $this->model->user()->where('id',$req->id)->update($input);
             if ($req->data == null) {
@@ -399,7 +398,7 @@ class apiController extends Controller
 
                 $file = $req->gambar;
                 if ($file != null) {
-                    $filename = 'admin_'.$req->name.'_'.carbon::now()->format('Y-m-d').'.'.'jpg';
+                    $filename = 'admin_'.$req->name.'.'.'jpg';
                     $path = './dist/img/user';
                     if (!file_exists($path)) {
                         mkdir($path, 777, true);
@@ -427,7 +426,7 @@ class apiController extends Controller
 
                 $file = $req->gambar;
                 if ($file != null) {
-                    $filename = 'admin_'.$req->name.'_'.carbon::now()->format('Y-m-d').'.'.'jpg';
+                    $filename = 'admin_'.$req->name.'.'.'jpg';
                     $path = './dist/img/user';
                     if (!file_exists($path)) {
                         mkdir($path, 777, true);
@@ -435,6 +434,7 @@ class apiController extends Controller
                     $path = 'dist/img/user/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
                     $path = '/dist/img/user/' . $filename;
+                    $input['image'] = $path;
                 }else{
                     $filename = null;
                 }
@@ -448,7 +448,6 @@ class apiController extends Controller
                 }
                 $input['type_user'] = 'ADMIN';
                 $input['active'] = 'true';
-                $input['image'] = $path;
                 $this->model->user()->where('id',$req->id)->update($input);
                 return Response::json(['status'=>1,'message'=>'Success updating data']);
             }
@@ -465,6 +464,263 @@ class apiController extends Controller
 
             foreach ($req->data as $i => $d) {
                 $this->model->user()->where('id',$req->data[$i]['id'])->delete();
+            }
+
+            return Response::json(['status'=>1,'message'=>'Success deleting data']);
+        });
+    }
+
+    // AGENT USER
+    public function datatableAgentUser(Request $req)
+    {
+        $data =  $this->model->user()->where('type_user','AGENT')->paginate($req->showing);
+            
+        foreach ($data as $i => $d) {
+            $data[$i]->action = '';
+            $data[$i]->role_name = $d->role->name;
+            $data[$i]->image = $data[$i]->image.'?'.time(); 
+        }
+
+ 
+
+        $role = $this->model->role()->where('active','true')->get();
+
+        return Response::json(['data'=>$data,'role'=>$role]);
+    }
+
+    public function chageStatusAgentUser(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+
+            if(!Auth::user()->hasAkses('Agent User','validation')){
+                return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Validate This Data']);
+            } 
+
+            if ($req->data == true) {
+                $input['active'] = 'true';
+            }else{
+                $input['active'] = 'false';
+            }
+            $input['updated_at'] = carbon::now();
+            $this->model->user()->where('id',$req->id)->update($input);
+            if ($req->data == null) {
+                return Response::json(['status'=>1,'message'=>'Success deactivate data']);
+            }else{
+                return Response::json(['status'=>1,'message'=>'Success activate data']);
+            }
+        });
+    }
+
+    public function saveAgentUser(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+            if (!isset($req->id) or $req->id == '' or $req->id == null) {
+                if(!Auth::user()->hasAkses('Agent User','create')){
+                    return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Create This Data']);
+                }
+
+                $check = $this->model->user()->where('email',$req->email)->first();
+                
+                if($check != null){
+                    return Response::json(['status'=>0,'message'=>'Email Has Been Taken']);
+                }
+
+                $file = $req->gambar;
+                if ($file != null) {
+                    $filename = 'admin_'.$req->name.'.'.'jpg';
+                    $path = './dist/img/user';
+                    if (!file_exists($path)) {
+                        mkdir($path, 777, true);
+                    }
+                    $path = 'dist/img/user/' . $filename;
+                    Image::make(file_get_contents($file))->save($path);  
+                    $path = '/dist/img/user/' . $filename;
+                }else{
+                    $filename = null;
+                }
+
+                $input = $req->all();
+                $input['updated_by'] = Auth::user()->name;
+                $input['updated_at'] = carbon::now();
+                $input['password'] =  Hash::make($req->password);
+                $input['type_user'] = 'AGENT';
+                $input['active'] = 'true';
+                $input['image'] = $path;
+                $this->model->user()->create($input);
+                return Response::json(['status'=>1,'message'=>'Success saving data']);
+            }else{
+                if(!Auth::user()->hasAkses('Agent User','edit')){
+                    return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Edit This Data']);
+                }
+
+                $file = $req->gambar;
+                if ($file != null) {
+                    $filename = 'admin_'.$req->name.'.'.'jpg';
+                    $path = './dist/img/user';
+                    if (!file_exists($path)) {
+                        mkdir($path, 777, true);
+                    }
+                    $path = 'dist/img/user/' . $filename;
+                    Image::make(file_get_contents($file))->save($path);  
+                    $path = '/dist/img/user/' . $filename;
+                    $input['image'] = $path;
+                }else{
+                    $filename = null;
+                }
+
+                $input = $req->all();
+                $input['updated_at'] = carbon::now();
+                unset($input['password']);
+                unset($input['gambar']);
+                if ($req->password != null) {
+                    $input['password'] =  Hash::make($req->password);
+                }
+                $input['type_user'] = 'AGENT';
+                $input['active'] = 'true';
+                $this->model->user()->where('id',$req->id)->update($input);
+                return Response::json(['status'=>1,'message'=>'Success updating data']);
+            }
+        });
+    }
+
+    public function deleteAgentUser(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+
+            if(!Auth::user()->hasAkses('Agent User','delete')){
+                return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
+            }
+
+            foreach ($req->data as $i => $d) {
+                $this->model->user()->where('id',$req->data[$i]['id'])->delete();
+            }
+
+            return Response::json(['status'=>1,'message'=>'Success deleting data']);
+        });
+    }
+    // Additional
+    public function datatableAdditional(Request $req)
+    {
+        $data =  $this->model->additional()->paginate($req->showing);
+        
+        foreach ($data as $i => $d) {
+            $data[$i]->image = $data[$i]->image.'?'.time(); 
+        }
+
+        return Response::json(['data'=>$data]);
+    }
+
+    public function chageStatusAdditional(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+
+            if(!Auth::user()->hasAkses('Additional','validation')){
+                return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Validate This Data']);
+            } 
+
+            if ($req->data == true) {
+                $input['active'] = 'true';
+            }else{
+                $input['active'] = 'false';
+            }
+            $input['updated_by'] = Auth::user()->name;
+            $input['updated_at'] = carbon::now();
+            $this->model->additional()->where('id',$req->id)->update($input);
+            if ($req->data == null) {
+                return Response::json(['status'=>1,'message'=>'Success deactivate data']);
+            }else{
+                return Response::json(['status'=>1,'message'=>'Success activate data']);
+            }
+        });
+    }
+
+    public function saveAdditional(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+            if (!isset($req->id) or $req->id == '' or $req->id == null) {
+                if(!Auth::user()->hasAkses('Additional','create')){
+                    return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Create This Data']);
+                }
+
+                $check = $this->model->additional()->where('name',$req->name)->first();
+                
+                if($check != null){
+                    return Response::json(['status'=>0,'message'=>'Name Has Been Taken']);
+                }
+
+                $file = $req->gambar;
+                if ($file != null) {
+                    
+                    $filename = 'additional_'.$req->name.'.'.'jpg';
+                    $path = './dist/img/additional';
+                    if (!file_exists($path)) {
+                        mkdir($path, 777, true);
+                    }
+                    $path = 'dist/img/additional/' . $filename;
+                    Image::make(file_get_contents($file))->save($path);  
+                    $path = '/dist/img/additional/' . $filename;
+                }else{
+                    $filename = null;
+                }
+
+                $input = $req->all();
+                $input['created_by'] = Auth::user()->name;
+                $input['created_at'] = carbon::now();
+                $input['updated_by'] = Auth::user()->name;
+                $input['updated_at'] = carbon::now();
+                $input['active'] = 'true';
+                $input['image'] = $path;
+                $this->model->additional()->create($input);
+                return Response::json(['status'=>1,'message'=>'Success saving data']);
+            }else{
+                if(!Auth::user()->hasAkses('Additional','edit')){
+                    return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Edit This Data']);
+                }
+
+                $check = $this->model->additional()->where('name',$req->name)->where('id','!=',$req->id)->first();
+                
+                if($check != null){
+                    return Response::json(['status'=>0,'message'=>'Name Has Been Taken']);
+                }
+
+                $file = $req->gambar;
+                if ($file != null) {
+                    $old_path = $this->model->additional()->where('id','=',$req->id)->first();
+                    unlink('.'.$old_path->image);
+                    $filename = 'additional_'.$req->name.'.'.'jpg';
+                    $path = './dist/img/additional';
+                    if (!file_exists($path)) {
+                        mkdir($path, 777, true);
+                    }
+                    $path = 'dist/img/additional/' . $filename;
+                    Image::make(file_get_contents($file))->save($path);  
+                    $path = '/dist/img/additional/' . $filename;
+                    $input['image'] = $path;
+                }else{
+                    $filename = null;
+                }
+
+                $input = $req->all();
+                $input['updated_by'] = Auth::user()->name;
+                $input['updated_at'] = carbon::now();
+                unset($input['gambar']);
+                $input['active'] = 'true';
+                $this->model->additional()->where('id',$req->id)->update($input);
+                return Response::json(['status'=>1,'message'=>'Success updating data']);
+            }
+        });
+    }
+
+    public function deleteAdditional(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+
+            if(!Auth::user()->hasAkses('Additional','delete')){
+                return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
+            }
+
+            foreach ($req->data as $i => $d) {
+                $this->model->additional()->where('id',$req->data[$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);

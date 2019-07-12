@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->integer('role_id');
-            $table->string('type_admin');
+            $table->string('type_user');
             $table->string('active')->default('true');
             $table->string('image')->nullable();
             $table->timestamps();

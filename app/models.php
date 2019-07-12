@@ -9,6 +9,7 @@ use App\menuList;
 use App\privilege;
 use App\role;
 use App\User;
+use App\additional;
 class models extends Model
 {
     public function destination()
@@ -51,5 +52,12 @@ class models extends Model
         $user = new User();
 
         return $user; 
+    }
+
+    public function additional()
+    {
+        $additional = new additional();
+
+        return $additional; 
     }
 }

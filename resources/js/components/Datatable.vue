@@ -47,6 +47,9 @@
               <v-switch  @change="switchChange(dataItem[props.index][header.value],props.item.id,header.value)" v-model="dataItem[props.index][header.value]" style="margin-left: 35px;margin-top: 15px;" class="text-xs-center">
               </v-switch>
             </div>
+            <div v-if="header.type == 'currency'" class="text-xs-center">
+              {{ props.item[header.value] | currency}}
+            </div>
             <div v-if="header.type == 'default' || header.type == undefined">
               {{ props.item[header.value] }}
             </div>
@@ -136,6 +139,10 @@
           this.dataItems = data.items
           this.totalItems = data.total
         })
+
+      Vue.filter('currency', function(val){
+          return accounting.formatNumber(val)
+      })
     },
     computed: {
         params(nv) {

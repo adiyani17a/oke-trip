@@ -35,22 +35,6 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::group(['middleware' => 'check-token'], function () {
 	Route::group(["prefix" => "api"], function(){
-    Route::group(["prefix" => "destination"], function(){
-      Route::get('/datatable', [
-        'uses' => "apiController@datatableDestination",
-        'as' => "datatableDestination"
-      ]);
-
-      Route::post('/save', [
-        'uses' => "apiController@saveDestination",
-        'as' => "saveDestination"
-      ]);
-
-      Route::delete('/delete', [
-        'uses' => "apiController@deleteDestination",
-        'as' => "deleteDestination"
-      ]);
-    });
 
     Route::group(["prefix" => "group-menu"], function(){
       Route::get('/datatable', [
@@ -139,6 +123,67 @@ Route::group(['middleware' => 'check-token'], function () {
       Route::delete('/delete', [
         'uses' => "apiController@deleteAdministratorUser",
         'as' => "deleteAdministratorUser"
+      ]);
+    });
+
+    Route::group(["prefix" => "agent-user"], function(){
+      Route::get('/datatable', [
+        'uses' => "apiController@datatableAgentUser",
+        'as' => "datatableAgentUser"
+      ]);
+
+      Route::post('/change-status', [
+        'uses' => "apiController@chageStatusAgentUser",
+        'as' => "chageStatusAgentUser"
+      ]);
+
+      Route::post('/save', [
+        'uses' => "apiController@saveAgentUser",
+        'as' => "saveAgentUser"
+      ]);
+
+      Route::delete('/delete', [
+        'uses' => "apiController@deleteAgentUser",
+        'as' => "deleteAgentUser"
+      ]);
+    });
+
+    Route::group(["prefix" => "destination"], function(){
+      Route::get('/datatable', [
+        'uses' => "apiController@datatableDestination",
+        'as' => "datatableDestination"
+      ]);
+
+      Route::post('/save', [
+        'uses' => "apiController@saveDestination",
+        'as' => "saveDestination"
+      ]);
+
+      Route::delete('/delete', [
+        'uses' => "apiController@deleteDestination",
+        'as' => "deleteDestination"
+      ]);
+    });
+
+    Route::group(["prefix" => "additional"], function(){
+      Route::get('/datatable', [
+        'uses' => "apiController@datatableAdditional",
+        'as' => "datatableAdditional"
+      ]);
+
+      Route::post('/change-status', [
+        'uses' => "apiController@chageStatusAdditional",
+        'as' => "chageStatusAdditional"
+      ]);
+
+      Route::post('/save', [
+        'uses' => "apiController@saveAdditional",
+        'as' => "saveAdditional"
+      ]);
+
+      Route::delete('/delete', [
+        'uses' => "apiController@deleteAdditional",
+        'as' => "deleteAdditional"
       ]);
     });
 	});
