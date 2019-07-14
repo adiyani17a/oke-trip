@@ -138,9 +138,6 @@
           this.price =  '';
           this.note =  '';
         }    
-      },
-      price:function(){
-      	console.log(this.price)
       }
     },
     methods:{
@@ -197,7 +194,6 @@
                 this.color = 'error'
               }
               this.imageReady = false;
-              console.log(this.$refs.tes)
             })
             .catch(error => {
               console.log(error)

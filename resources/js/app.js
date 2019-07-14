@@ -23,7 +23,6 @@ import BootstrapVue from 'bootstrap-vue'
 import Vuetify from 'vuetify'
 import Vuelidate from 'vuelidate'
 import Vue from 'vue'
-import VImageInput from 'vuetify-image-input';
  
 Vue.use(Vuelidate)
 Vue.use(Vuetify)
@@ -141,7 +140,6 @@ Vue.prototype.$globals = 'tes';
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('datatable-component', require('./components/Datatable.vue').default);
 Vue.component('filter-bar-component', require('./components/FilterBar.vue').default);
-Vue.component(VImageInput.name, VImageInput);
 
 let app = new Vue({
     el: '#app',

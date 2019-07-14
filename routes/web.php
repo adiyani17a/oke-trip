@@ -186,6 +186,28 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "deleteAdditional"
       ]);
     });
+
+    Route::group(["prefix" => "itinerary"], function(){
+      Route::get('/datatable', [
+        'uses' => "apiController@datatableItinerary",
+        'as' => "datatableItinerary"
+      ]);
+
+      Route::post('/change-status', [
+        'uses' => "apiController@chageStatusItinerary",
+        'as' => "chageStatusItinerary"
+      ]);
+
+      Route::post('/save', [
+        'uses' => "apiController@saveItinerary",
+        'as' => "saveItinerary"
+      ]);
+
+      Route::delete('/delete', [
+        'uses' => "apiController@deleteItinerary",
+        'as' => "deleteItinerary"
+      ]);
+    });
 	});
 });
 
