@@ -30,6 +30,7 @@
     "admin-lte": "^3.0.0-alpha.2",
     "bootstrap-vue": "^2.0.0-rc.23",
     "moment": "^2.24.0",
+    "tiptap-vuetify": "^1.4.1",
     "v-select2-component": "^0.3.8",
     "vue-autonumeric": "^1.2.6",
     "vue-loading-overlay": "^3.2.0",

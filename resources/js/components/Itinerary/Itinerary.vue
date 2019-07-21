@@ -39,7 +39,8 @@
                         </div>
                         <create-itinerary :dialog="dialog" 
                                             :idData="idData" 
-                                            :options="options"
+                                            :destination="destination"
+                                            :additional="additional"
                                             @closeDialog="closeDialog"></create-itinerary>
                     </div>
                     <v-dialog
@@ -157,7 +158,8 @@
                 color: 'success',
                 mode: '',
                 tes: '',
-                options: [],
+                destination: [],
+                additional: [],
                 timeout: 6000,
                 text: 'Hello, I\'m a snackbar'
             }

@@ -23,11 +23,15 @@ import BootstrapVue from 'bootstrap-vue'
 import Vuetify from 'vuetify'
 import Vuelidate from 'vuelidate'
 import Vue from 'vue'
- 
+ import { TiptapVuetifyPlugin } from 'tiptap-vuetify'
 Vue.use(Vuelidate)
 Vue.use(Vuetify)
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
+Vue.use(TiptapVuetifyPlugin, {
+  // optional, default to 'md' (default vuetify icons before v2.0.0)
+  iconsGroup: 'md'
+})
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -103,6 +107,10 @@ let routes = [{
     component: require('./components/Additional/additional.vue').default
 }, {
     path: '/itinerary',
+    name: 'Itinerary',
+    meta: {
+        breadcrumb: 'itinerary',
+    },
     component: require('./components/Itinerary/Itinerary.vue').default
 }, {
     path: '/tour-leader',
