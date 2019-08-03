@@ -187,7 +187,7 @@
                     page = this.currentPage;
                 }
                 axios
-                  .get('/api/additional/datatable?page='+page+'&showing='+show)
+                  .get('/api/itinerary/datatable?page='+page+'&showing='+show)
                   .then(response => {
                     this.loadingDataTable = false
                     this.dataItem = response.data.data.data
