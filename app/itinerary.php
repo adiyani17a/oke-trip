@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class itinerary extends Model
 {
-    protected $table = 'itinerarty';
+    protected $table = 'itinerary';
     protected $primaryKey = 'id';
     public $incrementing = false;
     public $remember_token = false;

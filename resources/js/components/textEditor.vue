@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--Use the component in the right place of the template-->
-    <h1>Term & Condition</h1>
+    <h5>Term & Condition</h5>
     <hr>
     <tiptap-vuetify
       v-model="content"
@@ -47,8 +47,7 @@ export default {
             new History()
         ],
         // starting content for the editor
-        content: `<h1>Yay Headlines!</h1>
-            <p>All these <strong>cool tags</strong> are working now.</p>`
+        content: ``
     }),
     watch: {
         content: function() {

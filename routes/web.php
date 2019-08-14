@@ -19,6 +19,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('{path}', 'HomeController@index')->where('all', '^(?!api).*$');
+Route::get('itinerary/{path}', 'HomeController@index')->where('all', '^(?!api).*$');
 
 Route::post('/api/generate-token', 'ApiTokenController@generateToken');
 Route::group(['middleware' => 'auth'], function () {

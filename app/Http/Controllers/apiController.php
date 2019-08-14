@@ -315,10 +315,9 @@ class apiController extends Controller
                 $input['updated_by'] = Auth::user()->name;
                 $this->model->role()->where('id',$req->id)->update($input);
 
-                $menu['id'] = $idMenu;
-                $menu['role_id'] = $id;
+                $menu['role_id'] = $req->id;
                 $menu['role_name'] = $req->name;
-                $menu['updated_by'] = Auth::user()->m_name;
+                $menu['updated_by'] = Auth::user()->name;
                 $menu['updated_at'] = carbon::now();
 
                 $this->model->privilege()->where('role_id',$req->id)->update($menu);

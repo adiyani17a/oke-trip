@@ -10,6 +10,7 @@ use App\privilege;
 use App\role;
 use App\User;
 use App\additional;
+use App\itinerary;
 class models extends Model
 {
     public function destination()
@@ -59,5 +60,12 @@ class models extends Model
         $additional = new additional();
 
         return $additional; 
+    }
+
+    public function itinerary()
+    {
+        $itinerary = new itinerary();
+
+        return $itinerary; 
     }
 }

@@ -10,9 +10,11 @@
                 <div class="card">
                     <div class="card-header">
                         <h5 style="margin-top: 10px;display: inline-block;"><b>{{ namaFitur }}</b></h5>
-                        <v-btn v-if="select.length == 0" color="primary pull-right" dark @click="dialog = true">Create
-                            <v-icon dark right>fas fa-plus</v-icon>
-                        </v-btn>
+                        <router-link to="/itinerary/create">
+                            <v-btn color="primary pull-right" dark >Create
+                                <v-icon dark right>fas fa-plus</v-icon>
+                            </v-btn>
+                        </router-link>
                         <v-btn v-if="select.length == 1" color="warning pull-right" @click="editData">Edit
                             <v-icon dark right>fas fa-pencil-alt</v-icon>
                         </v-btn>
@@ -37,11 +39,6 @@
                                                  >
                             </datatable-component>
                         </div>
-                        <create-itinerary :dialog="dialog" 
-                                            :idData="idData" 
-                                            :destination="destination"
-                                            :additional="additional"
-                                            @closeDialog="closeDialog"></create-itinerary>
                     </div>
                     <v-dialog
                       v-model="dialogDelete"
