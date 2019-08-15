@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialogs" persistent max-width="600px">
+    <v-dialog v-model="dialogs" persistent max-width="600px" style="z-index: 9999999999 !important;">
       <v-card>
         <v-card-title>
           <span class="headline">{{ this.$route.name }}</span>
@@ -143,6 +143,16 @@
           this.role = this.idData[0].role_id
           this.password =  this.idData[0].password;
           this.imageData = this.idData[0].image
+          let feature ='agent-user';
+          axios
+            .get('/api/convert-image-base-64?id='+this.id+'&feature='+feature)
+            .then(response => {
+                this.$refs.tes.images = [];
+                this.$refs.tes.images = response.data ;
+            })
+            .catch(error => {
+                console.log(error);
+            })
         }else{
           this.id =  '';
           this.name =  '';

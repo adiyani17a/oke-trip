@@ -37,6 +37,12 @@ Route::group(['middleware' => 'auth'], function () {
 Route::group(['middleware' => 'check-token'], function () {
 	Route::group(["prefix" => "api"], function(){
 
+
+    Route::get('/convert-image-base-64', [
+      'uses' => "apiController@convertImageBase64",
+      'as' => "convertImageBase64"
+    ]);
+
     Route::group(["prefix" => "group-menu"], function(){
       Route::get('/datatable', [
         'uses' => "apiController@datatableGroupMenu",
@@ -110,6 +116,8 @@ Route::group(['middleware' => 'check-token'], function () {
         'uses' => "apiController@datatableAdministratorUser",
         'as' => "datatableAdministratorUser"
       ]);
+
+      
 
       Route::post('/change-status', [
         'uses' => "apiController@chageStatusAdministratorUser",

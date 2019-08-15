@@ -15,7 +15,7 @@ class role extends Model
     protected $fillable = [
 							'id',
 							'name',
-							'note',
+                            'note',
 							'created_at',
                             'updated_at',
                             'created_by',

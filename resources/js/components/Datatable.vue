@@ -41,7 +41,9 @@
 	     	 	</td>
 	        <td v-for="header in headers" :class="header.class" >
             <div v-if="header.type == 'image'" class="text-xs-center">
-              <v-img :src="props.item[header.value]" aspect-ratio="1.7"></v-img>
+              <div v-if="props.item[header.value] != null">
+                <v-img :src="props.item[header.value]" aspect-ratio="1.7"></v-img>
+              </div>
             </div>
             <div v-if="header.type == 'switch'" class="text-xs-center">
               <v-switch  @change="switchChange(dataItem[props.index][header.value],props.item.id,header.value)" v-model="dataItem[props.index][header.value]" style="margin-left: 35px;margin-top: 15px;" class="text-xs-center">

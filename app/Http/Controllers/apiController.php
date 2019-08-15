@@ -21,6 +21,24 @@ class apiController extends Controller
 		$this->model = new models();
 	}
 
+    public function convertImageBase64(Request $req)
+    {
+
+        if ($req->feature == 'administrator-user') {
+            $image = '.'.$this->model->user()->where('id',$req->id)->first()->image;
+            $imgfile = file_get_contents($image);
+
+            $base64 = 'data:image/jpg' . ';base64,' . base64_encode($imgfile);
+        }elseif ($req->feature == 'agent-user') {
+            $image = '.'.$this->model->user()->where('id',$req->id)->first()->image;
+            $imgfile = file_get_contents($image);
+
+            $base64 = 'data:image/jpg' . ';base64,' . base64_encode($imgfile);
+        }
+
+        return Response::json($base64);
+    }
+
     public function datatableDestination(Request $req)
     {	
         $data =  $this->model->destination()->paginate($req->showing);
@@ -350,7 +368,9 @@ class apiController extends Controller
         foreach ($data as $i => $d) {
             $data[$i]->action = '';
             $data[$i]->role_name = $d->role->name;
-            $data[$i]->image = $data[$i]->image.'?'.time(); 
+            if ($data[$i]->image != null) {
+                $data[$i]->image = $data[$i]->image.'?'.time(); 
+            }
         }
 
         $role = $this->model->role()->where('active','true')->get();
@@ -422,7 +442,7 @@ class apiController extends Controller
                 if(!Auth::user()->hasAkses('Administrator User','edit')){
                     return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Edit This Data']);
                 }
-
+                $input = $req->all();
                 $file = $req->gambar;
                 if ($file != null) {
                     $filename = 'admin_'.$req->name.'.'.'jpg';
@@ -438,7 +458,6 @@ class apiController extends Controller
                     $filename = null;
                 }
 
-                $input = $req->all();
                 $input['updated_at'] = carbon::now();
                 unset($input['password']);
                 unset($input['gambar']);
@@ -447,6 +466,7 @@ class apiController extends Controller
                 }
                 $input['type_user'] = 'ADMIN';
                 $input['active'] = 'true';
+
                 $this->model->user()->where('id',$req->id)->update($input);
                 return Response::json(['status'=>1,'message'=>'Success updating data']);
             }

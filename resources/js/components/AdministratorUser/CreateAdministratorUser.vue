@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialogs" persistent max-width="600px">
+    <v-dialog v-model="dialogs" persistent max-width="600px" style="z-index: 9999999999 !important;">
       <v-card>
         <v-card-title>
           <span class="headline">{{ this.$route.name }}</span>
@@ -142,7 +142,18 @@
           this.email = this.idData[0].email
           this.role = this.idData[0].role_id
           this.password =  this.idData[0].password;
-          this.imageData = this.idData[0].image
+          this.imageData = this.idData[0].image;
+          let feature ='administrator-user';
+          axios
+            .get('/api/convert-image-base-64?id='+this.id+'&feature='+feature)
+            .then(response => {
+                this.$refs.tes.images = [];
+
+                this.$refs.tes.images.push(response.data) ;
+            })
+            .catch(error => {
+                console.log(error);
+            })
         }else{
           this.id =  '';
           this.name =  '';
@@ -164,7 +175,7 @@
             this.email = this.idData[0].email
             this.role = this.idData[0].role_id
             this.password =  this.idData[0].password;
-            this.imageData = this.idData[0].image
+            this.imageData = this.idData[0].image;
           }else{
             this.id =  '';
             this.name =  '';
@@ -180,7 +191,8 @@
           }
 
           let formData = new FormData();
-
+          console.log(this.$refs.tes);
+          return false;
           formData.append('id',this.id)
           formData.append('name',this.name)
           formData.append('email',this.email)
