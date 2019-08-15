@@ -749,12 +749,20 @@ class apiController extends Controller
     public function datatableItinerary(Request $req)
     {
         $data =  $this->model->itinerary()->paginate($req->showing);
-        
+        $destination = $this->model->destination()->get();
+        $additional = $this->model->additional()->get();
         foreach ($data as $i => $d) {
             $data[$i]->image = $data[$i]->image.'?'.time(); 
         }
 
         return Response::json(['data'=>$data]);
+    }
+
+    public function createItinerary()
+    {
+        $destination = $this->model->destination()->get();
+        $additional = $this->model->additional()->where('active','true')->get();
+        return Response::json(['destination'=>$destination,'additional'=>$additional]);
     }
 
     public function chageStatusItinerary(Request $req)

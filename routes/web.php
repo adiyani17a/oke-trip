@@ -202,6 +202,11 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "datatableItinerary"
       ]);
 
+      Route::get('/create', [
+        'uses' => "apiController@createItinerary",
+        'as' => "createItinerary"
+      ]);
+
       Route::post('/change-status', [
         'uses' => "apiController@chageStatusItinerary",
         'as' => "chageStatusItinerary"

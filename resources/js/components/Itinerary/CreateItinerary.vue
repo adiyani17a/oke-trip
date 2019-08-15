@@ -21,8 +21,10 @@
                   <v-select
                     v-model="destination"
                     label="Destination*"
-                    item-text="text"
-                    item-value="value"
+                    :items="destinationOptions"
+                    item-text="name"
+                    item-value="id"
+                    multiple
                     @blur="$v.destination.$touch()"
                   ></v-select>
                 </v-flex>
@@ -30,29 +32,32 @@
                   <v-select
                     v-model="additional"
                     label="Additional*"
-                    item-text="text"
-                    item-value="value"
+                    item-text="name"
+                    item-value="id"
+                    :items="additionalOptions"
+                    multiple
                     @blur="$v.additional.$touch()"
                   ></v-select>
                 </v-flex>
                 <v-flex xs12 style="padding: 10px">
                   <text-editor @textContent="textContent"></text-editor>
                 </v-flex>
-                <v-flex xs6 style="padding: 10px">
-                  <h5>Photo</h5>
-                  <vue-dropify message="Upload Image By Click Here"></vue-dropify> 
+                <v-flex xs12 style="padding: 10px" class="row">
+                  <div v-for="index in 3" class="col-sm-4">
+                    <h5>Carousel {{ index }}</h5>
+                    <vue-dropify ref="carousel[index]" message="Upload Carousel By Click Here"></vue-dropify> 
+                    <v-text-field label="Note" v-model="carousel[index]"  required name="carousel[index]" ></v-text-field>
+                  </div>
                 </v-flex>
+        
                 <v-flex xs6 style="padding: 10px">
                   <h5>Upload PDF</h5>
-                  <vue-dropify message="Upload PDF By Click Here"></vue-dropify> 
+                  <vue-dropify ref="pdf" message="Upload PDF By Click Here"></vue-dropify> 
                 </v-flex>
-                <v-flex xs6 style="padding: 10px">
-                  <h5>Carousel</h5>
-                  <vue-dropify message="Upload Carousel By Click Here"></vue-dropify> 
-                </v-flex>
+                  
                 <v-flex xs6 style="padding: 10px">
                   <h5>Flyer</h5>
-                  <vue-dropify message="Upload Flyer By Click Here"></vue-dropify> 
+                  <vue-dropify ref="flyer" message="Upload Flyer By Click Here"></vue-dropify> 
                 </v-flex>
                 <v-flex xs6 style="padding: 10px">
                   <h5>Add Detail Schedule</h5>
@@ -68,11 +73,11 @@
                         </v-btn>
                       </v-flex>
                       <v-flex xs4 class="pa-2">
-                        <v-text-field label="Caption"></v-text-field>
-                        <v-text-field label="B/L/D"></v-text-field>
+                        <v-text-field label="Title" v-model="title[index]"></v-text-field>
+                        <v-text-field label="B/L/D" v-model="bld[index]"></v-text-field>
                       </v-flex>
                       <v-flex xs6>
-                        <v-textarea auto-grow label="Caption"></v-textarea>
+                        <v-textarea auto-grow label="Caption"  v-model="caption[index]"></v-textarea>
                       </v-flex>
                     </v-layout>
                   </div>
@@ -82,10 +87,10 @@
                   <div v-for="index in addFlightDetail">
                     <v-layout wrap border style="padding: 10px">
                       <v-flex xs4 class="text-center pa-2" >
-                        <v-text-field label="No Flight"></v-text-field>
+                        <v-text-field label="No Flight" v-model="flight[index]"></v-text-field>
                       </v-flex>
                       <v-flex xs4 class="text-center pa-2">
-                        <v-text-field label="B/L/D"></v-text-field>
+                        <v-text-field label="Route" v-model="route[index]"></v-text-field>
                         <v-btn v-if="index == addFlightDetail" small  class="mx-1" fab dark color="primary" @click="addFlight">
                           <v-icon dark>add</v-icon>
                         </v-btn>
@@ -94,8 +99,8 @@
                         </v-btn>
                       </v-flex>
                       <v-flex xs4 class="text-center pa-2">
-                        <v-text-field label="Time Departure"></v-text-field>
-                        <v-text-field label="Time Arrival"></v-text-field>
+                        <v-text-field label="Time Departure" v-model="departure[index]"></v-text-field>
+                        <v-text-field label="Time Arrival" v-model="arrival[index]"></v-text-field>
                       </v-flex>
                     </v-layout>
                   </div>
@@ -181,7 +186,7 @@
                     :disabled="loading"
                     color="primary"
                     class="ma-2 white--text"
-                    @click="loader = 'loading'"
+                    @click="appendItinerary"
                   >
                     Append
                     <v-icon right dark>check_circle</v-icon>
@@ -232,14 +237,39 @@
           let accounting = document.createElement('script')
           accounting.setAttribute('src', '/js/accounting/accounting.js')
           document.head.appendChild(accounting)
+
+          axios
+            .get('/api/get-token')
+            .then(response => {
+              axios.defaults.headers.common['Authorization'] = 'Bearer '+response.data.access_token;
+
+            })
+            .catch(error => {
+              console.log(error)
+              this.errored = true
+            })
+            .finally(() => this.apiReady = true)
       },
       data: () => ({
         addDetailSchedule : 1,
         addFlightDetail : 1,
         code:'Tes',
         id:'1',
+        apiReady:false,
         name:'',
+        destination:'',
+        additional:'',
+        destinationOptions:[],
+        additionalOptions:[],
         dateStart:'',
+        carousel:[],
+        title:[],
+        caption:[],
+        bld:[],
+        flight:[],
+        route:[],
+        departure:[],
+        arrival:[],
         money: {
           decimal: '.',
           thousands: ',',
@@ -289,6 +319,9 @@
           destination: {
               required
           },
+          additional: {
+              required
+          },
           flightBy: {
               required
           },
@@ -312,6 +345,12 @@
               !this.$v.destination.required && errors.push('Destination is required.')
               return errors
           },
+          additionalErrors() {
+              const errors = []
+              if (!this.$v.additional.$dirty) return errors
+              !this.$v.additional.required && errors.push('Additional is required.')
+              return errors
+          },
           flightByErrors() {
               const errors = []
               if (!this.$v.flightBy.$dirty) return errors
@@ -322,16 +361,18 @@
       props: {
           dialog: false,
           idData: Array,
-          destination: Array,
-          additional: Array,
       },
       components: {
           'vue-dropify': VueDropify
       },
       watch: {
           dialog: function() {
-              this.dialogs = this.dialog
+              this.dialogs = this.dialog;
               this.imageReady = true;
+          },
+          apiReady:function(){
+              console.log('Generate Token...')
+              this.callingApi();
           },
           idData: function() {
               if (this.idData.length == 1) {
@@ -346,14 +387,6 @@
                   this.price = '';
                   this.note = '';
               }
-          },
-          loader () {
-            const l = this.loader
-            this[l] = !this[l]
-
-            setTimeout(() => (this[l] = false), 3000)
-
-            this.loader = null
           },
       },
       methods: {
@@ -440,6 +473,31 @@
             if (this.addFlightDetail != 1) {
               this.addFlightDetail--;
             }
+          },
+          appendItinerary(){
+            const l = this.loader
+            this[l] = !this[l]
+            let data = {
+              'adultPrice':this.adultPrice,
+              'adultPrice':this.adultPrice,
+            } 
+            this.itineraryItems.push(data);
+            console.log(this.itineraryItems);
+            this[l] = false;
+            this.loader = null;
+          },
+          callingApi(){
+            axios
+              .get('/api/itinerary/create')
+              .then(response => {
+                this.destinationOptions =  response.data.destination;
+                this.additionalOptions =  response.data.additional;
+              })
+              .catch(error => {
+                console.log(error)
+                this.errored = true
+              })
+              .finally(() => this.apiReady = true)
           }
       }
   }
