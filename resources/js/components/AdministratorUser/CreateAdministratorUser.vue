@@ -191,8 +191,6 @@
           }
 
           let formData = new FormData();
-          console.log(this.$refs.tes);
-          return false;
           formData.append('id',this.id)
           formData.append('name',this.name)
           formData.append('email',this.email)
