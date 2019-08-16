@@ -793,74 +793,10 @@ class apiController extends Controller
     {
         return DB::transaction(function() use ($req) {  
             if (!isset($req->id) or $req->id == '' or $req->id == null) {
-                if(!Auth::user()->hasAkses('Itinerary','create')){
-                    return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Create This Data']);
-                }
-
-                $check = $this->model->itinerary()->where('name',$req->name)->first();
-                
-                if($check != null){
-                    return Response::json(['status'=>0,'message'=>'Name Has Been Taken']);
-                }
-
-                $file = $req->gambar;
-                if ($file != null) {
-                    
-                    $filename = 'itinerary_'.$req->name.'.'.'jpg';
-                    $path = './dist/img/itinerary';
-                    if (!file_exists($path)) {
-                        mkdir($path, 777, true);
-                    }
-                    $path = 'dist/img/itinerary/' . $filename;
-                    Image::make(file_get_contents($file))->save($path);  
-                    $path = '/dist/img/itinerary/' . $filename;
-                }else{
-                    $filename = null;
-                }
-
-                $input = $req->all();
-                $input['created_by'] = Auth::user()->name;
-                $input['created_at'] = carbon::now();
-                $input['updated_by'] = Auth::user()->name;
-                $input['updated_at'] = carbon::now();
-                $input['active'] = 'true';
-                $input['image'] = $path;
-                $this->model->itinerary()->create($input);
+                dd($req->all());
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
-                if(!Auth::user()->hasAkses('Itinerary','edit')){
-                    return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Edit This Data']);
-                }
-
-                $check = $this->model->itinerary()->where('name',$req->name)->where('id','!=',$req->id)->first();
-                
-                if($check != null){
-                    return Response::json(['status'=>0,'message'=>'Name Has Been Taken']);
-                }
-
-                $file = $req->gambar;
-                if ($file != null) {
-                    $old_path = $this->model->itinerary()->where('id','=',$req->id)->first();
-                    unlink('.'.$old_path->image);
-                    $filename = 'itinerary_'.$req->name.'.'.'jpg';
-                    $path = './dist/img/itinerary';
-                    if (!file_exists($path)) {
-                        mkdir($path, 777, true);
-                    }
-                    $path = 'dist/img/itinerary/' . $filename;
-                    Image::make(file_get_contents($file))->save($path);  
-                    $path = '/dist/img/itinerary/' . $filename;
-                    $input['image'] = $path;
-                }else{
-                    $filename = null;
-                }
-
-                $input = $req->all();
-                $input['updated_by'] = Auth::user()->name;
-                $input['updated_at'] = carbon::now();
-                unset($input['gambar']);
-                $input['active'] = 'true';
-                $this->model->itinerary()->where('id',$req->id)->update($input);
+                dd($req->all());
                 return Response::json(['status'=>1,'message'=>'Success updating data']);
             }
         });

@@ -7,37 +7,42 @@
           <h5 style="margin-top: 10px;display: inline-block;"><b>Create Itinerary</b></h5>
         </div>
         <div class="card-body">
-          <form-wizard title="" subtitle="">
-            <tab-content title="Form Data">
+          <form-wizard title="" subtitle="" @on-loading="setLoading" color="#007bff" error-color="red" finish-button-text="Save" @on-complete="onComplete">
+            <tab-content title="Form Data" :before-change="beforeChange">
               <v-layout wrap>
-                <v-flex xs6 style="padding: 10px">
-                  <v-text-field label="Code Tour" v-model="code" readonly required name="code" ></v-text-field>
+                <v-flex xs12 md6 style="padding: 10px">
+                  <v-text-field label="Code Tour" v-model="form.code" readonly required name="code" ></v-text-field>
                   <input type="hidden" name="id" v-model="id">
                 </v-flex>
-                <v-flex xs6 style="padding: 10px">
-                  <v-text-field label="Name*" v-model="name" required name="name" @blur="$v.name.$touch()" :error-messages="nameErrors"></v-text-field>
+                <v-flex xs12 md6 style="padding: 10px">
+                  <v-text-field label="Name*" v-model="form.name" required name="name" @blur="$v.form.name.$touch()" :error-messages="nameErrors"></v-text-field>
                 </v-flex>
-                <v-flex xs6 style="padding: 10px">
+                <v-flex xs12 md6 style="padding: 10px">
                   <v-select
-                    v-model="destination"
+                    v-model="form.destination"
                     label="Destination*"
                     :items="destinationOptions"
                     item-text="name"
                     item-value="id"
                     multiple
-                    @blur="$v.destination.$touch()"
+                    @blur="$v.form.destination.$touch()"
+                    :error-messages="destinationErrors"
                   ></v-select>
                 </v-flex>
-                <v-flex xs6 style="padding: 10px">
+                <v-flex xs12 md6 style="padding: 10px">
                   <v-select
-                    v-model="additional"
+                    v-model="form.additional"
                     label="Additional*"
                     item-text="name"
                     item-value="id"
                     :items="additionalOptions"
                     multiple
-                    @blur="$v.additional.$touch()"
+                    @blur="$v.form.additional.$touch()"
+                    :error-messages="additionalErrors"
                   ></v-select>
+                </v-flex>
+                <v-flex xs12 md6 style="padding: 10px">
+                  <v-text-field label="Flight By*" v-model="form.flightBy" required name="flightBy" @blur="$v.form.flightBy.$touch()" :error-messages="flightByErrors"></v-text-field>
                 </v-flex>
                 <v-flex xs12 style="padding: 10px">
                   <text-editor @textContent="textContent"></text-editor>
@@ -45,21 +50,21 @@
                 <v-flex xs12 style="padding: 10px" class="row">
                   <div v-for="index in 3" class="col-sm-4">
                     <h5>Carousel {{ index }}</h5>
-                    <vue-dropify ref="carousel[index]" message="Upload Carousel By Click Here"></vue-dropify> 
-                    <v-text-field label="Note" v-model="carousel[index]"  required name="carousel[index]" ></v-text-field>
+                    <vue-dropify ref="carousel" message="Upload Carousel By Click Here"></vue-dropify> 
+                    <v-text-field label="Note" v-model="note[index]"  required name="note[index]" ></v-text-field>
                   </div>
                 </v-flex>
         
-                <v-flex xs6 style="padding: 10px">
+                <v-flex xs12 md6 style="padding: 10px">
                   <h5>Upload PDF</h5>
                   <vue-dropify ref="pdf" message="Upload PDF By Click Here"></vue-dropify> 
                 </v-flex>
                   
-                <v-flex xs6 style="padding: 10px">
+                <v-flex xs12 md6 style="padding: 10px">
                   <h5>Flyer</h5>
                   <vue-dropify ref="flyer" message="Upload Flyer By Click Here"></vue-dropify> 
                 </v-flex>
-                <v-flex xs6 style="padding: 10px">
+                <v-flex xs12 md6 style="padding: 10px">
                   <h5>Add Detail Schedule</h5>
                   <div v-for="index in addDetailSchedule">
                     <v-layout wrap border style="padding: 10px">
@@ -76,13 +81,13 @@
                         <v-text-field label="Title" v-model="title[index]"></v-text-field>
                         <v-text-field label="B/L/D" v-model="bld[index]"></v-text-field>
                       </v-flex>
-                      <v-flex xs6>
+                      <v-flex xs12 md6>
                         <v-textarea auto-grow label="Caption"  v-model="caption[index]"></v-textarea>
                       </v-flex>
                     </v-layout>
                   </div>
                 </v-flex>
-                <v-flex xs6 style="padding: 10px">
+                <v-flex xs12 md6 style="padding: 10px">
                   <h5>Add Flight Detail</h5>
                   <div v-for="index in addFlightDetail">
                     <v-layout wrap border style="padding: 10px">
@@ -90,7 +95,7 @@
                         <v-text-field label="No Flight" v-model="flight[index]"></v-text-field>
                       </v-flex>
                       <v-flex xs4 class="text-center pa-2">
-                        <v-text-field label="Route" v-model="route[index]"></v-text-field>
+                        <v-text-field label="Route" v-model="route[index]" ></v-text-field>
                         <v-btn v-if="index == addFlightDetail" small  class="mx-1" fab dark color="primary" @click="addFlight">
                           <v-icon dark>add</v-icon>
                         </v-btn>
@@ -99,8 +104,8 @@
                         </v-btn>
                       </v-flex>
                       <v-flex xs4 class="text-center pa-2">
-                        <v-text-field label="Time Departure" v-model="departure[index]"></v-text-field>
-                        <v-text-field label="Time Arrival" v-model="arrival[index]"></v-text-field>
+                        <v-text-field label="Time Departure" v-model="departure[index]" ></v-text-field>
+                        <v-text-field label="Time Arrival" v-model="arrival[index]" ></v-text-field>
                       </v-flex>
                     </v-layout>
                   </div>
@@ -109,9 +114,9 @@
             </tab-content>
             <tab-content title="Form Detail">
               <v-layout wrap>
-                <v-flex xs6 style="padding: 10px" class="px-12">
+                <v-flex xs12 md6 style="padding: 10px" class="px-12">
                   <v-menu
-                    v-model="menu"
+                    v-model="formDetail.menu"
                     :close-on-content-click="false"
                     :nudge-right="40"
                     transition="scale-transition"
@@ -121,19 +126,19 @@
                   >
                     <template v-slot:activator="{ on }">
                       <v-text-field
-                        v-model="dateStart"
+                        v-model="formDetail.dateStart"
                         label="Date Start"
                         prepend-icon="event"
                         readonly
                         v-on="on"
                       ></v-text-field>
                     </template>
-                    <v-date-picker v-model="dateStart" @input="menu = false"></v-date-picker>
+                    <v-date-picker v-model="formDetail.dateStart" @input="menu = false"></v-date-picker>
                   </v-menu>
                 </v-flex>
-                <v-flex xs6 style="padding: 10px">
+                <v-flex xs12 md6 style="padding: 10px">
                   <v-menu
-                    v-model="menu1"
+                    v-model="formDetail.menu1"
                     :close-on-content-click="false"
                     :nudge-right="40"
                     transition="scale-transition"
@@ -143,44 +148,47 @@
                   >
                     <template v-slot:activator="{ on }">
                       <v-text-field
-                        v-model="dateEnd"
+                        v-model="formDetail.dateEnd"
                         label="Date End"
                         prepend-icon="event"
                         readonly
                         v-on="on"
                       ></v-text-field>
                     </template>
-                    <v-date-picker v-model="dateEnd" @input="menu1 = false"></v-date-picker>
+                    <v-date-picker v-model="formDetail.dateEnd" @input="menu1 = false"></v-date-picker>
                   </v-menu>
                 </v-flex>
-                <v-flex xs6 style="padding: 10px">
-                  <v-text-field label="Adult Price" v-money="money" v-model="adultPrice"  required name="adultPrice" ></v-text-field>
+                <v-flex xs12 md6 style="padding: 10px">
+                  <v-text-field label="Adult Price" v-money="money" ref="adultPrice" v-model="formDetail.adultPrice" :error-messages="adultPriceErrors"  required name="adultPrice" @blur="$v.formDetail.adultPrice.$touch()"></v-text-field>
                 </v-flex>
-                <v-flex xs6 style="padding: 10px">
-                  <v-text-field label="Child No Bed Price" v-money="money" v-model="CnBPrice"  required name="CnBPrice" ></v-text-field>
+                <v-flex xs12 md6 style="padding: 10px">
+                  <v-text-field label="Child No Bed Price" v-money="money" ref="CnBPrice" v-model="formDetail.CnBPrice" :error-messages="CnBPriceErrors"  required name="CnBPrice"  @blur="$v.formDetail.CnBPrice.$touch()"></v-text-field>
                 </v-flex>
-                <v-flex xs6 style="padding: 10px">
-                  <v-text-field label="Child With Bed Price" v-money="money" v-model="CwBPrice"  required name="CwBPrice" ></v-text-field>
+                <v-flex xs12 md6 style="padding: 10px">
+                  <v-text-field label="Child With Bed Price" v-money="money" ref="CwBPrice" v-model="formDetail.CwBPrice" :error-messages="CwBPriceErrors"  required name="CwBPrice" @blur="$v.formDetail.CwBPrice.$touch()"></v-text-field>
                 </v-flex>
-                <v-flex xs6 style="padding: 10px">
-                  <v-text-field label="Infant Price" v-money="money" v-model="infantPrice"  required name="infantPrice" ></v-text-field>
+                <v-flex xs12 md6 style="padding: 10px">
+                  <v-text-field label="Infant Price" v-money="money" ref="infantPrice" v-model="formDetail.infantPrice" :error-messages="infantPriceErrors"  required name="infantPrice" @blur="$v.formDetail.infantPrice.$touch()" ></v-text-field>
                 </v-flex>
-                <v-flex xs6 style="padding: 10px">
-                  <v-text-field label="Agent Com Price" v-money="money" v-model="agentPrice"  required name="agentPrice" ></v-text-field>
+                <v-flex xs12 md6 style="padding: 10px">
+                  <v-text-field label="Agent Com Price" v-money="money" ref="agentPrice" v-model="formDetail.agentPrice" :error-messages="agentPriceErrors"  required name="agentPrice" @blur="$v.formDetail.agentPrice.$touch()" ></v-text-field>
                 </v-flex>
-                <v-flex xs6 style="padding: 10px">
-                  <v-text-field label="Tips Price" v-money="money" v-model="tipsPrice"  required name="tipsPrice" ></v-text-field>
+                <v-flex xs12 md6 style="padding: 10px">
+                  <v-text-field label="Tips Price" v-money="money" ref="tipsPrice" v-model="formDetail.tipsPrice" :error-messages="tipsPriceErrors"  required name="tipsPrice" @blur="$v.formDetail.tipsPrice.$touch()"></v-text-field>
                 </v-flex>
-                <v-flex xs6 style="padding: 10px">
-                  <v-text-field label="Visa Price" v-money="money" v-model="visaPrice"  required name="visaPrice" ></v-text-field>
+                <v-flex xs12 md6 style="padding: 10px">
+                  <v-text-field label="Visa Price" v-money="money" ref="visaPrice" v-model="formDetail.visaPrice" :error-messages="visaPriceErrors"  required name="visaPrice" @blur="$v.formDetail.visaPrice.$touch()" ></v-text-field>
                 </v-flex>
-                <v-flex xs6 style="padding: 10px">
-                  <v-text-field label="Apt Tax & Fuel Surcharge" v-money="money" v-model="aptPrice"  required name="aptPrice" ></v-text-field>
+                <v-flex xs12 md6 style="padding: 10px">
+                  <v-text-field label="Apt Tax & Fuel Surcharge" v-money="money" ref="aptPrice" v-model="formDetail.aptPrice" :error-messages="aptPriceErrors"  required name="aptPrice" @blur="$v.formDetail.aptPrice.$touch()"></v-text-field>
                 </v-flex>
-                <v-flex xs6 style="padding: 10px">
-                  <v-text-field label="Seat" v-model="seat"  required name="seat" type="number" ></v-text-field>
+                <v-flex xs12 md6 style="padding: 10px">
+                  <v-text-field label="Seat" ref="seat" v-model="formDetail.seat" :error-messages="seatErrors"  required name="seat" type="number" @blur="$v.formDetail.seat.$touch()"></v-text-field>
                 </v-flex>
-                <v-flex xs6 style="padding: 10px">
+                <v-flex xs12 md6 style="padding: 10px">
+                  <v-text-field label="minimal DP" v-money="money" ref="minimalDP" v-model="formDetail.minimalDP" :error-messages="minimalDPErrors"  required name="minimalDP" @blur="$v.formDetail.minimalDP.$touch()" ></v-text-field>
+                </v-flex>
+                <v-flex xs12 style="padding: 10px;text-align: right;">
                   <v-btn
                     :loading="loading"
                     :disabled="loading"
@@ -199,19 +207,21 @@
                     class="elevation-1"
                   >
                     <template v-slot:items="props">
-                      <td>{{ props.item.name }}</td>
-                      <td class="text-xs-right">{{ props.item.calories }}</td>
-                      <td class="text-xs-right">{{ props.item.fat }}</td>
-                      <td class="text-xs-right">{{ props.item.carbs }}</td>
-                      <td class="text-xs-right">{{ props.item.protein }}</td>
-                      <td class="text-xs-right">{{ props.item.iron }}</td>
+                      <td>{{ props.item.dateStart }}</td>
+                      <td>{{ props.item.dateEnd }}</td>
+                      <td class="text-xs-right">{{ props.item.adultPrice  | currency}}</td>
+                      <td class="text-xs-right">{{ props.item.CnBPrice  | currency}}</td>
+                      <td class="text-xs-right">{{ props.item.CwBPrice  | currency}}</td>
+                      <td class="text-xs-right">{{ props.item.infantPrice  | currency}}</td>
+                      <td class="text-xs-right">{{ props.item.minimalDP  | currency}}</td>
+                      <td class="text-xs-right">{{ props.item.agentPrice  | currency}}</td>
+                      <td class="text-xs-right">{{ props.item.tipsPrice  | currency}}</td>
+                      <td class="text-xs-right">{{ props.item.aptPrice  | currency}}</td>
+                      <td class="text-xs-right">{{ props.item.seat }}</td>
                     </template>
                   </v-data-table>
                 </v-flex>
               </v-layout>
-            </tab-content>
-            <tab-content title="Finish">
-            Yuhuuu! This seems pretty damn simple
             </tab-content>
           </form-wizard>
         </div>
@@ -234,9 +244,9 @@
       mounted() {
           let breadcrumb = 'Itinerary <router-link to="/additional">/ Create</router-link>';
           $('#crumb').html(breadcrumb);
-          let accounting = document.createElement('script')
-          accounting.setAttribute('src', '/js/accounting/accounting.js')
-          document.head.appendChild(accounting)
+          Vue.filter('currency', function(val){
+            return accounting.formatNumber(val)
+          })
 
           axios
             .get('/api/get-token')
@@ -249,24 +259,47 @@
               this.errored = true
             })
             .finally(() => this.apiReady = true)
+
+
       },
       data: () => ({
         addDetailSchedule : 1,
+        loadingWizard: false,
         addFlightDetail : 1,
-        code:'Tes',
         id:'1',
         apiReady:false,
-        name:'',
-        destination:'',
-        additional:'',
+        form: {
+            name: '',
+            destination: '',
+            additional: '',
+            flightBy: '',
+            code:'Tes',
+            term:'',
+        },
+        formDetail:{
+          adultPrice:'',
+          minimalDP:'',
+          CnBPrice:'',
+          CwBPrice:'',
+          infantPrice:'',
+          agentPrice:'',
+          tipsPrice:'',
+          visaPrice:'',
+          aptPrice:'',
+          seat:'',
+          dateStart: new Date().toISOString().substr(0, 10),
+          dateEnd: new Date().toISOString().substr(0, 10),
+          menu: false,
+          menu1: false,
+        },
         destinationOptions:[],
         additionalOptions:[],
-        dateStart:'',
-        carousel:[],
+        note:[],
         title:[],
         caption:[],
         bld:[],
         flight:[],
+        flightBy:[],
         route:[],
         departure:[],
         arrival:[],
@@ -276,20 +309,6 @@
           precision: 0,
           masked: false /* doesn't work with directive */
         },
-        adultPrice:'',
-        minimalDP:'',
-        CnBPrice:'',
-        CwBPrice:'',
-        infantPrice:'',
-        agentPrice:'',
-        tipsPrice:'',
-        visaPrice:'',
-        aptPrice:'',
-        seat:'',
-        dateStart: new Date().toISOString().substr(0, 10),
-        dateEnd: new Date().toISOString().substr(0, 10),
-        menu: false,
-        menu1: false,
         loader: null,
         loading: false,
         itineraryItem:[],
@@ -310,53 +329,151 @@
         itineraryItems: [],
       }),
       validations: {
-          name: {
-              required
+          form: {
+              name: {
+                  required
+              },
+              
+              destination: {
+                  required
+              },
+              additional: {
+                  required
+              },
+              flightBy: {
+                  required
+              },
           },
-          price: {
-              required
-          },
-          destination: {
-              required
-          },
-          additional: {
-              required
-          },
-          flightBy: {
-              required
-          },
+          formDetail: {
+              adultPrice: {
+                  required
+              },
+              
+              minimalDP: {
+                  required
+              },
+              CnBPrice: {
+                  required
+              },
+              CwBPrice: {
+                  required
+              },
+              infantPrice: {
+                  required
+              },
+              agentPrice: {
+                  required
+              },
+              tipsPrice: {
+                  required
+              },
+              visaPrice: {
+                  required
+              },
+              aptPrice: {
+                  required
+              },
+              seat: {
+                  required
+              },
+              minimalDP: {
+                  required
+              },
+          }
       },
       computed: {
           nameErrors() {
               const errors = []
-              if (!this.$v.name.$dirty) return errors
-              !this.$v.name.required && errors.push('Name is required.')
+              if (!this.$v.form.name.$dirty) return errors
+              !this.$v.form.name.required && errors.push('Name is required.')
               return errors
           },
           priceErrors() {
-              const errors = []
-              if (!this.$v.price.$dirty) return errors
-              !this.$v.price.required && errors.push('price is required.')
+              const errors = [];
+              if (!this.$v.form.price.$dirty) return errors
+              !this.$v.form.price.required && errors.push('price is required.')
               return errors
           },
           destinationErrors() {
-              const errors = []
-              if (!this.$v.destination.$dirty) return errors
-              !this.$v.destination.required && errors.push('Destination is required.')
+              const errors = [];
+              if (!this.$v.form.destination.$dirty) return errors
+              !this.$v.form.destination.required && errors.push('Destination is required.')
               return errors
           },
           additionalErrors() {
-              const errors = []
-              if (!this.$v.additional.$dirty) return errors
-              !this.$v.additional.required && errors.push('Additional is required.')
+              const errors = [];
+              if (!this.$v.form.additional.$dirty) return errors
+              !this.$v.form.additional.required && errors.push('Additional is required.')
               return errors
           },
           flightByErrors() {
-              const errors = []
-              if (!this.$v.flightBy.$dirty) return errors
-              !this.$v.flightBy.required && errors.push('Flight By is required.')
+              const errors = [];
+              if (!this.$v.form.flightBy.$dirty) return errors
+              !this.$v.form.flightBy.required && errors.push('Flight By is required.')
               return errors
           },
+          adultPriceErrors() {
+              const errors = [];
+              if (!this.$v.formDetail.adultPrice.$dirty) return errors
+              !this.$v.formDetail.adultPrice.required && errors.push('Adult Price is required.')
+              return errors
+          },
+          CwBPriceErrors() {
+              const errors = [];
+              if (!this.$v.formDetail.CwBPrice.$dirty) return errors
+              !this.$v.formDetail.CwBPrice.required && errors.push('CwB Price is required.')
+              return errors
+          },
+          agentPriceErrors() {
+              const errors = [];
+              if (!this.$v.formDetail.agentPrice.$dirty) return errors
+              !this.$v.formDetail.agentPrice.required && errors.push('Agent Com Price is required.')
+              return errors
+          },
+          visaPriceErrors() {
+              const errors = [];
+              if (!this.$v.formDetail.visaPrice.$dirty) return errors
+              !this.$v.formDetail.visaPrice.required && errors.push('Visa Price is required.')
+              return errors
+          },
+          seatErrors() {
+              const errors = [];
+              if (!this.$v.formDetail.seat.$dirty) return errors
+              !this.$v.formDetail.seat.required && errors.push('Seat is required.')
+              return errors
+          },
+          CnBPriceErrors() {
+              const errors = [];
+              if (!this.$v.formDetail.CnBPrice.$dirty) return errors
+              !this.$v.formDetail.CnBPrice.required && errors.push('CnB Price is required.')
+              return errors
+          },
+          infantPriceErrors() {
+              const errors = [];
+              if (!this.$v.formDetail.infantPrice.$dirty) return errors
+              !this.$v.formDetail.infantPrice.required && errors.push('Infant Price is required.')
+              return errors
+          },
+          tipsPriceErrors() {
+              const errors = [];
+              if (!this.$v.formDetail.tipsPrice.$dirty) return errors
+              !this.$v.formDetail.tipsPrice.required && errors.push('Tips Price is required.')
+              return errors
+          },
+          aptPriceErrors() {
+              const errors = [];
+              if (!this.$v.formDetail.aptPrice.$dirty) return errors
+              !this.$v.formDetail.aptPrice.required && errors.push('Apt tax and surcharge is required.')
+              return errors
+          },
+          minimalDPErrors() {
+              const errors = [];
+              if (!this.$v.formDetail.minimalDP.$dirty) return errors
+              !this.$v.formDetail.minimalDP.required && errors.push('Minimal DP is required.')
+              return errors
+          },
+
+
       },
       props: {
           dialog: false,
@@ -390,71 +507,48 @@
           },
       },
       methods: {
-          saveAndCloseDialog(param) {
-              if (param == 'close') {
-                  this.dialogs = false;
-                  this.$emit('closeDialog', this.dialogs)
-                  if (this.idData.length != 0) {
-                      this.id = this.idData[0].id
-                      this.name = this.idData[0].name
-                      this.$refs.price.$el.getElementsByTagName('input')[0].value = 0;
-                      this.price = this.idData[0].price
-                      this.note = this.idData[0].note
-                  } else {
-                      this.id = '';
-                      this.name = '';
-                      this.price = '';
-                      this.note = '';
-                  }
-              } else {
-                  this.$v.$touch()
-                  if (this.$v.$anyError == true) {
-                      return false;
-                  }
+          saveAndCloseDialog() {
 
-                  let formData = new FormData();
+            let formData = new FormData();
 
-                  formData.append('id', this.id)
-                  formData.append('name', this.name)
-                  formData.append('price', this.price.replace(/[^0-9\-]+/g, ""))
-                  formData.append('note', this.note)
-                  formData.append('gambar', this.$refs.tes.images)
-                  axios.post('/api/additional/save',
-                          formData, {
-                              headers: {
-                                  'Content-Type': 'multipart/form-data'
-                              }
-                          }
-                      )
-                      .then(response => {
-                          this.snackbar = true;
-                          this.text = response.data.message;
-                          if (response.data.status == 1) {
-                              this.color = 'success'
-                              this.id = '';
-                              this.name = '';
-                              this.$refs.price.$el.getElementsByTagName('input')[0].value = 0;
-                              this.price = '';
-                              this.note = '';
-                              this.imageData = null;
-                              this.$refs.tes.images = [];
-                          } else {
-                              this.color = 'error'
-                          }
-                          this.imageReady = false;
-                      })
-                      .catch(error => {
-                          console.log(error)
-                          this.snackbar = true;
-                          this.text = error;
-                          this.errored = true
-                      })
-                      .finally(() => this.$emit('closeDialog', this.dialogs))
-              }
+            formData.append('id', this.id)
+            formData.append('form', this.form)
+            formData.append('formDetail', this.formDetail)
+            console.log(this.$refs.carousel);
+            formData.append('carousel1', this.$refs.carousel[0].images)
+            formData.append('carousel2', this.$refs.carousel[1].images)
+            formData.append('carousel3', this.$refs.carousel[2].images)
+            formData.append('pdf', this.$refs.pdf.images)
+            formData.append('flyer', this.$refs.flyer.images)
+            axios.post('/api/itinerary/save',
+                    formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    }
+                )
+                .then(response => {
+                    this.snackbar = true;
+                    this.text = response.data.message;
+                    if (response.data.status == 1) {
+             
+                        this.$refs.tes.images = [];
+                    } else {
+                        this.color = 'error'
+                    }
+                    this.imageReady = false;
+                })
+                .catch(error => {
+                    console.log(error)
+                    this.snackbar = true;
+                    this.text = error;
+                    this.errored = true
+                })
+                .finally(() => this.$emit('closeDialog', this.dialogs))
+       
           },
           textContent(content){
-            this.term = content;
-            console.log(this.term)
+            this.form.term = content;
           },
           addSchedule(){
             this.addDetailSchedule++;
@@ -475,16 +569,43 @@
             }
           },
           appendItinerary(){
+            this.$v.formDetail.$touch();
+            if (this.$v.formDetail.$anyError) {
+              window.scrollTo(0,0);
+              return false;
+            }
+
             const l = this.loader
             this[l] = !this[l]
             let data = {
-              'adultPrice':this.adultPrice,
-              'adultPrice':this.adultPrice,
+              'dateStart':this.formDetail.dateStart,
+              'dateEnd':this.formDetail.dateEnd,
+              'adultPrice':this.formDetail.adultPrice,
+              'CwBPrice':this.formDetail.CwBPrice,
+              'CnBPrice':this.formDetail.CnBPrice,
+              'infantPrice':this.formDetail.infantPrice,
+              'agentPrice':this.formDetail.agentPrice,
+              'tipsPrice':this.formDetail.tipsPrice,
+              'visaPrice':this.formDetail.visaPrice,
+              'aptPrice':this.formDetail.aptPrice,
+              'seat':this.formDetail.seat,
+              'minimalDP':this.formDetail.minimalDP,
             } 
+
             this.itineraryItems.push(data);
-            console.log(this.itineraryItems);
             this[l] = false;
             this.loader = null;
+            this.formDetail.seat = '';
+            this.$refs.adultPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.CwBPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.CnBPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.infantPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.agentPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.tipsPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.visaPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.aptPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.minimalDP.$el.getElementsByTagName('input')[0].value = 0;
+            console.log(this.itineraryItems);
           },
           callingApi(){
             axios
@@ -498,6 +619,24 @@
                 this.errored = true
               })
               .finally(() => this.apiReady = true)
+          },
+          setLoading: function(value) {
+              this.loadingWizard = value;
+          },
+          beforeChange() {
+            console.log(this.$v);
+            return new Promise((resolve, reject) => {
+              this.$v.form.$touch()
+              if (this.$v.form.$anyError == true) {
+                window.scrollTo(0,0);
+                reject(true);
+              }else{
+                resolve(true)
+              }
+            })
+          },
+          onComplete: function(){
+            this.saveAndCloseDialog();
           }
       }
   }

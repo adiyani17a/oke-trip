@@ -161,4 +161,9 @@ Vue.component('filter-bar-component', require('./components/FilterBar.vue').defa
 let app = new Vue({
     el: '#app',
     router,
+    mounted(){
+        let accounting = document.createElement('script')
+        accounting.setAttribute('src', '/js/accounting/accounting.js')
+        document.head.appendChild(accounting)
+    },
 });

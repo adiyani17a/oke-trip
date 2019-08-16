@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialogs" persistent max-width="600px">
+    <v-dialog v-model="dialogs" persistent max-width="600px" style="z-index: 9999999 !important">
       <v-card>
         <v-card-title>
           <span class="headline">{{ this.$route.name }}</span>
@@ -63,10 +63,8 @@
   export default {
   	directives: {money: VMoney},
   	mounted(){
-  		let accounting = document.createElement('script')
-    	accounting.setAttribute('src', './js/accounting/accounting.js')
-    	document.head.appendChild(accounting)
-  },
+
+    },
     data: () => ({
       id: '',
       name: '',
