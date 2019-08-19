@@ -796,6 +796,7 @@ class apiController extends Controller
                 dd($req->all());
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
+                dd(json_decode($req->formDetail));
                 dd($req->all());
                 return Response::json(['status'=>1,'message'=>'Success updating data']);
             }

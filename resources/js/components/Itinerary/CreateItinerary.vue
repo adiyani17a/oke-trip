@@ -50,19 +50,19 @@
                 <v-flex xs12 style="padding: 10px" class="row">
                   <div v-for="index in 3" class="col-sm-4">
                     <h5>Carousel {{ index }}</h5>
-                    <vue-dropify ref="carousel" message="Upload Carousel By Click Here"></vue-dropify> 
+                    <vue-dropify :id="'carousel_'+index" :multiple="false" @change="changeImage('carousel',index)" ref="carousel" message="Upload Carousel By Click Here"></vue-dropify> 
                     <v-text-field label="Note" v-model="note[index]"  required name="note[index]" ></v-text-field>
                   </div>
                 </v-flex>
         
                 <v-flex xs12 md6 style="padding: 10px">
                   <h5>Upload PDF</h5>
-                  <vue-dropify ref="pdf" message="Upload PDF By Click Here"></vue-dropify> 
+                  <vue-dropify id="pdf" multiple="false" @change="changeImage('pdf',1)" ref="pdf" message="Upload PDF By Click Here"></vue-dropify> 
                 </v-flex>
                   
                 <v-flex xs12 md6 style="padding: 10px">
                   <h5>Flyer</h5>
-                  <vue-dropify ref="flyer" message="Upload Flyer By Click Here"></vue-dropify> 
+                  <vue-dropify id="flyer" multiple="false" @change="changeImage('flyer',1)" ref="flyer" message="Upload Flyer By Click Here"></vue-dropify> 
                 </v-flex>
                 <v-flex xs12 md6 style="padding: 10px">
                   <h5>Add Detail Schedule</h5>
@@ -203,7 +203,7 @@
                 <v-flex xs12 style="padding: 10px">
                   <v-data-table
                     :headers="itineraryHeaders"
-                    :items="itineraryItems"
+                    :items="formDetail.itineraryItems"
                     class="elevation-1"
                   >
                     <template v-slot:items="props">
@@ -218,6 +218,14 @@
                       <td class="text-xs-right">{{ props.item.tipsPrice  | currency}}</td>
                       <td class="text-xs-right">{{ props.item.aptPrice  | currency}}</td>
                       <td class="text-xs-right">{{ props.item.seat }}</td>
+                      <td if="props.item.action == 'action" class="text-xs-right">
+                        <v-btn small color="primary" dark fab @click="">
+                          <v-icon dark>edit</v-icon>
+                        </v-btn>
+                        <v-btn small color="red" dark fab @click="">
+                          <v-icon dark>remove</v-icon>
+                        </v-btn>
+                      </td>
                     </template>
                   </v-data-table>
                 </v-flex>
@@ -266,7 +274,7 @@
         addDetailSchedule : 1,
         loadingWizard: false,
         addFlightDetail : 1,
-        id:'1',
+        id:'',
         apiReady:false,
         form: {
             name: '',
@@ -275,6 +283,9 @@
             flightBy: '',
             code:'Tes',
             term:'',
+            carousel:[],
+            flyer:[],
+            pdf:[],
         },
         formDetail:{
           adultPrice:'',
@@ -291,6 +302,7 @@
           dateEnd: new Date().toISOString().substr(0, 10),
           menu: false,
           menu1: false,
+          itineraryItems:[],
         },
         destinationOptions:[],
         additionalOptions:[],
@@ -300,6 +312,7 @@
         bld:[],
         flight:[],
         flightBy:[],
+ 
         route:[],
         departure:[],
         arrival:[],
@@ -326,7 +339,6 @@
           { text: 'Seat', value: 'seat' },
           { text: 'Action', value: 'action' },
         ],
-        itineraryItems: [],
       }),
       validations: {
           form: {
@@ -348,7 +360,6 @@
               adultPrice: {
                   required
               },
-              
               minimalDP: {
                   required
               },
@@ -490,36 +501,29 @@
           apiReady:function(){
               console.log('Generate Token...')
               this.callingApi();
-          },
-          idData: function() {
-              if (this.idData.length == 1) {
-                  this.id = this.idData[0].id
-                  this.name = this.idData[0].name
-                  this.$refs.price.$el.getElementsByTagName('input')[0].value = accounting.formatNumber(this.idData[0].price);
-                  this.price = accounting.formatNumber(this.idData[0].price)
-                  this.note = this.idData[0].note
-              } else {
-                  this.id = '';
-                  this.name = '';
-                  this.price = '';
-                  this.note = '';
-              }
-          },
+          }
       },
       methods: {
           saveAndCloseDialog() {
 
             let formData = new FormData();
 
+            // for ( var key in this.form ) {
+            //     formData.append(key, this.form [key]);
+            // }
+
+            // for ( var key in this.formDetail ) {
+            //     formData.append(key, this.formDetail [key]);
+            // }
+
             formData.append('id', this.id)
-            formData.append('form', this.form)
-            formData.append('formDetail', this.formDetail)
-            console.log(this.$refs.carousel);
-            formData.append('carousel1', this.$refs.carousel[0].images)
-            formData.append('carousel2', this.$refs.carousel[1].images)
-            formData.append('carousel3', this.$refs.carousel[2].images)
-            formData.append('pdf', this.$refs.pdf.images)
-            formData.append('flyer', this.$refs.flyer.images)
+            formData.append('form',  JSON.stringify(this.form))
+            formData.append('formDetail', JSON.stringify(this.formDetail))
+            formData.append('carousel1', this.form.carousel[0])
+            formData.append('carousel2', this.form.carousel[1])
+            formData.append('carousel3', this.form.carousel[2])
+            formData.append('pdf', this.form.pdf)
+            formData.append('flyer', this.form.flyer)
             axios.post('/api/itinerary/save',
                     formData, {
                         headers: {
@@ -577,6 +581,9 @@
 
             const l = this.loader
             this[l] = !this[l]
+
+            let html = '<div>'
+
             let data = {
               'dateStart':this.formDetail.dateStart,
               'dateEnd':this.formDetail.dateEnd,
@@ -590,9 +597,10 @@
               'aptPrice':this.formDetail.aptPrice,
               'seat':this.formDetail.seat,
               'minimalDP':this.formDetail.minimalDP,
+              'action':'action',
             } 
 
-            this.itineraryItems.push(data);
+            this.formDetail.itineraryItems.push(data);
             this[l] = false;
             this.loader = null;
             this.formDetail.seat = '';
@@ -605,7 +613,6 @@
             this.$refs.visaPrice.$el.getElementsByTagName('input')[0].value = 0;
             this.$refs.aptPrice.$el.getElementsByTagName('input')[0].value = 0;
             this.$refs.minimalDP.$el.getElementsByTagName('input')[0].value = 0;
-            console.log(this.itineraryItems);
           },
           callingApi(){
             axios
@@ -637,6 +644,18 @@
           },
           onComplete: function(){
             this.saveAndCloseDialog();
+          },
+          changeImage:function(param,index){
+            if (param == 'carousel') {
+              var input =  $('#carousel_'+index).find('input');
+              this.form.carousel[index-1] = input[0].files[0];  
+            }else if (param == 'pdf'){
+              var input =  $('#pdf').find('input');
+              this.form.pdf = input[0].files[0];  
+            }else if (param == 'flyer'){
+              var input =  $('#flyer').find('input');
+              this.form.pdf = input[0].files[0]; 
+            }
           }
       }
   }
