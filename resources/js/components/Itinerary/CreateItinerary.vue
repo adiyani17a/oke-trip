@@ -50,19 +50,19 @@
                 <v-flex xs12 style="padding: 10px" class="row">
                   <div v-for="index in 3" class="col-sm-4">
                     <h5>Carousel {{ index }}</h5>
-                    <vue-dropify ref="carousel" message="Upload Carousel By Click Here"></vue-dropify> 
+                    <vue-dropify :id="'carousel_'+index" :multiple="false" @change="changeImage('carousel',index)" ref="carousel" message="Upload Carousel By Click Here"></vue-dropify> 
                     <v-text-field label="Note" v-model="note[index]"  required name="note[index]" ></v-text-field>
                   </div>
                 </v-flex>
         
                 <v-flex xs12 md6 style="padding: 10px">
                   <h5>Upload PDF</h5>
-                  <vue-dropify ref="pdf" message="Upload PDF By Click Here"></vue-dropify> 
+                  <vue-dropify id="pdf" multiple="false" @change="changeImage('pdf',1)" ref="pdf" message="Upload PDF By Click Here"></vue-dropify> 
                 </v-flex>
                   
                 <v-flex xs12 md6 style="padding: 10px">
                   <h5>Flyer</h5>
-                  <vue-dropify ref="flyer" message="Upload Flyer By Click Here"></vue-dropify> 
+                  <vue-dropify id="flyer" multiple="false" @change="changeImage('flyer',1)" ref="flyer" message="Upload Flyer By Click Here"></vue-dropify> 
                 </v-flex>
                 <v-flex xs12 md6 style="padding: 10px">
                   <h5>Add Detail Schedule</h5>
@@ -190,20 +190,29 @@
                 </v-flex>
                 <v-flex xs12 style="padding: 10px;text-align: right;">
                   <v-btn
+                    v-if="formDetailEdit == true"
+                    color="red"
+                    class="ma-2 white--text"
+                    @click="cancelEdit(idEdit)"
+                  >
+                    Cancel
+                    <v-icon right dark>remove</v-icon>
+                  </v-btn>
+                  <v-btn
                     :loading="loading"
                     :disabled="loading"
                     color="primary"
                     class="ma-2 white--text"
-                    @click="appendItinerary"
+                    @click="appendItinerary(idEdit)"
                   >
                     Append
-                    <v-icon right dark>check_circle</v-icon>
+                    <v-icon right dark>add</v-icon>
                   </v-btn>
                 </v-flex>
                 <v-flex xs12 style="padding: 10px">
                   <v-data-table
                     :headers="itineraryHeaders"
-                    :items="itineraryItems"
+                    :items="formDetail.itineraryItems"
                     class="elevation-1"
                   >
                     <template v-slot:items="props">
@@ -218,9 +227,65 @@
                       <td class="text-xs-right">{{ props.item.tipsPrice  | currency}}</td>
                       <td class="text-xs-right">{{ props.item.aptPrice  | currency}}</td>
                       <td class="text-xs-right">{{ props.item.seat }}</td>
+                      <td if="props.item.action == 'action" class="text-xs-right">
+                        <v-btn small color="primary" dark fab @click="editData(props.index)">
+                          <v-icon dark>edit</v-icon>
+                        </v-btn>
+                        <v-btn small color="red" dark fab @click="removeData(props.index)">
+                          <v-icon dark>remove</v-icon>
+                        </v-btn>
+                      </td>
                     </template>
                   </v-data-table>
                 </v-flex>
+                <v-dialog
+                  v-model="dialogSave"
+                  max-width="290"
+                >
+                  <v-card>
+                    <v-card-title class="headline">Are You Sure Saving Data?</v-card-title>
+
+                    <v-card-text>
+                      This Action Cannot Be Undo.
+                    </v-card-text>
+
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+
+                      <v-btn
+                        color="default darken-1"
+                        flat="flat"
+                        @click="confirmationSave('cancel')"
+                      >
+                        Cancel
+                      </v-btn>
+
+                      <v-btn
+                        color="green darken-1"
+                        flat="flat"
+                        @click="confirmationSave('confirm')"
+                      >
+                        Yes, Save
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+                <v-snackbar
+                  v-model="snackbar"
+                  :color="color"
+                  :multi-line="mode === 'multi-line'"
+                  :timeout="timeout"
+                  :vertical="mode === 'vertical'"
+                >
+                  {{ text }}
+                  <v-btn
+                    dark
+                    flat
+                    @click="snackbar = false"
+                  >
+                    Close
+                  </v-btn>
+                </v-snackbar>
               </v-layout>
             </tab-content>
           </form-wizard>
@@ -266,7 +331,7 @@
         addDetailSchedule : 1,
         loadingWizard: false,
         addFlightDetail : 1,
-        id:'1',
+        id:'',
         apiReady:false,
         form: {
             name: '',
@@ -275,6 +340,9 @@
             flightBy: '',
             code:'Tes',
             term:'',
+            carousel:[],
+            flyer:[],
+            pdf:[],
         },
         formDetail:{
           adultPrice:'',
@@ -291,7 +359,9 @@
           dateEnd: new Date().toISOString().substr(0, 10),
           menu: false,
           menu1: false,
+          itineraryItems:[],
         },
+        formDetailEdit : false,
         destinationOptions:[],
         additionalOptions:[],
         note:[],
@@ -300,9 +370,16 @@
         bld:[],
         flight:[],
         flightBy:[],
+        idEdit:[],
         route:[],
         departure:[],
         arrival:[],
+        color: 'success',
+        mode: '',
+        timeout: 6000,
+        text: 'Berhasil Simpan Data',
+        dialogSave:false,
+        snackbar:false,
         money: {
           decimal: '.',
           thousands: ',',
@@ -326,7 +403,6 @@
           { text: 'Seat', value: 'seat' },
           { text: 'Action', value: 'action' },
         ],
-        itineraryItems: [],
       }),
       validations: {
           form: {
@@ -348,7 +424,6 @@
               adultPrice: {
                   required
               },
-              
               minimalDP: {
                   required
               },
@@ -490,36 +565,28 @@
           apiReady:function(){
               console.log('Generate Token...')
               this.callingApi();
-          },
-          idData: function() {
-              if (this.idData.length == 1) {
-                  this.id = this.idData[0].id
-                  this.name = this.idData[0].name
-                  this.$refs.price.$el.getElementsByTagName('input')[0].value = accounting.formatNumber(this.idData[0].price);
-                  this.price = accounting.formatNumber(this.idData[0].price)
-                  this.note = this.idData[0].note
-              } else {
-                  this.id = '';
-                  this.name = '';
-                  this.price = '';
-                  this.note = '';
-              }
-          },
+          }
       },
       methods: {
           saveAndCloseDialog() {
 
             let formData = new FormData();
 
+            // for ( var key in this.form ) {
+            //     formData.append(key, this.form [key]);
+            // }
+
+            // for ( var key in this.formDetail ) {
+            //     formData.append(key, this.formDetail [key]);
+            // }
             formData.append('id', this.id)
-            formData.append('form', this.form)
-            formData.append('formDetail', this.formDetail)
-            console.log(this.$refs.carousel);
-            formData.append('carousel1', this.$refs.carousel[0].images)
-            formData.append('carousel2', this.$refs.carousel[1].images)
-            formData.append('carousel3', this.$refs.carousel[2].images)
-            formData.append('pdf', this.$refs.pdf.images)
-            formData.append('flyer', this.$refs.flyer.images)
+            formData.append('form',  JSON.stringify(this.form))
+            formData.append('formDetail', JSON.stringify(this.formDetail))
+            formData.append('carousel1', this.form.carousel[0])
+            formData.append('carousel2', this.form.carousel[1])
+            formData.append('carousel3', this.form.carousel[2])
+            formData.append('pdf', this.form.pdf)
+            formData.append('flyer', this.form.flyer)
             axios.post('/api/itinerary/save',
                     formData, {
                         headers: {
@@ -528,10 +595,11 @@
                     }
                 )
                 .then(response => {
+                    this.dialogSave = false;
                     this.snackbar = true;
+                    this.color = 'success'
                     this.text = response.data.message;
                     if (response.data.status == 1) {
-             
                         this.$refs.tes.images = [];
                     } else {
                         this.color = 'error'
@@ -546,6 +614,13 @@
                 })
                 .finally(() => this.$emit('closeDialog', this.dialogs))
        
+          },
+          confirmationSave(param){
+            if (param == 'save') {
+              this.saveAndCloseDialog();
+            }else{
+              this.dialogSave = false;
+            }
           },
           textContent(content){
             this.form.term = content;
@@ -568,7 +643,7 @@
               this.addFlightDetail--;
             }
           },
-          appendItinerary(){
+          appendItinerary(param){
             this.$v.formDetail.$touch();
             if (this.$v.formDetail.$anyError) {
               window.scrollTo(0,0);
@@ -577,35 +652,81 @@
 
             const l = this.loader
             this[l] = !this[l]
-            let data = {
-              'dateStart':this.formDetail.dateStart,
-              'dateEnd':this.formDetail.dateEnd,
-              'adultPrice':this.formDetail.adultPrice,
-              'CwBPrice':this.formDetail.CwBPrice,
-              'CnBPrice':this.formDetail.CnBPrice,
-              'infantPrice':this.formDetail.infantPrice,
-              'agentPrice':this.formDetail.agentPrice,
-              'tipsPrice':this.formDetail.tipsPrice,
-              'visaPrice':this.formDetail.visaPrice,
-              'aptPrice':this.formDetail.aptPrice,
-              'seat':this.formDetail.seat,
-              'minimalDP':this.formDetail.minimalDP,
-            } 
 
-            this.itineraryItems.push(data);
-            this[l] = false;
-            this.loader = null;
-            this.formDetail.seat = '';
-            this.$refs.adultPrice.$el.getElementsByTagName('input')[0].value = 0;
-            this.$refs.CwBPrice.$el.getElementsByTagName('input')[0].value = 0;
-            this.$refs.CnBPrice.$el.getElementsByTagName('input')[0].value = 0;
-            this.$refs.infantPrice.$el.getElementsByTagName('input')[0].value = 0;
-            this.$refs.agentPrice.$el.getElementsByTagName('input')[0].value = 0;
-            this.$refs.tipsPrice.$el.getElementsByTagName('input')[0].value = 0;
-            this.$refs.visaPrice.$el.getElementsByTagName('input')[0].value = 0;
-            this.$refs.aptPrice.$el.getElementsByTagName('input')[0].value = 0;
-            this.$refs.minimalDP.$el.getElementsByTagName('input')[0].value = 0;
-            console.log(this.itineraryItems);
+            if (this.formDetailEdit == false) {
+              let data = {
+                'dateStart':this.formDetail.dateStart,
+                'dateEnd':this.formDetail.dateEnd,
+                'adultPrice':this.formDetail.adultPrice,
+                'CwBPrice':this.formDetail.CwBPrice,
+                'CnBPrice':this.formDetail.CnBPrice,
+                'infantPrice':this.formDetail.infantPrice,
+                'agentPrice':this.formDetail.agentPrice,
+                'tipsPrice':this.formDetail.tipsPrice,
+                'visaPrice':this.formDetail.visaPrice,
+                'aptPrice':this.formDetail.aptPrice,
+                'seat':this.formDetail.seat,
+                'minimalDP':this.formDetail.minimalDP,
+                'action':'action',
+              } 
+
+              this.formDetail.itineraryItems.push(data);
+              this[l] = false;
+              this.loader = null;
+              this.formDetail.seat = '';
+              this.$refs.adultPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.CwBPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.CnBPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.infantPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.agentPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.tipsPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.visaPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.aptPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.minimalDP.$el.getElementsByTagName('input')[0].value = 0;
+            }else{
+              let data = {
+                'dateStart':this.formDetail.dateStart,
+                'dateEnd':this.formDetail.dateEnd,
+                'adultPrice':this.formDetail.adultPrice,
+                'CwBPrice':this.formDetail.CwBPrice,
+                'CnBPrice':this.formDetail.CnBPrice,
+                'infantPrice':this.formDetail.infantPrice,
+                'agentPrice':this.formDetail.agentPrice,
+                'tipsPrice':this.formDetail.tipsPrice,
+                'visaPrice':this.formDetail.visaPrice,
+                'aptPrice':this.formDetail.aptPrice,
+                'seat':this.formDetail.seat,
+                'minimalDP':this.formDetail.minimalDP,
+              } 
+
+              this.formDetail.itineraryItems[param].dateStart = this.formDetail.dateStart;
+              this.formDetail.itineraryItems[param].dateEnd = this.formDetail.dateEnd;
+              this.formDetail.itineraryItems[param].adultPrice = this.formDetail.adultPrice;
+              this.formDetail.itineraryItems[param].CwBPrice = this.formDetail.CwBPrice;
+              this.formDetail.itineraryItems[param].CnBPrice = this.formDetail.CnBPrice;
+              this.formDetail.itineraryItems[param].infantPrice = this.formDetail.infantPrice;
+              this.formDetail.itineraryItems[param].agentPrice = this.formDetail.agentPrice;
+              this.formDetail.itineraryItems[param].tipsPrice = this.formDetail.tipsPrice;
+              this.formDetail.itineraryItems[param].visaPrice = this.formDetail.visaPrice;
+              this.formDetail.itineraryItems[param].aptPrice = this.formDetail.aptPrice;
+              this.formDetail.itineraryItems[param].seat = this.formDetail.seat;
+              this.formDetail.itineraryItems[param].minimalDP = this.formDetail.minimalDP;
+
+              this[l] = false;
+              this.loader = null;
+              this.formDetailEdit = false;
+              this.idEdit = null;
+              this.formDetail.seat = '';
+              this.$refs.adultPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.CwBPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.CnBPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.infantPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.agentPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.tipsPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.visaPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.aptPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.minimalDP.$el.getElementsByTagName('input')[0].value = 0;
+            }
           },
           callingApi(){
             axios
@@ -636,7 +757,52 @@
             })
           },
           onComplete: function(){
-            this.saveAndCloseDialog();
+            this.dialogSave = true;
+          },
+          changeImage:function(param,index){
+            if (param == 'carousel') {
+              var input =  $('#carousel_'+index).find('input');
+              this.form.carousel[index-1] = input[0].files[0];  
+            }else if (param == 'pdf'){
+              var input =  $('#pdf').find('input');
+              this.form.pdf = input[0].files[0];  
+            }else if (param == 'flyer'){
+              var input =  $('#flyer').find('input');
+              this.form.pdf = input[0].files[0]; 
+            }
+          },
+          editData:function(param){
+            this.formDetail.dateStart = this.formDetail.itineraryItems[param].dateStart;
+            this.formDetail.dateEnd = this.formDetail.itineraryItems[param].dateEnd;
+            this.formDetail.adultPrice = this.formDetail.itineraryItems[param].adultPrice; 
+            this.formDetail.CwBPrice = this.formDetail.itineraryItems[param].CwBPrice;
+            this.formDetail.CnBPrice = this.formDetail.itineraryItems[param].CnBPrice; 
+            this.formDetail.infantPrice = this.formDetail.itineraryItems[param].infantPrice;
+            this.formDetail.agentPrice = this.formDetail.itineraryItems[param].agentPrice;
+            this.formDetail.tipsPrice = this.formDetail.itineraryItems[param].tipsPrice;
+            this.formDetail.visaPrice = this.formDetail.itineraryItems[param].visaPrice; 
+            this.formDetail.aptPrice = this.formDetail.itineraryItems[param].aptPrice; 
+            this.formDetail.seat = this.formDetail.itineraryItems[param].seat; 
+            this.formDetail.minimalDP = this.formDetail.itineraryItems[param].minimalDP; 
+            this.idEdit = param;  
+            this.formDetailEdit = true;
+          },
+          removeData:function(param){
+            this.formDetail.itineraryItems.splice(param,1);
+          },
+          cancelEdit:function(){
+            this.$refs.adultPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.CwBPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.CnBPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.infantPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.agentPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.tipsPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.visaPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.aptPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.minimalDP.$el.getElementsByTagName('input')[0].value = 0;
+            this.idEdit = null;
+            this.formDetail.seat = null; 
+            this.formDetailEdit = false;
           }
       }
   }

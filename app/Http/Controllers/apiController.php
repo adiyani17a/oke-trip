@@ -793,7 +793,39 @@ class apiController extends Controller
     {
         return DB::transaction(function() use ($req) {  
             if (!isset($req->id) or $req->id == '' or $req->id == null) {
-                dd($req->all());
+                // carousel
+                $id = $this->model->itinerary()->max('id');
+                $file = $req->carousel1;
+                if ($file != null) {
+                    $carousel_1 = 'carousel_1_'.$req->id.'.'.'jpg';
+                    $path = './dist/img/itinerary';
+                    if (!file_exists($path)) {
+                        mkdir($path, 777, true);
+                    }
+                    $path = 'dist/img/itinerary/' . $carousel_1;
+                    Image::make(file_get_contents($file))->save($path);  
+                    $path = '/dist/img/itinerary/' . $carousel_1;
+                }else{
+                    $carousel_1 = null;
+                }
+
+                $file = $req->carousel2;
+                if ($file != null) {
+                    $carousel_2 = 'carousel_2_'.$req->id.'.'.'jpg';
+                    $path = './dist/img/itinerary';
+                    if (!file_exists($path)) {
+                        mkdir($path, 777, true);
+                    }
+                    $path = 'dist/img/itinerary/' . $carousel_2;
+                    Image::make(file_get_contents($file))->save($path);  
+                    $path = '/dist/img/itinerary/' . $carousel_2;
+                }else{
+                    $carousel_2 = null;
+                }
+
+                $form = json_decode($req->form);
+                $formDetail = json_decode($req->formDetail);
+
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
                 dd($req->all());
