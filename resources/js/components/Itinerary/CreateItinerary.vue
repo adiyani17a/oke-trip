@@ -616,7 +616,7 @@
        
           },
           confirmationSave(param){
-            if (param == 'save') {
+            if (param == 'confirm') {
               this.saveAndCloseDialog();
             }else{
               this.dialogSave = false;

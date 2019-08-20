@@ -101,7 +101,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             @php
               $hasFeature = 0;
               foreach ($d->menuList as $i1 => $d1) {
-                if (Auth::user()->hasAkses($d1->id,'view')){
+                if (Auth::user()->hasAccess($d1->id,'view')){
                   $hasFeature+=1;
                 }  
               }
@@ -117,7 +117,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
                 <ul class="nav nav-treeview">
                   @foreach ($d->menuList as $i1 => $d1)
-                    @if (Auth::user()->hasAkses($d1->id,'view'))
+                    @if (Auth::user()->hasAccess($d1->id,'view'))
                       <li class="nav-item">
                         <router-link to="/{{ $d1->url }}" class="nav-link ">
                           <i class="far fa-circle nav-icon"></i>

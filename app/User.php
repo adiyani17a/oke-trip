@@ -43,7 +43,7 @@ class User extends Authenticatable
       return $this->belongsTo('App\role', 'role_id', 'id');
     }
 
-    public function hasAkses($fitur,$aksi){
+    public function hasAccess($fitur,$aksi){
       // select * from  join  on = where ubah =true
         
          $cek = DB::table('users')

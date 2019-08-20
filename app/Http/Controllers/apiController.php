@@ -279,7 +279,7 @@ class apiController extends Controller
         return DB::transaction(function() use ($req) {  
             if (!isset($req->id) or $req->id == '' or $req->id == null) {
 
-                if(!Auth::user()->hasAkses('Role','create')){
+                if(!Auth::user()->hasAccess('Role','create')){
                     return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Create This Data']);
                 } 
 
@@ -325,7 +325,7 @@ class apiController extends Controller
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
 
-                if(!Auth::user()->hasAkses('Role','edit')){
+                if(!Auth::user()->hasAccess('Role','edit')){
                     return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Update This Data']);
                 } 
 
@@ -348,7 +348,7 @@ class apiController extends Controller
     {
         return DB::transaction(function() use ($req) {  
 
-            if(!Auth::user()->hasAkses('Role','delete')){
+            if(!Auth::user()->hasAccess('Role','delete')){
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             } 
 
@@ -382,7 +382,7 @@ class apiController extends Controller
     {
         return DB::transaction(function() use ($req) {  
 
-            if(!Auth::user()->hasAkses('Administrator User','validation')){
+            if(!Auth::user()->hasAccess('Administrator User','validation')){
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Validate This Data']);
             } 
 
@@ -405,7 +405,7 @@ class apiController extends Controller
     {
         return DB::transaction(function() use ($req) {  
             if (!isset($req->id) or $req->id == '' or $req->id == null) {
-                if(!Auth::user()->hasAkses('Administrator User','create')){
+                if(!Auth::user()->hasAccess('Administrator User','create')){
                     return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Create This Data']);
                 }
 
@@ -439,7 +439,7 @@ class apiController extends Controller
                 $this->model->user()->create($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
-                if(!Auth::user()->hasAkses('Administrator User','edit')){
+                if(!Auth::user()->hasAccess('Administrator User','edit')){
                     return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Edit This Data']);
                 }
                 $input = $req->all();
@@ -477,7 +477,7 @@ class apiController extends Controller
     {
         return DB::transaction(function() use ($req) {  
 
-            if(!Auth::user()->hasAkses('Administrator User','delete')){
+            if(!Auth::user()->hasAccess('Administrator User','delete')){
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             }
 
@@ -511,7 +511,7 @@ class apiController extends Controller
     {
         return DB::transaction(function() use ($req) {  
 
-            if(!Auth::user()->hasAkses('Agent User','validation')){
+            if(!Auth::user()->hasAccess('Agent User','validation')){
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Validate This Data']);
             } 
 
@@ -534,7 +534,7 @@ class apiController extends Controller
     {
         return DB::transaction(function() use ($req) {  
             if (!isset($req->id) or $req->id == '' or $req->id == null) {
-                if(!Auth::user()->hasAkses('Agent User','create')){
+                if(!Auth::user()->hasAccess('Agent User','create')){
                     return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Create This Data']);
                 }
 
@@ -568,7 +568,7 @@ class apiController extends Controller
                 $this->model->user()->create($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
-                if(!Auth::user()->hasAkses('Agent User','edit')){
+                if(!Auth::user()->hasAccess('Agent User','edit')){
                     return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Edit This Data']);
                 }
 
@@ -606,7 +606,7 @@ class apiController extends Controller
     {
         return DB::transaction(function() use ($req) {  
 
-            if(!Auth::user()->hasAkses('Agent User','delete')){
+            if(!Auth::user()->hasAccess('Agent User','delete')){
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             }
 
@@ -633,7 +633,7 @@ class apiController extends Controller
     {
         return DB::transaction(function() use ($req) {  
 
-            if(!Auth::user()->hasAkses('Additional','validation')){
+            if(!Auth::user()->hasAccess('Additional','validation')){
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Validate This Data']);
             } 
 
@@ -657,7 +657,7 @@ class apiController extends Controller
     {
         return DB::transaction(function() use ($req) {  
             if (!isset($req->id) or $req->id == '' or $req->id == null) {
-                if(!Auth::user()->hasAkses('Additional','create')){
+                if(!Auth::user()->hasAccess('Additional','create')){
                     return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Create This Data']);
                 }
 
@@ -692,7 +692,7 @@ class apiController extends Controller
                 $this->model->additional()->create($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
-                if(!Auth::user()->hasAkses('Additional','edit')){
+                if(!Auth::user()->hasAccess('Additional','edit')){
                     return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Edit This Data']);
                 }
 
@@ -734,7 +734,7 @@ class apiController extends Controller
     {
         return DB::transaction(function() use ($req) {  
 
-            if(!Auth::user()->hasAkses('Additional','delete')){
+            if(!Auth::user()->hasAccess('Additional','delete')){
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             }
 
@@ -769,7 +769,7 @@ class apiController extends Controller
     {
         return DB::transaction(function() use ($req) {  
 
-            if(!Auth::user()->hasAkses('Itinerary','validation')){
+            if(!Auth::user()->hasAccess('Itinerary','validation')){
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Validate This Data']);
             } 
 
@@ -838,7 +838,7 @@ class apiController extends Controller
     {
         return DB::transaction(function() use ($req) {  
 
-            if(!Auth::user()->hasAkses('Itinerary','delete')){
+            if(!Auth::user()->hasAccess('Itinerary','delete')){
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             }
 
