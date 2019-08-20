@@ -190,14 +190,23 @@
                 </v-flex>
                 <v-flex xs12 style="padding: 10px;text-align: right;">
                   <v-btn
+                    v-if="formDetailEdit == true"
+                    color="red"
+                    class="ma-2 white--text"
+                    @click="cancelEdit(idEdit)"
+                  >
+                    Cancel
+                    <v-icon right dark>remove</v-icon>
+                  </v-btn>
+                  <v-btn
                     :loading="loading"
                     :disabled="loading"
                     color="primary"
                     class="ma-2 white--text"
-                    @click="appendItinerary"
+                    @click="appendItinerary(idEdit)"
                   >
                     Append
-                    <v-icon right dark>check_circle</v-icon>
+                    <v-icon right dark>add</v-icon>
                   </v-btn>
                 </v-flex>
                 <v-flex xs12 style="padding: 10px">
@@ -219,16 +228,64 @@
                       <td class="text-xs-right">{{ props.item.aptPrice  | currency}}</td>
                       <td class="text-xs-right">{{ props.item.seat }}</td>
                       <td if="props.item.action == 'action" class="text-xs-right">
-                        <v-btn small color="primary" dark fab @click="">
+                        <v-btn small color="primary" dark fab @click="editData(props.index)">
                           <v-icon dark>edit</v-icon>
                         </v-btn>
-                        <v-btn small color="red" dark fab @click="">
+                        <v-btn small color="red" dark fab @click="removeData(props.index)">
                           <v-icon dark>remove</v-icon>
                         </v-btn>
                       </td>
                     </template>
                   </v-data-table>
                 </v-flex>
+                <v-dialog
+                  v-model="dialogSave"
+                  max-width="290"
+                >
+                  <v-card>
+                    <v-card-title class="headline">Are You Sure Saving Data?</v-card-title>
+
+                    <v-card-text>
+                      This Action Cannot Be Undo.
+                    </v-card-text>
+
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+
+                      <v-btn
+                        color="default darken-1"
+                        flat="flat"
+                        @click="confirmationSave('cancel')"
+                      >
+                        Cancel
+                      </v-btn>
+
+                      <v-btn
+                        color="green darken-1"
+                        flat="flat"
+                        @click="confirmationSave('confirm')"
+                      >
+                        Yes, Save
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+                <v-snackbar
+                  v-model="snackbar"
+                  :color="color"
+                  :multi-line="mode === 'multi-line'"
+                  :timeout="timeout"
+                  :vertical="mode === 'vertical'"
+                >
+                  {{ text }}
+                  <v-btn
+                    dark
+                    flat
+                    @click="snackbar = false"
+                  >
+                    Close
+                  </v-btn>
+                </v-snackbar>
               </v-layout>
             </tab-content>
           </form-wizard>
@@ -304,6 +361,7 @@
           menu1: false,
           itineraryItems:[],
         },
+        formDetailEdit : false,
         destinationOptions:[],
         additionalOptions:[],
         note:[],
@@ -312,10 +370,16 @@
         bld:[],
         flight:[],
         flightBy:[],
- 
+        idEdit:[],
         route:[],
         departure:[],
         arrival:[],
+        color: 'success',
+        mode: '',
+        timeout: 6000,
+        text: 'Berhasil Simpan Data',
+        dialogSave:false,
+        snackbar:false,
         money: {
           decimal: '.',
           thousands: ',',
@@ -515,7 +579,6 @@
             // for ( var key in this.formDetail ) {
             //     formData.append(key, this.formDetail [key]);
             // }
-
             formData.append('id', this.id)
             formData.append('form',  JSON.stringify(this.form))
             formData.append('formDetail', JSON.stringify(this.formDetail))
@@ -532,10 +595,11 @@
                     }
                 )
                 .then(response => {
+                    this.dialogSave = false;
                     this.snackbar = true;
+                    this.color = 'success'
                     this.text = response.data.message;
                     if (response.data.status == 1) {
-             
                         this.$refs.tes.images = [];
                     } else {
                         this.color = 'error'
@@ -550,6 +614,13 @@
                 })
                 .finally(() => this.$emit('closeDialog', this.dialogs))
        
+          },
+          confirmationSave(param){
+            if (param == 'save') {
+              this.saveAndCloseDialog();
+            }else{
+              this.dialogSave = false;
+            }
           },
           textContent(content){
             this.form.term = content;
@@ -572,7 +643,7 @@
               this.addFlightDetail--;
             }
           },
-          appendItinerary(){
+          appendItinerary(param){
             this.$v.formDetail.$touch();
             if (this.$v.formDetail.$anyError) {
               window.scrollTo(0,0);
@@ -582,37 +653,80 @@
             const l = this.loader
             this[l] = !this[l]
 
-            let html = '<div>'
+            if (this.formDetailEdit == false) {
+              let data = {
+                'dateStart':this.formDetail.dateStart,
+                'dateEnd':this.formDetail.dateEnd,
+                'adultPrice':this.formDetail.adultPrice,
+                'CwBPrice':this.formDetail.CwBPrice,
+                'CnBPrice':this.formDetail.CnBPrice,
+                'infantPrice':this.formDetail.infantPrice,
+                'agentPrice':this.formDetail.agentPrice,
+                'tipsPrice':this.formDetail.tipsPrice,
+                'visaPrice':this.formDetail.visaPrice,
+                'aptPrice':this.formDetail.aptPrice,
+                'seat':this.formDetail.seat,
+                'minimalDP':this.formDetail.minimalDP,
+                'action':'action',
+              } 
 
-            let data = {
-              'dateStart':this.formDetail.dateStart,
-              'dateEnd':this.formDetail.dateEnd,
-              'adultPrice':this.formDetail.adultPrice,
-              'CwBPrice':this.formDetail.CwBPrice,
-              'CnBPrice':this.formDetail.CnBPrice,
-              'infantPrice':this.formDetail.infantPrice,
-              'agentPrice':this.formDetail.agentPrice,
-              'tipsPrice':this.formDetail.tipsPrice,
-              'visaPrice':this.formDetail.visaPrice,
-              'aptPrice':this.formDetail.aptPrice,
-              'seat':this.formDetail.seat,
-              'minimalDP':this.formDetail.minimalDP,
-              'action':'action',
-            } 
+              this.formDetail.itineraryItems.push(data);
+              this[l] = false;
+              this.loader = null;
+              this.formDetail.seat = '';
+              this.$refs.adultPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.CwBPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.CnBPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.infantPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.agentPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.tipsPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.visaPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.aptPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.minimalDP.$el.getElementsByTagName('input')[0].value = 0;
+            }else{
+              let data = {
+                'dateStart':this.formDetail.dateStart,
+                'dateEnd':this.formDetail.dateEnd,
+                'adultPrice':this.formDetail.adultPrice,
+                'CwBPrice':this.formDetail.CwBPrice,
+                'CnBPrice':this.formDetail.CnBPrice,
+                'infantPrice':this.formDetail.infantPrice,
+                'agentPrice':this.formDetail.agentPrice,
+                'tipsPrice':this.formDetail.tipsPrice,
+                'visaPrice':this.formDetail.visaPrice,
+                'aptPrice':this.formDetail.aptPrice,
+                'seat':this.formDetail.seat,
+                'minimalDP':this.formDetail.minimalDP,
+              } 
 
-            this.formDetail.itineraryItems.push(data);
-            this[l] = false;
-            this.loader = null;
-            this.formDetail.seat = '';
-            this.$refs.adultPrice.$el.getElementsByTagName('input')[0].value = 0;
-            this.$refs.CwBPrice.$el.getElementsByTagName('input')[0].value = 0;
-            this.$refs.CnBPrice.$el.getElementsByTagName('input')[0].value = 0;
-            this.$refs.infantPrice.$el.getElementsByTagName('input')[0].value = 0;
-            this.$refs.agentPrice.$el.getElementsByTagName('input')[0].value = 0;
-            this.$refs.tipsPrice.$el.getElementsByTagName('input')[0].value = 0;
-            this.$refs.visaPrice.$el.getElementsByTagName('input')[0].value = 0;
-            this.$refs.aptPrice.$el.getElementsByTagName('input')[0].value = 0;
-            this.$refs.minimalDP.$el.getElementsByTagName('input')[0].value = 0;
+              this.formDetail.itineraryItems[param].dateStart = this.formDetail.dateStart;
+              this.formDetail.itineraryItems[param].dateEnd = this.formDetail.dateEnd;
+              this.formDetail.itineraryItems[param].adultPrice = this.formDetail.adultPrice;
+              this.formDetail.itineraryItems[param].CwBPrice = this.formDetail.CwBPrice;
+              this.formDetail.itineraryItems[param].CnBPrice = this.formDetail.CnBPrice;
+              this.formDetail.itineraryItems[param].infantPrice = this.formDetail.infantPrice;
+              this.formDetail.itineraryItems[param].agentPrice = this.formDetail.agentPrice;
+              this.formDetail.itineraryItems[param].tipsPrice = this.formDetail.tipsPrice;
+              this.formDetail.itineraryItems[param].visaPrice = this.formDetail.visaPrice;
+              this.formDetail.itineraryItems[param].aptPrice = this.formDetail.aptPrice;
+              this.formDetail.itineraryItems[param].seat = this.formDetail.seat;
+              this.formDetail.itineraryItems[param].minimalDP = this.formDetail.minimalDP;
+
+              this[l] = false;
+              this.loader = null;
+              this.formDetailEdit = false;
+              this.idEdit = null;
+              this.formDetail.seat = '';
+              this.$refs.adultPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.CwBPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.CnBPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.infantPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.agentPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.tipsPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.visaPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.aptPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.minimalDP.$el.getElementsByTagName('input')[0].value = 0;
+            }
           },
           callingApi(){
             axios
@@ -643,7 +757,7 @@
             })
           },
           onComplete: function(){
-            this.saveAndCloseDialog();
+            this.dialogSave = true;
           },
           changeImage:function(param,index){
             if (param == 'carousel') {
@@ -656,6 +770,39 @@
               var input =  $('#flyer').find('input');
               this.form.pdf = input[0].files[0]; 
             }
+          },
+          editData:function(param){
+            this.formDetail.dateStart = this.formDetail.itineraryItems[param].dateStart;
+            this.formDetail.dateEnd = this.formDetail.itineraryItems[param].dateEnd;
+            this.formDetail.adultPrice = this.formDetail.itineraryItems[param].adultPrice; 
+            this.formDetail.CwBPrice = this.formDetail.itineraryItems[param].CwBPrice;
+            this.formDetail.CnBPrice = this.formDetail.itineraryItems[param].CnBPrice; 
+            this.formDetail.infantPrice = this.formDetail.itineraryItems[param].infantPrice;
+            this.formDetail.agentPrice = this.formDetail.itineraryItems[param].agentPrice;
+            this.formDetail.tipsPrice = this.formDetail.itineraryItems[param].tipsPrice;
+            this.formDetail.visaPrice = this.formDetail.itineraryItems[param].visaPrice; 
+            this.formDetail.aptPrice = this.formDetail.itineraryItems[param].aptPrice; 
+            this.formDetail.seat = this.formDetail.itineraryItems[param].seat; 
+            this.formDetail.minimalDP = this.formDetail.itineraryItems[param].minimalDP; 
+            this.idEdit = param;  
+            this.formDetailEdit = true;
+          },
+          removeData:function(param){
+            this.formDetail.itineraryItems.splice(param,1);
+          },
+          cancelEdit:function(){
+            this.$refs.adultPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.CwBPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.CnBPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.infantPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.agentPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.tipsPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.visaPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.aptPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.minimalDP.$el.getElementsByTagName('input')[0].value = 0;
+            this.idEdit = null;
+            this.formDetail.seat = null; 
+            this.formDetailEdit = false;
           }
       }
   }

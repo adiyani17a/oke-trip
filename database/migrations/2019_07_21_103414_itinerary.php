@@ -22,7 +22,12 @@ class Itinerary extends Migration
             $table->text('term_condition');
             $table->text('flight_by');
             $table->string('additional_id'); //related to table additional
-            $table->string('bg_image');
+            $table->string('carousel_1');
+            $table->string('carousel_2');
+            $table->string('carousel_3');
+            $table->string('note_1');
+            $table->string('note_2');
+            $table->string('note_3');
             $table->string('pdf');
             $table->string('flayer_image');
             $table->text('schedule');
