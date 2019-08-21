@@ -33,7 +33,7 @@
                               dark
                               v-on="on"
                             >
-                              Dropdown
+                              Menu List
                             <v-icon dark right>fas fa-info</v-icon>
                             </v-btn>
                           </template>
@@ -96,33 +96,124 @@
                       </v-card>
                     </v-dialog>
                     <v-dialog
-                      v-model="scheduleDialog"
-                      max-width="800"
+                      v-model="scheduleModal"
+                      width="500"
                     >
                       <v-card>
-                        <v-card-title class="headline">Are You Sure Deleting Data?</v-card-title>
+                        <v-card-title
+                          class="headline grey lighten-2"
+                          primary-title
+                        >
+                          Schedule
+                        </v-card-title>
 
                         <v-card-text>
-                          This Action Cannot Be Undo.
+                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                         </v-card-text>
+
+                        <v-divider></v-divider>
 
                         <v-card-actions>
                           <v-spacer></v-spacer>
-
                           <v-btn
-                            color="default darken-1"
-                            flat="flat"
-                            @click="confirmationDelete('cancel')"
+                            color="primary"
+                            flat
+                            @click="scheduleModal = false"
                           >
-                            Cancel
+                            I accept
                           </v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
 
+                    <v-dialog
+                      v-model="routeModal"
+                      width="500"
+                    >
+                      <v-card>
+                        <v-card-title
+                          class="headline grey lighten-2"
+                          primary-title
+                        >
+                          Flight Route
+                        </v-card-title>
+
+                        <v-card-text>
+                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </v-card-text>
+
+                        <v-divider></v-divider>
+
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
                           <v-btn
-                            color="green darken-1"
-                            flat="flat"
-                            @click="confirmationDelete('confirm')"
+                            color="primary"
+                            flat
+                            @click="routeModal = false"
                           >
-                            Yes, Delete
+                            I accept
+                          </v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
+
+                    <v-dialog
+                      v-model="termModal"
+                      width="500"
+                    >
+                      <v-card>
+                        <v-card-title
+                          class="headline grey lighten-2"
+                          primary-title
+                        >
+                          Term & Condition
+                        </v-card-title>
+
+                        <v-card-text>
+                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </v-card-text>
+
+                        <v-divider></v-divider>
+
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn
+                            color="primary"
+                            flat
+                            @click="termModal = false"
+                          >
+                            I accept
+                          </v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
+
+                    <v-dialog
+                      v-model="detailModal"
+                      width="500"
+                    >
+                      <v-card>
+                        <v-card-title
+                          class="headline grey lighten-2"
+                          primary-title
+                        >
+                            Detail
+                        </v-card-title>
+
+                        <v-card-text>
+                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </v-card-text>
+
+                        <v-divider></v-divider>
+
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn
+                            color="primary"
+                            flat
+                            @click="detailModal = false"
+                          >
+                            I accept
                           </v-btn>
                         </v-card-actions>
                       </v-card>
@@ -184,6 +275,7 @@
                 scheduleModal: false,
                 routeModal: false,
                 detailModal: false,
+                termModal:false,
                 fullPage: true,
                 dialog: false,
                 dialogDelete: false,
@@ -357,7 +449,15 @@
                     })
             },
             modalAction(param){
-                console.log(param);
+                if (param == 'schedule') {
+                    this.scheduleModal = true;
+                }else if (param == 'flight') {
+                    this.routeModal = true;
+                }else if (param == 'term') {
+                    this.termModal = true;
+                }if (param == 'detail') {
+                    this.detailModal = true;
+                }
             }
         }
     }
