@@ -15,6 +15,7 @@
                                 <v-icon dark right>fas fa-plus</v-icon>
                             </v-btn>
                         </router-link>
+
                         <v-btn v-if="select.length == 1" color="warning pull-right" @click="editData">Edit
                             <v-icon dark right>fas fa-pencil-alt</v-icon>
                         </v-btn>
@@ -24,6 +25,28 @@
                         <v-btn v-if="select.length > 1" color="error pull-right" @click="dialogDelete = true">Bulk Delete
                             <v-icon dark right>fas fa-trash</v-icon>
                         </v-btn>
+                        <v-menu offset-y v-if="select.length == 1">
+                          <template v-slot:activator="{ on }">
+                            <v-btn
+                              
+                              color="info pull-right"
+                              dark
+                              v-on="on"
+                            >
+                              Dropdown
+                            <v-icon dark right>fas fa-info</v-icon>
+                            </v-btn>
+                          </template>
+                          <v-list>
+                            <v-list-tile
+                              v-for="(item, index) in itineraryOptions"
+                              :key="index"
+                              @click=""
+                            >
+                              <v-list-tile-title @click="modalAction(item.value)" :class="item.class">{{ item.title }}</v-list-tile-title>
+                            </v-list-tile>
+                          </v-list>
+                        </v-menu>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -43,6 +66,38 @@
                     <v-dialog
                       v-model="dialogDelete"
                       max-width="290"
+                    >
+                      <v-card>
+                        <v-card-title class="headline">Are You Sure Deleting Data?</v-card-title>
+
+                        <v-card-text>
+                          This Action Cannot Be Undo.
+                        </v-card-text>
+
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+
+                          <v-btn
+                            color="default darken-1"
+                            flat="flat"
+                            @click="confirmationDelete('cancel')"
+                          >
+                            Cancel
+                          </v-btn>
+
+                          <v-btn
+                            color="green darken-1"
+                            flat="flat"
+                            @click="confirmationDelete('confirm')"
+                          >
+                            Yes, Delete
+                          </v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
+                    <v-dialog
+                      v-model="scheduleDialog"
+                      max-width="800"
                     >
                       <v-card>
                         <v-card-title class="headline">Are You Sure Deleting Data?</v-card-title>
@@ -92,7 +147,6 @@
             </div>
         </div>  
     </div>
-
 </template>
 <script>
 
@@ -127,14 +181,23 @@
                 dataItem: [],
                 select: [],
                 isLoading: true,
+                scheduleModal: false,
+                routeModal: false,
+                detailModal: false,
                 fullPage: true,
                 dialog: false,
                 dialogDelete: false,
+                itineraryOptions: [
+                    { title: ' Schedule' ,class:'fas fa-address-book',value:'schedule'},
+                    { title: ' Flight Route',class:'fas fa-plane-departure',value:'flight' },
+                    { title: ' Term' ,class:'fas fa-question' ,value:'term'},
+                    { title: ' Itinerary Detail',class:'fas fa-list-alt' ,value:'detail' }
+                ],
                 headers:[
                     { text: 'Name', value: 'name',class:'text-xs-left',type:'default'},
-                    { text: 'Price', value: 'price' ,type:'currency',class:'text-xs-right'},
-                    { text: 'Note', value: 'note' ,type:'default'},
-                    { text: 'Image', value: 'image' ,type:'image',class:'text-xs-center'},
+                    { text: 'Destination', value: 'destination'},
+                    { text: 'Highlight', value: 'highlight' ,type:'default'},
+                    { text: 'Flight By', value: 'flight_by' ,type:'default'},
                     { text: 'Active', value: 'active' ,type:'switch',class:'text-xs-center'},
                     { text: 'Created At', value: 'created_at',type:'default' },
                 ],
@@ -292,6 +355,9 @@
                         this.errored = true
                         this.dialogDelete = false;
                     })
+            },
+            modalAction(param){
+                console.log(param);
             }
         }
     }

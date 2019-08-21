@@ -17,11 +17,8 @@ class ItinerarySchedule extends Migration
             $table->integer('id')->primary();
             $table->integer('dt'); 
             $table->string('caption'); 
-            $table->string('description'); 
+            $table->string('title'); 
             $table->string('eat_service'); 
-            $table->string('created_by');
-            $table->string('updated_by');
-            $table->timestamps();
         });
     }
 

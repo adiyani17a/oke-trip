@@ -44,6 +44,9 @@
                 <v-flex xs12 md6 style="padding: 10px">
                   <v-text-field label="Flight By*" v-model="form.flightBy" required name="flightBy" @blur="$v.form.flightBy.$touch()" :error-messages="flightByErrors"></v-text-field>
                 </v-flex>
+                <v-flex xs12 md6 style="padding: 10px">
+                  <v-text-field label="Highlight*" v-model="form.highlight" required name="flightBy" @blur="$v.form.highlight.$touch()" :error-messages="highlightErrors"></v-text-field>
+                </v-flex>
                 <v-flex xs12 style="padding: 10px">
                   <text-editor @textContent="textContent"></text-editor>
                 </v-flex>
@@ -51,7 +54,7 @@
                   <div v-for="index in 3" class="col-sm-4">
                     <h5>Carousel {{ index }}</h5>
                     <vue-dropify :id="'carousel_'+index" :multiple="false" @change="changeImage('carousel',index)" ref="carousel" message="Upload Carousel By Click Here"></vue-dropify> 
-                    <v-text-field label="Note" v-model="note[index]"  required name="note[index]" ></v-text-field>
+                    <v-text-field label="Note" v-model="form.note[index-1]"  required name="note[index]" ></v-text-field>
                   </div>
                 </v-flex>
         
@@ -78,11 +81,11 @@
                         </v-btn>
                       </v-flex>
                       <v-flex xs4 class="pa-2">
-                        <v-text-field label="Title" v-model="title[index]"></v-text-field>
-                        <v-text-field label="B/L/D" v-model="bld[index]"></v-text-field>
+                        <v-text-field label="Title" v-model="form.title[index-1]"></v-text-field>
+                        <v-text-field label="B/L/D" v-model="form.bld[index-1]"></v-text-field>
                       </v-flex>
                       <v-flex xs12 md6>
-                        <v-textarea auto-grow label="Caption"  v-model="caption[index]"></v-textarea>
+                        <v-textarea auto-grow label="Caption"  v-model="form.caption[index-1]"></v-textarea>
                       </v-flex>
                     </v-layout>
                   </div>
@@ -92,10 +95,10 @@
                   <div v-for="index in addFlightDetail">
                     <v-layout wrap border style="padding: 10px">
                       <v-flex xs4 class="text-center pa-2" >
-                        <v-text-field label="No Flight" v-model="flight[index]"></v-text-field>
+                        <v-text-field label="No Flight" v-model="form.flight[index-1]"></v-text-field>
                       </v-flex>
                       <v-flex xs4 class="text-center pa-2">
-                        <v-text-field label="Route" v-model="route[index]" ></v-text-field>
+                        <v-text-field label="Route" v-model="form.route[index-1]" ></v-text-field>
                         <v-btn v-if="index == addFlightDetail" small  class="mx-1" fab dark color="primary" @click="addFlight">
                           <v-icon dark>add</v-icon>
                         </v-btn>
@@ -104,8 +107,8 @@
                         </v-btn>
                       </v-flex>
                       <v-flex xs4 class="text-center pa-2">
-                        <v-text-field label="Time Departure" v-model="departure[index]" ></v-text-field>
-                        <v-text-field label="Time Arrival" v-model="arrival[index]" ></v-text-field>
+                        <v-text-field label="Time Departure" v-model="form.departure[index-1]" ></v-text-field>
+                        <v-text-field label="Time Arrival" v-model="form.arrival[index-1]" ></v-text-field>
                       </v-flex>
                     </v-layout>
                   </div>
@@ -334,16 +337,25 @@
         id:'',
         apiReady:false,
         form: {
-            name: '',
-            destination: '',
-            additional: '',
-            flightBy: '',
-            code:'Tes',
-            term:'',
-            carousel:[],
-            flyer:[],
-            pdf:[],
-        },
+          name: '',
+          destination: '',
+          additional: '',
+          flightBy: '',
+          code:'',
+          term:'',
+          carousel:[],
+          flyer:[],
+          pdf:[],
+          note:[],
+          title:[],
+          caption:[],
+          bld:[],
+          flight:[],
+          route:[],
+          departure:[],
+          arrival:[],
+          highlight:'',
+      },
         formDetail:{
           adultPrice:'',
           minimalDP:'',
@@ -364,16 +376,7 @@
         formDetailEdit : false,
         destinationOptions:[],
         additionalOptions:[],
-        note:[],
-        title:[],
-        caption:[],
-        bld:[],
-        flight:[],
-        flightBy:[],
         idEdit:[],
-        route:[],
-        departure:[],
-        arrival:[],
         color: 'success',
         mode: '',
         timeout: 6000,
@@ -417,6 +420,9 @@
                   required
               },
               flightBy: {
+                  required
+              },
+              highlight: {
                   required
               },
           },
@@ -547,6 +553,12 @@
               !this.$v.formDetail.minimalDP.required && errors.push('Minimal DP is required.')
               return errors
           },
+          highlightErrors() {
+              const errors = [];
+              if (!this.$v.form.highlight.$dirty) return errors
+              !this.$v.form.highlight.required && errors.push('Highlight is required.')
+              return errors
+          },
 
 
       },
@@ -597,12 +609,13 @@
                 .then(response => {
                     this.dialogSave = false;
                     this.snackbar = true;
-                    this.color = 'success'
                     this.text = response.data.message;
                     if (response.data.status == 1) {
-                        this.$refs.tes.images = [];
+                      this.color = 'success';
+                      location.href = '/itinerary';
+
                     } else {
-                        this.color = 'error'
+                      this.color = 'error'
                     }
                     this.imageReady = false;
                 })
@@ -734,6 +747,7 @@
               .then(response => {
                 this.destinationOptions =  response.data.destination;
                 this.additionalOptions =  response.data.additional;
+                this.form.code =  response.data.code;
               })
               .catch(error => {
                 console.log(error)
@@ -768,7 +782,7 @@
               this.form.pdf = input[0].files[0];  
             }else if (param == 'flyer'){
               var input =  $('#flyer').find('input');
-              this.form.pdf = input[0].files[0]; 
+              this.form.flyer = input[0].files[0]; 
             }
           },
           editData:function(param){

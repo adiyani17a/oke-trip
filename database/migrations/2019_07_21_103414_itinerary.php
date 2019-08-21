@@ -30,12 +30,10 @@ class Itinerary extends Migration
             $table->string('note_3');
             $table->string('pdf');
             $table->string('flayer_image');
-            $table->text('schedule');
-            $table->text('flight_detail');
             $table->integer('book_by');
             $table->string('active');
-            $table->string('created_by');
-            $table->string('updated_by');
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
         });
     }

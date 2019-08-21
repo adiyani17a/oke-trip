@@ -18,7 +18,8 @@ class ItineraryFlight extends Migration
             $table->integer('dt'); 
             $table->string('flight_number'); 
             $table->string('route'); 
-            $table->string('time'); 
+            $table->string('departure'); 
+            $table->string('arrival'); 
         });
     }
 

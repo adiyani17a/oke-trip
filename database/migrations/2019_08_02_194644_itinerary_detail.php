@@ -34,8 +34,8 @@ class ItineraryDetail extends Migration
             $table->string('term_pdf');
             $table->string('flayer_jpg');
             $table->string('tour_leader_id');
-            $table->string('created_by');
-            $table->string('updated_by');
+            $table->integer('created_by');
+            $table->integer('updated_by');
             $table->timestamps();
         });
     }

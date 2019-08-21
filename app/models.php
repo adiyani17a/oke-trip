@@ -11,6 +11,9 @@ use App\role;
 use App\User;
 use App\additional;
 use App\itinerary;
+use App\itinerary_detail;
+use App\itinerary_flight;
+use App\itinerary_schedule;
 class models extends Model
 {
     public function destination()
@@ -67,5 +70,26 @@ class models extends Model
         $itinerary = new itinerary();
 
         return $itinerary; 
+    }
+
+    public function itinerary_detail()
+    {
+        $itinerary_detail = new itinerary_detail();
+
+        return $itinerary_detail; 
+    }
+
+    public function itinerary_flight()
+    {
+        $itinerary_flight = new itinerary_flight();
+
+        return $itinerary_flight; 
+    }
+
+    public function itinerary_schedule()
+    {
+        $itinerary_schedule = new itinerary_schedule();
+
+        return $itinerary_schedule; 
     }
 }
