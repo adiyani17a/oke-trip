@@ -109,7 +109,7 @@
                         </v-card-title>
 
                         <v-card-text>
-                          <schedule></schedule>
+                          <schedule :tes="schedules"></schedule>
                         </v-card-text>
 
                         <v-divider></v-divider>
@@ -278,6 +278,7 @@
                 select: [],
                 isLoading: true,
                 scheduleModal: false,
+                schedules:[],
                 routeModal: false,
                 detailModal: false,
                 termModal:false,
@@ -458,6 +459,10 @@
                     .get('/api/itinerary/menu-list?id='+this.select[0].id)
                     .then(response => {
                         if (param == 'schedule') {
+                            for (var i = 0; i < response.data.itinerary_schedule.length; i++) {
+                                this.schedules[i] = response.data.itinerary_schedule[i];
+                            }
+
                             this.scheduleModal = true;
                         }else if (param == 'flight') {
                             this.routeModal = true;
@@ -468,7 +473,6 @@
                         }
                     })
                     .catch(error => {
-                      console.log(error)
                       this.errored = true
                     })
                     .finally(() => this.apiReady = true)

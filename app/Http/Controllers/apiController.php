@@ -1006,7 +1006,10 @@ class apiController extends Controller
 
     public function menuListItinerary(Request $req)
     {
-        $data = $this->model->itinerary()->where('id',$req->id)->first();
+        $data = $this->model->itinerary()
+                    ->with(['itinerary_detail','itinerary_schedule','itinerary_flight'])
+                    ->where('id',$req->id)
+                    ->first();
         return Response::json($data);
     }
 }
