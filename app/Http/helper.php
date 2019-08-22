@@ -8,7 +8,7 @@ function generateToken()
 
     $user = Auth::user();
 	//proses simpan token ke database
-	$tokenInstance = new \App\TokenManagement;
+	$tokenInstance = new \app\TokenManagement;
 	$tokenInstance->user_id = $user->id;
 	$tokenInstance->access_token = $generated_token;
 	$tokenInstance->expired_at = $expired;

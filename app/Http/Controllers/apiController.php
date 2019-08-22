@@ -1003,4 +1003,10 @@ class apiController extends Controller
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
         });
     }
+
+    public function menuListItinerary(Request $req)
+    {
+        $data = $this->model->itinerary()->where('id',$req->id)->first();
+        return Response::json($data);
+    }
 }

@@ -15,4 +15,19 @@ class itinerary extends Model
     protected $fillable = [
 							'id', 'code', 'name', 'destination_id', 'highlight', 'term_condition', 'flight_by', 'additional_id', 'carousel_1', 'carousel_2', 'carousel_3', 'note_1', 'note_2', 'note_3', 'pdf', 'flayer_image', 'schedule', 'flight_detail', 'book_by', 'active', 'created_by', 'updated_by', 'created_at', 'updated_at'
     					];
+
+    public function itinerary_detail()
+    {
+    	return $this->hasMany('App\itinerary_detail', 'id', 'id');
+    }
+
+    public function itinerary_flight()
+    {
+    	return $this->hasMany('App\itinerary_flight', 'id', 'id');
+    }
+
+    public function itinerary_schedule()
+    {
+    	return $this->hasMany('App\itinerary_schedule', 'id', 'id');
+    }
 }

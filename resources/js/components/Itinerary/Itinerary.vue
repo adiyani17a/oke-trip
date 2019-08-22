@@ -95,6 +95,7 @@
                         </v-card-actions>
                       </v-card>
                     </v-dialog>
+
                     <v-dialog
                       v-model="scheduleModal"
                       width="500"
@@ -108,7 +109,7 @@
                         </v-card-title>
 
                         <v-card-text>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                          <schedule></schedule>
                         </v-card-text>
 
                         <v-divider></v-divider>
@@ -139,7 +140,7 @@
                         </v-card-title>
 
                         <v-card-text>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                          <flight-route></flight-route>
                         </v-card-text>
 
                         <v-divider></v-divider>
@@ -170,7 +171,8 @@
                         </v-card-title>
 
                         <v-card-text>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                          <term></term>
+                          
                         </v-card-text>
 
                         <v-divider></v-divider>
@@ -201,7 +203,7 @@
                         </v-card-title>
 
                         <v-card-text>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                          <detail></detail>  
                         </v-card-text>
 
                         <v-divider></v-divider>
@@ -242,7 +244,10 @@
 <script>
 
     Vue.component('create-itinerary', require('./CreateItinerary.vue').default)
-
+    Vue.component('detail', require('./Detail.vue').default)
+    Vue.component('flight-route', require('./FlightRoute.vue').default)
+    Vue.component('schedule', require('./Schedule.vue').default)
+    Vue.component('term', require('./Term.vue').default)
     import Loading from 'vue-loading-overlay';
     import 'vue-loading-overlay/dist/vue-loading.css';
     export default {
@@ -449,15 +454,24 @@
                     })
             },
             modalAction(param){
-                if (param == 'schedule') {
-                    this.scheduleModal = true;
-                }else if (param == 'flight') {
-                    this.routeModal = true;
-                }else if (param == 'term') {
-                    this.termModal = true;
-                }if (param == 'detail') {
-                    this.detailModal = true;
-                }
+                axios
+                    .get('/api/itinerary/menu-list?id='+this.select[0].id)
+                    .then(response => {
+                        if (param == 'schedule') {
+                            this.scheduleModal = true;
+                        }else if (param == 'flight') {
+                            this.routeModal = true;
+                        }else if (param == 'term') {
+                            this.termModal = true;
+                        }if (param == 'detail') {
+                            this.detailModal = true;
+                        }
+                    })
+                    .catch(error => {
+                      console.log(error)
+                      this.errored = true
+                    })
+                    .finally(() => this.apiReady = true)
             }
         }
     }

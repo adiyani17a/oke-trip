@@ -212,6 +212,11 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "chageStatusItinerary"
       ]);
 
+      Route::get('/menu-list', [
+        'uses' => "apiController@menuListItinerary",
+        'as' => "menuListItinerary"
+      ]);
+
       Route::post('/save', [
         'uses' => "apiController@saveItinerary",
         'as' => "saveItinerary"
