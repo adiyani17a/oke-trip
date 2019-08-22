@@ -98,8 +98,9 @@
 
                     <v-dialog
                       v-model="scheduleModal"
-                      width="500"
-                    >
+                      width="800"
+                      style="z-index:9999999999 !important"
+                      >
                       <v-card>
                         <v-card-title
                           class="headline grey lighten-2"
@@ -109,7 +110,7 @@
                         </v-card-title>
 
                         <v-card-text>
-                          <schedule :tes="schedules"></schedule>
+                          <schedule :schedules="menuListData"></schedule>
                         </v-card-text>
 
                         <v-divider></v-divider>
@@ -121,7 +122,7 @@
                             flat
                             @click="scheduleModal = false"
                           >
-                            I accept
+                            Close
                           </v-btn>
                         </v-card-actions>
                       </v-card>
@@ -129,18 +130,19 @@
 
                     <v-dialog
                       v-model="routeModal"
-                      width="500"
-                    >
+                      width="800"
+                      style="z-index:9999999999 !important"
+                     >
                       <v-card>
                         <v-card-title
                           class="headline grey lighten-2"
                           primary-title
-                        >
+                         >
                           Flight Route
                         </v-card-title>
 
                         <v-card-text>
-                          <flight-route></flight-route>
+                          <flight-route :route="menuListData"></flight-route>
                         </v-card-text>
 
                         <v-divider></v-divider>
@@ -160,7 +162,8 @@
 
                     <v-dialog
                       v-model="termModal"
-                      width="500"
+                      width="800"
+                      style="z-index:9999999999 !important"
                     >
                       <v-card>
                         <v-card-title
@@ -171,7 +174,7 @@
                         </v-card-title>
 
                         <v-card-text>
-                          <term></term>
+                          <term :term="term"></term>
                           
                         </v-card-text>
 
@@ -192,7 +195,8 @@
 
                     <v-dialog
                       v-model="detailModal"
-                      width="500"
+                      width="800"
+                      style="z-index:9999999999 !important"
                     >
                       <v-card>
                         <v-card-title
@@ -203,7 +207,7 @@
                         </v-card-title>
 
                         <v-card-text>
-                          <detail></detail>  
+                          <detail :itineraryDetail="menuListData"></detail>  
                         </v-card-text>
 
                         <v-divider></v-divider>
@@ -278,11 +282,12 @@
                 select: [],
                 isLoading: true,
                 scheduleModal: false,
-                schedules:[],
+                menuListData:[],
                 routeModal: false,
                 detailModal: false,
                 termModal:false,
                 fullPage: true,
+                term: '',
                 dialog: false,
                 dialogDelete: false,
                 itineraryOptions: [
@@ -292,6 +297,7 @@
                     { title: ' Itinerary Detail',class:'fas fa-list-alt' ,value:'detail' }
                 ],
                 headers:[
+                    { text: 'Code', value: 'code',class:'text-xs-left',type:'default'},
                     { text: 'Name', value: 'name',class:'text-xs-left',type:'default'},
                     { text: 'Destination', value: 'destination'},
                     { text: 'Highlight', value: 'highlight' ,type:'default'},
@@ -459,16 +465,19 @@
                     .get('/api/itinerary/menu-list?id='+this.select[0].id)
                     .then(response => {
                         if (param == 'schedule') {
-                            for (var i = 0; i < response.data.itinerary_schedule.length; i++) {
-                                this.schedules[i] = response.data.itinerary_schedule[i];
-                            }
-
+                            this.menuListData = response.data.itinerary_schedule;
                             this.scheduleModal = true;
                         }else if (param == 'flight') {
+                            this.menuListData = response.data.itinerary_flight;
                             this.routeModal = true;
                         }else if (param == 'term') {
+                            this.term = response.data.term_condition;
                             this.termModal = true;
                         }if (param == 'detail') {
+                            this.menuListData = response.data.itinerary_detail;
+                            for (var i = 0; i < this.menuListData.length; i++) {
+                              this.menuListData[i].id = i;
+                            }
                             this.detailModal = true;
                         }
                     })

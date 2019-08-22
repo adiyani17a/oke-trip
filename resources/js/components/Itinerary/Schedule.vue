@@ -2,18 +2,18 @@
 	<div>
 		<v-timeline>
 			<v-timeline-item
-			v-for="(item, index) in schedule"
-			:key="index"
-			color="red lighten-2"
-			large
-			>
+				v-for="(item, index) in schedules"
+				:key="index"
+				color="red lighten-2"
+				large
+				>
 				<template v-slot:opposite>
-					<span>Tus eu perfecto</span>
+					<h3>Day {{ index+1 }}</h3>
 				</template>
 				<v-card class="elevation-2">
-					<v-card-title class="headline">Lorem ipsum</v-card-title>
+					<v-card-title class="headline cyan lighten-5"><h3>{{ item.title }}</h3></v-card-title>
 					<v-card-text>
-					Lorem ipsum dolor sit amet, no nam oblique veritus. Commune scaevola imperdiet nec ut, sed euismod convenire principes at. Est et nobis iisque percipit, an vim zril disputando voluptatibus, vix an salutandi sententiae.
+					{{ item.caption }}
 					</v-card-text>
 				</v-card>
 			</v-timeline-item>
@@ -22,16 +22,8 @@
 </template>
 <script type="text/javascript">
     export default {
-    	mounted(){
-    		console.log('tes');
-    	},
 		props:{
-			schedule:Array,
+			schedules:Array,
 		},
-		watch:{
-			schedule:function(){
-				console.log(this.schedule);
-			}
-		}
 	}
 </script>

@@ -13,6 +13,6 @@ class itinerary_flight extends Model
     public $timestamps = false;
  
     protected $fillable = [
-							'id', 'dt', 'flight_number', 'route', 'departure','arrival'
+							'id', 'dt', 'flight_number', 'route', 'departure','arrival','departure_airport_code','arrival_airport_code'
     					];
 }

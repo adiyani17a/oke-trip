@@ -228,6 +228,7 @@
                       <td class="text-xs-right">{{ props.item.minimalDP  | currency}}</td>
                       <td class="text-xs-right">{{ props.item.agentPrice  | currency}}</td>
                       <td class="text-xs-right">{{ props.item.tipsPrice  | currency}}</td>
+                      <td class="text-xs-right">{{ props.item.visaPrice  | currency}}</td>
                       <td class="text-xs-right">{{ props.item.aptPrice  | currency}}</td>
                       <td class="text-xs-right">{{ props.item.seat }}</td>
                       <td if="props.item.action == 'action" class="text-xs-right">
@@ -402,6 +403,7 @@
           { text: 'Minimal DP', value: 'minimal_dp' },
           { text: 'Agent Com', value: 'agent_com' },
           { text: 'Tips', value: 'tips' },
+          { text: 'Visa', value: 'visa' },
           { text: 'Apt Tax', value: 'apt_tax' },
           { text: 'Seat', value: 'seat' },
           { text: 'Action', value: 'action' },

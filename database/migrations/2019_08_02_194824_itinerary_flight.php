@@ -20,6 +20,8 @@ class ItineraryFlight extends Migration
             $table->string('route'); 
             $table->string('departure'); 
             $table->string('arrival'); 
+            $table->string('departure_airport_code'); 
+            $table->string('arrival_airport_code'); 
         });
     }
 
