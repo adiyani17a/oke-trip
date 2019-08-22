@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use Validator;
 use App\User;
 use Auth;
-use App\TokenManagement;
+use App\tokenManagement;
 class ApiTokenController extends Controller
 {
 
@@ -19,10 +19,10 @@ class ApiTokenController extends Controller
     public function getToken()
     {
         $user = Auth::user();
-        TokenManagement::where('user_id',$user->id)->delete();
+        tokenManagement::where('user_id',$user->id)->delete();
 
         generateToken();
-        $data = TokenManagement::where('user_id',$user->id)->first();
+        $data = tokenManagement::where('user_id',$user->id)->first();
         return response()->json($data);
     }
 
@@ -75,7 +75,7 @@ class ApiTokenController extends Controller
     	$expired = date('Y-m-d H:i:s', strtotime('+1 day'));
 
     	//proses simpan token ke database
-    	$tokenInstance = new TokenManagement;
+    	$tokenInstance = new tokenManagement;
     	$tokenInstance->user_id = $user->id;
     	$tokenInstance->access_token = $generated_token;
     	$tokenInstance->expired_at = $expired;
