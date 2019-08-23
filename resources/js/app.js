@@ -130,6 +130,7 @@ let routes = [{
     component: require('./components/Itinerary/DetailItinerary.vue').default
 }, {
     path: '/tour-leader',
+    name: 'Tour Leader',
     component: require('./components/TourLeader/tourLeader.vue').default
 }, {
     path: '/income-report',

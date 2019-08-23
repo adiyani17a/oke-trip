@@ -243,6 +243,38 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "deleteItinerary"
       ]);
     });
+
+    Route::group(["prefix" => "tour-leader"], function(){
+      Route::get('/datatable', [
+        'uses' => "apiController@datatableTourLeader",
+        'as' => "datatableTourLeader"
+      ]);
+
+      Route::get('/create', [
+        'uses' => "apiController@createTourLeader",
+        'as' => "createTourLeader"
+      ]);
+
+      Route::post('/change-status', [
+        'uses' => "apiController@chageStatusTourLeader",
+        'as' => "chageStatusTourLeader"
+      ]);
+
+      Route::get('/menu-list', [
+        'uses' => "apiController@menuListTourLeader",
+        'as' => "menuListTourLeader"
+      ]);
+
+      Route::post('/save', [
+        'uses' => "apiController@saveTourLeader",
+        'as' => "saveTourLeader"
+      ]);
+
+      Route::delete('/delete', [
+        'uses' => "apiController@deleteTourLeader",
+        'as' => "deleteTourLeader"
+      ]);
+    });
 	});
 });
 

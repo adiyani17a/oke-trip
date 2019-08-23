@@ -34,6 +34,11 @@ class apiController extends Controller
             $imgfile = file_get_contents($image);
 
             $base64 = 'data:image/jpg' . ';base64,' . base64_encode($imgfile);
+        }elseif ($req->feature == 'tour-leader') {
+            $image = '.'.$this->model->tour_leader()->where('id',$req->id)->first()->image;
+            $imgfile = file_get_contents($image);
+
+            $base64 = 'data:image/jpg' . ';base64,' . base64_encode($imgfile);
         }
 
         return Response::json($base64);
@@ -1012,5 +1017,121 @@ class apiController extends Controller
                     ->where('id',$req->id)
                     ->first();
         return Response::json($data);
+    }
+    // TOUR LEADER
+    public function datatableTourLeader(Request $req)
+    {
+        $data =  $this->model->tour_leader()->paginate($req->showing);
+            
+        foreach ($data as $i => $d) {
+            $data[$i]->action = '';
+            $data[$i]->image = $data[$i]->image.'?'.time(); 
+        }
+ 
+
+
+        return Response::json(['data'=>$data]);
+    }
+
+    public function chageStatusTourLeader(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+
+            if(!Auth::user()->hasAccess('Agent User','validation')){
+                return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Validate This Data']);
+            } 
+
+            if ($req->data == true) {
+                $input['active'] = 'true';
+            }else{
+                $input['active'] = 'false';
+            }
+            $input['updated_at'] = carbon::now();
+            $this->model->user()->where('id',$req->id)->update($input);
+            if ($req->data == null) {
+                return Response::json(['status'=>1,'message'=>'Success deactivate data']);
+            }else{
+                return Response::json(['status'=>1,'message'=>'Success activate data']);
+            }
+        });
+    }
+
+    public function saveTourLeader(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+            if (!isset($req->id) or $req->id == '' or $req->id == null) {
+                if(!Auth::user()->hasAccess('Tour Leader','create')){
+                    return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Create This Data']);
+                }
+
+                $input = $req->all();
+
+                $file = $req->image;
+                if ($file != null) {
+                    $filename = 'admin_'.$req->name.'.'.'jpg';
+                    $path = './dist/img/user';
+                    if (!file_exists($path)) {
+                        mkdir($path, 777, true);
+                    }
+                    $path = 'dist/img/user/' . $filename;
+                    Image::make(file_get_contents($file))->save($path);  
+                    $filename = '/dist/img/user/' . $filename;
+
+                }else{
+                    $filename = null;
+                }
+                $id = $this->model->tour_leader()->max('id')+1;
+
+                $input['image'] = $filename;
+                $input['id'] = $id;
+                $input['created_by'] = Auth::user()->name;
+                $input['updated_by'] = Auth::user()->name;
+                $this->model->tour_leader()->create($input);
+                return Response::json(['status'=>1,'message'=>'Success saving data']);
+            }else{
+                if(!Auth::user()->hasAccess('Tour Leader','edit')){
+                    return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Edit This Data']);
+                }
+
+                $input = $req->all();
+                unset($input['image']);
+
+                $file = $req->image;
+                if ($file != null) {
+                    $filename = 'admin_'.$req->name.'.'.'jpg';
+                    $path = './dist/img/user';
+                    if (!file_exists($path)) {
+                        mkdir($path, 777, true);
+                    }
+                    $filename = '/dist/img/user/' . $filename;
+                    Image::make(file_get_contents($file))->save($filename);  
+                    $input['image'] = $filename;
+
+                }else{
+                    $filename = null;
+                }
+
+                $input['updated_by'] = Auth::user()->name;
+                $this->model->tour_leader()->where('id',$req->id)->update($input);
+
+                return Response::json(['status'=>1,'message'=>'Success updating data']);
+            }
+        });
+    }
+
+    public function deleteTourLeader(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+
+            if(!Auth::user()->hasAccess('Tour Leader','delete')){
+                return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
+            }
+
+            foreach ($req->data as $i => $d) {
+                $this->model->user()->where('id',$req->data[$i]['id'])->delete();
+            }
+
+            return Response::json(['status'=>1,'message'=>'Success deleting data']);
+        });
     }
 }

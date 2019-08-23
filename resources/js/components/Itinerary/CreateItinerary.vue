@@ -358,7 +358,7 @@
           departure:[],
           arrival:[],
           highlight:'',
-      },
+        },
         formDetail:{
           adultPrice:'',
           minimalDP:'',
@@ -416,7 +416,6 @@
               name: {
                   required
               },
-              
               destination: {
                   required
               },

@@ -14,6 +14,7 @@ use App\itinerary;
 use App\itinerary_detail;
 use App\itinerary_flight;
 use App\itinerary_schedule;
+use App\tour_leader;
 class models extends Model
 {
     public function destination()
@@ -91,5 +92,12 @@ class models extends Model
         $itinerary_schedule = new itinerary_schedule();
 
         return $itinerary_schedule; 
+    }
+
+    public function tour_leader()
+    {
+        $tour_leader = new tour_leader();
+
+        return $tour_leader; 
     }
 }
