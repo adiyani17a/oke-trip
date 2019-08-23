@@ -16,7 +16,7 @@ class ItinerarySchedule extends Migration
         Schema::create('itinerary_schedule', function ($table) {
             $table->integer('id')->primary();
             $table->integer('dt'); 
-            $table->string('caption'); 
+            $table->text('caption'); 
             $table->string('title'); 
             $table->string('eat_service'); 
         });

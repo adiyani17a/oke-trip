@@ -154,7 +154,7 @@
                             flat
                             @click="routeModal = false"
                           >
-                            I accept
+                            Close
                           </v-btn>
                         </v-card-actions>
                       </v-card>
@@ -187,7 +187,7 @@
                             flat
                             @click="termModal = false"
                           >
-                            I accept
+                            Close
                           </v-btn>
                         </v-card-actions>
                       </v-card>
@@ -207,7 +207,7 @@
                         </v-card-title>
 
                         <v-card-text>
-                          <detail :itineraryDetail="menuListData"></detail>  
+                          <detail :itineraryDetail="menuListData" :selected="select"></detail>  
                         </v-card-text>
 
                         <v-divider></v-divider>
@@ -219,7 +219,7 @@
                             flat
                             @click="detailModal = false"
                           >
-                            I accept
+                            Close
                           </v-btn>
                         </v-card-actions>
                       </v-card>
@@ -466,9 +466,15 @@
                     .then(response => {
                         if (param == 'schedule') {
                             this.menuListData = response.data.itinerary_schedule;
+                            for (var i = 0; i < this.menuListData.length; i++) {
+                              this.menuListData[i].id = i;
+                            }
                             this.scheduleModal = true;
                         }else if (param == 'flight') {
                             this.menuListData = response.data.itinerary_flight;
+                            for (var i = 0; i < this.menuListData.length; i++) {
+                              this.menuListData[i].id = i;
+                            }
                             this.routeModal = true;
                         }else if (param == 'term') {
                             this.term = response.data.term_condition;
@@ -478,6 +484,7 @@
                             for (var i = 0; i < this.menuListData.length; i++) {
                               this.menuListData[i].id = i;
                             }
+
                             this.detailModal = true;
                         }
                     })

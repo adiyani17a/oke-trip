@@ -5,7 +5,8 @@
     class="elevation-1"
   	>
     <template v-slot:items="props">
-      <td>{{ props.item.code }}</td>
+            
+      <td><router-link :to="{ name: 'Detail Itinerary', params: { id: selected[0].id ,dt: props.item.dt } }" class="nav-link "><a>{{ props.item.code }}</a></router-link></td>
       <td>{{ props.item.start }}</td>
       <td>{{ props.item.end }}</td>
       <td class="text-xs-right">{{ props.item.adult_price  | currency}}</td>
@@ -44,6 +45,7 @@
 	    },
 	    props: {
 	        itineraryDetail: Array,
+	        selected: Array,
 	    },
 	}
 </script>

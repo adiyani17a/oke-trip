@@ -122,6 +122,13 @@ let routes = [{
     },
     component: require('./components/Itinerary/CreateItinerary.vue').default
 }, {
+    path: '/itinerary/detail/:id/:dt',
+    name: 'Detail Itinerary',
+    meta: {
+        breadcrumb: 'Detail Itinerary',
+    },
+    component: require('./components/Itinerary/DetailItinerary.vue').default
+}, {
     path: '/tour-leader',
     component: require('./components/TourLeader/tourLeader.vue').default
 }, {

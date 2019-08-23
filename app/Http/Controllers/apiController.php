@@ -972,7 +972,8 @@ class apiController extends Controller
                         'id' => $id,
                         'dt' => $i+1,
                         'flight_number' => $form->flight[$i],
-                        'route' => $form->route[$i],
+                        'departure_airport_code' => $form->departureAirportCode[$i],
+                        'arrival_airport_code' => $form->arrivalAirportCode[$i],
                         'departure' => $form->departure[$i],
                         'arrival' => $form->arrival[$i],
                     );

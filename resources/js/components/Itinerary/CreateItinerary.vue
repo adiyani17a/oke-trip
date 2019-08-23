@@ -95,10 +95,7 @@
                   <div v-for="index in addFlightDetail">
                     <v-layout wrap border style="padding: 10px">
                       <v-flex xs4 class="text-center pa-2" >
-                        <v-text-field label="No Flight" v-model="form.flight[index-1]"></v-text-field>
-                      </v-flex>
-                      <v-flex xs4 class="text-center pa-2">
-                        <v-text-field label="Route" v-model="form.route[index-1]" ></v-text-field>
+                        <v-text-field label="No Flight" placeholder="CX7390" v-model="form.flight[index-1]"></v-text-field>
                         <v-btn v-if="index == addFlightDetail" small  class="mx-1" fab dark color="primary" @click="addFlight">
                           <v-icon dark>add</v-icon>
                         </v-btn>
@@ -107,8 +104,12 @@
                         </v-btn>
                       </v-flex>
                       <v-flex xs4 class="text-center pa-2">
-                        <v-text-field label="Time Departure" v-model="form.departure[index-1]" ></v-text-field>
-                        <v-text-field label="Time Arrival" v-model="form.arrival[index-1]" ></v-text-field>
+                        <v-text-field label="Departure Airport Code" placeholder="SUB" v-model="form.departureAirportCode[index-1]" ></v-text-field>
+                        <v-text-field label="Arrival Airport Code" placeholder="HKG" v-model="form.arrivalAirportCode[index-1]" ></v-text-field>
+                      </v-flex>
+                      <v-flex xs4 class="text-center pa-2">
+                        <v-text-field label="Time Departure" placeholder="08:30 WIB" v-model="form.departure[index-1]" ></v-text-field>
+                        <v-text-field label="Time Arrival" placeholder="12:30 WIB" v-model="form.arrival[index-1]" ></v-text-field>
                       </v-flex>
                     </v-layout>
                   </div>
@@ -352,7 +353,8 @@
           caption:[],
           bld:[],
           flight:[],
-          route:[],
+          departureAirportCode:[],
+          arrivalAirportCode:[],
           departure:[],
           arrival:[],
           highlight:'',
@@ -561,8 +563,6 @@
               !this.$v.form.highlight.required && errors.push('Highlight is required.')
               return errors
           },
-
-
       },
       props: {
           dialog: false,
@@ -614,7 +614,7 @@
                     this.text = response.data.message;
                     if (response.data.status == 1) {
                       this.color = 'success';
-                      location.href = '/itinerary';
+                      router.push({ name: "Itinerary"})
 
                     } else {
                       this.color = 'error'

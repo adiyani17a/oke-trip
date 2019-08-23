@@ -17,12 +17,27 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('{path}', 'HomeController@index')->where('all', '^(?!api).*$');
-Route::get('itinerary/{path}', 'HomeController@index')->where('all', '^(?!api).*$');
+
+
 
 Route::post('/api/generate-token', 'ApiTokenController@generateToken');
 Route::group(['middleware' => 'auth'], function () {
+  Route::get('group-menu', 'HomeController@index');
+  Route::get('privilege', 'HomeController@index');
+  Route::get('role', 'HomeController@index');
+  Route::get('menu-list', 'HomeController@index');
+  Route::get('administrator-user', 'HomeController@index');
+  Route::get('agent-user', 'HomeController@index');
+  Route::get('destination', 'HomeController@index');
+  Route::get('additional', 'HomeController@index');
+  Route::get('itinerary', 'HomeController@index');
+  Route::get('tour-leader', 'HomeController@index');
+
+  Route::get('/home', 'HomeController@index')->name('home');
+  Route::get('itinerary/{path}', 'HomeController@index')->where('all', '^(?!api).*$');
+  Route::get('itinerary/{path}/{id}/{dt}', 'HomeController@index')->where('all', '^(?!api).*$');
+  Route::get('group-menu', 'HomeController@index');
+
 	Route::get('api/get-token', [
       'uses' => "ApiTokenController@getToken",
       'as' => "getToken"
@@ -35,9 +50,10 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::group(['middleware' => 'check-token'], function () {
+
+  
+
 	Route::group(["prefix" => "api"], function(){
-
-
     Route::get('/convert-image-base-64', [
       'uses' => "apiController@convertImageBase64",
       'as' => "convertImageBase64"
