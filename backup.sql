@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS `itinerary` (
   UNIQUE KEY `itinerary_code_unique` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oke_trip.itinerary: ~3 rows (approximately)
+-- Dumping data for table oke_trip.itinerary: ~7 rows (approximately)
 /*!40000 ALTER TABLE `itinerary` DISABLE KEYS */;
 REPLACE INTO `itinerary` (`id`, `code`, `name`, `destination_id`, `highlight`, `term_condition`, `flight_by`, `additional_id`, `carousel_1`, `carousel_2`, `carousel_3`, `note_1`, `note_2`, `note_3`, `pdf`, `flayer_image`, `book_by`, `active`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, 'TR19082100001', '4D HONGKONG, CHINA', '1,2', 'AIRASIA', '<p>AIRASIA</p>', 'AIRASIA', '1', 'dist/img/itinerary/carousel_1_1.jpg', 'dist/img/itinerary/carousel_2_1.jpg', 'dist/img/itinerary/carousel_3_1.jpg', 'AIRASIA', 'AIRASIA', 'AIRASIA', './dist/pdf/itinerary/pdf_1.pdf', 'dist/img/itinerary/flyer_1.jpg', NULL, NULL, 4, 4, '2019-08-21 14:37:01', '2019-08-21 14:37:01'),
@@ -113,7 +113,8 @@ REPLACE INTO `itinerary` (`id`, `code`, `name`, `destination_id`, `highlight`, `
 	(3, 'TR19082100003', '3D HONGKONG CHINA', '2,1', 'BLUE ASIA', '<p>BLUE ASIA</p>', 'BLUE ASIA', '1', 'dist/img/itinerary/carousel_1_3.jpg', 'dist/img/itinerary/carousel_2_3.jpg', 'dist/img/itinerary/carousel_3_3.jpg', 'BLUE ASIA', 'BLUE ASIA', 'BLUE ASIA', 'dist/pdf/itinerary/pdf_3.pdf', 'dist/img/itinerary/flyer_3.jpg', NULL, NULL, 4, 4, '2019-08-21 15:05:03', '2019-08-21 15:05:03'),
 	(4, 'TR19082100004', '2D HONGKONG, CHINA', '1,2', 'itinerary', '<p>itinerary</p>', 'itinerary', '1', 'dist/img/itinerary/carousel_1_4.jpg', 'dist/img/itinerary/carousel_2_4.jpg', 'dist/img/itinerary/carousel_3_4.jpg', 'itinerary', 'itinerary', 'itinerary', 'dist/pdf/itinerary/pdf_4.pdf', 'dist/img/itinerary/flyer_4.jpg', NULL, NULL, 4, 4, '2019-08-21 15:07:40', '2019-08-21 15:07:40'),
 	(5, 'TR19082100005', '1D HONGKONG', '1', 'AIRASIA', '<p>AIRASIA</p>', 'AIRASIA', '1', 'dist/img/itinerary/carousel_1_5.jpg', 'dist/img/itinerary/carousel_2_5.jpg', 'dist/img/itinerary/carousel_3_5.jpg', 'AIRASIA', 'AIRASIA', 'AIRASIA', 'dist/pdf/itinerary/pdf_5.pdf', 'dist/img/itinerary/flyer_5.jpg', NULL, NULL, 4, 4, '2019-08-21 15:12:26', '2019-08-21 15:12:26'),
-	(6, 'TR19082100006', '2D CHINA', '2', 'LION AIR', '<p>LION AIR</p>', 'LION AIR', '1', 'dist/img/itinerary/carousel_1_6.jpg', 'dist/img/itinerary/carousel_2_6.jpg', 'dist/img/itinerary/carousel_3_6.jpg', 'LION AIR', 'LION AIR', 'LION AIR', 'dist/pdf/itinerary/pdf_6.pdf', 'dist/img/itinerary/flyer_6.jpg', NULL, NULL, 4, 4, '2019-08-21 15:15:04', '2019-08-21 15:15:04');
+	(6, 'TR19082100006', '2D CHINA', '2', 'LION AIR', '<p>LION AIR</p>', 'LION AIR', '1', 'dist/img/itinerary/carousel_1_6.jpg', 'dist/img/itinerary/carousel_2_6.jpg', 'dist/img/itinerary/carousel_3_6.jpg', 'LION AIR', 'LION AIR', 'LION AIR', 'dist/pdf/itinerary/pdf_6.pdf', 'dist/img/itinerary/flyer_6.jpg', NULL, NULL, 4, 4, '2019-08-21 15:15:04', '2019-08-21 15:15:04'),
+	(7, 'TR19082300007', '4D HONGKONG FOR FUN', '1', 'MAKE YOUR TRIP BECOME FUN', '<p>What are Terms and Conditions</p><p>Terms and Conditions agreements act as a legal contract between you (the company) who has the website or mobile app and the user who access your website and mobile app.</p><p>Having a Terms and Conditions agreement is completely optional. No laws require you to have one. Not even the super-strict and wide-reaching General Data Protection Regulation (<a href="https://termsfeed.com/blog/gdpr/" rel="noopener noreferrer nofollow">GDPR</a>).</p><p>It’s up to you to set the rules and guidelines that the user must agree to. You can think of your Terms and Conditions agreement as the legal agreement where you <strong>maintain your rights</strong> to exclude users from your app in the event that they abuse your app, where you maintain your legal rights against potential app abusers, and so on.</p><p>Terms and Conditions are also known as Terms of Service or Terms of Use.</p><p>You can use this agreement anywhere, regardless of what platform your business operates on:</p><ul><li><p>Websites</p></li><li><p>WordPress blogs or blogs on any kind of platform: Joomla!, Drupal etc.</p></li><li><p>E-commerce shops</p></li><li><p>Mobile apps: iOS, Android or Windows phone</p></li><li><p><a href="https://termsfeed.com/blog/facebook-terms-of-service-login-details-app-details/" rel="noopener noreferrer nofollow">Facebook apps</a></p></li><li><p>Desktop apps</p></li><li><p><a href="https://termsfeed.com/blog/terms-use-privacy-policy-saas-applications/" rel="noopener noreferrer nofollow">SaaS apps</a></p></li></ul><p>Desktop apps usually have an <a href="https://termsfeed.com/blog/eula-saas-apps/" rel="noopener noreferrer nofollow">EULA</a> (End-User License Agreement) instead of a Terms and Conditions agreement, but your business can use <em>both</em>. Mobile apps are increasingly using Terms and Conditions along with an EULA if the mobile app has an online service component, i.e. it connects with a server.</p>', 'AIRASIA', '1', 'dist/img/itinerary/carousel_1_7.jpg', 'dist/img/itinerary/carousel_2_7.jpg', 'dist/img/itinerary/carousel_3_7.jpg', 'BRIDGE OF SOUTH HONGKONG', 'BRIDGE OF NORTH HONGKONG', 'BRIDGE OF JAPAN HONGKONG', 'dist/pdf/itinerary/pdf_7.pdf', 'dist/img/itinerary/flyer_7.jpg', NULL, NULL, 3, 3, '2019-08-23 09:42:16', '2019-08-23 09:42:16');
 /*!40000 ALTER TABLE `itinerary` ENABLE KEYS */;
 
 -- Dumping structure for table oke_trip.itinerary_detail
@@ -145,7 +146,7 @@ CREATE TABLE IF NOT EXISTS `itinerary_detail` (
   PRIMARY KEY (`id`,`dt`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oke_trip.itinerary_detail: ~4 rows (approximately)
+-- Dumping data for table oke_trip.itinerary_detail: ~13 rows (approximately)
 /*!40000 ALTER TABLE `itinerary_detail` DISABLE KEYS */;
 REPLACE INTO `itinerary_detail` (`id`, `dt`, `code`, `seat`, `seat_remain`, `start`, `end`, `adult_price`, `child_price`, `child_bed_price`, `infant_price`, `minimal_dp`, `agent_com`, `agent_tip`, `agent_visa`, `agent_tax`, `final_pdf`, `term_pdf`, `flayer_jpg`, `tour_leader_id`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, 1, 'TR19082100001/001', 15, 15, '2019-08-21', '2019-08-21', 2500000.00, 2500000.00, 2500000.00, 2500000.00, 500000.00, 500000.00, 500000.00, 500000.00, 500000.00, NULL, NULL, NULL, NULL, 4, 4, '2019-08-21 14:37:01', '2019-08-21 14:37:01'),
@@ -158,7 +159,9 @@ REPLACE INTO `itinerary_detail` (`id`, `dt`, `code`, `seat`, `seat_remain`, `sta
 	(4, 2, 'TR19082100004/002', 15, 15, '2019-08-21', '2019-08-21', 1250000.00, 1250000.00, 1250000.00, 1250000.00, 2500000.00, 250000.00, 250000.00, 50000.00, 250000.00, NULL, NULL, NULL, NULL, 4, 4, '2019-08-21 15:07:40', '2019-08-21 15:07:40'),
 	(5, 1, 'TR19082100005/001', 15, 15, '2019-08-21', '2019-08-21', 1500000.00, 1500000.00, 1500000.00, 1500000.00, 500000.00, 500000.00, 500000.00, 500000.00, 500000.00, NULL, NULL, NULL, NULL, 4, 4, '2019-08-21 15:12:26', '2019-08-21 15:12:26'),
 	(6, 1, 'TR19082100006/001', 15, 15, '2019-08-21', '2019-08-21', 2500000.00, 2500000.00, 2500000.00, 2500000.00, 500000.00, 500000.00, 500000.00, 500000.00, 500000.00, NULL, NULL, NULL, NULL, 4, 4, '2019-08-21 15:15:04', '2019-08-21 15:15:04'),
-	(6, 2, 'TR19082100006/002', 15, 15, '2019-08-21', '2019-08-23', 5800000.00, 5800000.00, 5800000.00, 5800000.00, 80000.00, 80000.00, 80000.00, 80000.00, 80000.00, NULL, NULL, NULL, NULL, 4, 4, '2019-08-21 15:15:04', '2019-08-21 15:15:04');
+	(6, 2, 'TR19082100006/002', 15, 15, '2019-08-21', '2019-08-23', 5800000.00, 5800000.00, 5800000.00, 5800000.00, 80000.00, 80000.00, 80000.00, 80000.00, 80000.00, NULL, NULL, NULL, NULL, 4, 4, '2019-08-21 15:15:04', '2019-08-21 15:15:04'),
+	(7, 1, 'TR19082300007/001', 20, 20, '2019-08-23', '2019-08-23', 3000000.00, 3000000.00, 3000000.00, 3000000.00, 500000.00, 500000.00, 500000.00, 500000.00, 500000.00, NULL, NULL, NULL, NULL, 3, 3, '2019-08-23 09:42:16', '2019-08-23 09:42:16'),
+	(7, 2, 'TR19082300007/002', 20, 20, '2019-08-23', '2019-08-23', 3000000.00, 3000000.00, 3000000.00, 1500000.00, 500000.00, 500000.00, 500000.00, 500000.00, 500000.00, NULL, NULL, NULL, NULL, 3, 3, '2019-08-23 09:42:16', '2019-08-23 09:42:16');
 /*!40000 ALTER TABLE `itinerary_detail` ENABLE KEYS */;
 
 -- Dumping structure for table oke_trip.itinerary_flight
@@ -166,40 +169,45 @@ CREATE TABLE IF NOT EXISTS `itinerary_flight` (
   `id` int(11) NOT NULL,
   `dt` int(11) NOT NULL,
   `flight_number` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `route` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `departure_airport_code` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `arrival_airport_code` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `departure` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `arrival` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`,`dt`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oke_trip.itinerary_flight: ~2 rows (approximately)
+-- Dumping data for table oke_trip.itinerary_flight: ~16 rows (approximately)
 /*!40000 ALTER TABLE `itinerary_flight` DISABLE KEYS */;
-REPLACE INTO `itinerary_flight` (`id`, `dt`, `flight_number`, `route`, `departure`, `arrival`) VALUES
-	(1, 1, 'AIRASIA', 'AIRASIA', 'AIRASIA', 'AIRASIA'),
-	(1, 2, 'AIRASIA', 'AIRASIA', 'AIRASIA', 'AIRASIA'),
-	(2, 1, 'AIRASIA', 'AIRASIA', 'AIRASIA', 'AIRASIA'),
-	(2, 2, 'AIRASIA', 'AIRASIA', 'AIRASIA', 'AIRASIA'),
-	(2, 3, 'AIRASIA', 'AIRASIA', 'AIRASIA', 'AIRASIA'),
-	(3, 1, 'BLUE ASIA', 'BLUE ASIA', 'BLUE ASIA', 'BLUE ASIA'),
-	(3, 2, 'BLUE ASIA', 'BLUE ASIA', 'BLUE ASIA', 'BLUE ASIA'),
-	(4, 1, 'itinerary', 'itinerary', 'itinerary', 'itinerary'),
-	(4, 2, 'itinerary', 'itinerary', 'itinerary', 'itinerary'),
-	(5, 1, 'AIRASIA', 'AIRASIA', 'AIRASIA', 'AIRASIA'),
-	(6, 1, 'LION AIR', 'LION AIR', 'LION AIR', 'LION AIR'),
-	(6, 2, 'LION AIR', 'LION AIR', 'LION AIR', 'LION AIR');
+REPLACE INTO `itinerary_flight` (`id`, `dt`, `flight_number`, `departure_airport_code`, `arrival_airport_code`, `departure`, `arrival`) VALUES
+	(1, 1, 'CX790', 'SUB', 'HKG', '08:30 WIB', '08:30 WIB'),
+	(1, 2, 'CX790', 'SUB', 'HKG', '08:30 WIB', '08:30 WIB'),
+	(2, 1, 'CX790', 'SUB', 'HKG', '08:30 WIB', '08:30 WIB'),
+	(2, 2, 'CX790', 'SUB', 'HKG', '08:30 WIB', '08:30 WIB'),
+	(2, 3, 'CX790', 'SUB', 'HKG', '08:30 WIB', '08:30 WIB'),
+	(3, 1, 'CX790', 'SUB', 'HKG', '08:30 WIB', '08:30 WIB'),
+	(3, 2, 'CX790', 'SUB', 'HKG', '08:30 WIB', '08:30 WIB'),
+	(4, 1, 'CX790', 'SUB', 'HKG', '08:30 WIB', '08:30 WIB'),
+	(4, 2, 'CX790', 'SUB', 'HKG', '08:30 WIB', '08:30 WIB'),
+	(5, 1, 'CX790', 'SUB', 'HKG', '08:30 WIB', '08:30 WIB'),
+	(6, 1, 'CX790', 'SUB', 'HKG', '08:30 WIB', '08:30 WIB'),
+	(6, 2, 'CX790', 'SUB', 'HKG', '08:30 WIB', '08:30 WIB'),
+	(7, 1, 'CX869', 'SUB', 'JKT', '07:00 WIB', '09:30 WIB'),
+	(7, 2, 'CY890', 'JKT', 'HKG', '11:00 WIB', '18:00 WIB'),
+	(7, 3, 'CZ980', 'HKG', 'JKT', '23:00 WIB', '04:00 WIB'),
+	(7, 4, 'CX790', 'JKT', 'SUB', '05:00 WIB', '07:00 WIB');
 /*!40000 ALTER TABLE `itinerary_flight` ENABLE KEYS */;
 
 -- Dumping structure for table oke_trip.itinerary_schedule
 CREATE TABLE IF NOT EXISTS `itinerary_schedule` (
   `id` int(11) NOT NULL,
   `dt` int(11) NOT NULL,
-  `caption` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `title` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `eat_service` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `caption` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `eat_service` text COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`,`dt`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oke_trip.itinerary_schedule: ~4 rows (approximately)
+-- Dumping data for table oke_trip.itinerary_schedule: ~17 rows (approximately)
 /*!40000 ALTER TABLE `itinerary_schedule` DISABLE KEYS */;
 REPLACE INTO `itinerary_schedule` (`id`, `dt`, `caption`, `title`, `eat_service`) VALUES
 	(1, 1, 'AIRASIA', 'AIRASIA', 'AIRASIA'),
@@ -214,7 +222,11 @@ REPLACE INTO `itinerary_schedule` (`id`, `dt`, `caption`, `title`, `eat_service`
 	(4, 3, 'itinerary', 'itinerary', 'itinerary'),
 	(5, 1, 'AIRASIA', 'AIRASIA', 'AIRASIA'),
 	(6, 1, 'LION AIR', 'LION AIR', 'LION AIR'),
-	(6, 2, 'LION AIR', 'LION AIR', 'LION AIR');
+	(6, 2, 'LION AIR', 'LION AIR', 'LION AIR'),
+	(7, 1, 'Berkumpul di bandara juanda pukul 07:00 WIB. Sampai dijakarta pukul 09:30 WIB menunggu keberangkatan ke hongkong pada jam 11:00 WIB. Lalu tiba di hongkong jam 18:00 WIB dan dilanjut istirahat di hotel', 'Check Out Ke Hongkong', 'B/L/D'),
+	(7, 2, 'Berkumpul di lobby jam 08:00 WIB untuk bersiap pergi ke disney land hongkong. sampai ke disney land sekitar pukul jam 12:00 WIB. Keluar dari Disney Land Pukul 18:00 WIB langsung menuju hotel untuk istirahat.', 'Ke tempat rekreasi dan spot foto di hongkong', 'B/L/D'),
+	(7, 3, 'Berkumpul lobby jam 08:00 WIB dan bersiap siap ke pusat perbelanjaan di hongkong. sampai kesana jam 12:00 WIB berbelanja sampai pukul 17:00 WIB dan kembali ke hotel untuk bersiap check out.  lalu keluar dari hotel pukul 20:00 WIB menuju bandara.', 'Ke tempat perbelanjaan untuk oleh oleh', 'B/L/D'),
+	(7, 4, 'sampai bandara pukul 22:00 WIB berangkat ke jakarta pukul 23:00 WIB lalu sampai ke jakarta pukul 04:00 WIB. Ke surabaya pukul 05:00 WIB dan sampai ke bandara juanda jam 07:00 WIB', 'Pulang ke indonesia', 'B');
 /*!40000 ALTER TABLE `itinerary_schedule` ENABLE KEYS */;
 
 -- Dumping structure for table oke_trip.menu_list
@@ -261,9 +273,9 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oke_trip.migrations: ~17 rows (approximately)
+-- Dumping data for table oke_trip.migrations: ~18 rows (approximately)
 /*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
 REPLACE INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(1, '2014_10_12_000000_create_users_table', 1),
@@ -282,7 +294,8 @@ REPLACE INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(14, '2019_07_21_103414_itinerary', 1),
 	(15, '2019_08_02_194644_itinerary_detail', 1),
 	(16, '2019_08_02_194728_itinerary_schedule', 1),
-	(17, '2019_08_02_194824_itinerary_flight', 1);
+	(17, '2019_08_02_194824_itinerary_flight', 1),
+	(18, '2019_08_23_143624_tour_leader', 2);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 
 -- Dumping structure for table oke_trip.password_resets
@@ -418,16 +431,43 @@ CREATE TABLE IF NOT EXISTS `token_management` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1322 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1740 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table oke_trip.token_management: ~4 rows (approximately)
 /*!40000 ALTER TABLE `token_management` DISABLE KEYS */;
 REPLACE INTO `token_management` (`id`, `user_id`, `access_token`, `expired_at`, `is_active`, `created_at`, `updated_at`) VALUES
 	(66, 1, 'YjY4YTQ5ODQ1ZmZiYmVhNmM1MDQ3OGI4MWY2MDM1NjBjZDhiZjU2YQ==', '2019-08-15 09:03:07', 1, '2019-08-14 09:03:07', '2019-08-14 09:03:07'),
 	(436, 2, 'OWUxMWRhNDYzNjI1MDYzYWQwZmZjNmM2M2IyMmYxMDczN2JiM2MyNw==', '2019-08-15 16:16:26', 1, '2019-08-14 16:16:26', '2019-08-14 16:16:26'),
-	(1104, 3, 'NTQ5ZDFhMDAyYzY4NWM5NTEyZjg4NjJhZGQ0NmY0OWNjM2U2MWYyMg==', '2019-08-21 16:33:00', 1, '2019-08-20 16:33:00', '2019-08-20 16:33:00'),
-	(1321, 4, 'OTQ5MmY1ODg1NmY0NzE3YTYyYTA1NmEzZDQ4ZmM1NzQ5YzA2YTA0Ng==', '2019-08-22 17:57:14', 1, '2019-08-21 17:57:14', '2019-08-21 17:57:14');
+	(1495, 4, 'YjFmMGNjMjcwNjAyNGI0NTQzZWI4ZGY0NGJhMWQ4YzEwZDc5NWMwMQ==', '2019-08-23 16:51:18', 1, '2019-08-22 16:51:18', '2019-08-22 16:51:18'),
+	(1739, 3, 'MzczOGRhNzRhNzNiN2JlZmZkYjY1NzQ5YjU3NTNiZjBlMzJmMjY4Mg==', '2019-08-24 17:44:12', 1, '2019-08-23 17:44:12', '2019-08-23 17:44:12');
 /*!40000 ALTER TABLE `token_management` ENABLE KEYS */;
+
+-- Dumping structure for table oke_trip.tour_leader
+CREATE TABLE IF NOT EXISTS `tour_leader` (
+  `id` int(11) NOT NULL,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `passport` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `passport_exp_date` date NOT NULL,
+  `issuing` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `gender` enum('male','female') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `birth_date` date NOT NULL,
+  `birth_place` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_by` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `updated_by` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table oke_trip.tour_leader: ~1 rows (approximately)
+/*!40000 ALTER TABLE `tour_leader` DISABLE KEYS */;
+REPLACE INTO `tour_leader` (`id`, `name`, `address`, `phone`, `passport`, `passport_exp_date`, `issuing`, `gender`, `birth_date`, `birth_place`, `image`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
+	(1, 'Lukmans', 'Nginden Intan', '23434343', '21321321321321', '2019-08-23', 'dsfsf', 'male', '2019-08-23', 'surabaya', '/dist/img/user/admin_Lukman.jpg', 'adi wielijarni', 'adi wielijarni', '2019-08-23 16:30:24', '2019-08-23 17:44:58'),
+	(2, 'sdfa', 'asdaswdas', '2343423', '234234234', '2019-08-23', '343243', 'male', '2019-08-23', '34343', '/dist/img/user/admin_sdfa.jpg', 'adi wielijarni', 'adi wielijarni', '2019-08-23 17:45:15', '2019-08-23 17:45:15');
+/*!40000 ALTER TABLE `tour_leader` ENABLE KEYS */;
 
 -- Dumping structure for table oke_trip.users
 CREATE TABLE IF NOT EXISTS `users` (
