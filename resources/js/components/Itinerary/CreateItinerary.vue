@@ -1,304 +1,304 @@
 <template>
-<div class="container" >
-  <div class="row justify-content-center" id="apps">
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-header">
-          <h5 style="margin-top: 10px;display: inline-block;"><b>Create Itinerary</b></h5>
-        </div>
-        <div class="card-body">
-          <form-wizard title="" subtitle="" @on-loading="setLoading" color="#007bff" error-color="red" finish-button-text="Save" @on-complete="onComplete">
-            <tab-content title="Form Data" :before-change="beforeChange">
-              <v-layout wrap>
-                <v-flex xs12 md6 style="padding: 10px">
-                  <v-text-field label="Code Tour" v-model="form.code" readonly required name="code" ></v-text-field>
-                  <input type="hidden" name="id" v-model="id">
-                </v-flex>
-                <v-flex xs12 md6 style="padding: 10px">
-                  <v-text-field label="Name*" v-model="form.name" required name="name" @blur="$v.form.name.$touch()" :error-messages="nameErrors"></v-text-field>
-                </v-flex>
-                <v-flex xs12 md6 style="padding: 10px">
-                  <v-select
-                    v-model="form.destination"
-                    label="Destination*"
-                    :items="destinationOptions"
-                    item-text="name"
-                    item-value="id"
-                    multiple
-                    @blur="$v.form.destination.$touch()"
-                    :error-messages="destinationErrors"
-                  ></v-select>
-                </v-flex>
-                <v-flex xs12 md6 style="padding: 10px">
-                  <v-select
-                    v-model="form.additional"
-                    label="Additional*"
-                    item-text="name"
-                    item-value="id"
-                    :items="additionalOptions"
-                    multiple
-                    @blur="$v.form.additional.$touch()"
-                    :error-messages="additionalErrors"
-                  ></v-select>
-                </v-flex>
-                <v-flex xs12 md6 style="padding: 10px">
-                  <v-text-field label="Flight By*" v-model="form.flightBy" required name="flightBy" @blur="$v.form.flightBy.$touch()" :error-messages="flightByErrors"></v-text-field>
-                </v-flex>
-                <v-flex xs12 md6 style="padding: 10px">
-                  <v-text-field label="Highlight*" v-model="form.highlight" required name="flightBy" @blur="$v.form.highlight.$touch()" :error-messages="highlightErrors"></v-text-field>
-                </v-flex>
-                <v-flex xs12 style="padding: 10px">
-                  <text-editor @textContent="textContent"></text-editor>
-                </v-flex>
-                <v-flex xs12 style="padding: 10px" class="row">
-                  <div v-for="index in 3" class="col-sm-4">
-                    <h5>Carousel {{ index }}</h5>
-                    <vue-dropify :id="'carousel_'+index" :multiple="false" @change="changeImage('carousel',index)" ref="carousel" message="Upload Carousel By Click Here"></vue-dropify> 
-                    <v-text-field label="Note" v-model="form.note[index-1]"  required name="note[index]" ></v-text-field>
-                  </div>
-                </v-flex>
-        
-                <v-flex xs12 md6 style="padding: 10px">
-                  <h5>Upload PDF</h5>
-                  <vue-dropify id="pdf" multiple="false" @change="changeImage('pdf',1)" ref="pdf" message="Upload PDF By Click Here"></vue-dropify> 
-                </v-flex>
-                  
-                <v-flex xs12 md6 style="padding: 10px">
-                  <h5>Flyer</h5>
-                  <vue-dropify id="flyer" multiple="false" @change="changeImage('flyer',1)" ref="flyer" message="Upload Flyer By Click Here"></vue-dropify> 
-                </v-flex>
-                <v-flex xs12 md6 style="padding: 10px">
-                  <h5>Add Detail Schedule</h5>
-                  <div v-for="index in addDetailSchedule">
-                    <v-layout wrap border style="padding: 10px">
-                      <v-flex xs2 class="text-center">
-                        <v-chip color="primary" class="white--text" >Day {{index}}</v-chip>
-                        <v-btn v-if="index == addDetailSchedule" small  class="mx-1" fab dark color="primary" @click="addSchedule">
-                          <v-icon dark>add</v-icon>
-                        </v-btn>
-                        <v-btn v-if="index == addDetailSchedule" small  class="mx-1" fab dark color="red" @click="removeSchedule">
-                          <v-icon dark>remove</v-icon>
-                        </v-btn>
-                      </v-flex>
-                      <v-flex xs4 class="pa-2">
-                        <v-text-field label="Title" v-model="form.title[index-1]"></v-text-field>
-                        <v-text-field label="B/L/D" v-model="form.bld[index-1]"></v-text-field>
-                      </v-flex>
-                      <v-flex xs12 md6>
-                        <v-textarea auto-grow label="Caption"  v-model="form.caption[index-1]"></v-textarea>
-                      </v-flex>
-                    </v-layout>
-                  </div>
-                </v-flex>
-                <v-flex xs12 md6 style="padding: 10px">
-                  <h5>Add Flight Detail</h5>
-                  <div v-for="index in addFlightDetail">
-                    <v-layout wrap border style="padding: 10px">
-                      <v-flex xs4 class="text-center pa-2" >
-                        <v-text-field label="No Flight" placeholder="CX7390" v-model="form.flight[index-1]"></v-text-field>
-                        <v-btn v-if="index == addFlightDetail" small  class="mx-1" fab dark color="primary" @click="addFlight">
-                          <v-icon dark>add</v-icon>
-                        </v-btn>
-                        <v-btn v-if="index == addFlightDetail" small  class="mx-1" fab dark color="red" @click="removeFlight">
-                          <v-icon dark>remove</v-icon>
-                        </v-btn>
-                      </v-flex>
-                      <v-flex xs4 class="text-center pa-2">
-                        <v-text-field label="Departure Airport Code" placeholder="SUB" v-model="form.departureAirportCode[index-1]" ></v-text-field>
-                        <v-text-field label="Arrival Airport Code" placeholder="HKG" v-model="form.arrivalAirportCode[index-1]" ></v-text-field>
-                      </v-flex>
-                      <v-flex xs4 class="text-center pa-2">
-                        <v-text-field label="Time Departure" placeholder="08:30 WIB" v-model="form.departure[index-1]" ></v-text-field>
-                        <v-text-field label="Time Arrival" placeholder="12:30 WIB" v-model="form.arrival[index-1]" ></v-text-field>
-                      </v-flex>
-                    </v-layout>
-                  </div>
-                </v-flex>
-              </v-layout>
-            </tab-content>
-            <tab-content title="Form Detail">
-              <v-layout wrap>
-                <v-flex xs12 md6 style="padding: 10px" class="px-12">
-                  <v-menu
-                    v-model="formDetail.menu"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    min-width="1px"
+  <div class="container" >
+    <div class="row justify-content-center" id="apps">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h5 style="margin-top: 10px;display: inline-block;"><b>Create Itinerary</b></h5>
+          </div>
+          <div class="card-body">
+            <form-wizard title="" subtitle="" @on-loading="setLoading" color="#007bff" error-color="red" finish-button-text="Save" @on-complete="onComplete">
+              <tab-content title="Form Data" :before-change="beforeChange">
+                <v-layout wrap>
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <v-text-field label="Code Tour" v-model="form.code" readonly required name="code" ></v-text-field>
+                    <input type="hidden" name="id" v-model="id">
+                  </v-flex>
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <v-text-field label="Name*" v-model="form.name" required name="name" @blur="$v.form.name.$touch()" :error-messages="nameErrors"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <v-select
+                      v-model="form.destination"
+                      label="Destination*"
+                      :items="destinationOptions"
+                      item-text="name"
+                      item-value="id"
+                      multiple
+                      @blur="$v.form.destination.$touch()"
+                      :error-messages="destinationErrors"
+                    ></v-select>
+                  </v-flex>
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <v-select
+                      v-model="form.additional"
+                      label="Additional*"
+                      item-text="name"
+                      item-value="id"
+                      :items="additionalOptions"
+                      multiple
+                      @blur="$v.form.additional.$touch()"
+                      :error-messages="additionalErrors"
+                    ></v-select>
+                  </v-flex>
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <v-text-field label="Flight By*" v-model="form.flightBy" required name="flightBy" @blur="$v.form.flightBy.$touch()" :error-messages="flightByErrors"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <v-text-field label="Highlight*" v-model="form.highlight" required name="flightBy" @blur="$v.form.highlight.$touch()" :error-messages="highlightErrors"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 style="padding: 10px">
+                    <text-editor @textContent="textContent"></text-editor>
+                  </v-flex>
+                  <v-flex xs12 style="padding: 10px" class="row">
+                    <div v-for="index in 3" class="col-sm-4">
+                      <h5>Carousel {{ index }}</h5>
+                      <vue-dropify :id="'carousel_'+index" :multiple="false" @change="changeImage('carousel',index)" ref="carousel" message="Upload Carousel By Click Here"></vue-dropify> 
+                      <v-text-field label="Note" v-model="form.note[index-1]"  required name="note[index]" ></v-text-field>
+                    </div>
+                  </v-flex>
+          
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <h5>Upload PDF</h5>
+                    <vue-dropify id="pdf" multiple="false" @change="changeImage('pdf',1)" ref="pdf" message="Upload PDF By Click Here"></vue-dropify> 
+                  </v-flex>
+                    
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <h5>Flyer</h5>
+                    <vue-dropify id="flyer" multiple="false" @change="changeImage('flyer',1)" ref="flyer" message="Upload Flyer By Click Here"></vue-dropify> 
+                  </v-flex>
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <h5>Add Detail Schedule</h5>
+                    <div v-for="index in addDetailSchedule">
+                      <v-layout wrap border style="padding: 10px">
+                        <v-flex xs2 class="text-center">
+                          <v-chip color="primary" class="white--text" >Day {{index}}</v-chip>
+                          <v-btn v-if="index == addDetailSchedule" small  class="mx-1" fab dark color="primary" @click="addSchedule">
+                            <v-icon dark>add</v-icon>
+                          </v-btn>
+                          <v-btn v-if="index == addDetailSchedule" small  class="mx-1" fab dark color="red" @click="removeSchedule">
+                            <v-icon dark>remove</v-icon>
+                          </v-btn>
+                        </v-flex>
+                        <v-flex xs4 class="pa-2">
+                          <v-text-field label="Title" v-model="form.title[index-1]"></v-text-field>
+                          <v-text-field label="B/L/D" v-model="form.bld[index-1]"></v-text-field>
+                        </v-flex>
+                        <v-flex xs12 md6>
+                          <v-textarea auto-grow label="Caption"  v-model="form.caption[index-1]"></v-textarea>
+                        </v-flex>
+                      </v-layout>
+                    </div>
+                  </v-flex>
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <h5>Add Flight Detail</h5>
+                    <div v-for="index in addFlightDetail">
+                      <v-layout wrap border style="padding: 10px">
+                        <v-flex xs4 class="text-center pa-2" >
+                          <v-text-field label="No Flight" placeholder="CX7390" v-model="form.flight[index-1]"></v-text-field>
+                          <v-btn v-if="index == addFlightDetail" small  class="mx-1" fab dark color="primary" @click="addFlight">
+                            <v-icon dark>add</v-icon>
+                          </v-btn>
+                          <v-btn v-if="index == addFlightDetail" small  class="mx-1" fab dark color="red" @click="removeFlight">
+                            <v-icon dark>remove</v-icon>
+                          </v-btn>
+                        </v-flex>
+                        <v-flex xs4 class="text-center pa-2">
+                          <v-text-field label="Departure Airport Code" placeholder="SUB" v-model="form.departureAirportCode[index-1]" ></v-text-field>
+                          <v-text-field label="Arrival Airport Code" placeholder="HKG" v-model="form.arrivalAirportCode[index-1]" ></v-text-field>
+                        </v-flex>
+                        <v-flex xs4 class="text-center pa-2">
+                          <v-text-field label="Time Departure" placeholder="08:30 WIB" v-model="form.departure[index-1]" ></v-text-field>
+                          <v-text-field label="Time Arrival" placeholder="12:30 WIB" v-model="form.arrival[index-1]" ></v-text-field>
+                        </v-flex>
+                      </v-layout>
+                    </div>
+                  </v-flex>
+                </v-layout>
+              </tab-content>
+              <tab-content title="Form Detail">
+                <v-layout wrap>
+                  <v-flex xs12 md6 style="padding: 10px" class="px-12">
+                    <v-menu
+                      v-model="formDetail.menu"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      min-width="1px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="formDetail.dateStart"
+                          label="Date Start"
+                          prepend-icon="event"
+                          readonly
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker v-model="formDetail.dateStart" @input="menu = false"></v-date-picker>
+                    </v-menu>
+                  </v-flex>
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <v-menu
+                      v-model="formDetail.menu1"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      min-width="1px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="formDetail.dateEnd"
+                          label="Date End"
+                          prepend-icon="event"
+                          readonly
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker v-model="formDetail.dateEnd" @input="menu1 = false"></v-date-picker>
+                    </v-menu>
+                  </v-flex>
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <v-text-field label="Adult Price" v-money="money" ref="adultPrice" v-model="formDetail.adultPrice" :error-messages="adultPriceErrors"  required name="adultPrice" @blur="$v.formDetail.adultPrice.$touch()"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <v-text-field label="Child No Bed Price" v-money="money" ref="CnBPrice" v-model="formDetail.CnBPrice" :error-messages="CnBPriceErrors"  required name="CnBPrice"  @blur="$v.formDetail.CnBPrice.$touch()"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <v-text-field label="Child With Bed Price" v-money="money" ref="CwBPrice" v-model="formDetail.CwBPrice" :error-messages="CwBPriceErrors"  required name="CwBPrice" @blur="$v.formDetail.CwBPrice.$touch()"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <v-text-field label="Infant Price" v-money="money" ref="infantPrice" v-model="formDetail.infantPrice" :error-messages="infantPriceErrors"  required name="infantPrice" @blur="$v.formDetail.infantPrice.$touch()" ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <v-text-field label="Agent Com Price" v-money="money" ref="agentPrice" v-model="formDetail.agentPrice" :error-messages="agentPriceErrors"  required name="agentPrice" @blur="$v.formDetail.agentPrice.$touch()" ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <v-text-field label="Tips Price" v-money="money" ref="tipsPrice" v-model="formDetail.tipsPrice" :error-messages="tipsPriceErrors"  required name="tipsPrice" @blur="$v.formDetail.tipsPrice.$touch()"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <v-text-field label="Visa Price" v-money="money" ref="visaPrice" v-model="formDetail.visaPrice" :error-messages="visaPriceErrors"  required name="visaPrice" @blur="$v.formDetail.visaPrice.$touch()" ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <v-text-field label="Apt Tax & Fuel Surcharge" v-money="money" ref="aptPrice" v-model="formDetail.aptPrice" :error-messages="aptPriceErrors"  required name="aptPrice" @blur="$v.formDetail.aptPrice.$touch()"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <v-text-field label="Seat" ref="seat" v-model="formDetail.seat" :error-messages="seatErrors"  required name="seat" type="number" @blur="$v.formDetail.seat.$touch()"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <v-text-field label="minimal DP" v-money="money" ref="minimalDP" v-model="formDetail.minimalDP" :error-messages="minimalDPErrors"  required name="minimalDP" @blur="$v.formDetail.minimalDP.$touch()" ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 style="padding: 10px;text-align: right;">
+                    <v-btn
+                      v-if="formDetailEdit == true"
+                      color="red"
+                      class="ma-2 white--text"
+                      @click="cancelEdit(idEdit)"
+                    >
+                      Cancel
+                      <v-icon right dark>remove</v-icon>
+                    </v-btn>
+                    <v-btn
+                      :loading="loading"
+                      :disabled="loading"
+                      color="primary"
+                      class="ma-2 white--text"
+                      @click="appendItinerary(idEdit)"
+                    >
+                      Append
+                      <v-icon right dark>add</v-icon>
+                    </v-btn>
+                  </v-flex>
+                  <v-flex xs12 style="padding: 10px">
+                    <v-data-table
+                      :headers="itineraryHeaders"
+                      :items="formDetail.itineraryItems"
+                      class="elevation-1"
+                    >
+                      <template v-slot:items="props">
+                        <td>{{ props.item.dateStart }}</td>
+                        <td>{{ props.item.dateEnd }}</td>
+                        <td class="text-xs-right">{{ props.item.adultPrice  | currency}}</td>
+                        <td class="text-xs-right">{{ props.item.CnBPrice  | currency}}</td>
+                        <td class="text-xs-right">{{ props.item.CwBPrice  | currency}}</td>
+                        <td class="text-xs-right">{{ props.item.infantPrice  | currency}}</td>
+                        <td class="text-xs-right">{{ props.item.minimalDP  | currency}}</td>
+                        <td class="text-xs-right">{{ props.item.agentPrice  | currency}}</td>
+                        <td class="text-xs-right">{{ props.item.tipsPrice  | currency}}</td>
+                        <td class="text-xs-right">{{ props.item.visaPrice  | currency}}</td>
+                        <td class="text-xs-right">{{ props.item.aptPrice  | currency}}</td>
+                        <td class="text-xs-right">{{ props.item.seat }}</td>
+                        <td if="props.item.action == 'action" class="text-xs-right">
+                          <v-btn small color="primary" dark fab @click="editData(props.index)">
+                            <v-icon dark>edit</v-icon>
+                          </v-btn>
+                          <v-btn small color="red" dark fab @click="removeData(props.index)">
+                            <v-icon dark>remove</v-icon>
+                          </v-btn>
+                        </td>
+                      </template>
+                    </v-data-table>
+                  </v-flex>
+                  <v-dialog
+                    v-model="dialogSave"
+                    max-width="290"
                   >
-                    <template v-slot:activator="{ on }">
-                      <v-text-field
-                        v-model="formDetail.dateStart"
-                        label="Date Start"
-                        prepend-icon="event"
-                        readonly
-                        v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker v-model="formDetail.dateStart" @input="menu = false"></v-date-picker>
-                  </v-menu>
-                </v-flex>
-                <v-flex xs12 md6 style="padding: 10px">
-                  <v-menu
-                    v-model="formDetail.menu1"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    min-width="1px"
-                  >
-                    <template v-slot:activator="{ on }">
-                      <v-text-field
-                        v-model="formDetail.dateEnd"
-                        label="Date End"
-                        prepend-icon="event"
-                        readonly
-                        v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker v-model="formDetail.dateEnd" @input="menu1 = false"></v-date-picker>
-                  </v-menu>
-                </v-flex>
-                <v-flex xs12 md6 style="padding: 10px">
-                  <v-text-field label="Adult Price" v-money="money" ref="adultPrice" v-model="formDetail.adultPrice" :error-messages="adultPriceErrors"  required name="adultPrice" @blur="$v.formDetail.adultPrice.$touch()"></v-text-field>
-                </v-flex>
-                <v-flex xs12 md6 style="padding: 10px">
-                  <v-text-field label="Child No Bed Price" v-money="money" ref="CnBPrice" v-model="formDetail.CnBPrice" :error-messages="CnBPriceErrors"  required name="CnBPrice"  @blur="$v.formDetail.CnBPrice.$touch()"></v-text-field>
-                </v-flex>
-                <v-flex xs12 md6 style="padding: 10px">
-                  <v-text-field label="Child With Bed Price" v-money="money" ref="CwBPrice" v-model="formDetail.CwBPrice" :error-messages="CwBPriceErrors"  required name="CwBPrice" @blur="$v.formDetail.CwBPrice.$touch()"></v-text-field>
-                </v-flex>
-                <v-flex xs12 md6 style="padding: 10px">
-                  <v-text-field label="Infant Price" v-money="money" ref="infantPrice" v-model="formDetail.infantPrice" :error-messages="infantPriceErrors"  required name="infantPrice" @blur="$v.formDetail.infantPrice.$touch()" ></v-text-field>
-                </v-flex>
-                <v-flex xs12 md6 style="padding: 10px">
-                  <v-text-field label="Agent Com Price" v-money="money" ref="agentPrice" v-model="formDetail.agentPrice" :error-messages="agentPriceErrors"  required name="agentPrice" @blur="$v.formDetail.agentPrice.$touch()" ></v-text-field>
-                </v-flex>
-                <v-flex xs12 md6 style="padding: 10px">
-                  <v-text-field label="Tips Price" v-money="money" ref="tipsPrice" v-model="formDetail.tipsPrice" :error-messages="tipsPriceErrors"  required name="tipsPrice" @blur="$v.formDetail.tipsPrice.$touch()"></v-text-field>
-                </v-flex>
-                <v-flex xs12 md6 style="padding: 10px">
-                  <v-text-field label="Visa Price" v-money="money" ref="visaPrice" v-model="formDetail.visaPrice" :error-messages="visaPriceErrors"  required name="visaPrice" @blur="$v.formDetail.visaPrice.$touch()" ></v-text-field>
-                </v-flex>
-                <v-flex xs12 md6 style="padding: 10px">
-                  <v-text-field label="Apt Tax & Fuel Surcharge" v-money="money" ref="aptPrice" v-model="formDetail.aptPrice" :error-messages="aptPriceErrors"  required name="aptPrice" @blur="$v.formDetail.aptPrice.$touch()"></v-text-field>
-                </v-flex>
-                <v-flex xs12 md6 style="padding: 10px">
-                  <v-text-field label="Seat" ref="seat" v-model="formDetail.seat" :error-messages="seatErrors"  required name="seat" type="number" @blur="$v.formDetail.seat.$touch()"></v-text-field>
-                </v-flex>
-                <v-flex xs12 md6 style="padding: 10px">
-                  <v-text-field label="minimal DP" v-money="money" ref="minimalDP" v-model="formDetail.minimalDP" :error-messages="minimalDPErrors"  required name="minimalDP" @blur="$v.formDetail.minimalDP.$touch()" ></v-text-field>
-                </v-flex>
-                <v-flex xs12 style="padding: 10px;text-align: right;">
-                  <v-btn
-                    v-if="formDetailEdit == true"
-                    color="red"
-                    class="ma-2 white--text"
-                    @click="cancelEdit(idEdit)"
-                  >
-                    Cancel
-                    <v-icon right dark>remove</v-icon>
-                  </v-btn>
-                  <v-btn
-                    :loading="loading"
-                    :disabled="loading"
-                    color="primary"
-                    class="ma-2 white--text"
-                    @click="appendItinerary(idEdit)"
-                  >
-                    Append
-                    <v-icon right dark>add</v-icon>
-                  </v-btn>
-                </v-flex>
-                <v-flex xs12 style="padding: 10px">
-                  <v-data-table
-                    :headers="itineraryHeaders"
-                    :items="formDetail.itineraryItems"
-                    class="elevation-1"
-                  >
-                    <template v-slot:items="props">
-                      <td>{{ props.item.dateStart }}</td>
-                      <td>{{ props.item.dateEnd }}</td>
-                      <td class="text-xs-right">{{ props.item.adultPrice  | currency}}</td>
-                      <td class="text-xs-right">{{ props.item.CnBPrice  | currency}}</td>
-                      <td class="text-xs-right">{{ props.item.CwBPrice  | currency}}</td>
-                      <td class="text-xs-right">{{ props.item.infantPrice  | currency}}</td>
-                      <td class="text-xs-right">{{ props.item.minimalDP  | currency}}</td>
-                      <td class="text-xs-right">{{ props.item.agentPrice  | currency}}</td>
-                      <td class="text-xs-right">{{ props.item.tipsPrice  | currency}}</td>
-                      <td class="text-xs-right">{{ props.item.visaPrice  | currency}}</td>
-                      <td class="text-xs-right">{{ props.item.aptPrice  | currency}}</td>
-                      <td class="text-xs-right">{{ props.item.seat }}</td>
-                      <td if="props.item.action == 'action" class="text-xs-right">
-                        <v-btn small color="primary" dark fab @click="editData(props.index)">
-                          <v-icon dark>edit</v-icon>
-                        </v-btn>
-                        <v-btn small color="red" dark fab @click="removeData(props.index)">
-                          <v-icon dark>remove</v-icon>
-                        </v-btn>
-                      </td>
-                    </template>
-                  </v-data-table>
-                </v-flex>
-                <v-dialog
-                  v-model="dialogSave"
-                  max-width="290"
-                >
-                  <v-card>
-                    <v-card-title class="headline">Are You Sure Saving Data?</v-card-title>
+                    <v-card>
+                      <v-card-title class="headline">Are You Sure Saving Data?</v-card-title>
 
-                    <v-card-text>
-                      This Action Cannot Be Undo.
-                    </v-card-text>
+                      <v-card-text>
+                        This Action Cannot Be Undo.
+                      </v-card-text>
 
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
 
-                      <v-btn
-                        color="default darken-1"
-                        flat="flat"
-                        @click="confirmationSave('cancel')"
-                      >
-                        Cancel
-                      </v-btn>
+                        <v-btn
+                          color="default darken-1"
+                          flat="flat"
+                          @click="confirmationSave('cancel')"
+                        >
+                          Cancel
+                        </v-btn>
 
-                      <v-btn
-                        color="green darken-1"
-                        flat="flat"
-                        @click="confirmationSave('confirm')"
-                      >
-                        Yes, Save
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-                <v-snackbar
-                  v-model="snackbar"
-                  :color="color"
-                  :multi-line="mode === 'multi-line'"
-                  :timeout="timeout"
-                  :vertical="mode === 'vertical'"
-                >
-                  {{ text }}
-                  <v-btn
-                    dark
-                    flat
-                    @click="snackbar = false"
+                        <v-btn
+                          color="green darken-1"
+                          flat="flat"
+                          @click="confirmationSave('confirm')"
+                        >
+                          Yes, Save
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                  <v-snackbar
+                    v-model="snackbar"
+                    :color="color"
+                    :multi-line="mode === 'multi-line'"
+                    :timeout="timeout"
+                    :vertical="mode === 'vertical'"
                   >
-                    Close
-                  </v-btn>
-                </v-snackbar>
-              </v-layout>
-            </tab-content>
-          </form-wizard>
+                    {{ text }}
+                    <v-btn
+                      dark
+                      flat
+                      @click="snackbar = false"
+                    >
+                      Close
+                    </v-btn>
+                  </v-snackbar>
+                </v-layout>
+              </tab-content>
+            </form-wizard>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 <script>
   import { required, maxLength, email } from 'vuelidate/lib/validators'

@@ -57,13 +57,13 @@
   </v-layout>
 </template>
 <script>
+  import Vuelidate from 'vuelidate'
   import { required, maxLength, email } from 'vuelidate/lib/validators'
   import VueDropify from 'vue-dropify';
   import {VMoney} from 'v-money'
   export default {
   	directives: {money: VMoney},
   	mounted(){
-
     },
     data: () => ({
       id: '',

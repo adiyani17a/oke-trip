@@ -26,7 +26,6 @@ import Vue from 'vue'
 import { TiptapVuetifyPlugin } from 'tiptap-vuetify'
 import VueFormWizard from 'vue-form-wizard'
 Vue.use(VueFormWizard)
-Vue.use(Vuelidate)
 Vue.use(Vuetify)
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
@@ -34,6 +33,7 @@ Vue.use(TiptapVuetifyPlugin, {
   // optional, default to 'md' (default vuetify icons before v2.0.0)
   iconsGroup: 'md'
 })
+Vue.use(Vuelidate)
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -161,7 +161,6 @@ const router = new VueRouter({
 })
 
 
-Vue.prototype.$globals = 'tes';
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('datatable-component', require('./components/Datatable.vue').default);
 Vue.component('filter-bar-component', require('./components/FilterBar.vue').default);

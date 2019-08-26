@@ -107,6 +107,7 @@
             console.log('Intialize Main Page...')
             let breadcrumb = '<router-link to="/additional">Additional</router-link>';
             $('#crumb').html(breadcrumb);
+            
             axios
                 .get('/api/get-token')
                 .then(response => {

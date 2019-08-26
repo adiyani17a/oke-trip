@@ -12,7 +12,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
   <title>oke-trip.com | ADMIN</title>
   <link rel="stylesheet" href="/css/app.css">
-  <link rel="icon" href="dist/img/AdminLTELogo.png" type="image/gif" sizes="16x16">
+  <link rel="icon" href="/dist/img/AdminLTELogo.png" type="image/gif" sizes="16x16">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
