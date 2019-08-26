@@ -1065,22 +1065,22 @@ class apiController extends Controller
                 }
 
                 $input = $req->all();
+                $id = $this->model->tour_leader()->max('id')+1;
 
                 $file = $req->image;
                 if ($file != null) {
-                    $filename = 'admin_'.$req->name.'.'.'jpg';
-                    $path = './dist/img/user';
+                    $filename = 'leader_'.$req->name.'_'.$id.'.'.'jpg';
+                    $path = './dist/img/tourLeader';
                     if (!file_exists($path)) {
                         mkdir($path, 777, true);
                     }
-                    $path = 'dist/img/user/' . $filename;
+                    $path = 'dist/img/tourLeader/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
-                    $filename = '/dist/img/user/' . $filename;
+                    $filename = '/dist/img/tourLeader/' . $filename;
 
                 }else{
                     $filename = null;
                 }
-                $id = $this->model->tour_leader()->max('id')+1;
 
                 $input['image'] = $filename;
                 $input['id'] = $id;
@@ -1098,12 +1098,12 @@ class apiController extends Controller
 
                 $file = $req->image;
                 if ($file != null) {
-                    $filename = 'admin_'.$req->name.'.'.'jpg';
-                    $path = './dist/img/user';
+                    $filename = 'leader_'.$req->name.'_'.$id.'.'.'jpg';
+                    $path = './dist/img/tourLeader';
                     if (!file_exists($path)) {
                         mkdir($path, 777, true);
                     }
-                    $filename = '/dist/img/user/' . $filename;
+                    $filename = '/dist/img/tourLeader/' . $filename;
                     Image::make(file_get_contents($file))->save($filename);  
                     $input['image'] = $filename;
 
