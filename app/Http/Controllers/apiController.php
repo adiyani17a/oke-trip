@@ -1018,6 +1018,19 @@ class apiController extends Controller
                     ->first();
         return Response::json($data);
     }
+
+    public function detailItinerary(Request $req)
+    {
+
+        $data = $this->model->itinerary_detail()
+                    ->where('id',$req->id)
+                    ->where('dt',$req->dt)
+                    ->first();
+        $tourLeader = $this->model->tour_leader()->get();
+
+        return Response::json(['data'=>$data,'tourLeader'=>$tourLeader]);
+    }
+
     // TOUR LEADER
     public function datatableTourLeader(Request $req)
     {

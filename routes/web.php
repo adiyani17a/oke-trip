@@ -36,6 +36,7 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('/home', 'HomeController@index')->name('home');
   Route::get('itinerary/{path}', 'HomeController@index')->where('all', '^(?!api).*$');
   Route::get('itinerary/{path}/{id}/{dt}', 'HomeController@index')->where('all', '^(?!api).*$');
+  Route::get('itinerary/{path}/{id}/{dt}', 'HomeController@index')->where('all', '^(?!api).*$');
   Route::get('group-menu', 'HomeController@index');
 
 	Route::get('api/get-token', [
@@ -241,6 +242,11 @@ Route::group(['middleware' => 'check-token'], function () {
       Route::delete('/delete', [
         'uses' => "apiController@deleteItinerary",
         'as' => "deleteItinerary"
+      ]);
+
+      Route::get('/detail', [
+        'uses' => "apiController@detailItinerary",
+        'as' => "detailItinerary"
       ]);
     });
 
