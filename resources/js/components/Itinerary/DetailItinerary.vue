@@ -29,10 +29,10 @@
                     <div class="file-select">
                       <div class="file-select-button fileName" >Final Confirmation</div>
                       <div class="file-select-name noFile"></div>
-                      <input type="file" class="chooseFile" id="final" name="fc">
+                      <input type="file" class="chooseFile" id="final" name="fc" @change="uploadPDF('final')">
                     </div>
                   </div>
-                  <div class="preview_pdf col-sm-4">
+                  <div class="preview_pdf col-sm-4 text-right">
                     <div>
                       <button type="button" class="btn btn-info" style="margin-top: 5px;" @click="previewPDF('final')"><i class="fa fa-eye"></i> Preview PDF</button>
                     </div>
@@ -46,10 +46,10 @@
                     <div class="file-select">
                       <div class="file-select-button fileName" >Tata Tertib</div>
                       <div class="file-select-name noFile"></div>
-                      <input type="file" class="chooseFile" id="tata_tertib" name="fc">
+                      <input type="file" class="chooseFile" id="tataTertib" name="fc" @change="uploadPDF('tatib')">
                     </div>
                   </div>
-                  <div class="preview_pdf col-sm-4">
+                  <div class="preview_pdf col-sm-4 text-right">
                     <div>
                       <button type="button" class="btn btn-info" style="margin-top: 5px;" @click="previewPDF('tata_tertib')"><i class="fa fa-eye"></i> Preview PDF</button>
                     </div>
@@ -63,10 +63,10 @@
                     <div class="file-select">
                       <div class="file-select-button fileName" >Flayer</div>
                       <div class="file-select-name noFile"></div>
-                      <input type="file" class="chooseFile" id="flayer" name="fc">
+                      <input type="file" class="chooseFile" id="flayer" name="fc" @change="uploadPDF('flayer')">
                     </div>
                   </div>
-                  <div class="preview_pdf col-sm-4">
+                  <div class="preview_pdf col-sm-4 text-right">
                     <div>
                       <button type="button" class="btn btn-info" style="margin-top: 5px;" @click="previewPDF('flayer')"><i class="fa fa-eye"></i> Preview PDF</button>
                     </div>
@@ -154,22 +154,7 @@
               $(parent).find('.file-upload').addClass('active');
               $(parent).find(".noFile").text(filename.replace("C:\\fakepath\\", "")); 
           }
-          load(parent,this);
       });
-
-      function load(parent,file) {
-          var fsize = $(file)[0].files[0].size;
-          if(fsize>2048576) //do something if file size more than 1 mb (1048576)
-          {
-            alert('Data To Big');
-            return false;
-          }
-          var reader = new FileReader();
-          reader.onload = function(e){
-              $(parent).find('.output').attr('src',e.target.result);
-          };
-          reader.readAsDataURL(file.files[0]);
-      }
 
       axios
           .get('/api/get-token')
@@ -189,6 +174,9 @@
       tourLeaderOptions: [],
       apiReady:false,
       pdfPreview:false,
+      finalConfirmation:'',
+      tataTertib:'',
+      flayer:'',
       money: {
         decimal: '.',
         thousands: ',',
@@ -237,6 +225,19 @@
         console.log(pdffile_url);
         $('#viewer').attr('src',pdffile_url);
         this.pdfPreview = true;
+      },
+      uploadPDF(param){
+        if (param == 'final') {
+          var input =  $('#final');
+          this.finalConfirmation= input[0].files[0];  
+          console.log(this.finalConfirmation);
+        }else if (param == 'tatib') {
+          var input =  $('#tataTertib');
+          this.tataTertib= input[0].files[0];  
+        }else if (param == 'flayer') {
+          var input =  $('#flayer');
+          this.flayer= input[0].files[0];  
+        }
       }
     }
   }
