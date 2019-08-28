@@ -17,5 +17,9 @@ class itinerary_detail extends Model
 							'id', 'dt', 'code', 'seat', 'seat_remain', 'start', 'end', 'adult_price', 'child_price', 'child_bed_price', 'infant_price', 'minimal_dp', 'agent_com', 'agent_tip', 'agent_visa', 'agent_tax', 'final_pdf', 'term_pdf', 'flayer_jpg', 'tour_leader_id', 'created_by', 'updated_by', 'created_at', 'updated_at'
     					];
 
-    
+
+    public function booking()
+    {
+    	return $this->hasMany('App\booking', 'itinerary_code', 'id');
+    }
 }
