@@ -102,9 +102,9 @@
                   <v-btn
                     color="primary"
                     flat
-                    @click="dialog = false"
+                    @click="pdfPreview = false"
                   >
-                    I accept
+                    Close
                   </v-btn>
                 </v-card-actions>
               </v-card>
