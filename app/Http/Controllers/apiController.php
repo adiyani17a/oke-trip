@@ -1031,6 +1031,65 @@ class apiController extends Controller
         return Response::json(['data'=>$data,'tourLeader'=>$tourLeader]);
     }
 
+    public function saveDetailItinerary(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+            $input = [];
+
+            $file = $req->finalConfirmation;
+
+            if ($file != null) {
+                $pdf = 'final_confirmation_'.$req->id.'_'.$req->dt.'.'.'pdf';
+                $path = 'dist/pdf/itinerary_detail';
+
+                if (!file_exists($path)) {
+                    mkdir($path, 777, true);
+                }
+
+                $file->move($path,$pdf);
+                $pdf = $path.'/'.$pdf;
+                $input['final_pdf'] = $pdf;
+            }
+
+            $file = $req->tataTertib;
+
+            if ($file != null) {
+                $pdf = 'tata_tertib_'.$req->id.'_'.$req->dt.'.'.'pdf';
+                $path = 'dist/pdf/itinerary_detail';
+
+                if (!file_exists($path)) {
+                    mkdir($path, 777, true);
+                }
+
+                $file->move($path,$pdf);
+                $pdf = $path.'/'.$pdf;
+                $input['term_pdf'] = $pdf;
+            }
+
+            $file = $req->flayer;
+
+            if ($file != null) {
+                $pdf = 'flayer_'.$req->id.'_'.$req->dt.'.'.'jpg';
+                $path = 'dist/pdf/itinerary_detail';
+
+                if (!file_exists($path)) {
+                    mkdir($path, 777, true);
+                }
+
+                $file->move($path,$pdf);
+                $pdf = $path.'/'.$pdf;
+                $input['flayer_jpg'] = $pdf;
+            }
+
+            $input['tour_leader_id'] = $req->tour_leader_id;
+            $input['tour_leader_tips'] = filter_var($req->tour_leader_tips,FILTER_SANITIZE_NUMBER_INT);
+            $input['updated_by'] = Auth::user()->id;
+            $input['updated_at'] = carbon::now();
+            $this->model->itinerary_detail()->where('id',$req->id)->where('dt',$req->dt)->update($input);
+            return Response::json(['status'=>1,'message'=>'Success update data']);
+        });
+    }
+
     // TOUR LEADER
     public function datatableTourLeader(Request $req)
     {

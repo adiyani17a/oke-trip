@@ -248,6 +248,12 @@ Route::group(['middleware' => 'check-token'], function () {
         'uses' => "apiController@detailItinerary",
         'as' => "detailItinerary"
       ]);
+
+
+      Route::post('/save-detail', [
+        'uses' => "apiController@saveDetailItinerary",
+        'as' => "saveDetailItinerary"
+      ]);
     });
 
     Route::group(["prefix" => "tour-leader"], function(){

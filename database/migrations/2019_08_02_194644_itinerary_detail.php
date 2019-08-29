@@ -33,7 +33,8 @@ class ItineraryDetail extends Migration
             $table->string('final_pdf')->default(null);
             $table->string('term_pdf')->default(null);
             $table->string('flayer_jpg')->default(null);
-            $table->string('tour_leader_id')->default(null);
+            $table->integer('tour_leader_id')->default(null);
+            $table->double('tour_leader_tips', 10, 2);
             $table->integer('created_by');
             $table->integer('updated_by');
             $table->timestamps();

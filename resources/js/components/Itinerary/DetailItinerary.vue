@@ -20,15 +20,15 @@
                 </v-select>
               </v-flex>
               <v-flex xs12 md6 style="padding: 10px">
-                <v-text-field label="Tour Leader Tips*" v-money="money" v-model="tourLeaderTips" @blur="$v.tourLeaderTips.$touch()" :error-messages="tourLeaderTipsErrors" ></v-text-field>
+                <v-text-field ref="tourLeaderTips" label="Tour Leader Tips*" v-money="money" v-model="tourLeaderTips" @blur="$v.tourLeaderTips.$touch()" :error-messages="tourLeaderTipsErrors" ></v-text-field>
               </v-flex>
               <v-flex xs12 style="padding: 10px">
                 <label>Upload Final PDF</label>
                 <div class="final preview_div satu row">
-                  <div class="file-upload upl_3 col-sm-8 py-3">
+                  <div class="file-upload upl_3 col-sm-8 py-3" v-bind:class="{ active: finalActive }">
                     <div class="file-select">
                       <div class="file-select-button fileName" >Final Confirmation</div>
-                      <div class="file-select-name noFile"></div>
+                      <div class="file-select-name noFile">{{ finalName }}</div>
                       <input type="file" class="chooseFile" id="final" name="fc" @change="uploadPDF('final')">
                     </div>
                   </div>
@@ -42,10 +42,10 @@
               <v-flex xs12 style="padding: 10px">
                 <label>Upload Final PDF</label>
                 <div class="tata_tertib preview_div satu row">
-                  <div class="file-upload upl_3 col-sm-8 py-3">
+                  <div class="file-upload upl_3 col-sm-8 py-3" v-bind:class="{ active: tatibActive }">
                     <div class="file-select">
                       <div class="file-select-button fileName" >Tata Tertib</div>
-                      <div class="file-select-name noFile"></div>
+                      <div class="file-select-name noFile">{{ tatibName }}</div>
                       <input type="file" class="chooseFile" id="tataTertib" name="fc" @change="uploadPDF('tatib')">
                     </div>
                   </div>
@@ -59,10 +59,10 @@
               <v-flex xs12 style="padding: 10px">
                 <label>Upload Flayer PDF</label>
                 <div class="flayer preview_div satu row">
-                  <div class="file-upload upl_3 col-sm-8 py-3">
+                  <div class="file-upload upl_3 col-sm-8 py-3" v-bind:class="{ active: flayerActive }">
                     <div class="file-select">
                       <div class="file-select-button fileName" >Flayer</div>
-                      <div class="file-select-name noFile"></div>
+                      <div class="file-select-name noFile">{{ flayerName }}</div>
                       <input type="file" class="chooseFile" id="flayer" name="fc" @change="uploadPDF('flayer')">
                     </div>
                   </div>
@@ -74,8 +74,8 @@
                 </div>
               </v-flex>
               <v-flex xs12 md-6 style="padding: 10px" class="right">
-                <v-btn color="primary">
-                  <v-icon>fas fa-save</v-icon>&nbsp;Save 
+                <v-btn color="warning" @click="saveData">
+                  <v-icon>fas fa-edit</v-icon>&nbsp;Update 
                 </v-btn>
               </v-flex>
             </v-layout>
@@ -109,6 +109,22 @@
                 </v-card-actions>
               </v-card>
             </v-dialog>
+            <v-snackbar
+              v-model="snackbar"
+              :color="color"
+              :multi-line="mode === 'multi-line'"
+              :timeout="timeout"
+              :vertical="mode === 'vertical'"
+              >
+              {{ textPreview }}
+              <v-btn
+                dark
+                flat
+                @click="snackbar = false"
+              >
+                Close
+              </v-btn>
+            </v-snackbar>
           </div>
         </div>
       </div>
@@ -177,6 +193,18 @@
       finalConfirmation:'',
       tataTertib:'',
       flayer:'',
+      finalActive:false,
+      tatibActive:false,
+      flayerActive:false,
+      finalName:false,
+      tatibName:false,
+      flayerName:false,
+      snackbar:false,
+      timeout: 6000,
+      mode: '',
+      color:'warning',
+      textPreview: 'No data can be preview',
+
       money: {
         decimal: '.',
         thousands: ',',
@@ -202,6 +230,9 @@
         apiReady:function(){
             console.log('Generate Token...')
             this.callingApi();
+        },
+        tourLeaderTips(){
+          console.log(this.tourLeaderTips);
         }
     },
     methods: {
@@ -210,7 +241,28 @@
           .get('/api/itinerary/detail?id='+this.$route.params.id+'&dt='+this.$route.params.dt)
           .then(response => {
               this.tourLeaderOptions = response.data.tourLeader;
-            
+              this.tourLeader = response.data.data.tour_leader_id;
+              this.tourLeaderTips = response.data.data.tour_leader_tips;
+              this.$refs.tourLeaderTips.$el.getElementsByTagName('input')[0].value =  accounting.formatNumber(response.data.data.tour_leader_tips);
+              this.finalConfirmation = response.data.data.final_pdf;
+              this.tataTertib = response.data.data.term_pdf;
+              this.flayer = response.data.data.flayer_jpg;
+
+              if (this.finalConfirmation != '') {
+                this.finalActive = true;
+                this.finalName = this.finalConfirmation.replace(/^.*[\\\/]/, '');
+              }
+
+              if (this.tatibConfirmation != '') {
+                this.tatibActive = true;
+                this.tatibName = this.tataTertib.replace(/^.*[\\\/]/, '');
+              }
+
+              if (this.flayerConfirmation != '') {
+                this.flayerActive = true;
+                this.flayerName = this.flayer.replace(/^.*[\\\/]/, '');
+              }
+
           })
           .catch(error => {
             console.log(error)
@@ -219,25 +271,70 @@
           .finally(() => this.apiReady = true)
       },
       previewPDF(param){
-        let par = $('.'+param).find('.chooseFile');
-        let pdffile = $(par)[0].files[0];
-        let pdffile_url = URL.createObjectURL(pdffile);
-        console.log(pdffile_url);
-        $('#viewer').attr('src',pdffile_url);
+        if (param == 'final') {
+          var pdffile = this.finalConfirmation;
+        }else if (param == 'tata_tertib') {
+          var pdffile = this.tataTertib;
+        }else if (param == 'flayer') {
+          var pdffile = this.flayer;
+        }
+        console.log(pdffile);
+        if (pdffile == undefined) {
+          this.textPreview = 'No data can be preview';
+          this.snackbar = true;
+          return false;
+        }
+        $('#viewer').attr('src','/'+pdffile);
         this.pdfPreview = true;
       },
       uploadPDF(param){
         if (param == 'final') {
           var input =  $('#final');
-          this.finalConfirmation= input[0].files[0];  
+          this.finalConfirmation = input[0].files[0];  
           console.log(this.finalConfirmation);
         }else if (param == 'tatib') {
           var input =  $('#tataTertib');
           this.tataTertib= input[0].files[0];  
         }else if (param == 'flayer') {
           var input =  $('#flayer');
-          this.flayer= input[0].files[0];  
+          this.flayer = input[0].files[0];  
         }
+      },
+      saveData(){
+        let formData = new FormData();
+
+
+        formData.append('id', this.$route.params.id)
+        formData.append('dt', this.$route.params.dt)
+        formData.append('tour_leader_id', this.tourLeader)
+        formData.append('tour_leader_tips', this.tourLeaderTips)
+        formData.append('finalConfirmation', this.finalConfirmation)
+        formData.append('tataTertib', this.tataTertib)
+        formData.append('flayer', this.flayer)
+        axios.post('/api/itinerary/save-detail',
+                formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+            )
+            .then(response => {
+                this.dialogSave = false;
+                this.snackbar = true;
+                this.textPreview = response.data.message;
+                if (response.data.status == 1) {
+                  this.color = 'success';
+                } else {
+                  this.color = 'error'
+                }
+                this.imageReady = false;
+            })
+            .catch(error => {
+                console.log(error)
+                this.snackbar = true;
+                this.text = error;
+                this.errored = true
+            })
       }
     }
   }
