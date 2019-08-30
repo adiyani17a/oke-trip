@@ -93,7 +93,14 @@ let routes = [{
         breadcrumb: 'Agent User',
     },
     component: require('./components/AgentUser/AgentUser.vue').default
-},{
+}, {
+    path: '/Company',
+    name: 'Company',
+    meta: {
+        breadcrumb: 'Company',
+    },
+    component: require('./components/Company/Company.vue').default
+}, {
     path: '/destination',
     name: 'Destination',
     meta: {

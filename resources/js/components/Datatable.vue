@@ -203,9 +203,6 @@
         })
       },
       switchChange(data,id,param){
-        console.log(data)
-        console.log(id)
-        console.log(param)
         this.$emit('switchChange',data,id,param);
       },
       checkboxChange(data,id){

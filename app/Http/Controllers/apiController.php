@@ -827,7 +827,7 @@ class apiController extends Controller
             }else{
                 $input['active'] = 'false';
             }
-            $input['updated_by'] = Auth::user()->name;
+            $input['updated_by'] = Auth::user()->id;
             $input['updated_at'] = carbon::now();
             $this->model->itinerary()->where('id',$req->id)->update($input);
             if ($req->data == null) {
@@ -1027,8 +1027,10 @@ class apiController extends Controller
                     ->where('dt',$req->dt)
                     ->first();
         $tourLeader = $this->model->tour_leader()->get();
+        
+        $agen = $this->model->user()->where('type_user','AGEN')->get();
 
-        return Response::json(['data'=>$data,'tourLeader'=>$tourLeader]);
+        return Response::json(['data'=>$data,'tourLeader'=>$tourLeader,'agen'=>$agen]);
     }
 
     public function saveDetailItinerary(Request $req)

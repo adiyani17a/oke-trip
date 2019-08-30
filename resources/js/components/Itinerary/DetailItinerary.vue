@@ -22,6 +22,16 @@
               <v-flex xs12 md6 style="padding: 10px">
                 <v-text-field ref="tourLeaderTips" label="Tour Leader Tips*" v-money="money" v-model="tourLeaderTips" @blur="$v.tourLeaderTips.$touch()" :error-messages="tourLeaderTipsErrors" ></v-text-field>
               </v-flex>
+              <v-flex xs12 md6 style="padding: 10px">
+                <v-select
+                  v-model="isBooked"
+                  label="Is Booked By?"
+                  :items="isBookedOptions"
+                  item-text="name"
+                  item-value="id"
+                  >
+                </v-select>
+              </v-flex>
               <v-flex xs12 style="padding: 10px">
                 <label>Upload Final PDF</label>
                 <div class="final preview_div satu row">
@@ -187,7 +197,9 @@
     data: () => ({
       tourLeader: '',
       tourLeaderTips: '',
+      isBooked: '',
       tourLeaderOptions: [],
+      isBookedOptions: [],
       apiReady:false,
       pdfPreview:false,
       finalConfirmation:'',
@@ -241,6 +253,7 @@
           .get('/api/itinerary/detail?id='+this.$route.params.id+'&dt='+this.$route.params.dt)
           .then(response => {
               this.tourLeaderOptions = response.data.tourLeader;
+              this.isBookedOptions = response.data.agen;
               this.tourLeader = response.data.data.tour_leader_id;
               this.tourLeaderTips = response.data.data.tour_leader_tips;
               this.$refs.tourLeaderTips.$el.getElementsByTagName('input')[0].value =  accounting.formatNumber(response.data.data.tour_leader_tips);
@@ -278,20 +291,26 @@
         }else if (param == 'flayer') {
           var pdffile = this.flayer;
         }
-        console.log(pdffile);
+
         if (pdffile == undefined) {
           this.textPreview = 'No data can be preview';
           this.snackbar = true;
           return false;
         }
-        $('#viewer').attr('src','/'+pdffile);
+
+        if (pdffile.name === undefined) {
+          $('#viewer').attr('src','/'+pdffile);
+        }else{
+          pdffile = URL.createObjectURL(pdffile);
+          $('#viewer').attr('src',pdffile);
+        }
+
         this.pdfPreview = true;
       },
       uploadPDF(param){
         if (param == 'final') {
           var input =  $('#final');
           this.finalConfirmation = input[0].files[0];  
-          console.log(this.finalConfirmation);
         }else if (param == 'tatib') {
           var input =  $('#tataTertib');
           this.tataTertib= input[0].files[0];  

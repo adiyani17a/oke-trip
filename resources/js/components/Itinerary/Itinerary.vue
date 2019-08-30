@@ -294,7 +294,7 @@
                     { title: ' Schedule' ,class:'fas fa-address-book',value:'schedule'},
                     { title: ' Flight Route',class:'fas fa-plane-departure',value:'flight' },
                     { title: ' Term' ,class:'fas fa-question' ,value:'term'},
-                    { title: ' Itinerary Detail',class:'fas fa-list-alt' ,value:'detail' }
+                    { title: ' Itinerary Detail',class:'fas fa-list-alt' ,value:'detail' },
                 ],
                 headers:[
                     { text: 'Code', value: 'code',class:'text-xs-left',type:'default'},
@@ -441,7 +441,7 @@
             },
             switchChange(data,id,param){
                 axios
-                    .post('/api/additional/change-status',{
+                    .post('/api/itinerary/change-status',{
                         data:data,
                         id:id,
                         param:param,
