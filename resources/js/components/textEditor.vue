@@ -23,6 +23,9 @@ export default {
     components: {
         TiptapVuetify
     },
+    props:{
+        contentModel:String
+    },
     data: () => ({
         // declare extensions you want to use
         extensions: [
@@ -52,6 +55,9 @@ export default {
     watch: {
         content: function() {
           this.$emit('textContent', this.content)
+        },
+        contentModel:function(){
+            this.content = this.contentModel;
         }
     },
 }

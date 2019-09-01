@@ -18,6 +18,8 @@ use App\tour_leader;
 use App\booking;
 use App\booking_d;
 use App\booking_additional;
+use App\company;
+use App\city;
 
 class models extends Model
 {
@@ -124,5 +126,19 @@ class models extends Model
         $booking_additional = new booking_additional();
 
         return $booking_additional; 
+    }
+
+    public function company()
+    {
+        $company = new company();
+
+        return $company; 
+    }
+
+    public function city()
+    {
+        $city = new city();
+
+        return $city; 
     }
 }

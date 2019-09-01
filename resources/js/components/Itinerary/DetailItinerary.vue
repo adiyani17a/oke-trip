@@ -260,7 +260,8 @@
               this.finalConfirmation = response.data.data.final_pdf;
               this.tataTertib = response.data.data.term_pdf;
               this.flayer = response.data.data.flayer_jpg;
-
+              this.isBooked = response.data.data.booked_by;
+              console.log(this.isBooked);
               if (this.finalConfirmation != '') {
                 this.finalActive = true;
                 this.finalName = this.finalConfirmation.replace(/^.*[\\\/]/, '');
@@ -330,6 +331,7 @@
         formData.append('finalConfirmation', this.finalConfirmation)
         formData.append('tataTertib', this.tataTertib)
         formData.append('flayer', this.flayer)
+        formData.append('booked_by', this.isBooked)
         axios.post('/api/itinerary/save-detail',
                 formData, {
                     headers: {

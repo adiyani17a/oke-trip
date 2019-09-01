@@ -39,6 +39,11 @@ class apiController extends Controller
             $imgfile = file_get_contents($image);
 
             $base64 = 'data:image/jpg' . ';base64,' . base64_encode($imgfile);
+        }elseif ($req->feature == 'company') {
+            $image = '.'.$this->model->company()->where('id',$req->id)->first()->image;
+            $imgfile = file_get_contents($image);
+
+            $base64 = 'data:image/jpg' . ';base64,' . base64_encode($imgfile);
         }
 
         return Response::json($base64);
@@ -503,13 +508,20 @@ class apiController extends Controller
             $data[$i]->action = '';
             $data[$i]->role_name = $d->role->name;
             $data[$i]->image = $data[$i]->image.'?'.time(); 
+            if ( $d->company != null) {
+                $data[$i]->company_name = $d->company->name; 
+            }else{
+                $data[$i]->company_name = '-';
+            }
+
         }
 
  
 
         $role = $this->model->role()->where('active','true')->get();
+        $company = $this->model->company()->select('id as value','name')->get();
 
-        return Response::json(['data'=>$data,'role'=>$role]);
+        return Response::json(['data'=>$data,'role'=>$role,'company'=>$company]);
     }
 
     public function chageStatusAgentUser(Request $req)
@@ -994,6 +1006,41 @@ class apiController extends Controller
         });
     }
 
+    public function editItinerary($id)
+    {   
+
+        $destination = $this->model->destination()->get();
+        $additional = $this->model->additional()->where('active','true')->get();
+        
+        $data = $this->model->itinerary()->with(['itinerary_detail','itinerary_flight','itinerary_schedule'])->where('id',$id)->first();
+
+        $data->destination = array_map('intval', explode(',', $data->destination_id)); 
+        $data->additional = array_map('intval', explode(',', $data->additional_id));
+
+        $image = './'.$data->carousel_1;
+        $imgfile = file_get_contents($image);
+        $data->carousel1 = 'data:image/jpg' . ';base64,' . base64_encode($imgfile);
+
+        $image = './'.$data->carousel_2;
+        $imgfile = file_get_contents($image);
+        $data->carousel2 = 'data:image/jpg' . ';base64,' . base64_encode($imgfile);
+
+        $image = './'.$data->carousel_3;
+        $imgfile = file_get_contents($image);
+        $data->carousel3 = 'data:image/jpg' . ';base64,' . base64_encode($imgfile);
+
+        $image = './'.$data->pdf;
+        $imgfile = file_get_contents($image);
+        $data->pdfs = 'data:file/pdf' . ';base64,' . base64_encode($imgfile);
+
+        $image = './'.$data->flayer_image;
+        $imgfile = file_get_contents($image);
+        $data->flayer_images = 'data:file/pdf' . ';base64,' . base64_encode($imgfile);
+
+
+        return Response::json(['data'=>$data,'additional'=>$additional,'destination'=>$destination]);
+    }
+
     public function deleteItinerary(Request $req)
     {
         return DB::transaction(function() use ($req) {  
@@ -1028,7 +1075,7 @@ class apiController extends Controller
                     ->first();
         $tourLeader = $this->model->tour_leader()->get();
         
-        $agen = $this->model->user()->where('type_user','AGEN')->get();
+        $agen = $this->model->user()->where('type_user','AGENT')->get();
 
         return Response::json(['data'=>$data,'tourLeader'=>$tourLeader,'agen'=>$agen]);
     }
@@ -1040,7 +1087,7 @@ class apiController extends Controller
 
             $file = $req->finalConfirmation;
 
-            if ($file != null) {
+            if (is_object($file)) {
                 $pdf = 'final_confirmation_'.$req->id.'_'.$req->dt.'.'.'pdf';
                 $path = 'dist/pdf/itinerary_detail';
 
@@ -1055,7 +1102,7 @@ class apiController extends Controller
 
             $file = $req->tataTertib;
 
-            if ($file != null) {
+            if (is_object($file)) {
                 $pdf = 'tata_tertib_'.$req->id.'_'.$req->dt.'.'.'pdf';
                 $path = 'dist/pdf/itinerary_detail';
 
@@ -1069,8 +1116,8 @@ class apiController extends Controller
             }
 
             $file = $req->flayer;
+            if (is_object($file)) {
 
-            if ($file != null) {
                 $pdf = 'flayer_'.$req->id.'_'.$req->dt.'.'.'jpg';
                 $path = 'dist/pdf/itinerary_detail';
 
@@ -1084,6 +1131,7 @@ class apiController extends Controller
             }
 
             $input['tour_leader_id'] = $req->tour_leader_id;
+            $input['booked_by'] = $req->booked_by;
             $input['tour_leader_tips'] = filter_var($req->tour_leader_tips,FILTER_SANITIZE_NUMBER_INT);
             $input['updated_by'] = Auth::user()->id;
             $input['updated_at'] = carbon::now();
@@ -1203,6 +1251,122 @@ class apiController extends Controller
 
             foreach ($req->data as $i => $d) {
                 $this->model->user()->where('id',$req->data[$i]['id'])->delete();
+            }
+
+            return Response::json(['status'=>1,'message'=>'Success deleting data']);
+        });
+    }
+
+    public function datatableCompany(Request $req)
+    {
+        $data =  $this->model->company()->paginate($req->showing);
+            
+        foreach ($data as $i => $d) {
+            $data[$i]->action = '';
+            $data[$i]->image = $data[$i]->image.'?'.time(); 
+            $data[$i]->city_name = $d->city->name; 
+        }
+    
+
+        $city = $this->model->city()->select('id as value','name')->get();
+
+
+        return Response::json(['data'=>$data,'city'=>$city]);
+    }
+
+    public function saveCompany(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+            if (!isset($req->id) or $req->id == '' or $req->id == null) {
+                if(!Auth::user()->hasAccess('Company','create')){
+                    return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Create This Data']);
+                }
+
+                $input = $req->all();
+                $id = $this->model->company()->max('id')+1;
+
+                $file = $req->image;
+                if ($file != null) {
+                    $filename = 'leader_'.$req->name.'_'.$id.'.'.'jpg';
+                    $path = './dist/img/company';
+                    if (!file_exists($path)) {
+                        mkdir($path, 777, true);
+                    }
+                    $path = 'dist/img/company/' . $filename;
+                    Image::make(file_get_contents($file))->save($path);  
+                    $filename = '/dist/img/company/' . $filename;
+
+                }else{
+                    $filename = null;
+                }
+
+                $input['image'] = $filename;
+                $input['id'] = $id;
+                $input['created_by'] = Auth::user()->name;
+                $input['updated_by'] = Auth::user()->name;
+                $this->model->company()->create($input);
+                return Response::json(['status'=>1,'message'=>'Success saving data']);
+            }else{
+                if(!Auth::user()->hasAccess('Company','edit')){
+                    return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Edit This Data']);
+                }
+
+                $input = $req->all();
+                unset($input['image']);
+
+                $file = $req->image;
+                if ($file != null) {
+                    $filename = 'leader_'.$req->name.'_'.$id.'.'.'jpg';
+                    $path = './dist/img/company';
+                    if (!file_exists($path)) {
+                        mkdir($path, 777, true);
+                    }
+                    $filename = '/dist/img/company/' . $filename;
+                    Image::make(file_get_contents($file))->save($filename);  
+                    $input['image'] = $filename;
+
+                }else{
+                    $filename = null;
+                }
+
+                $input['updated_by'] = Auth::user()->name;
+                $this->model->company()->where('id',$req->id)->update($input);
+
+                return Response::json(['status'=>1,'message'=>'Success updating data']);
+            }
+        });
+    }
+
+    public function chageStatusCompany(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+
+            if ($req->data == true) {
+                $input['active'] = 'true';
+            }else{
+                $input['active'] = 'false';
+            }
+            $input['updated_by'] = Auth::user()->name;
+            $input['updated_at'] = carbon::now();
+            $this->model->company()->where('id',$req->id)->update($input);
+            if ($req->data == null) {
+                return Response::json(['status'=>1,'message'=>'Success deactivate data']);
+            }else{
+                return Response::json(['status'=>1,'message'=>'Success activate data']);
+            }
+        });
+    }
+
+    public function deleteCompany(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+
+            if(!Auth::user()->hasAccess('Company','delete')){
+                return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
+            }
+
+            foreach ($req->data as $i => $d) {
+                $this->model->company()->where('id',$req->data[$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);

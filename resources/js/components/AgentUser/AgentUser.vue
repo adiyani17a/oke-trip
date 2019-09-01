@@ -40,6 +40,7 @@
                         <create-agent-user :dialog="dialog" 
                                             :idData="idData" 
                                             :options="options"
+                                            :companyOptions="companyOptions"
                                             @closeDialog="closeDialog"></create-agent-user>
                     </div>
                     <v-dialog
@@ -158,6 +159,7 @@
                 mode: '',
                 tes: '',
                 options: [],
+                companyOptions:[],
                 timeout: 6000,
                 text: 'Hello, I\'m a snackbar'
             }
@@ -194,6 +196,7 @@
                     this.pagination.rowsPerPage = show;
                     this.pagination.totalItem = response.data.data.total;
                     this.totalItem = response.data.data.total;
+                    this.companyOptions = response.data.company;
                     for (var i = 0; i < this.dataItem.length; i++) {
                         if (this.dataItem[i].active == 'true') {
                             this.dataItem[i].active = true 
@@ -210,8 +213,6 @@
                             value:response.data.role[i].id
                         })
                     }
-
-
                   })
                   .catch(error => {
                     console.log(error)

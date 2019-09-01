@@ -25,6 +25,7 @@ import Vuelidate from 'vuelidate'
 import Vue from 'vue'
 import { TiptapVuetifyPlugin } from 'tiptap-vuetify'
 import VueFormWizard from 'vue-form-wizard'
+
 Vue.use(VueFormWizard)
 Vue.use(Vuetify)
 Vue.use(VueRouter)
@@ -135,6 +136,13 @@ let routes = [{
         breadcrumb: 'Detail Itinerary',
     },
     component: require('./components/Itinerary/DetailItinerary.vue').default
+}, {
+    path: '/itinerary/edit/:id',
+    name: 'Edit Itinerary',
+    meta: {
+        breadcrumb: 'Edit Itinerary',
+    },
+    component: require('./components/Itinerary/EditItinerary.vue').default
 }, {
     path: '/tour-leader',
     name: 'Tour Leader',

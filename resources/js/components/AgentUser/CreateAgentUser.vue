@@ -31,6 +31,18 @@
                   ></v-select>
                 </v-flex>
                 <v-flex xs12>
+                  <v-autocomplete
+                    v-model="company"
+                    :items="companyOptions"
+                    item-text="name"
+                    label="Company*"
+                    item-value="value"
+                    @blur="$v.company.$touch()"
+                    :error-messages="companyErrors"
+                  >
+                  </v-autocomplete>
+                </v-flex>
+                <v-flex xs12>
                   <vue-dropify ref="tes"></vue-dropify>
                 </v-flex>
               </v-layout>
@@ -73,10 +85,12 @@
       email: '',
       password: '',
       role: '',
+      company: '',
       imageWidth:400,
       imageHeight:300,
       imageReady: false,
       dialogs:false,
+      base64:'',
       nameRules: [
         v => !!v || 'Name is required',
         v => v.length <= 20 || 'Name must be less than 10 characters'
@@ -94,6 +108,7 @@
       email: { required, email },
       password: { required },
       role: { required },
+      company: { required },
     },
     computed:{
       nameErrors () {
@@ -121,10 +136,17 @@
         !this.$v.role.required && errors.push('Role is required.')
         return errors
       },
+      companyErrors () {
+        const errors = []
+        if (!this.$v.company.$dirty) return errors
+        !this.$v.company.required && errors.push('Company is required.')
+        return errors
+      },
     },
     props:{
       dialog: false,
       idData:Array,
+      companyOptions:Array,
       options:Array,
     },
     components: {
@@ -141,14 +163,14 @@
           this.name = this.idData[0].name
           this.email = this.idData[0].email
           this.role = this.idData[0].role_id
+          this.company = this.idData[0].company_id
           this.password =  this.idData[0].password;
-          this.imageData = this.idData[0].image
           let feature ='agent-user';
           axios
             .get('/api/convert-image-base-64?id='+this.id+'&feature='+feature)
             .then(response => {
                 this.$refs.tes.images = [];
-                this.$refs.tes.images = response.data ;
+                this.$refs.tes.images.push(response.data);
             })
             .catch(error => {
                 console.log(error);
@@ -160,8 +182,9 @@
           this.role =  '';
           this.imageData =  '';
           this.password =  '';
+          this.company = '';
         }    
-      }
+      },
     },
     methods:{
       saveAndCloseDialog(param){
@@ -174,6 +197,7 @@
             this.email = this.idData[0].email
             this.role = this.idData[0].role_id
             this.password =  this.idData[0].password;
+            this.company = this.idData[0].company_id
             this.imageData = this.idData[0].image
           }else{
             this.id =  '';
@@ -196,6 +220,7 @@
           formData.append('email',this.email)
           formData.append('password',this.password)
           formData.append('role_id',this.role)
+          formData.append('company_id',this.company)
           formData.append('gambar',this.$refs.tes.images)
           axios.post( '/api/agent-user/save',
               formData,
@@ -217,6 +242,7 @@
                 this.imageData =  null;
                 this.$refs.tes.images = [];
                 this.password =  '';
+                this.company = '';
               }else{
                 this.color = 'error'
               }

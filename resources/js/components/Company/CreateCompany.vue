@@ -20,70 +20,17 @@
                   <v-text-field label="Phone*" v-model="phone"  required name="phone" @blur="$v.phone.$touch()" :error-messages="phoneErrors"></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="Passport*" v-model="passport"  required name="passport" @blur="$v.passport.$touch()" :error-messages="passportErrors"></v-text-field>
-                </v-flex>
-                <v-flex xs12 style="padding: 10px">
-                  <v-menu
-                    v-model="menu1"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    min-width="1px"
-                    >
-                    <template v-slot:activator="{ on }">
-                      <v-text-field
-                        v-model="passportExpDate"
-                        label="Passport Expired Date*"
-                        prepend-icon="event"
-                        readonly
-                        v-on="on"
-                        @click="$v.passportExpDate.$touch()"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker v-model="passportExpDate" @input="menu1 = false"></v-date-picker>
-                  </v-menu>
+                  <v-text-field label="Email*" v-model="email"  required name="email" @blur="$v.email.$touch()" :error-messages="emailErrors"></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <v-text-field label="Issuing*" v-model="issuing"  required name="issuing" @blur="$v.issuing.$touch()" :error-messages="issuingErrors"></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-select
-                    v-model="gender"
-                    :items="genderOptions"
-                    label="Gender*"
+                  <v-autocomplete
+                    v-model="city_id"
+                    :items="cityOptions"
                     item-text="name"
+                    label="City*"
                     item-value="value"
-                    @blur="$v.gender.$touch()"
-                    :error-messages="genderErrors"
-                    ></v-select>
-                </v-flex>
-                <v-flex xs12 style="padding: 10px">
-                  <v-menu
-                    v-model="menu"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    min-width="1px"
-                    >
-                    <template v-slot:activator="{ on }">
-                      <v-text-field
-                        v-model="birthDate"
-                        label="Birth Date"
-                        prepend-icon="event"
-                        readonly
-                        v-on="on"
-                        @click="$v.birthDate.$touch()"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker v-model="birthDate" @input="menu = false"></v-date-picker>
-                  </v-menu>
-                </v-flex>
-                <v-flex xs12>
-                  <v-text-field label="Birth Place*" v-model="birthPlace"  required name="birthPlace" @blur="$v.birthPlace.$touch()" :error-messages="birthPlaceErrors"></v-text-field>
+                  >
+                  </v-autocomplete>
                 </v-flex>
                 <v-flex xs12>
                   <vue-dropify id="image" ref="tes" @change="changeImage()"></vue-dropify>
@@ -121,13 +68,12 @@
 <script>
   import { required, maxLength, email } from 'vuelidate/lib/validators'
   import VueDropify from 'vue-dropify';
+
   export default {
     data: () => ({
       id: '',
       name: '',
       email: '',
-      password: '',
-      role: '',
       imageWidth:400,
       imageHeight:300,
       imageReady: false,
@@ -142,37 +88,21 @@
       namaFitur: '',
       timeout: 6000,
       groupMenuId:null,
-      name: '',
       address: '',
       phone: '',
-      passport: '',
-      passportExpDate: new Date().toISOString().substr(0, 10),
-      issuing: '',
-      gender: '',
-      birthDate: new Date().toISOString().substr(0, 10),
-      birthPlace: '',
+      city_id: '',
       menu: false,
       menu1: false,
+      placeholderCity:'Select City',
       image:[],
-      genderOptions:[{
-        name:'Male',
-        value:'male',
-      },{
-        name:'Female',
-        value:'female',
-      }],
       text: 'Hello, I\'m a snackbar'
     }),
     validations: {
       name: { required },
       address: { required },
       phone: { required },
-      passport: { required },
-      passportExpDate: { required },
-      issuing: { required },
-      gender: { required },
-      birthDate: { required },
-      birthPlace: { required },
+      email: { required,email },
+      city_id: { required },
     },
     computed:{
       nameErrors () {
@@ -193,47 +123,25 @@
         !this.$v.phone.required && errors.push('Phone is required.')
         return errors
       },
-      passportErrors () {
+      emailErrors () {
         const errors = []
-        if (!this.$v.passport.$dirty) return errors
-        !this.$v.passport.required && errors.push('Passport is required.')
+        if (!this.$v.email.$dirty) return errors
+        !this.$v.email.email && errors.push('Must be valid e-mail')
+        !this.$v.email.required && errors.push('Email is required.')
         return errors
       },
-      passportExpDateErrors () {
+      cityErrors () {
         const errors = []
-        if (!this.$v.passportExpDate.$dirty) return errors
-        !this.$v.passportExpDate.required && errors.push('Passport Expired Date is required.')
+        if (!this.$v.city_id.$dirty) return errors
+          this.placeholderCity = 'City is required'
+        !this.$v.city_id.required && errors.push('City is required.') 
         return errors
-      },
-      issuingErrors () {
-        const errors = []
-        if (!this.$v.issuing.$dirty) return errors
-        !this.$v.issuing.required && errors.push('Issuing is required.')
-        return errors
-      },
-      genderErrors () {
-        const errors = []
-        if (!this.$v.gender.$dirty) return errors
-        !this.$v.gender.required && errors.push('Gender is required.')
-        return errors
-      },
-      birthDateErrors () {
-        const errors = []
-        if (!this.$v.birthDate.$dirty) return errors
-        !this.$v.birthDate.required && errors.push('Birth date is required.')
-        return errors
-      },
-      birthPlaceErrors () {
-        const errors = []
-        if (!this.$v.birthPlace.$dirty) return errors
-        !this.$v.birthPlace.required && errors.push('Birth place is required.')
-        return errors
-      },
+      }
     },
     props:{
       dialog: false,
       idData:Array,
-      options:Array,
+      cityOptions:Array,
     },
     components: {
       'vue-dropify': VueDropify
@@ -254,13 +162,9 @@
             this.name = this.idData[0].name
             this.address = this.idData[0].address
             this.phone = this.idData[0].phone
-            this.passport = this.idData[0].passport
-            this.passportExpDate = this.idData[0].passport_exp_date
-            this.issuing = this.idData[0].issuing
-            this.gender = this.idData[0].gender
-            this.birthDate = this.idData[0].birth_date
-            this.birthPlace = this.idData[0].birth_place
-            let feature = 'tour-leader';
+            this.email = this.idData[0].email
+            this.city_id = this.idData[0].city_id+''
+            let feature = 'company';
             axios
                 .get('/api/convert-image-base-64?id=' + this.id + '&feature=' + feature)
                 .then(response => {
@@ -276,12 +180,8 @@
             this.name = ''
             this.address = ''
             this.phone = ''
-            this.passport = ''
-            this.passportExpDate = new Date().toISOString().substr(0, 10)
-            this.issuing = ''
-            this.gender = ''
-            this.birthDate = new Date().toISOString().substr(0, 10)
-            this.birthPlace = ''
+            this.email = ''
+            this.city_id = '';
             this.$refs.tes.images = [];
         }
       },
@@ -301,14 +201,10 @@
           formData.append('name',this.name)
           formData.append('address',this.address)
           formData.append('phone',this.phone)
-          formData.append('passport',this.passport)
-          formData.append('passport_exp_date',this.passportExpDate)
-          formData.append('issuing',this.issuing)
-          formData.append('gender',this.gender)
-          formData.append('birth_date',this.birthDate)
-          formData.append('birth_place',this.birthPlace)
+          formData.append('email',this.email)
+          formData.append('city_id',this.city_id)
           formData.append('image',this.image)
-          axios.post( '/api/tour-leader/save',
+          axios.post( '/api/company/save',
               formData,
               {
                 headers: {

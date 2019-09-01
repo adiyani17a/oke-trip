@@ -17,6 +17,7 @@ class ItineraryDetail extends Migration
             $table->integer('id')->primary();
             $table->integer('dt'); 
             $table->string('code'); 
+            $table->integer('booked_by')->nullable(); 
             $table->integer('seat');
             $table->integer('seat_remain');
             $table->date('start');

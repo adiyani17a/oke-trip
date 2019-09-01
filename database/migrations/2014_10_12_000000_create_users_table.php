@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('type_user');
             $table->string('active')->default('true');
             $table->string('image')->nullable();
+            $table->integer('company_id')->nullable();
             $table->timestamps();
         });
     }

@@ -37,10 +37,10 @@
                                                  >
                             </datatable-component>
                         </div>
-                        <create-tour-leader :dialog="dialog" 
+                        <create-company :dialog="dialog" 
                                             :idData="idData" 
-                                            :options="options"
-                                            @closeDialog="closeDialog"></create-tour-leader>
+                                            :cityOptions="cityOptions"
+                                            @closeDialog="closeDialog"></create-company>
                     </div>
                     <v-dialog
                       v-model="dialogDelete"
@@ -104,7 +104,7 @@
     export default {
         mounted() {
             console.log('Intialize Main Page...')
-            let breadcrumb = '<router-link to="/tour-leader">Administrator User</router-link>';
+            let breadcrumb = '<router-link to="/company">Administrator User</router-link>';
             $('#crumb').html(breadcrumb);
             axios
                 .get('/api/get-token')
@@ -145,29 +145,18 @@
                     value: 'phone',
                     type: 'default'
                 }, {
-                    text: 'Passport',
-                    value: 'passport',
+                    text: 'Email',
+                    value: 'email',
                     type: 'default'
                 }, {
-                    text: 'Passport Expired Date',
-                    value: 'passport_exp_date',
+                    text: 'City',
+                    value: 'city_name',
                     type: 'default'
                 }, {
-                    text: 'Issuing',
-                    value: 'issuing',
-                    type: 'default'
-                }, {
-                    text: 'Gender',
-                    value: 'gender',
-                    type: 'default'
-                }, {
-                    text: 'Birth Date',
-                    value: 'birth_date',
-                    type: 'default'
-                }, {
-                    text: 'Birth Place',
-                    value: 'birth_place',
-                    type: 'default'
+                    text: 'Active',
+                    value: 'active' ,
+                    type:'switch',
+                    class:'text-xs-center'
                 }, {
                     text: 'Image',
                     value: 'image',
@@ -190,7 +179,7 @@
                 color: 'success',
                 mode: '',
                 tes: '',
-                options: [],
+                cityOptions: [],
                 timeout: 6000,
                 text: 'Hello, I\'m a snackbar'
             }
@@ -203,7 +192,7 @@
         },
         methods: {
             onClickChild(value) {
-                this.api = '/api/tour-leader/datatable'
+                this.api = '/api/company/datatable'
             },
             selectedCheckbox(selected) {
                 this.select = selected;
@@ -218,7 +207,7 @@
                     page = this.currentPage;
                 }
                 axios
-                    .get('/api/tour-leader/datatable?page=' + page + '&showing=' + show)
+                    .get('/api/company/datatable?page=' + page + '&showing=' + show)
                     .then(response => {
                         this.loadingDataTable = false
                         this.dataItem = response.data.data.data
@@ -227,6 +216,8 @@
                         this.pagination.rowsPerPage = show;
                         this.pagination.totalItem = response.data.data.total;
                         this.totalItem = response.data.data.total;
+
+                        this.cityOptions = response.data.city;
                         for (var i = 0; i < this.dataItem.length; i++) {
                             if (this.dataItem[i].active == 'true') {
                                 this.dataItem[i].active = true
@@ -242,8 +233,6 @@
                                     this.idData[0] = undefined;
                                 }
                             }
-
-                            console.log(this.idData[0]);
                         }
                     })
                     .catch(error => {
@@ -255,7 +244,7 @@
             deleteData() {
 
                 axios
-                    .delete('/api/tour-leader/delete', {
+                    .delete('/api/company/delete', {
                         data: {
                             data: this.select,
                         }
@@ -316,7 +305,7 @@
             },
             switchChange(data, id, param) {
                 axios
-                    .post('/api/tour-leader/change-status', {
+                    .post('/api/company/change-status', {
                         data: data,
                         id: id,
                         param: param,

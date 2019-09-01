@@ -409,10 +409,7 @@
                     })
             },
             editData(){
-                this.idData = '';
-                this.idData = this.select;
-                this.dialog = true;
-
+              this.$router.push({ name: 'Edit Itinerary', params: { id: this.select[0].id } });
             },
             closeDialog(param){
                 this.dialog = false;

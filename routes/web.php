@@ -33,9 +33,10 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('itinerary', 'HomeController@index');
   Route::get('tour-leader', 'HomeController@index');
 
+  Route::get('{path}', 'HomeController@index')->where('all', '^(?!api).*$');
   Route::get('/home', 'HomeController@index')->name('home');
   Route::get('itinerary/{path}', 'HomeController@index')->where('all', '^(?!api).*$');
-  Route::get('itinerary/{path}/{id}/{dt}', 'HomeController@index')->where('all', '^(?!api).*$');
+  Route::get('itinerary/{path}/{id}', 'HomeController@index')->where('all', '^(?!api).*$');
   Route::get('itinerary/{path}/{id}/{dt}', 'HomeController@index')->where('all', '^(?!api).*$');
   Route::get('group-menu', 'HomeController@index');
 
@@ -249,10 +250,14 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "detailItinerary"
       ]);
 
-
       Route::post('/save-detail', [
         'uses' => "apiController@saveDetailItinerary",
         'as' => "saveDetailItinerary"
+      ]);
+
+      Route::get('/edit/{id}', [
+        'uses' => "apiController@editItinerary",
+        'as' => "editItinerary"
       ]);
 
     });
@@ -286,6 +291,38 @@ Route::group(['middleware' => 'check-token'], function () {
       Route::delete('/delete', [
         'uses' => "apiController@deleteTourLeader",
         'as' => "deleteTourLeader"
+      ]);
+    });
+
+    Route::group(["prefix" => "company"], function(){
+      Route::get('/datatable', [
+        'uses' => "apiController@datatableCompany",
+        'as' => "datatableCompany"
+      ]);
+
+      Route::get('/create', [
+        'uses' => "apiController@createCompany",
+        'as' => "createCompany"
+      ]);
+
+      Route::post('/change-status', [
+        'uses' => "apiController@chageStatusCompany",
+        'as' => "chageStatusCompany"
+      ]);
+
+      Route::get('/menu-list', [
+        'uses' => "apiController@menuListCompany",
+        'as' => "menuListCompany"
+      ]);
+
+      Route::post('/save', [
+        'uses' => "apiController@saveCompany",
+        'as' => "saveCompany"
+      ]);
+
+      Route::delete('/delete', [
+        'uses' => "apiController@deleteCompany",
+        'as' => "deleteCompany"
       ]);
     });
 	});

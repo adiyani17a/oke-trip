@@ -18,5 +18,4 @@ class tour_leader extends Model
     {
     	return $this->hasMany('App\itinerary_detail', 'id', 'id');
     }
-
 }
