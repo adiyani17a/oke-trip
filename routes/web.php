@@ -332,17 +332,17 @@ header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Origin, Autho
 
 
 Route::group(['middleware' => 'cors'], function () {
-  
-});
-
-Route::group(["prefix" => "api"], function(){
-  Route::group(["prefix" => "v1"], function(){
-    Route::get('/get-data', [
-      'uses' => "apiV1Controller@getDataHome",
-      'as' => "getDataHome"
-    ]);
+  Route::group(["prefix" => "api"], function(){
+    Route::group(["prefix" => "v1"], function(){
+      Route::get('/get-data', [
+        'uses' => "apiV1Controller@getDataHome",
+        'as' => "getDataHome"
+      ]);
+    });
   });
 });
+
+  
 
 
 // Route::get('/api/destination/datatable', 'apiController@datatableDestination');
