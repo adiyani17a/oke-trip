@@ -25,7 +25,6 @@ class apiV1Controller extends Controller
 	{
 		$data['hotDeal'] = $this->model->itinerary()->where('hot_deals')->take(4)->get();
 		$data['destination'] = $this->model->destination()->take(6)->get();
-		$data['destination'] = $this->model->destination()->take(6)->get();
 
 		return Response::json($data)
 	}

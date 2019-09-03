@@ -163,7 +163,7 @@
             this.address = this.idData[0].address
             this.phone = this.idData[0].phone
             this.email = this.idData[0].email
-            this.city_id = this.idData[0].city_id+''
+            this.city_id = this.idData[0].city_id
             let feature = 'company';
             axios
                 .get('/api/convert-image-base-64?id=' + this.id + '&feature=' + feature)

@@ -21,6 +21,7 @@
                   ></v-textarea>
                 </v-flex>
                 <v-flex xs12>
+                  <label aria-hidden="true" class="v-label theme--light" style="left: 0px; right: auto;">Image</label>
                   <vue-dropify ref="tes"></vue-dropify>
                 </v-flex>
               </v-layout>
@@ -54,7 +55,7 @@
   </v-layout>
 </template>
 <script>
-
+  import VueDropify from 'vue-dropify';
   import { required, maxLength, email } from 'vuelidate/lib/validators'
   export default {
     data: () => ({
@@ -88,6 +89,9 @@
       dialog: false,
       idData:Array,
     },
+    components: {
+      'vue-dropify': VueDropify
+    },
     watch:{
       dialog:function(){
         this.dialogs = this.dialog
@@ -97,10 +101,21 @@
           this.id = this.idData[0].id
           this.name = this.idData[0].name
           this.note = this.idData[0].note
+          this.$refs.tes.images = [];
+          let feature ='destination';
+          axios
+            .get('/api/convert-image-base-64?id='+this.id+'&feature='+feature)
+            .then(response => {
+                this.$refs.tes.images.push(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            })
         }else{
           this.id = ''
           this.name = ''
           this.note = ''
+          this.$refs.tes.images = [];
         }
       }
     },
@@ -117,16 +132,30 @@
             this.name = ''
             this.note = ''
             this.id = ''
+            this.$refs.tes.images = [];
           }
           
         }else{
+          let formData = new FormData();
+
+          formData.append('id',this.id)
+          formData.append('name',this.name)
+          formData.append('note',this.note)
+          formData.append('image',this.$refs.tes.images)
+
           this.$v.$touch()
           if (this.$v.$anyError == true) {
             return false;
           }
 
-          axios
-            .post('/api/destination/save',$('#saveData').serialize())
+          axios.post( '/api/destination/save',
+              formData,
+              {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+              }
+            )
             .then(response => {
               this.snackbar =  true;
               this.text =  response.data.message;
@@ -135,6 +164,7 @@
                 this.name = ''
                 this.note = ''
                 this.id = ''
+                this.$refs.tes.images = [];
               }else{
                 this.color = 'error'
               }

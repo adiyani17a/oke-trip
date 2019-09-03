@@ -44,6 +44,11 @@ class apiController extends Controller
             $imgfile = file_get_contents($image);
 
             $base64 = 'data:image/jpg' . ';base64,' . base64_encode($imgfile);
+        }elseif ($req->feature == 'destination') {
+            $image = '.'.$this->model->destination()->where('id',$req->id)->first()->image;
+            $imgfile = file_get_contents($image);
+
+            $base64 = 'data:image/jpg' . ';base64,' . base64_encode($imgfile);
         }
 
         return Response::json($base64);
@@ -64,14 +69,58 @@ class apiController extends Controller
     {
         return DB::transaction(function() use ($req) {  
             if (!isset($req->id) or $req->id == '' or $req->id == null) {
+
+                $file = $req->image;
+                if ($file != null) {
+                    
+                    $filename = 'destination_'.$req->name.'.'.'jpg';
+                    $path = './dist/img/destination';
+                    if (!file_exists($path)) {
+                        mkdir($path, 777, true);
+                    }
+                    $path = 'dist/img/destination/' . $filename;
+                    Image::make(file_get_contents($file))->save($path);  
+                    $path = '/dist/img/destination/' . $filename;
+                }else{
+                    $filename = null;
+                }
+
                 $input = $req->all();
                 $input['created_by'] = Auth::user()->name;
                 $input['updated_by'] = Auth::user()->name;
+                $input['image'] = $path;
                 $this->model->destination()->create($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
+
+                if(!Auth::user()->hasAccess('Additional','edit')){
+                    return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Edit This Data']);
+                }
+
+                $file = $req->image;
+                if ($file != null) {
+                    $old_path = $this->model->destination()->where('id','=',$req->id)->first();
+                    if ($old_path->image != null) {
+                        unlink('.'.$old_path->image);
+                    }
+                    $filename = 'destination_'.$req->name.'.'.'jpg';
+                    $path = './dist/img/destination';
+                    if (!file_exists($path)) {
+                        mkdir($path, 777, true);
+                    }
+                    $path = 'dist/img/destination/' . $filename;
+                    Image::make(file_get_contents($file))->save($path);  
+                    $path = '/dist/img/destination/' . $filename;
+                }else{
+                    $filename = null;
+                }
+
                 $input = $req->all();
                 $input['updated_by'] = Auth::user()->name;
+                $input['updated_at'] = carbon::now();
+                unset($input['image']);
+                $input['image'] = $path;
+                $input['active'] = 'true';
                 $this->model->destination()->where('id',$req->id)->update($input);
                 return Response::json(['status'=>1,'message'=>'Success updating data']);
             }
