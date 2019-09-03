@@ -52,9 +52,6 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::group(['middleware' => 'check-token'], function () {
-
-  
-
 	Route::group(["prefix" => "api"], function(){
     Route::get('/convert-image-base-64', [
       'uses' => "apiController@convertImageBase64",
