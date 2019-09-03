@@ -325,5 +325,14 @@ Route::group(['middleware' => 'check-token'], function () {
 	});
 });
 
+Route::group(["prefix" => "api"], function(){
+  Route::group(["prefix" => "v1"], function(){
+    Route::get('/get-data', [
+      'uses' => "apiV1Controller@getDataHome",
+      'as' => "getDataHome"
+    ]);
+  });
+});
+
 
 // Route::get('/api/destination/datatable', 'apiController@datatableDestination');
