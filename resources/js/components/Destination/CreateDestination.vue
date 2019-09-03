@@ -20,6 +20,9 @@
                     v-model="note"
                   ></v-textarea>
                 </v-flex>
+                <v-flex xs12>
+                  <vue-dropify ref="tes"></vue-dropify>
+                </v-flex>
               </v-layout>
             </form>
           </v-container>
