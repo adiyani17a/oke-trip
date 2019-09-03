@@ -1000,7 +1000,150 @@ class apiController extends Controller
 
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
-                dd($form);
+                // carousel
+                $form = json_decode($req->form);
+                $formDetail = json_decode($req->formDetail);
+                $id = $req->id;
+
+                $data = array(
+                    'name' => $form->name,
+                    'destination_id' => implode(',', $form->destination),
+                    'additional_id' => implode(',', $form->additional),
+                    'flight_by' => $form->flightBy,
+                    'code' => $form->code,
+                    'term_condition' => $form->term,
+                    'highlight' => $form->highlight,
+                    'note_1' => $form->note[0],
+                    'note_2' => $form->note[1],
+                    'note_3' => $form->note[2],
+                    'updated_by' => Auth::user()->id,
+                );
+
+                $file = $req->carousel1;
+
+                if ($file != 'undefined') {
+                    $carousel_1 = 'carousel_1_'.$id.'.'.'jpg';
+                    $path = './dist/img/itinerary';
+                    if (!file_exists($path)) {
+                        mkdir($path, 777, true);
+                    }
+                    $carousel_1 = 'dist/img/itinerary/' . $carousel_1;
+                    Image::make(file_get_contents($file))->save($carousel_1);  
+                    $data['carousel_1'] = $carousel_1;
+                }
+
+                $file = $req->carousel2;
+                if ($file != 'undefined') {
+                    $carousel_2 = 'carousel_2_'.$id.'.'.'jpg';
+                    $path = './dist/img/itinerary';
+                    if (!file_exists($path)) {
+                        mkdir($path, 777, true);
+                    }
+                    $carousel_2 = 'dist/img/itinerary/' . $carousel_2;
+                    Image::make(file_get_contents($file))->save($carousel_2);  
+                    $data['carousel_2'] = $carousel_2;
+                }
+
+                $file = $req->carousel3;
+                if ($file != 'undefined') {
+                    $carousel_3 = 'carousel_3_'.$id.'.'.'jpg';
+                    $path = './dist/img/itinerary';
+
+                    if (!file_exists($path)) {
+                        mkdir($path, 777, true);
+                    }
+
+                    $carousel_3 = 'dist/img/itinerary/' . $carousel_3;
+                    Image::make(file_get_contents($file))->save($carousel_3);  
+                    $data['carousel_3'] = $carousel_3;
+                }
+
+                $file = $req->pdf;
+
+                if ($file != null) {
+                    $pdf = 'pdf_'.$id.'.'.'pdf';
+                    $path = 'dist/pdf/itinerary';
+
+                    if (!file_exists($path)) {
+                        mkdir($path, 777, true);
+                    }
+
+                    $file->move($path,$pdf);
+                    $pdf = $path.'/'.$pdf;
+                    $data['pdf'] = $pdf;
+                }
+
+                $file = $req->flyer;
+                if ($file != null) {
+                    $flyer = 'flyer_'.$id.'.'.'jpg';
+                    $path = './dist/img/itinerary';
+                    if (!file_exists($path)) {
+                        mkdir($path, 777, true);
+                    }
+
+                    $flyer = 'dist/img/itinerary/' . $flyer;
+                    Image::make(file_get_contents($file))->save($flyer);  
+                    $data['flayer_image'] = $flyer;
+                }
+
+                
+
+                $this->model->itinerary()->where('id',$req->id)->update($data);
+
+                $this->model->itinerary_detail()->where('id',$req->id)->delete();
+
+                $this->model->itinerary_flight()->where('id',$req->id)->delete();
+
+                $this->model->itinerary_schedule()->where('id',$req->id)->delete();
+
+                for ($i=0; $i < count($formDetail->itineraryItems); $i++) { 
+                    $data = array(
+                        'id' => $id,
+                        'dt' => $i+1,
+                        'code' => $form->code.'/'.str_pad($i+1,3,'0',STR_PAD_LEFT),
+                        'seat' => $formDetail->itineraryItems[$i]->seat,
+                        'seat_remain' => $formDetail->itineraryItems[$i]->seat,
+                        'start' => $formDetail->itineraryItems[$i]->dateStart,
+                        'end' => $formDetail->itineraryItems[$i]->dateEnd,
+                        'adult_price' => filter_var($formDetail->itineraryItems[$i]->adultPrice,FILTER_SANITIZE_NUMBER_INT),
+                        'child_price' => filter_var($formDetail->itineraryItems[$i]->CnBPrice,FILTER_SANITIZE_NUMBER_INT),
+                        'child_bed_price' => filter_var($formDetail->itineraryItems[$i]->CwBPrice,FILTER_SANITIZE_NUMBER_INT),
+                        'infant_price' => filter_var($formDetail->itineraryItems[$i]->infantPrice,FILTER_SANITIZE_NUMBER_INT),
+                        'minimal_dp' => filter_var($formDetail->itineraryItems[$i]->minimalDP,FILTER_SANITIZE_NUMBER_INT),
+                        'agent_com' => filter_var($formDetail->itineraryItems[$i]->agentPrice,FILTER_SANITIZE_NUMBER_INT),
+                        'agent_tip' => filter_var($formDetail->itineraryItems[$i]->tipsPrice,FILTER_SANITIZE_NUMBER_INT),
+                        'agent_visa' => filter_var($formDetail->itineraryItems[$i]->visaPrice,FILTER_SANITIZE_NUMBER_INT),
+                        'agent_tax' => filter_var($formDetail->itineraryItems[$i]->aptPrice,FILTER_SANITIZE_NUMBER_INT),
+                        'created_by' => Auth::user()->id,
+                        'updated_by' => Auth::user()->id,
+                    );
+                    $this->model->itinerary_detail()->create($data);
+                }
+
+                for ($i=0; $i < count($form->title); $i++) { 
+                    $data = array(
+                        'id' => $id,
+                        'dt' => $i+1,
+                        'caption' => $form->caption[$i],
+                        'title' => $form->title[$i],
+                        'eat_service' => $form->bld[$i],
+                    );
+                    $this->model->itinerary_schedule()->create($data);
+                }
+                for ($i=0; $i < count($form->flight); $i++) { 
+                    $data = array(
+                        'id' => $id,
+                        'dt' => $i+1,
+                        'flight_number' => $form->flight[$i],
+                        'departure_airport_code' => $form->departureAirportCode[$i],
+                        'arrival_airport_code' => $form->arrivalAirportCode[$i],
+                        'departure' => $form->departure[$i],
+                        'arrival' => $form->arrival[$i],
+                    );
+
+                    $this->model->itinerary_flight()->create($data);
+                }
+
                 return Response::json(['status'=>1,'message'=>'Success updating data']);
             }
         });

@@ -5,6 +5,9 @@
         <div class="card">
           <div class="card-header">
             <h5 style="margin-top: 10px;display: inline-block;"><b>DETAIL ITINERARY</b></h5>
+            <v-btn  color="warning pull-right" @click="$router.push({ name: 'Itinerary' })">Back
+              <v-icon dark right>fas fa-home</v-icon>
+            </v-btn>
           </div>
           <div class="card-body">
             <v-layout wrap class="px-5 py-5">

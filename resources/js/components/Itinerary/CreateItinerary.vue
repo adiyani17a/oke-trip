@@ -5,6 +5,9 @@
         <div class="card">
           <div class="card-header">
             <h5 style="margin-top: 10px;display: inline-block;"><b>Create Itinerary</b></h5>
+            <v-btn  color="warning pull-right" @click="$router.push({ name: 'Itinerary' })">Back
+                <v-icon dark right>fas fa-home</v-icon>
+            </v-btn>
           </div>
           <div class="card-body">
             <form-wizard title="" subtitle="" @on-loading="setLoading" color="#007bff" error-color="red" finish-button-text="Save" @on-complete="onComplete">

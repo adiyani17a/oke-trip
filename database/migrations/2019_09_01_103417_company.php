@@ -22,7 +22,7 @@ class Company extends Migration
             $table->string('email'); 
             $table->integer('city_id'); 
             $table->string('image'); 
-            $table->string('active')->default(null); 
+            $table->string('active')->nullable(); 
             $table->string('created_by'); 
             $table->string('updated_by'); 
             $table->timestamps(); 

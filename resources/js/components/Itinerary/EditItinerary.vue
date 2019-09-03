@@ -5,6 +5,9 @@
         <div class="card">
           <div class="card-header">
             <h5 style="margin-top: 10px;display: inline-block;"><b>Create Itinerary</b></h5>
+            <v-btn  color="warning pull-right" @click="$router.push({ name: 'Itinerary' })">Back
+                <v-icon dark right>fas fa-home</v-icon>
+            </v-btn>
           </div>
           <div class="card-body">
             <form-wizard title="" subtitle="" @on-loading="setLoading" color="#007bff" error-color="red" finish-button-text="Save" @on-complete="onComplete">
@@ -583,16 +586,7 @@
       },
       methods: {
           saveAndCloseDialog() {
-
             let formData = new FormData();
-
-            // for ( var key in this.form ) {
-            //     formData.append(key, this.form [key]);
-            // }
-
-            // for ( var key in this.formDetail ) {
-            //     formData.append(key, this.formDetail [key]);
-            // }
             formData.append('id', this.id)
             formData.append('form',  JSON.stringify(this.form))
             formData.append('formDetail', JSON.stringify(this.formDetail))
@@ -614,8 +608,7 @@
                     this.text = response.data.message;
                     if (response.data.status == 1) {
                       this.color = 'success';
-                      router.push({ name: "Itinerary"})
-
+                      this.$router.push({ name: 'Itinerary' });
                     } else {
                       this.color = 'error'
                     }

@@ -31,10 +31,10 @@ class ItineraryDetail extends Migration
             $table->double('agent_tip', 10, 2);
             $table->double('agent_visa', 10, 2);
             $table->double('agent_tax', 10, 2);
-            $table->string('final_pdf')->default(null);
-            $table->string('term_pdf')->default(null);
-            $table->string('flayer_jpg')->default(null);
-            $table->integer('tour_leader_id')->default(null);
+            $table->string('final_pdf')->nullable();
+            $table->string('term_pdf')->nullable();
+            $table->string('flayer_jpg')->nullable();
+            $table->integer('tour_leader_id')->nullable();
             $table->double('tour_leader_tips', 10, 2);
             $table->integer('created_by');
             $table->integer('updated_by');
