@@ -23,7 +23,7 @@ class apiV1Controller extends Controller
 
 	public function getDataHome()
 	{
-		$data['hotDeal'] = $this->model->itinerary()->with(['itinerary_detail'])->where('hot_deals')->take(4)->get();
+		$data['hotDeal'] = $this->model->itinerary()->with(['itinerary_detail'])->where('hot_deals','Y')->where('active','true')->take(4)->get();
 		$data['destination'] = $this->model->destination()->take(6)->get();
 
 		return Response::json($data);
