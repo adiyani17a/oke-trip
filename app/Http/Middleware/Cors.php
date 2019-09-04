@@ -16,6 +16,6 @@ class Cors
     public function handle($request, Closure $next)
     {
         return $next($request)
-            ->header('Access-Control-Allow-Headers','X-CSRF-Token');
+            ->header('Access-Control-Allow-Headers','X-CSRF-Token','x-requested-With');
     }
 }
