@@ -30,7 +30,8 @@ class Itinerary extends Migration
             $table->string('note_3');
             $table->string('pdf');
             $table->string('flayer_image');
-            $table->string('hot_deals')->nullable();
+            $table->string('summary');
+            $table->enum('hot_deals',['Y','N']);
             $table->integer('book_by');
             $table->string('active');
             $table->integer('created_by');

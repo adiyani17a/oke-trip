@@ -50,6 +50,9 @@
                   <v-flex xs12 md6 style="padding: 10px">
                     <v-text-field label="Highlight*" v-model="form.highlight" required name="highlight" @blur="$v.form.highlight.$touch()" :error-messages="highlightErrors"></v-text-field>
                   </v-flex>
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <v-text-field label="Summary*" v-model="form.summary" required name="flightBy" @blur="$v.form.summary.$touch()" :error-messages="summaryErrors"></v-text-field>
+                  </v-flex>
                   <v-flex xs12 style="padding: 10px">
                     <text-editor :contentModel="contentModel" @textContent="textContent"></text-editor>
                   </v-flex>
@@ -347,6 +350,7 @@
           destination: '',
           additional: '',
           flightBy: '',
+          summary: '',
           code:'',
           term:'',
           carousel:[],
@@ -430,6 +434,9 @@
                   required
               },
               highlight: {
+                  required
+              },
+              summary: {
                   required
               },
           },
@@ -564,6 +571,12 @@
               const errors = [];
               if (!this.$v.form.highlight.$dirty) return errors
               !this.$v.form.highlight.required && errors.push('Highlight is required.')
+              return errors
+          },
+          summaryErrors() {
+              const errors = [];
+              if (!this.$v.form.summary.$dirty) return errors
+              !this.$v.form.summary.required && errors.push('Summary is required.')
               return errors
           },
       },
@@ -749,6 +762,7 @@
                 this.form.additional = response.data.data.additional
                 this.form.flightBy = response.data.data.flight_by
                 this.form.highlight = response.data.data.highlight
+                this.form.summary = response.data.data.summary
                 this.contentModel = response.data.data.term_condition
 
                 this.$refs.carousel[0].images.push(response.data.data.carousel1);

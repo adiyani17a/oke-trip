@@ -99,8 +99,8 @@ Route::group(['middleware' => 'check-token'], function () {
       ]);
 
       Route::post('/change-status', [
-        'uses' => "apiController@chageStatusRole",
-        'as' => "chageStatusRole"
+        'uses' => "apiController@changeStatusRole",
+        'as' => "changeStatusRole"
       ]);
 
       Route::post('/save', [
@@ -121,8 +121,8 @@ Route::group(['middleware' => 'check-token'], function () {
       ]);
 
       Route::post('/change-status', [
-        'uses' => "apiController@chageStatusPrivilege",
-        'as' => "chageStatusPrivilege"
+        'uses' => "apiController@changeStatusPrivilege",
+        'as' => "changeStatusPrivilege"
       ]);
     });
 
@@ -135,8 +135,8 @@ Route::group(['middleware' => 'check-token'], function () {
       
 
       Route::post('/change-status', [
-        'uses' => "apiController@chageStatusAdministratorUser",
-        'as' => "chageStatusAdministratorUser"
+        'uses' => "apiController@changeStatusAdministratorUser",
+        'as' => "changeStatusAdministratorUser"
       ]);
 
       Route::post('/save', [
@@ -157,8 +157,8 @@ Route::group(['middleware' => 'check-token'], function () {
       ]);
 
       Route::post('/change-status', [
-        'uses' => "apiController@chageStatusAgentUser",
-        'as' => "chageStatusAgentUser"
+        'uses' => "apiController@changeStatusAgentUser",
+        'as' => "changeStatusAgentUser"
       ]);
 
       Route::post('/save', [
@@ -196,8 +196,8 @@ Route::group(['middleware' => 'check-token'], function () {
       ]);
 
       Route::post('/change-status', [
-        'uses' => "apiController@chageStatusAdditional",
-        'as' => "chageStatusAdditional"
+        'uses' => "apiController@changeStatusAdditional",
+        'as' => "changeStatusAdditional"
       ]);
 
       Route::post('/save', [
@@ -223,8 +223,8 @@ Route::group(['middleware' => 'check-token'], function () {
       ]);
 
       Route::post('/change-status', [
-        'uses' => "apiController@chageStatusItinerary",
-        'as' => "chageStatusItinerary"
+        'uses' => "apiController@changeStatusItinerary",
+        'as' => "changeStatusItinerary"
       ]);
 
       Route::get('/menu-list', [
@@ -271,8 +271,8 @@ Route::group(['middleware' => 'check-token'], function () {
       ]);
 
       Route::post('/change-status', [
-        'uses' => "apiController@chageStatusTourLeader",
-        'as' => "chageStatusTourLeader"
+        'uses' => "apiController@changeStatusTourLeader",
+        'as' => "changeStatusTourLeader"
       ]);
 
       Route::get('/menu-list', [
@@ -303,8 +303,8 @@ Route::group(['middleware' => 'check-token'], function () {
       ]);
 
       Route::post('/change-status', [
-        'uses' => "apiController@chageStatusCompany",
-        'as' => "chageStatusCompany"
+        'uses' => "apiController@changeStatusCompany",
+        'as' => "changeStatusCompany"
       ]);
 
       Route::get('/menu-list', [
@@ -322,12 +322,25 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "deleteCompany"
       ]);
     });
+
+    Route::group(["prefix" => "carousel"], function(){
+      Route::get('/', [
+        'uses' => "apiController@carousel",
+        'as' => "carousel"
+      ]);
+
+      Route::post('/save', [
+        'uses' => "apiController@saveCarousel",
+        'as' => "saveCarousel"
+      ]);
+    });
+
 	});
 });
 
-header('Access-Control-Allow-Origin:  *');
-header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE');
-header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Origin, Authorization');
+// header('Access-Control-Allow-Origin:  *');
+// header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE');
+// header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Origin, Authorization');
 
 
 

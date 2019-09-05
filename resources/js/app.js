@@ -144,6 +144,13 @@ let routes = [{
     },
     component: require('./components/Itinerary/EditItinerary.vue').default
 }, {
+    path: '/carousel',
+    name: 'Carousel',
+    meta: {
+        breadcrumb: 'Carousel',
+    },
+    component: require('./components/Carousel/Carousel.vue').default
+}, {
     path: '/tour-leader',
     name: 'Tour Leader',
     component: require('./components/TourLeader/tourLeader.vue').default

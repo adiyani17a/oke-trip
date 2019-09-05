@@ -20,6 +20,7 @@ use App\booking_d;
 use App\booking_additional;
 use App\company;
 use App\city;
+use App\carousel;
 
 class models extends Model
 {
@@ -140,5 +141,12 @@ class models extends Model
         $city = new city();
 
         return $city; 
+    }
+
+    public function carousel()
+    {
+        $carousel = new carousel();
+
+        return $carousel; 
     }
 }

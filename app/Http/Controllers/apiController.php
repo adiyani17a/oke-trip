@@ -281,7 +281,7 @@ class apiController extends Controller
         return Response::json($data);
     }
 
-    public function chageStatusPrivilege(Request $req)
+    public function changeStatusPrivilege(Request $req)
     {
         return DB::transaction(function() use ($req) {  
             if ($req->data == true) {
@@ -312,7 +312,7 @@ class apiController extends Controller
         return Response::json($data);
     }
 
-    public function chageStatusRole(Request $req)
+    public function changeStatusRole(Request $req)
     {
         return DB::transaction(function() use ($req) {  
 
@@ -436,7 +436,7 @@ class apiController extends Controller
         return Response::json(['data'=>$data,'role'=>$role]);
     }
 
-    public function chageStatusAdministratorUser(Request $req)
+    public function changeStatusAdministratorUser(Request $req)
     {
         return DB::transaction(function() use ($req) {  
 
@@ -572,7 +572,7 @@ class apiController extends Controller
         return Response::json(['data'=>$data,'role'=>$role,'company'=>$company]);
     }
 
-    public function chageStatusAgentUser(Request $req)
+    public function changeStatusAgentUser(Request $req)
     {
         return DB::transaction(function() use ($req) {  
 
@@ -694,7 +694,7 @@ class apiController extends Controller
         return Response::json(['data'=>$data]);
     }
 
-    public function chageStatusAdditional(Request $req)
+    public function changeStatusAdditional(Request $req)
     {
         return DB::transaction(function() use ($req) {  
 
@@ -874,7 +874,7 @@ class apiController extends Controller
         return Response::json(['destination'=>$destination,'additional'=>$additional,'code'=>$code]);
     }
 
-    public function chageStatusItinerary(Request $req)
+    public function changeStatusItinerary(Request $req)
     {
         return DB::transaction(function() use ($req) {  
 
@@ -993,6 +993,7 @@ class apiController extends Controller
                     'note_3' => $form->note[2],
                     'pdf' => $pdf,
                     'flayer_image' => $flyer,
+                    'summary' => $form->summary,
                     'created_by' => Auth::user()->id,
                     'updated_by' => Auth::user()->id,
                 );
@@ -1062,6 +1063,7 @@ class apiController extends Controller
                     'term_condition' => $form->term,
                     'highlight' => $form->highlight,
                     'note_1' => $form->note[0],
+                    'summary' => $form->summary,
                     'note_2' => $form->note[1],
                     'note_3' => $form->note[2],
                     'updated_by' => Auth::user()->id,
@@ -1346,7 +1348,7 @@ class apiController extends Controller
         return Response::json(['data'=>$data]);
     }
 
-    public function chageStatusTourLeader(Request $req)
+    public function changeStatusTourLeader(Request $req)
     {
         return DB::transaction(function() use ($req) {  
 
@@ -1478,7 +1480,7 @@ class apiController extends Controller
 
                 $file = $req->image;
                 if ($file != null) {
-                    $filename = 'leader_'.$req->name.'_'.$id.'.'.'jpg';
+                    $filename = 'company_'.$req->name.'_'.$id.'.'.'jpg';
                     $path = './dist/img/company';
                     if (!file_exists($path)) {
                         mkdir($path, 777, true);
@@ -1507,7 +1509,7 @@ class apiController extends Controller
 
                 $file = $req->image;
                 if ($file != null) {
-                    $filename = 'leader_'.$req->name.'_'.$id.'.'.'jpg';
+                    $filename = 'company_'.$req->name.'_'.$id.'.'.'jpg';
                     $path = './dist/img/company';
                     if (!file_exists($path)) {
                         mkdir($path, 777, true);
@@ -1528,7 +1530,7 @@ class apiController extends Controller
         });
     }
 
-    public function chageStatusCompany(Request $req)
+    public function changeStatusCompany(Request $req)
     {
         return DB::transaction(function() use ($req) {  
 
@@ -1561,6 +1563,84 @@ class apiController extends Controller
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
+        });
+    }
+
+    public function carousel()
+    {
+        $data = $this->model->carousel()->first();
+
+        return Response::json(['data'=>$data,'message'=>'Success Fetching data']);
+    }
+
+    public function saveCarousel(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+
+            if(!Auth::user()->hasAccess('Carousel','create')){
+                return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Save This Data']);
+            }
+
+            $data = $this->model->carousel()->first();
+
+            if ($data == null) {
+                $id = $this->model->carousel()->max('id')+1;
+                $this->model->carousel()->create([
+                    'id' => $id,
+                    'created_by' => Auth::user()->name,
+                    'updated_by' => Auth::user()->name,
+                    'note_1' => $req->note_1,
+                    'note_2' => $req->note_2,
+                    'note_3' => $req->note_3,
+                ]);
+            }
+
+            $file = $req->carousel_1;
+            if ($file != null) {
+                $filename = 'carousel_1.'.'jpg';
+                $path = 'dist/img/carousel';
+                if (!file_exists($path)) {
+                    mkdir($path, 777, true);
+                }
+                $carousel_1 = '/dist/img/carousel/' . $filename;
+                $file->move($path,$filename);
+                $input['carousel_1'] = $carousel_1;
+            }
+
+            $file = $req->carousel_2;
+            if ($file != null) {
+                $filename = 'carousel_2.'.'jpg';
+                $path = 'dist/img/carousel';
+                if (!file_exists($path)) {
+                    mkdir($path, 777, true);
+                }
+                $carousel_2 = '/dist/img/carousel/' . $filename;
+                $file->move($path,$filename);
+                $input['carousel_2'] = $carousel_2;
+            }
+
+            $file = $req->carousel_3;
+            if ($file != null) {
+                $filename = 'carousel_3.'.'jpg';
+                $path = 'dist/img/carousel';
+                if (!file_exists($path)) {
+                    mkdir($path, 777, true);
+                }
+                $carousel_3 = '/dist/img/carousel/' . $filename;
+                $file->move($path,$filename);
+                $input['carousel_3'] = $carousel_3;
+            }
+
+
+            $input['note_1'] = $req->note_1;
+            $input['note_2'] = $req->note_2;
+            $input['note_3'] = $req->note_3;
+            $input['updated_by'] = Auth::user()->name;
+
+            $this->model->carousel()->where('id',1)->update($input);
+                
+
+            return Response::json(['status'=>1,'message'=>'Success Updating data']);
         });
     }
 }

@@ -50,6 +50,9 @@
                   <v-flex xs12 md6 style="padding: 10px">
                     <v-text-field label="Highlight*" v-model="form.highlight" required name="flightBy" @blur="$v.form.highlight.$touch()" :error-messages="highlightErrors"></v-text-field>
                   </v-flex>
+                  <v-flex xs12 md6 style="padding: 10px">
+                    <v-text-field label="Summary*" v-model="form.summary" required name="flightBy" @blur="$v.form.summary.$touch()" :error-messages="summaryErrors"></v-text-field>
+                  </v-flex>
                   <v-flex xs12 style="padding: 10px">
                     <text-editor @textContent="textContent"></text-editor>
                   </v-flex>
@@ -345,6 +348,7 @@
           name: '',
           destination: '',
           additional: '',
+          summary: '',
           flightBy: '',
           code:'',
           term:'',
@@ -429,6 +433,9 @@
                   required
               },
               highlight: {
+                  required
+              },
+              summary: {
                   required
               },
           },
@@ -563,6 +570,12 @@
               const errors = [];
               if (!this.$v.form.highlight.$dirty) return errors
               !this.$v.form.highlight.required && errors.push('Highlight is required.')
+              return errors
+          },
+          summaryErrors() {
+              const errors = [];
+              if (!this.$v.form.summary.$dirty) return errors
+              !this.$v.form.summary.required && errors.push('Summary is required.')
               return errors
           },
       },
