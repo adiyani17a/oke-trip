@@ -28,7 +28,6 @@ class apiV1Controller extends Controller
 
 		// dd($data['hotDeal']);
 		foreach ($data['destination'] as $i => $d) {
-
 			if (count($d->itinerary_destination) != 0) {
 				$data['destination'][$i]->total_data = $d->itinerary_destination->count(); 
 				$data['destination'][$i]->total_hot_deals = $d->itinerary_destination->itinerary->where('hot_deals','Y')->count(); 

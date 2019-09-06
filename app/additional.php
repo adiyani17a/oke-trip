@@ -24,4 +24,9 @@ class additional extends Model
                             'created_by',
 							'updated_by',
     					];
+
+    public function itinerary_additional()
+    {
+        return $this->hasMany('App\itinerary_additional', 'id', 'itinerary_code');
+    }
 }

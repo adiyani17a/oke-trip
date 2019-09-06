@@ -24,8 +24,8 @@ class destination extends Model
 							'updated_by',
     					];
 
-    public function itinerary()
+    public function itinerary_destination()
     {
-        return $this->hasMany('App\itinerary_destination', 'itinerary_code', 'id');
+        return $this->hasMany('App\itinerary_destination', 'id', 'itinerary_code');
     }
 }	
