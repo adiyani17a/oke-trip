@@ -1,5 +1,10 @@
 <template>
   <div class="container" >
+    <loading :active.sync="isLoading" 
+        :can-cancel="true" 
+        :on-cancel="onCancel"
+        :is-full-page="fullPage">    
+    </loading>
     <div class="row justify-content-center" id="apps">
       <div class="col-md-12">
         <div class="card">
@@ -345,6 +350,8 @@
         id:'',
         apiReady:false,
         contentModel:'',
+        isLoading: true,
+        fullPage: true,
         form: {
           name: '',
           destination: '',
@@ -818,7 +825,7 @@
                 console.log(error)
                 this.errored = true
               })
-              .finally(() => this.apiReady = true)
+              .finally(() => this.isLoading = false)
           },
           setLoading: function(value) {
               this.loadingWizard = value;
