@@ -814,17 +814,14 @@ class apiController extends Controller
     public function datatableItinerary(Request $req)
     {
         $data =  $this->model->itinerary()->paginate($req->showing);
-        $destination = $this->model->destination()->get();
-        $additional = $this->model->additional()->get();
         foreach ($data as $i => $d) {
-            $destination = explode(',', $d->destination_id);
-            $destination = $this->model->destination()->whereIn('id',$destination)->get();
-
-            foreach ($destination as $i1 => $d1) {
-                if (count($destination)-1 == $i1) {
-                    $data[$i]->destination .= $d1->name;
-                }else{
-                    $data[$i]->destination .= $d1->name.', ';
+            if (count($d->itinerary_destination) != 0) {
+                foreach ($d->itinerary_destination as $i1 => $d1) {
+                    if (count($d->itinerary_destination)-1 == $i1) {
+                        $data[$i]->destination .= $d1->destination->name;
+                    }else{
+                        $data[$i]->destination .= $d1->destination->name.', ';
+                    }
                 }
             }
         }
@@ -979,8 +976,6 @@ class apiController extends Controller
                 $data = array(
                     'id' => $id,
                     'name' => $form->name,
-                    'destination_id' => implode(',', $form->destination),
-                    'additional_id' => implode(',', $form->additional),
                     'flight_by' => $form->flightBy,
                     'code' => $form->code,
                     'term_condition' => $form->term,
@@ -1033,6 +1028,7 @@ class apiController extends Controller
                     );
                     $this->model->itinerary_schedule()->create($data);
                 }
+
                 for ($i=0; $i < count($form->flight); $i++) { 
                     $data = array(
                         'id' => $id,
@@ -1047,6 +1043,26 @@ class apiController extends Controller
                     $this->model->itinerary_flight()->create($data);
                 }
 
+                for ($i=0; $i < count($form->destination); $i++) { 
+                    $data = array(
+                        'id' => $id,
+                        'dt' => $i+1,
+                        'destination_id' => $form->destination[$i],
+                    );
+
+                    $this->model->itinerary_destination()->create($data);
+                }
+
+                for ($i=0; $i < count($form->additional); $i++) { 
+                    $data = array(
+                        'id' => $id,
+                        'dt' => $i+1,
+                        'additional_id' => $form->additional[$i],
+                    );
+
+                    $this->model->itinerary_additional()->create($data);
+                }
+
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
                 // carousel
@@ -1056,8 +1072,6 @@ class apiController extends Controller
 
                 $data = array(
                     'name' => $form->name,
-                    'destination_id' => implode(',', $form->destination),
-                    'additional_id' => implode(',', $form->additional),
                     'flight_by' => $form->flightBy,
                     'code' => $form->code,
                     'term_condition' => $form->term,
@@ -1146,6 +1160,10 @@ class apiController extends Controller
 
                 $this->model->itinerary_schedule()->where('id',$req->id)->delete();
 
+                $this->model->itinerary_additional()->where('id',$req->id)->delete();
+
+                $this->model->itinerary_destination()->where('id',$req->id)->delete();
+
                 for ($i=0; $i < count($formDetail->itineraryItems); $i++) { 
                     $data = array(
                         'id' => $id,
@@ -1180,6 +1198,7 @@ class apiController extends Controller
                     );
                     $this->model->itinerary_schedule()->create($data);
                 }
+
                 for ($i=0; $i < count($form->flight); $i++) { 
                     $data = array(
                         'id' => $id,
@@ -1194,6 +1213,26 @@ class apiController extends Controller
                     $this->model->itinerary_flight()->create($data);
                 }
 
+                for ($i=0; $i < count($form->destination); $i++) { 
+                    $data = array(
+                        'id' => $id,
+                        'dt' => $i+1,
+                        'destination_id' => $form->destination[$i],
+                    );
+
+                    $this->model->itinerary_destination()->create($data);
+                }
+
+                for ($i=0; $i < count($form->additional); $i++) { 
+                    $data = array(
+                        'id' => $id,
+                        'dt' => $i+1,
+                        'additional_id' => $form->additional[$i],
+                    );
+
+                    $this->model->itinerary_additional()->create($data);
+                }
+
                 return Response::json(['status'=>1,'message'=>'Success updating data']);
             }
         });
@@ -1205,10 +1244,7 @@ class apiController extends Controller
         $destination = $this->model->destination()->get();
         $additional = $this->model->additional()->where('active','true')->get();
         
-        $data = $this->model->itinerary()->with(['itinerary_detail','itinerary_flight','itinerary_schedule'])->where('id',$id)->first();
-
-        $data->destination = array_map('intval', explode(',', $data->destination_id)); 
-        $data->additional = array_map('intval', explode(',', $data->additional_id));
+        $data = $this->model->itinerary()->with(['itinerary_detail','itinerary_flight','itinerary_schedule','itinerary_destination','itinerary_additional'])->where('id',$id)->first();
 
         $image = './'.$data->carousel_1;
         $imgfile = file_get_contents($image);

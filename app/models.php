@@ -21,6 +21,8 @@ use App\booking_additional;
 use App\company;
 use App\city;
 use App\carousel;
+use App\itinerary_additional;
+use App\itinerary_destination;
 
 class models extends Model
 {
@@ -148,5 +150,19 @@ class models extends Model
         $carousel = new carousel();
 
         return $carousel; 
+    }
+
+    public function itinerary_additional()
+    {
+        $itinerary_additional = new itinerary_additional();
+
+        return $itinerary_additional; 
+    }
+
+    public function itinerary_destination()
+    {
+        $itinerary_destination = new itinerary_destination();
+
+        return $itinerary_destination; 
     }
 }

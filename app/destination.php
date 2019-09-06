@@ -23,4 +23,9 @@ class destination extends Model
                             'created_by',
 							'updated_by',
     					];
+
+    public function itinerary()
+    {
+        return $this->hasMany('App\itinerary_destination', 'itinerary_code', 'id');
+    }
 }	

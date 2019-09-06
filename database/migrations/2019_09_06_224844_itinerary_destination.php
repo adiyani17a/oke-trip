@@ -16,6 +16,7 @@ class ItineraryDestination extends Migration
         Schema::create('itinerary_destination', function ($table) {
             $table->engine = 'MyISAM';
             $table->integer('id')->primary();
+            $table->integer('dt')->primary();
             $table->integer('destination_id');
             $table->timestamps(); 
         });

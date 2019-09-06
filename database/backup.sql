@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
--- Host:                         103.101.225.81
--- Server version:               5.7.27-0ubuntu0.16.04.1 - (Ubuntu)
--- Server OS:                    Linux
+-- Host:                         127.0.0.1
+-- Server version:               5.6.37 - MySQL Community Server (GPL)
+-- Server OS:                    Win32
 -- HeidiSQL Version:             10.2.0.5599
 -- --------------------------------------------------------
 
@@ -11,7 +11,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for table oketrip.additional
+-- Dumping structure for table oke_trip.additional
 CREATE TABLE IF NOT EXISTS `additional` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -26,13 +26,13 @@ CREATE TABLE IF NOT EXISTS `additional` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.additional: ~0 rows (approximately)
+-- Dumping data for table oke_trip.additional: ~1 rows (approximately)
 /*!40000 ALTER TABLE `additional` DISABLE KEYS */;
 REPLACE INTO `additional` (`id`, `name`, `note`, `image`, `price`, `created_by`, `updated_by`, `active`, `created_at`, `updated_at`) VALUES
 	(1, 'FPG insurance', 'asuransi dari fpg', '/dist/img/additional/additional_FPG insurance.jpg', 2500000.00, 'adi', 'adi wielijarni', 'true', '2019-08-14 09:33:45', '2019-08-21 15:15:20');
 /*!40000 ALTER TABLE `additional` ENABLE KEYS */;
 
--- Dumping structure for table oketrip.booking
+-- Dumping structure for table oke_trip.booking
 CREATE TABLE IF NOT EXISTS `booking` (
   `id` int(11) NOT NULL,
   `kode` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -61,11 +61,11 @@ CREATE TABLE IF NOT EXISTS `booking` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.booking: 0 rows
+-- Dumping data for table oke_trip.booking: 0 rows
 /*!40000 ALTER TABLE `booking` DISABLE KEYS */;
 /*!40000 ALTER TABLE `booking` ENABLE KEYS */;
 
--- Dumping structure for table oketrip.booking_additional
+-- Dumping structure for table oke_trip.booking_additional
 CREATE TABLE IF NOT EXISTS `booking_additional` (
   `id` int(11) NOT NULL,
   `id_booking_d` int(11) NOT NULL,
@@ -74,11 +74,11 @@ CREATE TABLE IF NOT EXISTS `booking_additional` (
   PRIMARY KEY (`id`,`dt`,`id_booking_d`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.booking_additional: 0 rows
+-- Dumping data for table oke_trip.booking_additional: 0 rows
 /*!40000 ALTER TABLE `booking_additional` DISABLE KEYS */;
 /*!40000 ALTER TABLE `booking_additional` ENABLE KEYS */;
 
--- Dumping structure for table oketrip.booking_d
+-- Dumping structure for table oke_trip.booking_d
 CREATE TABLE IF NOT EXISTS `booking_d` (
   `id` int(11) NOT NULL,
   `dt` int(11) NOT NULL,
@@ -99,11 +99,31 @@ CREATE TABLE IF NOT EXISTS `booking_d` (
   PRIMARY KEY (`id`,`dt`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.booking_d: 0 rows
+-- Dumping data for table oke_trip.booking_d: 0 rows
 /*!40000 ALTER TABLE `booking_d` DISABLE KEYS */;
 /*!40000 ALTER TABLE `booking_d` ENABLE KEYS */;
 
--- Dumping structure for table oketrip.company
+-- Dumping structure for table oke_trip.carousel
+CREATE TABLE IF NOT EXISTS `carousel` (
+  `id` int(11) NOT NULL,
+  `carousel_1` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `carousel_2` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `carousel_3` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `note_1` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `note_2` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `note_3` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_by` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `updated_by` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table oke_trip.carousel: 0 rows
+/*!40000 ALTER TABLE `carousel` DISABLE KEYS */;
+/*!40000 ALTER TABLE `carousel` ENABLE KEYS */;
+
+-- Dumping structure for table oke_trip.company
 CREATE TABLE IF NOT EXISTS `company` (
   `id` int(11) NOT NULL,
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -120,13 +140,13 @@ CREATE TABLE IF NOT EXISTS `company` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.company: 1 rows
+-- Dumping data for table oke_trip.company: 1 rows
 /*!40000 ALTER TABLE `company` DISABLE KEYS */;
 REPLACE INTO `company` (`id`, `name`, `address`, `phone`, `email`, `city_id`, `image`, `active`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, 'PT Jawa Abadi', 'JL. Manokwari 115', '0897897878', 'jawa.abadi@gmail.com', 3578, '/dist/img/company/leader_PT Jawa Abadi_1.jpg', 'true', 'adi wielijarni', 'adi wielijarni', '2019-09-03 11:03:03', '2019-09-03 11:03:06');
 /*!40000 ALTER TABLE `company` ENABLE KEYS */;
 
--- Dumping structure for table oketrip.destination
+-- Dumping structure for table oke_trip.destination
 CREATE TABLE IF NOT EXISTS `destination` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -140,7 +160,7 @@ CREATE TABLE IF NOT EXISTS `destination` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.destination: ~6 rows (approximately)
+-- Dumping data for table oke_trip.destination: ~6 rows (approximately)
 /*!40000 ALTER TABLE `destination` DISABLE KEYS */;
 REPLACE INTO `destination` (`id`, `name`, `note`, `image`, `active`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
 	(1, 'Hongkong', 'Travel To Hongkong', '/dist/img/destination/destination_Hongkong.jpg', 'true', '2019-08-14 09:30:16', 'adi', '2019-09-06 21:30:46', 'adi wielijarni'),
@@ -151,7 +171,7 @@ REPLACE INTO `destination` (`id`, `name`, `note`, `image`, `active`, `created_at
 	(6, 'Bangkok', 'Go to Bangkok', '/dist/img/destination/destination_Bangkok.jpg', NULL, '2019-09-06 22:30:05', 'adi wielijarni', '2019-09-06 22:30:05', 'adi wielijarni');
 /*!40000 ALTER TABLE `destination` ENABLE KEYS */;
 
--- Dumping structure for table oketrip.group_menu
+-- Dumping structure for table oke_trip.group_menu
 CREATE TABLE IF NOT EXISTS `group_menu` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -165,7 +185,7 @@ CREATE TABLE IF NOT EXISTS `group_menu` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.group_menu: ~5 rows (approximately)
+-- Dumping data for table oke_trip.group_menu: ~5 rows (approximately)
 /*!40000 ALTER TABLE `group_menu` DISABLE KEYS */;
 REPLACE INTO `group_menu` (`id`, `name`, `slug`, `icon`, `url`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, 'Setting', 'setting', 'fas fa-cogs', '-', 'adi', 'adi', '2019-08-14 08:48:34', '2019-08-14 09:10:03'),
@@ -175,7 +195,7 @@ REPLACE INTO `group_menu` (`id`, `name`, `slug`, `icon`, `url`, `created_by`, `u
 	(5, 'Report', 'report', 'fas fa-book', '-', 'adi', 'adi', '2019-08-14 09:12:53', '2019-08-14 09:12:53');
 /*!40000 ALTER TABLE `group_menu` ENABLE KEYS */;
 
--- Dumping structure for table oketrip.itinerary
+-- Dumping structure for table oke_trip.itinerary
 CREATE TABLE IF NOT EXISTS `itinerary` (
   `id` int(11) NOT NULL,
   `code` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -205,19 +225,61 @@ CREATE TABLE IF NOT EXISTS `itinerary` (
   UNIQUE KEY `itinerary_code_unique` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.itinerary: ~7 rows (approximately)
+-- Dumping data for table oke_trip.itinerary: ~7 rows (approximately)
 /*!40000 ALTER TABLE `itinerary` DISABLE KEYS */;
 REPLACE INTO `itinerary` (`id`, `code`, `name`, `destination_id`, `highlight`, `term_condition`, `flight_by`, `additional_id`, `carousel_1`, `carousel_2`, `carousel_3`, `note_1`, `note_2`, `note_3`, `pdf`, `flayer_image`, `summary`, `book_by`, `active`, `hot_deals`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, 'TR19082100001', '4D HONGKONG, CHINA', '1,2', 'AIRASIA', '<p>AIRASIA</p>', 'AIRASIA', '1', 'dist/img/itinerary/carousel_1_1.jpg', 'dist/img/itinerary/carousel_2_1.jpg', 'dist/img/itinerary/carousel_3_1.jpg', 'AIRASIA', 'AIRASIA', 'AIRASIA', './dist/pdf/itinerary/pdf_1.pdf', 'dist/img/itinerary/flyer_1.jpg', 'What are Terms and Conditions  Terms and Conditions agreements act as a legal contract between you (the company) who has the website or mobile app and the user who access your website and mobile app.  Having a Terms and Conditions agreement is completely optional. No laws require you to have one. Not even the super-strict and wide-reaching General Data Protection Regulation (GDPR).', NULL, 'true', NULL, 4, 3, '2019-08-21 14:37:01', '2019-09-06 19:49:32'),
 	(2, 'TR19082100002', '2D HONGKONG,SURABAYA', '2,3', 'AIRASIA', '<p>AIRASIA</p>', 'AIRASIA', '1', 'dist/img/itinerary/carousel_1_2.jpg', 'dist/img/itinerary/carousel_2_2.jpg', 'dist/img/itinerary/carousel_3_2.jpg', 'AIRASIA', 'AIRASIA', 'AIRASIA', 'dist/pdf/itinerary/pdf_2.pdf', 'dist/img/itinerary/flyer_2.jpg', '', NULL, 'true', NULL, 4, 3, '2019-08-21 14:55:16', '2019-09-06 19:49:30'),
 	(3, 'TR19082100003', '3D HONGKONG CHINA', '2,1', 'BLUE ASIA', '<p>BLUE ASIA</p>', 'BLUE ASIA', '1', 'dist/img/itinerary/carousel_1_3.jpg', 'dist/img/itinerary/carousel_2_3.jpg', 'dist/img/itinerary/carousel_3_3.jpg', 'BLUE ASIA', 'BLUE ASIA', 'BLUE ASIA', 'dist/pdf/itinerary/pdf_3.pdf', 'dist/img/itinerary/flyer_3.jpg', '', NULL, 'true', NULL, 4, 3, '2019-08-21 15:05:03', '2019-09-06 19:49:29'),
-	(4, 'TR19082100004', '2D HONGKONG, CHINA', '1,2', 'itinerary', '<p>itinerary</p>', 'itinerary', '1', 'dist/img/itinerary/carousel_1_4.jpg', 'dist/img/itinerary/carousel_2_4.jpg', 'dist/img/itinerary/carousel_3_4.jpg', 'itinerary', 'itinerary', 'itinerary', 'dist/pdf/itinerary/pdf_4.pdf', 'dist/img/itinerary/flyer_4.jpg', 'What are Terms and Conditions  Terms and Conditions agreements act as a legal contract between you (the company) who has the website or mobile app and the user who access your website and mobile app.  Having a Terms and Conditions agreement is completely optional. No laws require you to have one. Not even the super-strict and wide-reaching General Data Protection Regulation (GDPR).', NULL, 'true', 'Y', 4, 3, '2019-08-21 15:07:40', '2019-09-06 19:49:27'),
-	(5, 'TR19082100005', '1D HONGKONG', '1', 'AIRASIA', '<p>AIRASIA</p>', 'AIRASIA', '1', 'dist/img/itinerary/carousel_1_5.jpg', 'dist/img/itinerary/carousel_2_5.jpg', 'dist/img/itinerary/carousel_3_5.jpg', 'AIRASIA', 'AIRASIA', 'AIRASIA', 'dist/pdf/itinerary/pdf_5.pdf', 'dist/img/itinerary/flyer_5.jpg', 'What are Terms and Conditions  Terms and Conditions agreements act as a legal contract between you (the company) who has the website or mobile app and the user who access your website and mobile app.  Having a Terms and Conditions agreement is completely optional. No laws require you to have one. Not even the super-strict and wide-reaching General Data Protection Regulation (GDPR).', NULL, 'true', 'Y', 4, 3, '2019-08-21 15:12:26', '2019-09-06 19:49:26'),
-	(6, 'TR19082100006', '2D CHINA', '2', 'LION AIR', '<p>LION AIR</p>', 'LION AIR', '1', 'dist/img/itinerary/carousel_1_6.jpg', 'dist/img/itinerary/carousel_2_6.jpg', 'dist/img/itinerary/carousel_3_6.jpg', 'LION AIR', 'LION AIR', 'LION AIR', 'dist/pdf/itinerary/pdf_6.pdf', 'dist/img/itinerary/flyer_6.jpg', 'What are Terms and Conditions  Terms and Conditions agreements act as a legal contract between you (the company) who has the website or mobile app and the user who access your website and mobile app.  Having a Terms and Conditions agreement is completely optional. No laws require you to have one. Not even the super-strict and wide-reaching General Data Protection Regulation (GDPR).', NULL, 'true', 'Y', 4, 3, '2019-08-21 15:15:04', '2019-09-06 19:49:25'),
-	(7, 'TR19082300007', '4D HONGKONG FOR FUN FUN', '1', 'MAKE YOUR TRIP BECOME FUN', '<p>What are Terms and Conditions</p><p>Terms and Conditions agreements act as a legal contract between you (the company) who has the website or mobile app and the user who access your website and mobile app.</p><p>Having a Terms and Conditions agreement is completely optional. No laws require you to have one. Not even the super-strict and wide-reaching General Data Protection Regulation (<a href="https://termsfeed.com/blog/gdpr/" rel="noopener noreferrer nofollow">GDPR</a>).</p><p>It’s up to you to set the rules and guidelines that the user must agree to. You can think of your Terms and Conditions agreement as the legal agreement where you <strong>maintain your rights</strong> to exclude users from your app in the event that they abuse your app, where you maintain your legal rights against potential app abusers, and so on.</p><p>Terms and Conditions are also known as Terms of Service or Terms of Use.</p><p>You can use this agreement anywhere, regardless of what platform your business operates on:</p><ul><li><p>Websites</p></li><li><p>WordPress blogs or blogs on any kind of platform: Joomla!, Drupal etc.</p></li><li><p>E-commerce shops</p></li><li><p>Mobile apps: iOS, Android or Windows phone</p></li><li><p><a href="https://termsfeed.com/blog/facebook-terms-of-service-login-details-app-details/" rel="noopener noreferrer nofollow">Facebook apps</a></p></li><li><p>Desktop apps</p></li><li><p><a href="https://termsfeed.com/blog/terms-use-privacy-policy-saas-applications/" rel="noopener noreferrer nofollow">SaaS apps</a></p></li></ul><p>Desktop apps usually have an <a href="https://termsfeed.com/blog/eula-saas-apps/" rel="noopener noreferrer nofollow">EULA</a> (End-User License Agreement) instead of a Terms and Conditions agreement, but your business can use <em>both</em>. Mobile apps are increasingly using Terms and Conditions along with an EULA if the mobile app has an online service component, i.e. it connects with a server.</p>', 'AIRASIA', '1', 'dist/img/itinerary/carousel_1_7.jpg', 'dist/img/itinerary/carousel_2_7.jpg', 'dist/img/itinerary/carousel_3_7.jpg', 'BRIDGE OF SOUTH HONGKONG', 'BRIDGE OF NORTH HONGKONG', 'BRIDGE OF JAPAN HONGKONG', 'dist/pdf/itinerary/pdf_7.pdf', 'dist/img/itinerary/flyer_7.jpg', 'What are Terms and Conditions  Terms and Conditions agreements act as a legal contract between you (the company) who has the website or mobile app and the user who access your website and mobile app.  Having a Terms and Conditions agreement is completely optional. No laws require you to have one. Not even the super-strict and wide-reaching General Data Protection Regulation (GDPR).', NULL, 'true', 'Y', 3, 3, '2019-08-23 09:42:16', '2019-09-03 10:55:12');
+	(4, 'TR19082100004', '2D HONGKONG, CHINA', '1,2', 'itinerary', '<p>itinerary</p>', 'itinerary', '1', 'dist/img/itinerary/carousel_1_4.jpg', 'dist/img/itinerary/carousel_2_4.jpg', 'dist/img/itinerary/carousel_3_4.jpg', 'itinerary', 'itinerary', 'itinerary', 'dist/pdf/itinerary/pdf_4.pdf', 'dist/img/itinerary/flyer_4.jpg', 'What are Terms and Conditions  Terms and Conditions agreements act as a legal contract between you (the company) who has the website or mobile app and the user who access your website and mobile app.  Having a Terms and Conditions agreement is completely optional. No laws require you to have one. Not even the super-strict and wide-reaching General Data Protection Regulation (GDPR).', NULL, 'true', 'Y', 4, 3, '2019-08-21 15:07:40', '2019-09-06 23:23:45'),
+	(5, 'TR19082100005', '1D HONGKONG', '1', 'AIRASIA', '<p>AIRASIA</p>', 'AIRASIA', '1', 'dist/img/itinerary/carousel_1_5.jpg', 'dist/img/itinerary/carousel_2_5.jpg', 'dist/img/itinerary/carousel_3_5.jpg', 'AIRASIA', 'AIRASIA', 'AIRASIA', 'dist/pdf/itinerary/pdf_5.pdf', 'dist/img/itinerary/flyer_5.jpg', 'What are Terms and Conditions  Terms and Conditions agreements act as a legal contract between you (the company) who has the website or mobile app and the user who access your website and mobile app.  Having a Terms and Conditions agreement is completely optional. No laws require you to have one. Not even the super-strict and wide-reaching General Data Protection Regulation (GDPR).', NULL, 'true', 'Y', 4, 3, '2019-08-21 15:12:26', '2019-09-06 23:23:32'),
+	(6, 'TR19082100006', '2D CHINA', '2', 'LION AIR', '<p>LION AIR</p>', 'LION AIR', '1', 'dist/img/itinerary/carousel_1_6.jpg', 'dist/img/itinerary/carousel_2_6.jpg', 'dist/img/itinerary/carousel_3_6.jpg', 'LION AIR', 'LION AIR', 'LION AIR', 'dist/pdf/itinerary/pdf_6.pdf', 'dist/img/itinerary/flyer_6.jpg', 'What are Terms and Conditions  Terms and Conditions agreements act as a legal contract between you (the company) who has the website or mobile app and the user who access your website and mobile app.  Having a Terms and Conditions agreement is completely optional. No laws require you to have one. Not even the super-strict and wide-reaching General Data Protection Regulation (GDPR).', NULL, 'true', 'Y', 4, 3, '2019-08-21 15:15:04', '2019-09-06 23:23:20'),
+	(7, 'TR19082300007', '4D HONGKONG FOR FUN FUN', '1', 'MAKE YOUR TRIP BECOME FUN', '<p>What are Terms and Conditions</p><p>Terms and Conditions agreements act as a legal contract between you (the company) who has the website or mobile app and the user who access your website and mobile app.</p><p>Having a Terms and Conditions agreement is completely optional. No laws require you to have one. Not even the super-strict and wide-reaching General Data Protection Regulation (<a href="https://termsfeed.com/blog/gdpr/" rel="noopener noreferrer nofollow">GDPR</a>).</p><p>It’s up to you to set the rules and guidelines that the user must agree to. You can think of your Terms and Conditions agreement as the legal agreement where you <strong>maintain your rights</strong> to exclude users from your app in the event that they abuse your app, where you maintain your legal rights against potential app abusers, and so on.</p><p>Terms and Conditions are also known as Terms of Service or Terms of Use.</p><p>You can use this agreement anywhere, regardless of what platform your business operates on:</p><ul><li><p>Websites</p></li><li><p>WordPress blogs or blogs on any kind of platform: Joomla!, Drupal etc.</p></li><li><p>E-commerce shops</p></li><li><p>Mobile apps: iOS, Android or Windows phone</p></li><li><p><a href="https://termsfeed.com/blog/facebook-terms-of-service-login-details-app-details/" rel="noopener noreferrer nofollow">Facebook apps</a></p></li><li><p>Desktop apps</p></li><li><p><a href="https://termsfeed.com/blog/terms-use-privacy-policy-saas-applications/" rel="noopener noreferrer nofollow">SaaS apps</a></p></li></ul><p>Desktop apps usually have an <a href="https://termsfeed.com/blog/eula-saas-apps/" rel="noopener noreferrer nofollow">EULA</a> (End-User License Agreement) instead of a Terms and Conditions agreement, but your business can use <em>both</em>. Mobile apps are increasingly using Terms and Conditions along with an EULA if the mobile app has an online service component, i.e. it connects with a server.</p>', 'AIRASIA', '1', 'dist/img/itinerary/carousel_1_7.jpg', 'dist/img/itinerary/carousel_2_7.jpg', 'dist/img/itinerary/carousel_3_7.jpg', 'BRIDGE OF SOUTH HONGKONG', 'BRIDGE OF NORTH HONGKONG', 'BRIDGE OF JAPAN HONGKONG', 'dist/pdf/itinerary/pdf_7.pdf', 'dist/img/itinerary/flyer_7.jpg', 'What are Terms and Conditions  Terms and Conditions agreements act as a legal contract between you (the company) who has the website or mobile app and the user who access your website and mobile app.  Having a Terms and Conditions agreement is completely optional. No laws require you to have one. Not even the super-strict and wide-reaching General Data Protection Regulation (GDPR).', NULL, 'true', 'Y', 3, 3, '2019-08-23 09:42:16', '2019-09-06 23:11:41');
 /*!40000 ALTER TABLE `itinerary` ENABLE KEYS */;
 
--- Dumping structure for table oketrip.itinerary_detail
+-- Dumping structure for table oke_trip.itinerary_additional
+CREATE TABLE IF NOT EXISTS `itinerary_additional` (
+  `id` int(11) NOT NULL,
+  `dt` int(11) NOT NULL,
+  `additional_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`,`dt`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table oke_trip.itinerary_additional: 0 rows
+/*!40000 ALTER TABLE `itinerary_additional` DISABLE KEYS */;
+REPLACE INTO `itinerary_additional` (`id`, `dt`, `additional_id`, `created_at`, `updated_at`) VALUES
+	(7, 1, 1, '2019-09-06 23:11:41', '2019-09-06 23:11:41'),
+	(6, 1, 1, '2019-09-06 23:23:20', '2019-09-06 23:23:20'),
+	(5, 1, 1, '2019-09-06 23:23:32', '2019-09-06 23:23:32'),
+	(4, 1, 1, '2019-09-06 23:23:45', '2019-09-06 23:23:45');
+/*!40000 ALTER TABLE `itinerary_additional` ENABLE KEYS */;
+
+-- Dumping structure for table oke_trip.itinerary_destination
+CREATE TABLE IF NOT EXISTS `itinerary_destination` (
+  `id` int(11) NOT NULL,
+  `dt` int(11) NOT NULL,
+  `destination_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`,`dt`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table oke_trip.itinerary_destination: 0 rows
+/*!40000 ALTER TABLE `itinerary_destination` DISABLE KEYS */;
+REPLACE INTO `itinerary_destination` (`id`, `dt`, `destination_id`, `created_at`, `updated_at`) VALUES
+	(7, 1, 1, '2019-09-06 23:11:41', '2019-09-06 23:11:41'),
+	(7, 2, 2, '2019-09-06 23:11:41', '2019-09-06 23:11:41'),
+	(7, 3, 3, '2019-09-06 23:11:41', '2019-09-06 23:11:41'),
+	(6, 1, 4, '2019-09-06 23:23:20', '2019-09-06 23:23:20'),
+	(5, 1, 3, '2019-09-06 23:23:32', '2019-09-06 23:23:32'),
+	(4, 1, 1, '2019-09-06 23:23:45', '2019-09-06 23:23:45'),
+	(4, 2, 4, '2019-09-06 23:23:45', '2019-09-06 23:23:45'),
+	(4, 3, 3, '2019-09-06 23:23:45', '2019-09-06 23:23:45');
+/*!40000 ALTER TABLE `itinerary_destination` ENABLE KEYS */;
+
+-- Dumping structure for table oke_trip.itinerary_detail
 CREATE TABLE IF NOT EXISTS `itinerary_detail` (
   `id` int(11) NOT NULL,
   `dt` int(11) NOT NULL,
@@ -248,7 +310,7 @@ CREATE TABLE IF NOT EXISTS `itinerary_detail` (
   PRIMARY KEY (`id`,`dt`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.itinerary_detail: ~13 rows (approximately)
+-- Dumping data for table oke_trip.itinerary_detail: ~15 rows (approximately)
 /*!40000 ALTER TABLE `itinerary_detail` DISABLE KEYS */;
 REPLACE INTO `itinerary_detail` (`id`, `dt`, `code`, `seat`, `seat_remain`, `booked_by`, `start`, `end`, `adult_price`, `child_price`, `child_bed_price`, `infant_price`, `minimal_dp`, `agent_com`, `agent_tip`, `agent_visa`, `agent_tax`, `tour_leader_tips`, `final_pdf`, `term_pdf`, `flayer_jpg`, `tour_leader_id`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, 1, 'TR19082100001/001', 15, 15, 0, '2019-08-21', '2019-08-21', 2500000.00, 2500000.00, 2500000.00, 2500000.00, 500000.00, 500000.00, 500000.00, 500000.00, 500000.00, 0.00, NULL, NULL, NULL, NULL, 4, 4, '2019-08-21 14:37:01', '2019-08-21 14:37:01'),
@@ -257,16 +319,16 @@ REPLACE INTO `itinerary_detail` (`id`, `dt`, `code`, `seat`, `seat_remain`, `boo
 	(2, 2, 'TR19082100002/002', 10, 10, 0, '2019-08-21', '2019-08-21', 2500000.00, 2500000.00, 2500000.00, 2500000.00, 2500000.00, 2500000.00, 2500000.00, 2500000.00, 2500000.00, 0.00, NULL, NULL, NULL, NULL, 4, 4, '2019-08-21 14:55:16', '2019-08-21 14:55:16'),
 	(3, 1, 'TR19082100003/001', 15, 15, 0, '2019-08-21', '2019-08-21', 2500000.00, 2500000.00, 2500000.00, 2500000.00, 12.00, 2500000.00, 2500000.00, 2500000.00, 2500000.00, 0.00, NULL, NULL, NULL, NULL, 4, 4, '2019-08-21 15:05:03', '2019-08-21 15:05:03'),
 	(3, 2, 'TR19082100003/002', 25, 25, 0, '2019-08-21', '2019-08-21', 2500000.00, 2500000.00, 2500000.00, 2500000.00, 2500000.00, 2500000.00, 2500000.00, 2500000.00, 2500000.00, 0.00, NULL, NULL, NULL, NULL, 4, 4, '2019-08-21 15:05:03', '2019-08-21 15:05:03'),
-	(4, 1, 'TR19082100004/001', 15, 15, 0, '2019-08-21', '2019-08-21', 2500000.00, 2500000.00, 2500000.00, 2500000.00, 500000.00, 500000.00, 500000.00, 500000.00, 500000.00, 0.00, NULL, NULL, NULL, NULL, 4, 4, '2019-08-21 15:07:40', '2019-08-21 15:07:40'),
-	(4, 2, 'TR19082100004/002', 15, 15, 0, '2019-08-21', '2019-08-21', 1250000.00, 1250000.00, 1250000.00, 1250000.00, 2500000.00, 250000.00, 250000.00, 50000.00, 250000.00, 0.00, NULL, NULL, NULL, NULL, 4, 4, '2019-08-21 15:07:40', '2019-08-21 15:07:40'),
-	(5, 1, 'TR19082100005/001', 15, 15, 0, '2019-08-21', '2019-08-21', 1500000.00, 1500000.00, 1500000.00, 1500000.00, 500000.00, 500000.00, 500000.00, 500000.00, 500000.00, 0.00, NULL, NULL, NULL, NULL, 4, 4, '2019-08-21 15:12:26', '2019-08-21 15:12:26'),
-	(6, 1, 'TR19082100006/001', 15, 15, 0, '2019-08-21', '2019-08-21', 2500000.00, 2500000.00, 2500000.00, 2500000.00, 500000.00, 500000.00, 500000.00, 500000.00, 500000.00, 0.00, NULL, NULL, NULL, NULL, 4, 4, '2019-08-21 15:15:04', '2019-08-21 15:15:04'),
-	(6, 2, 'TR19082100006/002', 15, 15, 0, '2019-08-21', '2019-08-23', 5800000.00, 5800000.00, 5800000.00, 5800000.00, 80000.00, 80000.00, 80000.00, 80000.00, 80000.00, 0.00, NULL, NULL, NULL, NULL, 4, 4, '2019-08-21 15:15:04', '2019-08-21 15:15:04'),
-	(7, 1, 'TR19082300007/001', 20, 20, 0, '2019-08-23', '2019-08-23', 3000000.00, 3000000.00, 3000000.00, 3000000.00, 500000.00, 500000.00, 500000.00, 500000.00, 500000.00, 0.00, NULL, NULL, NULL, NULL, 3, 3, '2019-09-03 10:50:25', '2019-09-03 10:50:25'),
-	(7, 2, 'TR19082300007/002', 20, 20, 5, '2019-08-23', '2019-08-23', 3000000.00, 3000000.00, 3000000.00, 1500000.00, 350000.00, 500000.00, 500000.00, 500000.00, 500000.00, 500000.00, 'dist/pdf/itinerary_detail/final_confirmation_7_2.pdf', 'dist/pdf/itinerary_detail/tata_tertib_7_2.pdf', 'dist/pdf/itinerary_detail/flayer_7_2.jpg', 1, 3, 3, '2019-09-03 10:50:25', '2019-09-03 11:08:56');
+	(4, 1, 'TR19082100004/001', 15, 15, NULL, '2019-08-21', '2019-08-21', 2500000.00, 2500000.00, 2500000.00, 2500000.00, 500000.00, 500000.00, 500000.00, 500000.00, 500000.00, NULL, NULL, NULL, NULL, NULL, 3, 3, '2019-09-06 23:23:45', '2019-09-06 23:23:45'),
+	(4, 2, 'TR19082100004/002', 15, 15, NULL, '2019-08-21', '2019-08-21', 1250000.00, 1250000.00, 1250000.00, 1250000.00, 2500000.00, 250000.00, 250000.00, 50000.00, 250000.00, NULL, NULL, NULL, NULL, NULL, 3, 3, '2019-09-06 23:23:45', '2019-09-06 23:23:45'),
+	(5, 1, 'TR19082100005/001', 15, 15, NULL, '2019-08-21', '2019-08-21', 1500000.00, 1500000.00, 1500000.00, 1500000.00, 500000.00, 500000.00, 500000.00, 500000.00, 500000.00, NULL, NULL, NULL, NULL, NULL, 3, 3, '2019-09-06 23:23:32', '2019-09-06 23:23:32'),
+	(6, 1, 'TR19082100006/001', 15, 15, NULL, '2019-08-21', '2019-08-21', 2500000.00, 2500000.00, 2500000.00, 2500000.00, 500000.00, 500000.00, 500000.00, 500000.00, 500000.00, NULL, NULL, NULL, NULL, NULL, 3, 3, '2019-09-06 23:23:20', '2019-09-06 23:23:20'),
+	(6, 2, 'TR19082100006/002', 15, 15, NULL, '2019-08-21', '2019-08-23', 5800000.00, 5800000.00, 5800000.00, 5800000.00, 80000.00, 80000.00, 80000.00, 80000.00, 80000.00, NULL, NULL, NULL, NULL, NULL, 3, 3, '2019-09-06 23:23:20', '2019-09-06 23:23:20'),
+	(7, 1, 'TR19082300007/001', 20, 20, NULL, '2019-08-23', '2019-08-23', 3000000.00, 3000000.00, 3000000.00, 3000000.00, 500000.00, 500000.00, 500000.00, 500000.00, 500000.00, NULL, NULL, NULL, NULL, NULL, 3, 3, '2019-09-06 23:11:41', '2019-09-06 23:11:41'),
+	(7, 2, 'TR19082300007/002', 20, 20, NULL, '2019-08-23', '2019-08-23', 3000000.00, 3000000.00, 3000000.00, 1500000.00, 350000.00, 500000.00, 500000.00, 500000.00, 500000.00, NULL, NULL, NULL, NULL, NULL, 3, 3, '2019-09-06 23:11:41', '2019-09-06 23:11:41');
 /*!40000 ALTER TABLE `itinerary_detail` ENABLE KEYS */;
 
--- Dumping structure for table oketrip.itinerary_flight
+-- Dumping structure for table oke_trip.itinerary_flight
 CREATE TABLE IF NOT EXISTS `itinerary_flight` (
   `id` int(11) NOT NULL,
   `dt` int(11) NOT NULL,
@@ -278,7 +340,7 @@ CREATE TABLE IF NOT EXISTS `itinerary_flight` (
   PRIMARY KEY (`id`,`dt`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.itinerary_flight: ~16 rows (approximately)
+-- Dumping data for table oke_trip.itinerary_flight: ~16 rows (approximately)
 /*!40000 ALTER TABLE `itinerary_flight` DISABLE KEYS */;
 REPLACE INTO `itinerary_flight` (`id`, `dt`, `flight_number`, `departure_airport_code`, `arrival_airport_code`, `departure`, `arrival`) VALUES
 	(1, 1, 'CX790', 'SUB', 'HKG', '08:30 WIB', '08:30 WIB'),
@@ -299,7 +361,7 @@ REPLACE INTO `itinerary_flight` (`id`, `dt`, `flight_number`, `departure_airport
 	(7, 4, 'CX790', 'JKT', 'SUB', '05:00 WIB', '07:00 WIB');
 /*!40000 ALTER TABLE `itinerary_flight` ENABLE KEYS */;
 
--- Dumping structure for table oketrip.itinerary_schedule
+-- Dumping structure for table oke_trip.itinerary_schedule
 CREATE TABLE IF NOT EXISTS `itinerary_schedule` (
   `id` int(11) NOT NULL,
   `dt` int(11) NOT NULL,
@@ -309,7 +371,7 @@ CREATE TABLE IF NOT EXISTS `itinerary_schedule` (
   PRIMARY KEY (`id`,`dt`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.itinerary_schedule: ~17 rows (approximately)
+-- Dumping data for table oke_trip.itinerary_schedule: ~17 rows (approximately)
 /*!40000 ALTER TABLE `itinerary_schedule` DISABLE KEYS */;
 REPLACE INTO `itinerary_schedule` (`id`, `dt`, `caption`, `title`, `eat_service`) VALUES
 	(1, 1, 'AIRASIA', 'AIRASIA', 'AIRASIA'),
@@ -331,7 +393,7 @@ REPLACE INTO `itinerary_schedule` (`id`, `dt`, `caption`, `title`, `eat_service`
 	(7, 4, 'sampai bandara pukul 22:00 WIB berangkat ke jakarta pukul 23:00 WIB lalu sampai ke jakarta pukul 04:00 WIB. Ke surabaya pukul 05:00 WIB dan sampai ke bandara juanda jam 07:00 WIB', 'Pulang ke indonesia', 'B');
 /*!40000 ALTER TABLE `itinerary_schedule` ENABLE KEYS */;
 
--- Dumping structure for table oketrip.menu_list
+-- Dumping structure for table oke_trip.menu_list
 CREATE TABLE IF NOT EXISTS `menu_list` (
   `id` int(11) NOT NULL,
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -347,7 +409,7 @@ CREATE TABLE IF NOT EXISTS `menu_list` (
   CONSTRAINT `menu_list_group_menu_id_foreign` FOREIGN KEY (`group_menu_id`) REFERENCES `group_menu` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.menu_list: ~18 rows (approximately)
+-- Dumping data for table oke_trip.menu_list: ~18 rows (approximately)
 /*!40000 ALTER TABLE `menu_list` DISABLE KEYS */;
 REPLACE INTO `menu_list` (`id`, `name`, `icon`, `slug`, `group_menu_id`, `url`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, 'Group Menu', '-', 'group-menu', 1, 'group-menu', 'adi', 'adi', '2019-08-14 08:53:06', '2019-08-14 08:53:06'),
@@ -370,15 +432,15 @@ REPLACE INTO `menu_list` (`id`, `name`, `icon`, `slug`, `group_menu_id`, `url`, 
 	(18, 'Company', '-', 'company', 2, 'company', 'adi wielijarni', 'adi wielijarni', '2019-09-03 10:58:06', '2019-09-03 10:58:06');
 /*!40000 ALTER TABLE `menu_list` ENABLE KEYS */;
 
--- Dumping structure for table oketrip.migrations
+-- Dumping structure for table oke_trip.migrations
 CREATE TABLE IF NOT EXISTS `migrations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.migrations: ~23 rows (approximately)
+-- Dumping data for table oke_trip.migrations: ~26 rows (approximately)
 /*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
 REPLACE INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(1, '2014_10_12_000000_create_users_table', 1),
@@ -403,10 +465,13 @@ REPLACE INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(20, '2019_08_27_194852_booking_d', 3),
 	(21, '2019_08_27_194910_booking_additional', 3),
 	(22, '2019_09_01_103417_company', 3),
-	(23, '2019_09_01_104600_regencies', 3);
+	(23, '2019_09_01_104600_regencies', 3),
+	(24, '2019_09_05_195310_carousel', 4),
+	(25, '2019_09_06_224844_itinerary_destination', 4),
+	(27, '2019_09_06_224849_itinerary_additional', 5);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 
--- Dumping structure for table oketrip.password_resets
+-- Dumping structure for table oke_trip.password_resets
 CREATE TABLE IF NOT EXISTS `password_resets` (
   `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `token` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -414,11 +479,11 @@ CREATE TABLE IF NOT EXISTS `password_resets` (
   KEY `password_resets_email_index` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.password_resets: ~0 rows (approximately)
+-- Dumping data for table oke_trip.password_resets: ~0 rows (approximately)
 /*!40000 ALTER TABLE `password_resets` DISABLE KEYS */;
 /*!40000 ALTER TABLE `password_resets` ENABLE KEYS */;
 
--- Dumping structure for table oketrip.privilege
+-- Dumping structure for table oke_trip.privilege
 CREATE TABLE IF NOT EXISTS `privilege` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `role_id` int(11) NOT NULL,
@@ -437,7 +502,7 @@ CREATE TABLE IF NOT EXISTS `privilege` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.privilege: ~54 rows (approximately)
+-- Dumping data for table oke_trip.privilege: ~54 rows (approximately)
 /*!40000 ALTER TABLE `privilege` DISABLE KEYS */;
 REPLACE INTO `privilege` (`id`, `role_id`, `role_name`, `menu_list_id`, `menu_list_name`, `view`, `create`, `edit`, `delete`, `validation`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, 1, 'Administrator', 1, 'Group Menu', 'true', 'true', 'true', 'true', 'true', 'adi', 'adi', '2019-08-14 08:53:06', '2019-08-14 09:29:37'),
@@ -496,7 +561,7 @@ REPLACE INTO `privilege` (`id`, `role_id`, `role_name`, `menu_list_id`, `menu_li
 	(54, 3, 'Agent', 18, 'Company', 'false', 'false', 'false', 'false', 'false', 'adi wielijarni', 'adi wielijarni', '2019-09-03 10:58:06', '2019-09-03 10:58:06');
 /*!40000 ALTER TABLE `privilege` ENABLE KEYS */;
 
--- Dumping structure for table oketrip.regencies
+-- Dumping structure for table oke_trip.regencies
 CREATE TABLE IF NOT EXISTS `regencies` (
   `id` int(11) NOT NULL,
   `province_id` int(11) NOT NULL,
@@ -504,7 +569,7 @@ CREATE TABLE IF NOT EXISTS `regencies` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.regencies: 514 rows
+-- Dumping data for table oke_trip.regencies: 514 rows
 /*!40000 ALTER TABLE `regencies` DISABLE KEYS */;
 REPLACE INTO `regencies` (`id`, `province_id`, `name`) VALUES
 	(1101, 11, 'KABUPATEN SIMEULUE'),
@@ -1023,7 +1088,7 @@ REPLACE INTO `regencies` (`id`, `province_id`, `name`) VALUES
 	(9471, 94, 'KOTA JAYAPURA');
 /*!40000 ALTER TABLE `regencies` ENABLE KEYS */;
 
--- Dumping structure for table oketrip.role
+-- Dumping structure for table oke_trip.role
 CREATE TABLE IF NOT EXISTS `role` (
   `id` int(11) NOT NULL,
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1036,7 +1101,7 @@ CREATE TABLE IF NOT EXISTS `role` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.role: ~3 rows (approximately)
+-- Dumping data for table oke_trip.role: ~3 rows (approximately)
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
 REPLACE INTO `role` (`id`, `name`, `note`, `active`, `type`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, 'Administrator', 'Top level of admin user', 'true', 'true', '1', 'adi', '2019-08-14 08:50:45', '2019-08-14 09:29:37'),
@@ -1044,7 +1109,7 @@ REPLACE INTO `role` (`id`, `name`, `note`, `active`, `type`, `created_by`, `upda
 	(3, 'Agent', 'Below level of master agent', 'true', 'true', 'adi', 'adi', '2019-08-14 09:27:03', '2019-08-14 09:27:03');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 
--- Dumping structure for table oketrip.sessions
+-- Dumping structure for table oke_trip.sessions
 CREATE TABLE IF NOT EXISTS `sessions` (
   `id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_id` int(10) unsigned DEFAULT NULL,
@@ -1055,11 +1120,18 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   UNIQUE KEY `sessions_id_unique` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.sessions: ~0 rows (approximately)
+-- Dumping data for table oke_trip.sessions: ~4 rows (approximately)
 /*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
+REPLACE INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
+	('cs6DIINUhEAckwDgAmOA0ZgG7V4Ix4YDdQ0grkoq', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoib3dScExDYkRkTUl3bmttWmIySERKRUhkRTcxN29ZWndvV2FIa3AweCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mzc6Imh0dHA6Ly8xMjcuMC4wLjE6ODA4MC9hcGkvdjEvZ2V0LWRhdGEiO319', 1567784833),
+	('giZwuoxEytAIYTS302dhp6bps136aidy7SqF0Aa6', 3, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiT3JhVjJRU2ZEZlQ3M0MzeDJicDE1UmI2TE9kd3pJQ0dJTmEyNWhLYiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjY6Imh0dHA6Ly8xMjcuMC4wLjE6ODA4MC9ob21lIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6Mzt9', 1567785876),
+	('HUgW2LTN3iPC6EneGsvfErUe0CbYJGAkLtz0vsAz', 3, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiYVF2OE1jVWx0Y2MwdkdWd244Q21Jd25ONFdMbWlNZDRuaklQckppMyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjMxOiJodHRwOi8vMTI3LjAuMC4xOjgwODAvaXRpbmVyYXJ5Ijt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6Mzt9', 1567787025),
+	('TTJ0eLJlBkZdUton0XuLY3L29uyRK5T0CT9jz8CN', 3, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoibFZWVXRuTXd1RThqY3J0V2ZmUzl2ZUpsR1dKdE8yWUF3RE8zbGpRVCI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjMzOiJodHRwOi8vMTI3LjAuMC4xOjgwODAvZGVzdGluYXRpb24iO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTozO30=', 1567784269),
+	('wnfTjcjl1oLNULFoaaHBeoIzuvG1Qn7ermvL08z4', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36', 'YToyOntzOjY6Il90b2tlbiI7czo0MDoiWlhLTkZRTkJWdVAydEhPQ3B1THlpdk44cEwzZnAyaUJteG5JbHZIRyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1567787025),
+	('YS3pNOKRdld9HV4N9OrZ2Sqx9g5oYtoIQz5y6EVO', 3, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoidHg5NTFtWXpsbUpKS3kzaUEzV2JoZzBFSUFEMll3eDBYSjZVdFVTUyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjMxOiJodHRwOi8vMTI3LjAuMC4xOjgwODAvaXRpbmVyYXJ5Ijt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6Mzt9', 1567786675);
 /*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
 
--- Dumping structure for table oketrip.token_management
+-- Dumping structure for table oke_trip.token_management
 CREATE TABLE IF NOT EXISTS `token_management` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -1069,19 +1141,19 @@ CREATE TABLE IF NOT EXISTS `token_management` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2146 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2186 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.token_management: ~5 rows (approximately)
+-- Dumping data for table oke_trip.token_management: ~5 rows (approximately)
 /*!40000 ALTER TABLE `token_management` DISABLE KEYS */;
 REPLACE INTO `token_management` (`id`, `user_id`, `access_token`, `expired_at`, `is_active`, `created_at`, `updated_at`) VALUES
 	(66, 1, 'YjY4YTQ5ODQ1ZmZiYmVhNmM1MDQ3OGI4MWY2MDM1NjBjZDhiZjU2YQ==', '2019-08-15 09:03:07', 1, '2019-08-14 09:03:07', '2019-08-14 09:03:07'),
 	(436, 2, 'OWUxMWRhNDYzNjI1MDYzYWQwZmZjNmM2M2IyMmYxMDczN2JiM2MyNw==', '2019-08-15 16:16:26', 1, '2019-08-14 16:16:26', '2019-08-14 16:16:26'),
 	(2121, 4, 'ZDdiY2E3YjA3ZjgxN2YzOTNmZWVkZDAwZWVmMWI4NmIyMDBhMTY3OQ==', '2019-09-07 16:24:41', 1, '2019-09-06 16:24:41', '2019-09-06 16:24:41'),
 	(2122, 4, 'YTMxOWZlYWE1ZjNhZjJhNmFmNGJkODljODZhMzkzMTk1NGJlZTk1MQ==', '2019-09-07 16:26:53', 1, '2019-09-06 16:26:53', '2019-09-06 16:26:53'),
-	(2145, 3, 'ZTViZGE5MDViNWFlODllODY3MjQzMGRhYzU2MTJiMjA0OThlNTg0Mw==', '2019-09-07 22:29:29', 1, '2019-09-06 22:29:29', '2019-09-06 22:29:29');
+	(2185, 3, 'ODZkOWM4NjkwZGU1NWJhMDY4ZjIwYjczNDZiNTQ5ZmUzNDY0NzVlZQ==', '2019-09-07 23:23:37', 1, '2019-09-06 23:23:37', '2019-09-06 23:23:37');
 /*!40000 ALTER TABLE `token_management` ENABLE KEYS */;
 
--- Dumping structure for table oketrip.tour_leader
+-- Dumping structure for table oke_trip.tour_leader
 CREATE TABLE IF NOT EXISTS `tour_leader` (
   `id` int(11) NOT NULL,
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1101,14 +1173,14 @@ CREATE TABLE IF NOT EXISTS `tour_leader` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.tour_leader: ~2 rows (approximately)
+-- Dumping data for table oke_trip.tour_leader: ~2 rows (approximately)
 /*!40000 ALTER TABLE `tour_leader` DISABLE KEYS */;
 REPLACE INTO `tour_leader` (`id`, `name`, `address`, `phone`, `passport`, `passport_exp_date`, `issuing`, `gender`, `birth_date`, `birth_place`, `image`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 	(1, 'Lukmans', 'Nginden Intan', '23434343', '21321321321321', '2019-08-23', 'dsfsf', 'male', '2019-08-23', 'surabaya', '/dist/img/user/admin_Lukman.jpg', 'adi wielijarni', 'adi wielijarni', '2019-08-23 16:30:24', '2019-08-23 17:44:58'),
 	(2, 'sdfa', 'asdaswdas', '2343423', '234234234', '2019-08-23', '343243', 'male', '2019-08-23', '34343', '/dist/img/user/admin_sdfa.jpg', 'adi wielijarni', 'adi wielijarni', '2019-08-23 17:45:15', '2019-08-23 17:45:15');
 /*!40000 ALTER TABLE `tour_leader` ENABLE KEYS */;
 
--- Dumping structure for table oketrip.users
+-- Dumping structure for table oke_trip.users
 CREATE TABLE IF NOT EXISTS `users` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -1129,7 +1201,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `users_api_token_unique` (`api_token`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.users: ~3 rows (approximately)
+-- Dumping data for table oke_trip.users: ~3 rows (approximately)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 REPLACE INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `api_token`, `remember_token`, `role_id`, `company_id`, `type_user`, `active`, `image`, `created_at`, `updated_at`) VALUES
 	(3, 'adi wielijarni', 'dewa17a@gmail.com', NULL, '$2y$10$.hdraGNS2OHKn9bl9./EluhSQ.pIHveoGBDW4HXg0Gv0RGvelo/RG', NULL, NULL, 1, NULL, 'ADMIN', 'true', '/dist/img/user/admin_adi wielijarni.jpg', '2019-08-15 08:33:38', '2019-08-15 08:47:14'),

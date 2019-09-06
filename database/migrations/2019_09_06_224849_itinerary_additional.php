@@ -13,7 +13,13 @@ class ItineraryAdditional extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('itinerary_additional', function ($table) {
+            $table->engine = 'MyISAM';
+            $table->integer('id')->primary();
+            $table->integer('dt')->primary();
+            $table->integer('additional_id');
+            $table->timestamps(); 
+        });
     }
 
     /**
@@ -23,6 +29,6 @@ class ItineraryAdditional extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('itinerary_additional');
     }
 }

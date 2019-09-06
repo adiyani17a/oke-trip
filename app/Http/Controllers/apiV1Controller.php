@@ -26,19 +26,17 @@ class apiV1Controller extends Controller
 		$data['hotDeal'] = $this->model->itinerary()->with(['itinerary_detail'])->where('hot_deals','Y')->where('active','true')->take(4)->get();
 		$data['destination'] = $this->model->destination()->take(6)->get();
 
-		foreach ($data['hotDeal'] as $i => $d) {
-			$data['hotDeal'][$i]->destination = explode(',', $d->destination_id);
-		}
 		// dd($data['hotDeal']);
 		foreach ($data['destination'] as $i => $d) {
-			$itinerary = explode(',', $d->destination_id);
-			dd($itinerary);
 
-			foreach ($variable as $key => $value) {
-				# code...
+			if (count($d->itinerary_destination) != 0) {
+				$data['destination'][$i]->total_data = $d->itinerary_destination->count(); 
+				$data['destination'][$i]->total_hot_deals = $d->itinerary_destination->itinerary->where('hot_deals','Y')->count(); 
+			}else{
+				$data['destination'][$i]->total_data = 0;
+				$data['destination'][$i]->total_hot_deals = 0;
+
 			}
-			$data['hotDeal'][$i]->itinerary_count = $d->itinerary->count();
-			$data['hotDeal'][$i]->itinerary_hot_deal = $d->itinerary->where('hot_deals','Y')->count();
 		}
 
 

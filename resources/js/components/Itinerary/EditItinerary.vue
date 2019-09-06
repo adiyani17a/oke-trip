@@ -765,8 +765,14 @@
                 this.id = response.data.data.id
                 this.form.code = response.data.data.code
                 this.form.name = response.data.data.name
-                this.form.destination = response.data.data.destination
-                this.form.additional = response.data.data.additional
+                for (var i = 0; i < response.data.data.itinerary_destination.length; i++) {
+                  this.form.destination.push(response.data.data.itinerary_destination[i].destination_id);
+                }
+
+                for (var i = 0; i < response.data.data.itinerary_additional.length; i++) {
+                  this.form.additional.push(response.data.data.itinerary_additional[i].additional_id);
+                }
+
                 this.form.flightBy = response.data.data.flight_by
                 this.form.highlight = response.data.data.highlight
                 this.form.summary = response.data.data.summary
