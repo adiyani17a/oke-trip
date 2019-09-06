@@ -2,7 +2,6 @@
   <div class="container" >
     <loading :active.sync="isLoading" 
         :can-cancel="true" 
-        :on-cancel="onCancel"
         :is-full-page="fullPage">    
     </loading>
     <div class="row justify-content-center" id="apps">
@@ -315,6 +314,8 @@
   import { required, maxLength, email } from 'vuelidate/lib/validators'
   import VueDropify from 'vue-dropify';
   import {VMoney} from 'v-money'
+  import Loading from 'vue-loading-overlay';
+  import 'vue-loading-overlay/dist/vue-loading.css';
   Vue.component('text-editor', require('../textEditor.vue').default)
 
   export default {
@@ -592,7 +593,8 @@
           idData: Array,
       },
       components: {
-          'vue-dropify': VueDropify
+          'vue-dropify': VueDropify,
+          Loading
       },
       watch: {
           dialog: function() {
