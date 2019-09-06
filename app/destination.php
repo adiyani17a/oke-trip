@@ -26,6 +26,6 @@ class destination extends Model
 
     public function itinerary_destination()
     {
-        return $this->hasMany('App\itinerary_destination', 'id', 'itinerary_code');
+        return $this->hasMany('App\itinerary_destination', 'destination_id', 'id');
     }
 }	

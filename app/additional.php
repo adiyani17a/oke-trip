@@ -27,6 +27,6 @@ class additional extends Model
 
     public function itinerary_additional()
     {
-        return $this->hasMany('App\itinerary_additional', 'id', 'itinerary_code');
+        return $this->hasMany('App\itinerary_additional', 'additional_id', 'id');
     }
 }
