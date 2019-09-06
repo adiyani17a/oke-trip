@@ -72,13 +72,13 @@ class apiController extends Controller
 
                 $file = $req->image;
                 if ($file != null) {
-                    
                     $filename = 'destination_'.$req->name.'.'.'jpg';
-                    $path = 'dist/img/destination';
+                    $path = './dist/img/destination';
                     if (!file_exists($path)) {
                         mkdir($path, 777, true);
                     }
-                    $file->move($path,$filename);
+                    $path = 'dist/img/destination/' . $filename;
+                    Image::make(file_get_contents($file))->save($path);  
                     $path = '/dist/img/destination/' . $filename;
                 }else{
                     $filename = null;
@@ -103,11 +103,12 @@ class apiController extends Controller
                         unlink('.'.$old_path->image);
                     }
                     $filename = 'destination_'.$req->name.'.'.'jpg';
-                    $path = 'dist/img/destination';
+                    $path = './dist/img/destination';
                     if (!file_exists($path)) {
                         mkdir($path, 777, true);
                     }
-                    $file->move($path,$filename);
+                    $path = 'dist/img/destination/' . $filename;
+                    Image::make(file_get_contents($file))->save($path);  
                     $path = '/dist/img/destination/' . $filename;
                 }else{
                     $filename = null;
