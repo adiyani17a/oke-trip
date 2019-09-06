@@ -791,7 +791,6 @@
                   this.form.caption[i] = response.data.data.itinerary_schedule[i].caption
                 }
 
-
                 for (var i = 0; i < this.addFlightDetail; i++) {
                   this.form.flight[i] = response.data.data.itinerary_flight[i].flight_number
                   this.form.departureAirportCode[i] = response.data.data.itinerary_flight[i].departure_airport_code
