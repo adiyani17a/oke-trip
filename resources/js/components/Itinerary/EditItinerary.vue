@@ -355,8 +355,8 @@
         fullPage: true,
         form: {
           name: '',
-          destination: '',
-          additional: '',
+          destination: [],
+          additional: [],
           flightBy: '',
           summary: '',
           code:'',
