@@ -13,7 +13,7 @@ class itinerary extends Model
     const UPDATED_AT = 'updated_at';
     const CREATED_AT = 'created_at';
     protected $fillable = [
-							'id', 'code', 'name', 'destination_id', 'highlight', 'term_condition', 'flight_by', 'additional_id', 'carousel_1', 'carousel_2', 'carousel_3', 'note_1', 'note_2', 'note_3', 'pdf', 'flayer_image', 'schedule', 'flight_detail', 'book_by', 'active', 'created_by', 'updated_by', 'created_at', 'updated_at','hot_deals','summary'
+							'id', 'code', 'name', 'highlight', 'term_condition', 'flight_by', 'additional_id', 'carousel_1', 'carousel_2', 'carousel_3', 'note_1', 'note_2', 'note_3', 'pdf', 'flayer_image', 'schedule', 'flight_detail', 'book_by', 'active', 'created_by', 'updated_by', 'created_at', 'updated_at','hot_deals','summary'
     					];
 
     public function itinerary_detail()

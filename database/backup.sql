@@ -132,20 +132,23 @@ CREATE TABLE IF NOT EXISTS `destination` (
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `note` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `image` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `active` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `created_by` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `updated_by` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.destination: ~4 rows (approximately)
+-- Dumping data for table oketrip.destination: ~6 rows (approximately)
 /*!40000 ALTER TABLE `destination` DISABLE KEYS */;
-REPLACE INTO `destination` (`id`, `name`, `note`, `image`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
-	(1, 'Hongkong', 'Travel To Hongkong', NULL, '2019-08-14 09:30:16', 'adi', '2019-08-14 09:30:16', 'adi'),
-	(2, 'China', 'Travel to china', NULL, '2019-08-14 09:30:32', 'adi', '2019-08-14 09:30:32', 'adi'),
-	(3, 'Dubai', 'Travel to dubai', NULL, '2019-08-14 09:30:44', 'adi', '2019-08-14 09:30:44', 'adi'),
-	(4, 'Japan', 'Travel to japan', NULL, '2019-08-14 09:31:00', 'adi', '2019-08-14 09:31:00', 'adi');
+REPLACE INTO `destination` (`id`, `name`, `note`, `image`, `active`, `created_at`, `created_by`, `updated_at`, `updated_by`) VALUES
+	(1, 'Hongkong', 'Travel To Hongkong', '/dist/img/destination/destination_Hongkong.jpg', 'true', '2019-08-14 09:30:16', 'adi', '2019-09-06 21:30:46', 'adi wielijarni'),
+	(2, 'China', 'Travel to china', '/dist/img/destination/destination_China.jpg', 'true', '2019-08-14 09:30:32', 'adi', '2019-09-06 21:30:20', 'adi wielijarni'),
+	(3, 'Dubai', 'Travel to dubai', '/dist/img/destination/destination_Dubai.jpg', 'true', '2019-08-14 09:30:44', 'adi', '2019-09-06 21:30:37', 'adi wielijarni'),
+	(4, 'Japan', 'Travel to japan', '/dist/img/destination/destination_Japan.jpg', 'true', '2019-08-14 09:31:00', 'adi', '2019-09-06 21:30:55', 'adi wielijarni'),
+	(5, 'Taiwan', 'Go to taiwan', '/dist/img/destination/destination_Taiwan.jpg', NULL, '2019-09-06 22:29:46', 'adi wielijarni', '2019-09-06 22:29:46', 'adi wielijarni'),
+	(6, 'Bangkok', 'Go to Bangkok', '/dist/img/destination/destination_Bangkok.jpg', NULL, '2019-09-06 22:30:05', 'adi wielijarni', '2019-09-06 22:30:05', 'adi wielijarni');
 /*!40000 ALTER TABLE `destination` ENABLE KEYS */;
 
 -- Dumping structure for table oketrip.group_menu
@@ -190,7 +193,7 @@ CREATE TABLE IF NOT EXISTS `itinerary` (
   `note_3` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `pdf` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `flayer_image` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `summary` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `summary` text COLLATE utf8mb4_unicode_ci,
   `book_by` int(11) DEFAULT NULL,
   `active` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `hot_deals` enum('Y','N') COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -205,13 +208,13 @@ CREATE TABLE IF NOT EXISTS `itinerary` (
 -- Dumping data for table oketrip.itinerary: ~7 rows (approximately)
 /*!40000 ALTER TABLE `itinerary` DISABLE KEYS */;
 REPLACE INTO `itinerary` (`id`, `code`, `name`, `destination_id`, `highlight`, `term_condition`, `flight_by`, `additional_id`, `carousel_1`, `carousel_2`, `carousel_3`, `note_1`, `note_2`, `note_3`, `pdf`, `flayer_image`, `summary`, `book_by`, `active`, `hot_deals`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-	(1, 'TR19082100001', '4D HONGKONG, CHINA', '1,2', 'AIRASIA', '<p>AIRASIA</p>', 'AIRASIA', '1', 'dist/img/itinerary/carousel_1_1.jpg', 'dist/img/itinerary/carousel_2_1.jpg', 'dist/img/itinerary/carousel_3_1.jpg', 'AIRASIA', 'AIRASIA', 'AIRASIA', './dist/pdf/itinerary/pdf_1.pdf', 'dist/img/itinerary/flyer_1.jpg', '', NULL, NULL, NULL, 4, 4, '2019-08-21 14:37:01', '2019-08-21 14:37:01'),
-	(2, 'TR19082100002', '2D HONGKONG,SURABAYA', '2,3', 'AIRASIA', '<p>AIRASIA</p>', 'AIRASIA', '1', 'dist/img/itinerary/carousel_1_2.jpg', 'dist/img/itinerary/carousel_2_2.jpg', 'dist/img/itinerary/carousel_3_2.jpg', 'AIRASIA', 'AIRASIA', 'AIRASIA', 'dist/pdf/itinerary/pdf_2.pdf', 'dist/img/itinerary/flyer_2.jpg', '', NULL, NULL, NULL, 4, 4, '2019-08-21 14:55:16', '2019-08-21 14:55:16'),
-	(3, 'TR19082100003', '3D HONGKONG CHINA', '2,1', 'BLUE ASIA', '<p>BLUE ASIA</p>', 'BLUE ASIA', '1', 'dist/img/itinerary/carousel_1_3.jpg', 'dist/img/itinerary/carousel_2_3.jpg', 'dist/img/itinerary/carousel_3_3.jpg', 'BLUE ASIA', 'BLUE ASIA', 'BLUE ASIA', 'dist/pdf/itinerary/pdf_3.pdf', 'dist/img/itinerary/flyer_3.jpg', '', NULL, NULL, NULL, 4, 4, '2019-08-21 15:05:03', '2019-08-21 15:05:03'),
-	(4, 'TR19082100004', '2D HONGKONG, CHINA', '1,2', 'itinerary', '<p>itinerary</p>', 'itinerary', '1', 'dist/img/itinerary/carousel_1_4.jpg', 'dist/img/itinerary/carousel_2_4.jpg', 'dist/img/itinerary/carousel_3_4.jpg', 'itinerary', 'itinerary', 'itinerary', 'dist/pdf/itinerary/pdf_4.pdf', 'dist/img/itinerary/flyer_4.jpg', '', NULL, NULL, NULL, 4, 4, '2019-08-21 15:07:40', '2019-08-21 15:07:40'),
-	(5, 'TR19082100005', '1D HONGKONG', '1', 'AIRASIA', '<p>AIRASIA</p>', 'AIRASIA', '1', 'dist/img/itinerary/carousel_1_5.jpg', 'dist/img/itinerary/carousel_2_5.jpg', 'dist/img/itinerary/carousel_3_5.jpg', 'AIRASIA', 'AIRASIA', 'AIRASIA', 'dist/pdf/itinerary/pdf_5.pdf', 'dist/img/itinerary/flyer_5.jpg', '', NULL, NULL, 'Y', 4, 4, '2019-08-21 15:12:26', '2019-08-21 15:12:26'),
-	(6, 'TR19082100006', '2D CHINA', '2', 'LION AIR', '<p>LION AIR</p>', 'LION AIR', '1', 'dist/img/itinerary/carousel_1_6.jpg', 'dist/img/itinerary/carousel_2_6.jpg', 'dist/img/itinerary/carousel_3_6.jpg', 'LION AIR', 'LION AIR', 'LION AIR', 'dist/pdf/itinerary/pdf_6.pdf', 'dist/img/itinerary/flyer_6.jpg', '', NULL, NULL, 'Y', 4, 4, '2019-08-21 15:15:04', '2019-08-21 15:15:04'),
-	(7, 'TR19082300007', '4D HONGKONG FOR FUN FUN', '1', 'MAKE YOUR TRIP BECOME FUN', '<p>What are Terms and Conditions</p><p>Terms and Conditions agreements act as a legal contract between you (the company) who has the website or mobile app and the user who access your website and mobile app.</p><p>Having a Terms and Conditions agreement is completely optional. No laws require you to have one. Not even the super-strict and wide-reaching General Data Protection Regulation (<a href="https://termsfeed.com/blog/gdpr/" rel="noopener noreferrer nofollow">GDPR</a>).</p><p>It’s up to you to set the rules and guidelines that the user must agree to. You can think of your Terms and Conditions agreement as the legal agreement where you <strong>maintain your rights</strong> to exclude users from your app in the event that they abuse your app, where you maintain your legal rights against potential app abusers, and so on.</p><p>Terms and Conditions are also known as Terms of Service or Terms of Use.</p><p>You can use this agreement anywhere, regardless of what platform your business operates on:</p><ul><li><p>Websites</p></li><li><p>WordPress blogs or blogs on any kind of platform: Joomla!, Drupal etc.</p></li><li><p>E-commerce shops</p></li><li><p>Mobile apps: iOS, Android or Windows phone</p></li><li><p><a href="https://termsfeed.com/blog/facebook-terms-of-service-login-details-app-details/" rel="noopener noreferrer nofollow">Facebook apps</a></p></li><li><p>Desktop apps</p></li><li><p><a href="https://termsfeed.com/blog/terms-use-privacy-policy-saas-applications/" rel="noopener noreferrer nofollow">SaaS apps</a></p></li></ul><p>Desktop apps usually have an <a href="https://termsfeed.com/blog/eula-saas-apps/" rel="noopener noreferrer nofollow">EULA</a> (End-User License Agreement) instead of a Terms and Conditions agreement, but your business can use <em>both</em>. Mobile apps are increasingly using Terms and Conditions along with an EULA if the mobile app has an online service component, i.e. it connects with a server.</p>', 'AIRASIA', '1', 'dist/img/itinerary/carousel_1_7.jpg', 'dist/img/itinerary/carousel_2_7.jpg', 'dist/img/itinerary/carousel_3_7.jpg', 'BRIDGE OF SOUTH HONGKONG', 'BRIDGE OF NORTH HONGKONG', 'BRIDGE OF JAPAN HONGKONG', 'dist/pdf/itinerary/pdf_7.pdf', 'dist/img/itinerary/flyer_7.jpg', '', NULL, 'true', 'Y', 3, 3, '2019-08-23 09:42:16', '2019-09-03 10:55:12');
+	(1, 'TR19082100001', '4D HONGKONG, CHINA', '1,2', 'AIRASIA', '<p>AIRASIA</p>', 'AIRASIA', '1', 'dist/img/itinerary/carousel_1_1.jpg', 'dist/img/itinerary/carousel_2_1.jpg', 'dist/img/itinerary/carousel_3_1.jpg', 'AIRASIA', 'AIRASIA', 'AIRASIA', './dist/pdf/itinerary/pdf_1.pdf', 'dist/img/itinerary/flyer_1.jpg', 'What are Terms and Conditions  Terms and Conditions agreements act as a legal contract between you (the company) who has the website or mobile app and the user who access your website and mobile app.  Having a Terms and Conditions agreement is completely optional. No laws require you to have one. Not even the super-strict and wide-reaching General Data Protection Regulation (GDPR).', NULL, 'true', NULL, 4, 3, '2019-08-21 14:37:01', '2019-09-06 19:49:32'),
+	(2, 'TR19082100002', '2D HONGKONG,SURABAYA', '2,3', 'AIRASIA', '<p>AIRASIA</p>', 'AIRASIA', '1', 'dist/img/itinerary/carousel_1_2.jpg', 'dist/img/itinerary/carousel_2_2.jpg', 'dist/img/itinerary/carousel_3_2.jpg', 'AIRASIA', 'AIRASIA', 'AIRASIA', 'dist/pdf/itinerary/pdf_2.pdf', 'dist/img/itinerary/flyer_2.jpg', '', NULL, 'true', NULL, 4, 3, '2019-08-21 14:55:16', '2019-09-06 19:49:30'),
+	(3, 'TR19082100003', '3D HONGKONG CHINA', '2,1', 'BLUE ASIA', '<p>BLUE ASIA</p>', 'BLUE ASIA', '1', 'dist/img/itinerary/carousel_1_3.jpg', 'dist/img/itinerary/carousel_2_3.jpg', 'dist/img/itinerary/carousel_3_3.jpg', 'BLUE ASIA', 'BLUE ASIA', 'BLUE ASIA', 'dist/pdf/itinerary/pdf_3.pdf', 'dist/img/itinerary/flyer_3.jpg', '', NULL, 'true', NULL, 4, 3, '2019-08-21 15:05:03', '2019-09-06 19:49:29'),
+	(4, 'TR19082100004', '2D HONGKONG, CHINA', '1,2', 'itinerary', '<p>itinerary</p>', 'itinerary', '1', 'dist/img/itinerary/carousel_1_4.jpg', 'dist/img/itinerary/carousel_2_4.jpg', 'dist/img/itinerary/carousel_3_4.jpg', 'itinerary', 'itinerary', 'itinerary', 'dist/pdf/itinerary/pdf_4.pdf', 'dist/img/itinerary/flyer_4.jpg', 'What are Terms and Conditions  Terms and Conditions agreements act as a legal contract between you (the company) who has the website or mobile app and the user who access your website and mobile app.  Having a Terms and Conditions agreement is completely optional. No laws require you to have one. Not even the super-strict and wide-reaching General Data Protection Regulation (GDPR).', NULL, 'true', 'Y', 4, 3, '2019-08-21 15:07:40', '2019-09-06 19:49:27'),
+	(5, 'TR19082100005', '1D HONGKONG', '1', 'AIRASIA', '<p>AIRASIA</p>', 'AIRASIA', '1', 'dist/img/itinerary/carousel_1_5.jpg', 'dist/img/itinerary/carousel_2_5.jpg', 'dist/img/itinerary/carousel_3_5.jpg', 'AIRASIA', 'AIRASIA', 'AIRASIA', 'dist/pdf/itinerary/pdf_5.pdf', 'dist/img/itinerary/flyer_5.jpg', 'What are Terms and Conditions  Terms and Conditions agreements act as a legal contract between you (the company) who has the website or mobile app and the user who access your website and mobile app.  Having a Terms and Conditions agreement is completely optional. No laws require you to have one. Not even the super-strict and wide-reaching General Data Protection Regulation (GDPR).', NULL, 'true', 'Y', 4, 3, '2019-08-21 15:12:26', '2019-09-06 19:49:26'),
+	(6, 'TR19082100006', '2D CHINA', '2', 'LION AIR', '<p>LION AIR</p>', 'LION AIR', '1', 'dist/img/itinerary/carousel_1_6.jpg', 'dist/img/itinerary/carousel_2_6.jpg', 'dist/img/itinerary/carousel_3_6.jpg', 'LION AIR', 'LION AIR', 'LION AIR', 'dist/pdf/itinerary/pdf_6.pdf', 'dist/img/itinerary/flyer_6.jpg', 'What are Terms and Conditions  Terms and Conditions agreements act as a legal contract between you (the company) who has the website or mobile app and the user who access your website and mobile app.  Having a Terms and Conditions agreement is completely optional. No laws require you to have one. Not even the super-strict and wide-reaching General Data Protection Regulation (GDPR).', NULL, 'true', 'Y', 4, 3, '2019-08-21 15:15:04', '2019-09-06 19:49:25'),
+	(7, 'TR19082300007', '4D HONGKONG FOR FUN FUN', '1', 'MAKE YOUR TRIP BECOME FUN', '<p>What are Terms and Conditions</p><p>Terms and Conditions agreements act as a legal contract between you (the company) who has the website or mobile app and the user who access your website and mobile app.</p><p>Having a Terms and Conditions agreement is completely optional. No laws require you to have one. Not even the super-strict and wide-reaching General Data Protection Regulation (<a href="https://termsfeed.com/blog/gdpr/" rel="noopener noreferrer nofollow">GDPR</a>).</p><p>It’s up to you to set the rules and guidelines that the user must agree to. You can think of your Terms and Conditions agreement as the legal agreement where you <strong>maintain your rights</strong> to exclude users from your app in the event that they abuse your app, where you maintain your legal rights against potential app abusers, and so on.</p><p>Terms and Conditions are also known as Terms of Service or Terms of Use.</p><p>You can use this agreement anywhere, regardless of what platform your business operates on:</p><ul><li><p>Websites</p></li><li><p>WordPress blogs or blogs on any kind of platform: Joomla!, Drupal etc.</p></li><li><p>E-commerce shops</p></li><li><p>Mobile apps: iOS, Android or Windows phone</p></li><li><p><a href="https://termsfeed.com/blog/facebook-terms-of-service-login-details-app-details/" rel="noopener noreferrer nofollow">Facebook apps</a></p></li><li><p>Desktop apps</p></li><li><p><a href="https://termsfeed.com/blog/terms-use-privacy-policy-saas-applications/" rel="noopener noreferrer nofollow">SaaS apps</a></p></li></ul><p>Desktop apps usually have an <a href="https://termsfeed.com/blog/eula-saas-apps/" rel="noopener noreferrer nofollow">EULA</a> (End-User License Agreement) instead of a Terms and Conditions agreement, but your business can use <em>both</em>. Mobile apps are increasingly using Terms and Conditions along with an EULA if the mobile app has an online service component, i.e. it connects with a server.</p>', 'AIRASIA', '1', 'dist/img/itinerary/carousel_1_7.jpg', 'dist/img/itinerary/carousel_2_7.jpg', 'dist/img/itinerary/carousel_3_7.jpg', 'BRIDGE OF SOUTH HONGKONG', 'BRIDGE OF NORTH HONGKONG', 'BRIDGE OF JAPAN HONGKONG', 'dist/pdf/itinerary/pdf_7.pdf', 'dist/img/itinerary/flyer_7.jpg', 'What are Terms and Conditions  Terms and Conditions agreements act as a legal contract between you (the company) who has the website or mobile app and the user who access your website and mobile app.  Having a Terms and Conditions agreement is completely optional. No laws require you to have one. Not even the super-strict and wide-reaching General Data Protection Regulation (GDPR).', NULL, 'true', 'Y', 3, 3, '2019-08-23 09:42:16', '2019-09-03 10:55:12');
 /*!40000 ALTER TABLE `itinerary` ENABLE KEYS */;
 
 -- Dumping structure for table oketrip.itinerary_detail
@@ -221,7 +224,7 @@ CREATE TABLE IF NOT EXISTS `itinerary_detail` (
   `code` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `seat` int(11) NOT NULL,
   `seat_remain` int(11) NOT NULL,
-  `booked_by` int(11) NOT NULL,
+  `booked_by` int(11) DEFAULT NULL,
   `start` date NOT NULL,
   `end` date NOT NULL,
   `adult_price` double(10,2) NOT NULL,
@@ -233,7 +236,7 @@ CREATE TABLE IF NOT EXISTS `itinerary_detail` (
   `agent_tip` double(10,2) NOT NULL,
   `agent_visa` double(10,2) NOT NULL,
   `agent_tax` double(10,2) NOT NULL,
-  `tour_leader_tips` double(10,2) NOT NULL,
+  `tour_leader_tips` double(10,2) DEFAULT NULL,
   `final_pdf` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `term_pdf` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `flayer_jpg` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -1066,15 +1069,16 @@ CREATE TABLE IF NOT EXISTS `token_management` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2111 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2146 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table oketrip.token_management: ~4 rows (approximately)
+-- Dumping data for table oketrip.token_management: ~5 rows (approximately)
 /*!40000 ALTER TABLE `token_management` DISABLE KEYS */;
 REPLACE INTO `token_management` (`id`, `user_id`, `access_token`, `expired_at`, `is_active`, `created_at`, `updated_at`) VALUES
 	(66, 1, 'YjY4YTQ5ODQ1ZmZiYmVhNmM1MDQ3OGI4MWY2MDM1NjBjZDhiZjU2YQ==', '2019-08-15 09:03:07', 1, '2019-08-14 09:03:07', '2019-08-14 09:03:07'),
 	(436, 2, 'OWUxMWRhNDYzNjI1MDYzYWQwZmZjNmM2M2IyMmYxMDczN2JiM2MyNw==', '2019-08-15 16:16:26', 1, '2019-08-14 16:16:26', '2019-08-14 16:16:26'),
-	(1495, 4, 'YjFmMGNjMjcwNjAyNGI0NTQzZWI4ZGY0NGJhMWQ4YzEwZDc5NWMwMQ==', '2019-08-23 16:51:18', 1, '2019-08-22 16:51:18', '2019-08-22 16:51:18'),
-	(2110, 3, 'MmM3YmQ1YTRiZDUyOTJkZTY0MDkxMWJkMDQ1MGNmN2Q2MmE2MDIyNA==', '2019-09-06 16:36:32', 1, '2019-09-05 16:36:32', '2019-09-05 16:36:32');
+	(2121, 4, 'ZDdiY2E3YjA3ZjgxN2YzOTNmZWVkZDAwZWVmMWI4NmIyMDBhMTY3OQ==', '2019-09-07 16:24:41', 1, '2019-09-06 16:24:41', '2019-09-06 16:24:41'),
+	(2122, 4, 'YTMxOWZlYWE1ZjNhZjJhNmFmNGJkODljODZhMzkzMTk1NGJlZTk1MQ==', '2019-09-07 16:26:53', 1, '2019-09-06 16:26:53', '2019-09-06 16:26:53'),
+	(2145, 3, 'ZTViZGE5MDViNWFlODllODY3MjQzMGRhYzU2MTJiMjA0OThlNTg0Mw==', '2019-09-07 22:29:29', 1, '2019-09-06 22:29:29', '2019-09-06 22:29:29');
 /*!40000 ALTER TABLE `token_management` ENABLE KEYS */;
 
 -- Dumping structure for table oketrip.tour_leader
@@ -1129,7 +1133,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 REPLACE INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `api_token`, `remember_token`, `role_id`, `company_id`, `type_user`, `active`, `image`, `created_at`, `updated_at`) VALUES
 	(3, 'adi wielijarni', 'dewa17a@gmail.com', NULL, '$2y$10$.hdraGNS2OHKn9bl9./EluhSQ.pIHveoGBDW4HXg0Gv0RGvelo/RG', NULL, NULL, 1, NULL, 'ADMIN', 'true', '/dist/img/user/admin_adi wielijarni.jpg', '2019-08-15 08:33:38', '2019-08-15 08:47:14'),
-	(4, 'adi wielijarni', 'adiyani17a@gmail.com', NULL, '$2y$10$J2tJPk/CLx4ANfJEt6BCAeRo0qhY5szmN5ZuY/.uVLC13ziK7Q1Qa', NULL, NULL, 1, NULL, 'ADMIN', 'true', '/dist/img/user/admin_adi wielijarni.jpg', '2019-08-15 11:06:59', '2019-08-15 13:55:45'),
+	(4, 'oke trip', 'oke-trip@gmail.com', NULL, '$2y$10$0hF.JA1gy0l7/dVdf0QvueVJgIKW7eIhbEbdBfSq3S8hK/7Qjx/0u', NULL, NULL, 1, NULL, 'ADMIN', 'true', '/dist/img/user/admin_oke trip.jpg', '2019-08-15 11:06:59', '2019-09-06 19:21:43'),
 	(5, 'PT Jawa Abadi', 'jawa.abadi@gmail.com', NULL, '$2y$10$jHujawgPG84uKpFqQj.ndujpLjg6FGtd1qs.TJKGUyxQz5qJJXjiq', NULL, NULL, 2, 1, 'AGENT', 'true', '/dist/img/user/admin_PT Jawa Abadi.jpg', '2019-09-03 11:04:16', '2019-09-03 11:04:16');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 

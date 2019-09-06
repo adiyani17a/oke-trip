@@ -17,7 +17,6 @@ class Itinerary extends Migration
             $table->integer('id')->primary();
             $table->string('code')->unique(); 
             $table->string('name'); 
-            $table->string('destination_id'); //related to table destination
             $table->string('highlight');
             $table->text('term_condition');
             $table->text('flight_by');
