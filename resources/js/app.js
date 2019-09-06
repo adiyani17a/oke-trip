@@ -45,13 +45,13 @@ let routes = [{
     component: require('./components/Dashboard.vue').default
 }, {
     path: '/paket-tour',
-    component: require('./components/paketTour.vue').default
+    component: require('./components/PaketTour.vue').default
 }, {
     path: '/booking-list',
     meta: {
         breadcrumb: 'Booking List',
     },
-    component: require('./components/BookingList/bookingList.vue').default
+    component: require('./components/BookingList/BookingList.vue').default
 }, {
     path: '/group-menu',
     name: 'Group Menu',
@@ -107,14 +107,14 @@ let routes = [{
     meta: {
         breadcrumb: 'Destination',
     },
-    component: require('./components/Destination/destination.vue').default
+    component: require('./components/Destination/Destination.vue').default
 }, {
     path: '/additional',
     name: 'Additional',
     meta: {
         breadcrumb: 'additional',
     },
-    component: require('./components/Additional/additional.vue').default
+    component: require('./components/Additional/Additional.vue').default
 }, {
     path: '/itinerary',
     name: 'Itinerary',
