@@ -28,4 +28,5 @@ class apiV1Controller extends Controller
 
 		return Response::json($data);
 	}
+	
 }
