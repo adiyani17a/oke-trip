@@ -96,7 +96,7 @@
 </template>
 <script>
 
-    Vue.component('create-destination', require('./createDestination.vue').default)
+    Vue.component('create-destination', require('./CreateDestination.vue').default)
 
     import Loading from 'vue-loading-overlay';
     import 'vue-loading-overlay/dist/vue-loading.css';
