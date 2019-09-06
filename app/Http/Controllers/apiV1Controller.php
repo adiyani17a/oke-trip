@@ -25,6 +25,7 @@ class apiV1Controller extends Controller
 	{
 		$data['hotDeal'] = $this->model->itinerary()->with(['itinerary_detail'])->where('hot_deals','Y')->where('active','true')->take(4)->get();
 		$data['destination'] = $this->model->destination()->with(['itinerary_destination'])->take(6)->get();
+		$data['carousel'] = $this->model->carousel()->first();
 
 		foreach ($data['destination'] as $i => $d) {
 			if (count($d->itinerary_destination) != 0) {
