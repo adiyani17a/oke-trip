@@ -46,4 +46,15 @@ class apiV1Controller extends Controller
 
 		return Response::json($data);
 	}
+
+	public function getItineraryDetail($id)
+	{
+		$data = $this->model->itinerary()->with(['itinerary_detail','itinerary_destination' => function($q){
+											$q->with(['destination']);
+										},'itinerary_flight','itinerary_schedule','itinerary_additional'=> function($q){
+											$q->with(['additional']);
+										}])->where('id',$id)
+										->first();
+		return Response::json($data);
+	}
 }

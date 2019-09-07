@@ -351,6 +351,11 @@ Route::group(['middleware' => 'cors'], function () {
         'uses' => "apiV1Controller@getDataHome",
         'as' => "getDataHome"
       ]);
+
+      Route::get('/get-itinerary-detail/{id}', [
+        'uses' => "apiV1Controller@getItineraryDetail",
+        'as' => "getItineraryDetail"
+      ]);
     });
   });
 });
