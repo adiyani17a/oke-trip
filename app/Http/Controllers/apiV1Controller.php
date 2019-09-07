@@ -49,12 +49,28 @@ class apiV1Controller extends Controller
 
 	public function getItineraryDetail($id)
 	{
-		$data = $this->model->itinerary()->with(['itinerary_detail','itinerary_destination' => function($q){
+		$data = $this->model->itinerary()->with(['itinerary_detail' => function($q){
+											$q->with(['destination']);
+										},'itinerary_destination' => function($q){
 											$q->with(['destination']);
 										},'itinerary_flight','itinerary_schedule','itinerary_additional'=> function($q){
 											$q->with(['additional']);
 										}])->where('id',$id)
 										->first();
+		return Response::json($data);
+	}
+
+	public function getBooking($id,$dt)
+	{
+		$data = $this->model->itinerary_detail()->with(['itinerary'=>function($q){
+												$q->with(['itinerary_destination'=>function($q1){
+													$q1->with(['destination']);
+												},'itinerary_additional'=>function($q1){
+													$q1->with(['additional']);
+												}]);
+											   }])->where('id',$id)->where('dt',$dt)->first();
+
+
 		return Response::json($data);
 	}
 }

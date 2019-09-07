@@ -356,6 +356,11 @@ Route::group(['middleware' => 'cors'], function () {
         'uses' => "apiV1Controller@getItineraryDetail",
         'as' => "getItineraryDetail"
       ]);
+
+      Route::get('/get-booking/{id}/{dt}', [
+        'uses' => "apiV1Controller@getBooking",
+        'as' => "getBooking"
+      ]);
     });
   });
 });

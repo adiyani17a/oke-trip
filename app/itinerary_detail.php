@@ -22,4 +22,9 @@ class itinerary_detail extends Model
     {
     	return $this->hasMany('App\booking', 'itinerary_code', 'id');
     }
+
+    public function itinerary()
+    {
+        return $this->belongsTo('App\itinerary', 'id', 'id');
+    }
 }
