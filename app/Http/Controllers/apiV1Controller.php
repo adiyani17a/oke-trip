@@ -49,9 +49,7 @@ class apiV1Controller extends Controller
 
 	public function getItineraryDetail($id)
 	{
-		$data = $this->model->itinerary()->with(['itinerary_detail' => function($q){
-											$q->with(['destination']);
-										},'itinerary_destination' => function($q){
+		$data = $this->model->itinerary()->with(['itinerary_detail','itinerary_destination' => function($q){
 											$q->with(['destination']);
 										},'itinerary_flight','itinerary_schedule','itinerary_additional'=> function($q){
 											$q->with(['additional']);
