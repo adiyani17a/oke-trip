@@ -81,7 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Oke-trip.com
+                    Oke-trip.com | Dashboard
                 </div>
             </div>
         </div>
