@@ -4,22 +4,16 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class BookingD extends Migration
+class BookingAdditional extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
-        Schema::create('booking_d', function ($table) {
+        Schema::create('booking_additional', function ($table) {
             $table->engine = 'MyISAM';
             $table->integer('id');
             $table->integer('dt');
-            $table->string('bed');
-            $table->integer('total_bed');
-            $table->primary(array('id', 'dt'));
+            $table->integer('id_booking_pax');
+            $table->integer('additional_id');
             $table->timestamps();
             $table->foreign('id')
                   ->references('id')->on('booking')
@@ -34,6 +28,6 @@ class BookingD extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('booking_d');
+        Schema::dropIfExists('booking_additional');
     }
 }
