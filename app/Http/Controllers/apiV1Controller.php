@@ -78,6 +78,6 @@ class apiV1Controller extends Controller
 		$room = json_decode($req->room);
 		$guest_leader = json_decode($req->guest_leader);
 		$pricing = json_decode($req->pricing);
-		dd($guest_leader);
+		dd($room);
 	}
 }
