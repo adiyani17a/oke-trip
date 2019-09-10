@@ -163,7 +163,7 @@ class apiV1Controller extends Controller
 								'gender'			=> $room->gender[$i][$i1],
 								'birth_date'		=> $room->date_birth[$i][$i1],
 								'birth_place'		=> $room->place_birth[$i][$i1],
-								'remark'			=> $room->remark[$i][$i1],
+								'remark'			=> $room->note[$i][$i1],
 								'type'				=> $room->type[$i][$i1],
 								'passport_image'	=> $path,
 							);
