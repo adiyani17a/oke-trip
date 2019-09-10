@@ -15,9 +15,6 @@ use App\itinerary_detail;
 use App\itinerary_flight;
 use App\itinerary_schedule;
 use App\tour_leader;
-use App\booking;
-use App\booking_d;
-use App\booking_additional;
 use App\company;
 use App\city;
 use App\carousel;
@@ -112,27 +109,6 @@ class models extends Model
         $tour_leader = new tour_leader();
 
         return $tour_leader; 
-    }
-
-    public function booking()
-    {
-        $booking = new booking();
-
-        return $booking; 
-    }
-
-    public function booking_d()
-    {
-        $booking_d = new booking_d();
-
-        return $booking_d; 
-    }
-
-    public function booking_additional()
-    {
-        $booking_additional = new booking_additional();
-
-        return $booking_additional; 
     }
 
     public function company()
