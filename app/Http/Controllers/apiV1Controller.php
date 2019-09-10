@@ -75,43 +75,51 @@ class apiV1Controller extends Controller
 	public function saveBooking(Request $req)
 	{
 
-		$room = json_decode($req->room);
-		$guest_leader = json_decode($req->guest_leader);
-		$pricing = json_decode($req->pricing);
+    	return DB::transaction(function() use ($req) {  
+			$room = json_decode($req->room);
+			$guest_leader = json_decode($req->guest_leader);
+			$pricing = json_decode($req->pricing);
+			$data = json_decode($req->data);
 
-		// save booking
+			// save booking
 
-		$id = $this->model->booking()->max('id')+1;
+			$id = $this->model->booking()->max('id')+1;
 
-		$day = Carbon::now()->format('dmy');
-		dd($pricing);
-		$kode = 'BK'.$day.str_pad($id, 3, '0', STR_PAD_LEFT);
+			$day = Carbon::now()->format('dmy');
+			$kode = 'BK'.$day.str_pad($id, 3, '0', STR_PAD_LEFT);
 
-		// $data = array(
-		// 			'id'				=> $id,
-		// 			'kode'				=> $kode,
-		// 			'users_id'			=> 1,
-		// 			'telp'				=> ,
-		// 			'itinerary_id'		=> ,
-		// 			'status'			=> ,
-		// 			'name'				=> ,
-		// 			'total_adult'		=> ,
-		// 			'total_child'		=> ,
-		// 			'total_infant'		=> ,
-		// 			'remark'			=> ,
-		// 			'total_additional'	=> ,
-		// 			'total_room'		=> ,
-		// 			'tax'				=> ,
-		// 			'visa'				=> ,
-		// 			'agent_com'			=> ,
-		// 			'tips'				=> ,
-		// 			'total'				=> ,
-		// 			'total_remain'		=> ,
-		// 			'handle_by'			=> ,
-		// 			'created_by'		=> ,
-		// 			'updated_by'		=> ,
-		// 			'created_at'		=> ,
-		// 			'updated_at'		=> ,
-		// 		);
+			$total_additional = 0;
+			for ($i=0; $i < $pricing; $i++) { 
+				$total_additional += $pricing[$i+4]->nominal;
+			}
+
+			$data = array(
+						'id'					=> $id,
+						'kode'					=> $kode,
+						'users_id'				=> 1,
+						'telp'					=> $guest_leader->telp,
+						'itinerary_id'			=> $data->code,
+						'status'				=> 'Waiting List',
+						'name'					=> $guest_leader->party_name,
+						'total_adult'			=> $pricing[0]->nominal,
+						'total_child_no_bed'	=> $pricing[1]->nominal,
+						'total_child_with_bed'	=> $pricing[2]->nominal,
+						'total_infant'			=> $pricing[3]->nominal,
+						'remark'				=> $req->remark,
+						'total_additional'		=> $total_additional,
+						'total_room'			=> $guest_leader->total_room,
+						'tax'					=> 0,
+						'visa'					=> 0,
+						'agent_com'				=> 0,
+						'tips'					=> 0,
+						'total'					=> $req->total,
+						'handle_by'				=> 0,
+						'created_by'			=> '-',
+						'updated_by'			=> '-',
+						'created_at'			=> carbon::now(),
+						'updated_at'			=> carbon::now(),
+					);
+			dd($req->all());
+		});
 	}
 }
