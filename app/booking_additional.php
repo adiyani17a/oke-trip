@@ -19,7 +19,7 @@ class booking_additional extends Model
 
     public function additional()
     {
-    	return $this->belongsTo('App\additional', 'id', 'additional_id')
+    	return $this->belongsTo('App\additional', 'id', 'additional_id');
     }
 
     public function booking_pax()
