@@ -13,16 +13,16 @@ class booking_d extends Model
     const UPDATED_AT = 'updated_at';
     const CREATED_AT = 'created_at';
     protected $fillable = [
-							'id', 'dt', 'bed', 'name', 'passport', 'exp_date', 'issuing', 'gender', 'birth_date', 'birth_place', 'room', 'reference', 'status_person', 'image', 'created_at', 'updated_at'
+							'id', 'dt', 'bed', 'total_bed', 'created_at', 'updated_at'
     					];
 
-    public function booking_d()
+    public function booking_pax()
     {
-    	return $this->belongsTO('App\booking_d', 'id', 'id');
+    	return $this->hasMany('App\booking_additional', 'id_booking_d', 'dt')->where('booking_d.id','booking_pax.id');
     }
 
-    public function booking_additional()
+    public function booking()
     {
-    	return $this->hasMany('App\booking_additional', 'id', 'id')->where('dt','id_booking_d');
+        return $this->belongsTo('App\booking', 'id', 'id');
     }
 }

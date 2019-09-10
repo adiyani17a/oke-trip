@@ -78,6 +78,40 @@ class apiV1Controller extends Controller
 		$room = json_decode($req->room);
 		$guest_leader = json_decode($req->guest_leader);
 		$pricing = json_decode($req->pricing);
-		dd($room);
+
+		// save booking
+
+		$id = $this->model->booking()->max('id')+1;
+
+		$day = Carbon::now()->format('dmy');
+		dd($day);
+		// $kode = 'BK'.
+
+		// $data = array(
+		// 			'id'				=> $id,
+		// 			'kode'				=> ,
+		// 			'users_id'			=> ,
+		// 			'telp'				=> ,
+		// 			'itinerary_id'		=> ,
+		// 			'status'			=> ,
+		// 			'name'				=> ,
+		// 			'total_adult'		=> ,
+		// 			'total_child'		=> ,
+		// 			'total_infant'		=> ,
+		// 			'remark'			=> ,
+		// 			'total_additional'	=> ,
+		// 			'total_room'		=> ,
+		// 			'tax'				=> ,
+		// 			'visa'				=> ,
+		// 			'agent_com'			=> ,
+		// 			'tips'				=> ,
+		// 			'total'				=> ,
+		// 			'total_remain'		=> ,
+		// 			'handle_by'			=> ,
+		// 			'created_by'		=> ,
+		// 			'updated_by'		=> ,
+		// 			'created_at'		=> ,
+		// 			'updated_at'		=> ,
+		// 		);
 	}
 }

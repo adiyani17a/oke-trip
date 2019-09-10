@@ -16,10 +16,10 @@ class BookingAdditional extends Migration
         Schema::create('booking_additional', function ($table) {
             $table->engine = 'MyISAM';
             $table->integer('id');
-            $table->integer('id_booking_d');
+            $table->integer('id_booking_pax');
             $table->integer('dt');
             $table->integer('additional_id');
-            $table->primary(array('id', 'dt','id_booking_d'));
+            $table->primary(array('id', 'dt','id_booking_pax'));
             $table->foreign('id')
                   ->references('id')->on('booking')
                   ->onDelete('cascade');

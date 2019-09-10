@@ -23,6 +23,10 @@ use App\city;
 use App\carousel;
 use App\itinerary_additional;
 use App\itinerary_destination;
+use App\booking;
+use App\booking_d;
+use App\booking_pax;
+use App\booking_additional;
 
 class models extends Model
 {
@@ -164,5 +168,33 @@ class models extends Model
         $itinerary_destination = new itinerary_destination();
 
         return $itinerary_destination; 
+    }
+
+    public function booking()
+    {
+        $booking = new booking();
+
+        return $booking; 
+    }
+
+    public function booking_d()
+    {
+        $booking_d = new booking_d();
+
+        return $booking_d; 
+    }
+
+    public function booking_pax()
+    {
+        $booking_pax = new booking_pax();
+
+        return $booking_pax; 
+    }
+
+    public function booking_additional()
+    {
+        $booking_additional = new booking_additional();
+
+        return $booking_additional; 
     }
 }

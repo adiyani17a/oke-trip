@@ -13,16 +13,17 @@ class booking_additional extends Model
     const UPDATED_AT = 'updated_at';
     const CREATED_AT = 'created_at';
     protected $fillable = [
-							'id', 'id_booking_d', 'dt', 'additional_id'
+							'id', 'id_booking_pax', 'dt', 'additional_id'
     					];
 
-    public function booking()
+
+    public function additional()
     {
-    	return $this->belongsTo('App\booking', 'id', 'id');
+    	return $this->belongsTo('App\additional', 'id', 'additional_id')
     }
 
-    public function booking_d()
+    public function booking_pax()
     {
-    	return $this->belongsTo('App\booking_d', 'id', 'id')->where('dt','id_booking_d');
+        return $this->belongsTo('App\booking_pax', 'dt', 'id_booking_pax')->where('booking_pax.id','booking_additional.id');
     }
 }
