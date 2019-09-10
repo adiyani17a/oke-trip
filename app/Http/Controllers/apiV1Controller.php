@@ -142,7 +142,7 @@ class apiV1Controller extends Controller
 	                    $path = './dist/img/booking/'.$guest_leader->party_name;
 	                    if (!file_exists($path)) {
 	                    	$oldmask = umask(0);
-	                        mkdir($path, 0777);
+	                        mkdir($path, 0777,true);
 	                        umask($oldmask);
 	                    }
 	                    $path = 'dist/img/booking/'.$guest_leader->party_name.'/'. $filename;
