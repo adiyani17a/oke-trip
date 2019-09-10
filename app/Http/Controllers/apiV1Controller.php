@@ -134,7 +134,7 @@ class apiV1Controller extends Controller
 
 				$this->model->booking_d()->create($data);
 
-				for ($i1=0; $i1 < ; $i1++) { 
+				for ($i1=0; $i1 < $room->name[$i]; $i1++) { 
 
 					$file = $req->image;
 	                if ($file != null) {
