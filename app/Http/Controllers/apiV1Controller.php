@@ -161,7 +161,7 @@ class apiV1Controller extends Controller
 								'exp_date'			=> carbon::parse($room->expired_at[$i][$i1])->format('Y-m-d'),
 								'issuing'			=> $room->issuing[$i][$i1],
 								'gender'			=> $room->gender[$i][$i1],
-								'birth_date'		=> $room->date_birth[$i][$i1],
+								'birth_date'		=> carbon::parse($room->date_birth[$i][$i1])->format('Y-m-d'),
 								'birth_place'		=> $room->place_birth[$i][$i1],
 								'remark'			=> $room->note[$i][$i1],
 								'type'				=> $room->type[$i][$i1],

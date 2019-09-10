@@ -13,10 +13,10 @@ class BookingPax extends Migration
             $table->integer('id');
             $table->integer('dt');
             $table->integer('id_booking_d');
-            $table->integer('name');
-            $table->integer('passport');
+            $table->string('name');
+            $table->string('passport');
             $table->string('exp_date');
-            $table->integer('issuing');
+            $table->string('issuing');
             $table->enum('gender', ['male', 'female']);
             $table->date('birth_date');
             $table->string('birth_place');
