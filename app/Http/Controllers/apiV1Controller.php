@@ -120,7 +120,52 @@ class apiV1Controller extends Controller
 						'updated_at'			=> carbon::now(),
 					);
 
-			dd($room);
+			$this->model->booking()->create($data);
+			$image_counting = 0;
+
+			dd($req->passport_image);
+			for ($i=0; $i < $guest_leader->total_room; $i++) { 
+				$data = array(
+							'id'			=> $id,
+							'dt'			=> $i+1,
+							'bed'			=> $room->bed[$i],
+							'total_bed'		=> $room->total_bed[$i],
+						);
+
+				$this->model->booking_d()->create($data);
+
+				for ($i1=0; $i1 < ; $i1++) { 
+
+					$file = $req->image;
+	                if ($file != null) {
+	                    $filename = 'destination_'.$req->name.'.'.'jpg';
+	                    $path = './dist/img/destination';
+	                    if (!file_exists($path)) {
+	                        mkdir($path, 777, true);
+	                    }
+	                    $path = 'dist/img/destination/' . $filename;
+	                    Image::make(file_get_contents($file))->save($path);  
+	                    $path = '/dist/img/destination/' . $filename;
+	                }else{
+	                    $filename = null;
+	                }
+
+					$data = array(
+								'id'				=> $id,
+								'dt'				=> $i1+1,
+								'id_booking_d'		=> $i+1,
+								'name'				=> $room->name[$i][$i1],
+								'passport'			=> $room->passport[$i][$i1],
+								'exp_date'			=> carbon::parse($room->expired_at[$i][$i1])->format('Y-m-d'),
+								'issuing'			=> $room->issuing[$i][$i1],
+								'gender'			=> $room->gender[$i][$i1],
+								'birth_date'		=> $room->birth_date[$i][$i1],
+								'birth_place'		=> $room->birth_place[$i][$i1],
+								'remark'			=> $room->remark[$i][$i1],
+								'type'				=> $room->type[$i][$i1],
+							);
+				}
+			}
 		});
 	}
 }
