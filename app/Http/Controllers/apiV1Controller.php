@@ -98,7 +98,7 @@ class apiV1Controller extends Controller
 						'kode'					=> $kode,
 						'users_id'				=> 1,
 						'telp'					=> $guest_leader->telp,
-						'itinerary_id'			=> $data->code,
+						'itinerary_code'		=> $data->code,
 						'status'				=> 'Waiting List',
 						'name'					=> $guest_leader->party_name,
 						'total_adult'			=> $pricing[0]->nominal,
