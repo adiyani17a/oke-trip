@@ -123,7 +123,6 @@ class apiV1Controller extends Controller
 			$this->model->booking()->create($data);
 			$image_index = 0;
 
-			dd($req->passport_image);
 			for ($i=0; $i < $guest_leader->total_room; $i++) { 
 				$data = array(
 							'id'			=> $id,
@@ -139,7 +138,7 @@ class apiV1Controller extends Controller
 					$file = $req->passport_image[$image_index];
 
 	                if ($file != null) {
-	                    $filename = 'booking_'.$req->name.$id.$i.$i1.$image_index'.'.'jpg';
+	                    $filename = 'booking_'.$req->name.$id.$i.$i1.$image_index.'.'.'jpg';
 	                    $path = './dist/img/booking/'.$guest_leader->party_name;
 	                    if (!file_exists($path)) {
 	                        mkdir($path, 777, true);
@@ -183,6 +182,8 @@ class apiV1Controller extends Controller
 					}
 				}
 			}
+
+	        return Response::json(['status'=>1,'message'=>'Success Saving Data','code'=>$kode]);
 		});
 	}
 }
