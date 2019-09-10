@@ -121,7 +121,7 @@ class apiV1Controller extends Controller
 					);
 
 			$this->model->booking()->create($data);
-			$image_counting = 0;
+			$image_index = 0;
 
 			dd($req->passport_image);
 			for ($i=0; $i < $guest_leader->total_room; $i++) { 
@@ -134,20 +134,21 @@ class apiV1Controller extends Controller
 
 				$this->model->booking_d()->create($data);
 
-				for ($i1=0; $i1 < $room->name[$i]; $i1++) { 
+				for ($i1=0; $i1 < count($room->name[$i]); $i1++) { 
 
-					$file = $req->image;
+					$file = $req->passport_image[$image_index];
+
 	                if ($file != null) {
-	                    $filename = 'destination_'.$req->name.'.'.'jpg';
-	                    $path = './dist/img/destination';
+	                    $filename = 'booking_'.$req->name.$id.$i.$i1.$image_index'.'.'jpg';
+	                    $path = './dist/img/booking/'.$guest_leader->party_name;
 	                    if (!file_exists($path)) {
 	                        mkdir($path, 777, true);
 	                    }
-	                    $path = 'dist/img/destination/' . $filename;
+	                    $path = 'dist/img/booking/'.$guest_leader->party_name.'/'. $filename;
 	                    Image::make(file_get_contents($file))->save($path);  
-	                    $path = '/dist/img/destination/' . $filename;
+	                    $path = '/dist/img/booking/'.$guest_leader->party_name.'/'. $filename;
 	                }else{
-	                    $filename = null;
+	                    return Response::json(['status'=>0,'message'=>'There is Passport Image With 0 Value']);
 	                }
 
 					$data = array(
@@ -163,7 +164,23 @@ class apiV1Controller extends Controller
 								'birth_place'		=> $room->birth_place[$i][$i1],
 								'remark'			=> $room->remark[$i][$i1],
 								'type'				=> $room->type[$i][$i1],
+								'passport_image'	=> $path,
 							);
+
+					$this->model->booking_pax()->create($data);
+					$image_index += 1;
+
+					for ($i2=0; $i2 < count($room->additional[$i][$i1]); $i2++) { 
+						dd($room->additional[$i][$i1][$i2]);
+						$data = array(
+									'id'				=> $id,
+									'id_booking_pax'	=> $i1+1,
+									'dt'				=> $i2,
+									'additional_id'		=> $room->additional[$i][$i1][$i2],
+								);
+
+						$this->model->booking_additional()->create($data);
+					}
 				}
 			}
 		});

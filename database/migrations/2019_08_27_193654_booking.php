@@ -23,7 +23,8 @@ class Booking extends Migration
             $table->enum('status', ['Waiting List', 'Confirm','Cancel']);
             $table->string('name');
             $table->double('total_adult', 10, 2);
-            $table->double('total_child', 10, 2);
+            $table->double('total_child_no_bed', 10, 2);
+            $table->double('total_child_with_bed', 10, 2);
             $table->double('total_infant', 10, 2);
             $table->text('remark');
             $table->double('total_additional', 10, 2);
@@ -33,7 +34,6 @@ class Booking extends Migration
             $table->double('agent_com', 10, 2);
             $table->double('tips', 10, 2);
             $table->double('total', 10, 2);
-            $table->double('total_remain', 10, 2);
             $table->integer('handle_by');
             $table->string('created_by');
             $table->string('updated_by');
