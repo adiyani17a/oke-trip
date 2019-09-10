@@ -89,7 +89,7 @@ class apiV1Controller extends Controller
 			$kode = 'BK'.$day.str_pad($id, 3, '0', STR_PAD_LEFT);
 
 			$total_additional = 0;
-			for ($i=0; $i < $pricing-4; $i++) { 
+			for ($i=0; $i < (count($pricing)-4); $i++) { 
 				$total_additional += $pricing[$i+4]->nominal;
 			}
 
