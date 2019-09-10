@@ -141,7 +141,9 @@ class apiV1Controller extends Controller
 	                    $filename = 'booking_'.$req->name.$id.$i.$i1.$image_index.'.'.'jpg';
 	                    $path = './dist/img/booking/'.$guest_leader->party_name;
 	                    if (!file_exists($path)) {
-	                        mkdir($path, 777, true);
+	                    	$oldmask = umask(0);
+	                        mkdir($path, 0777);
+	                        umask($oldmask);
 	                    }
 	                    $path = 'dist/img/booking/'.$guest_leader->party_name.'/'. $filename;
 	                    Image::make(file_get_contents($file))->save($path);  
