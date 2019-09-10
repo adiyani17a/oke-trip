@@ -84,13 +84,13 @@ class apiV1Controller extends Controller
 		$id = $this->model->booking()->max('id')+1;
 
 		$day = Carbon::now()->format('dmy');
-		dd($day);
-		// $kode = 'BK'.
+		dd($guest_leader);
+		$kode = 'BK'.$day.str_pad($id, 3, '0', STR_PAD_LEFT);
 
 		// $data = array(
 		// 			'id'				=> $id,
-		// 			'kode'				=> ,
-		// 			'users_id'			=> ,
+		// 			'kode'				=> $kode,
+		// 			'users_id'			=> 1,
 		// 			'telp'				=> ,
 		// 			'itinerary_id'		=> ,
 		// 			'status'			=> ,
