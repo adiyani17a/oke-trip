@@ -71,4 +71,9 @@ class apiV1Controller extends Controller
 
 		return Response::json($data);
 	}
+
+	public function saveBooking(Request $req)
+	{
+		dd($req->all());
+	}
 }

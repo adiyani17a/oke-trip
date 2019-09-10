@@ -361,6 +361,11 @@ Route::group(['middleware' => 'cors'], function () {
         'uses' => "apiV1Controller@getBooking",
         'as' => "getBooking"
       ]);
+
+      Route::post('/booking/save', [
+        'uses' => "apiV1Controller@saveBooking",
+        'as' => "saveBooking"
+      ]);
     });
   });
 });
