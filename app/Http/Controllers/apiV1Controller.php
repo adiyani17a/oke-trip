@@ -119,7 +119,8 @@ class apiV1Controller extends Controller
 						'created_at'			=> carbon::now(),
 						'updated_at'			=> carbon::now(),
 					);
-			dd($req->all());
+
+			dd($room);
 		});
 	}
 }
