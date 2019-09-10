@@ -74,6 +74,10 @@ class apiV1Controller extends Controller
 
 	public function saveBooking(Request $req)
 	{
-		dd($req->all());
+
+		$room = json_decode($rqe->room);
+		$guest_leader = json_decode($rqe->guest_leader);
+		$pricing = json_decode($rqe->pricing);
+		dd($guest_leader);
 	}
 }
