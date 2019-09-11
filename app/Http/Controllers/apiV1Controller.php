@@ -186,16 +186,17 @@ class apiV1Controller extends Controller
 
 					$this->model->booking_pax()->create($data);
 					$image_index += 1;
+					if (count($room->additional[$i][$i1][$i2]) != 0) {
+						for ($i2=0; $i2 < count($room->additional[$i][$i1]); $i2++) { 
+							$data = array(
+										'id'				=> $id,
+										'id_booking_pax'	=> $i1+1,
+										'dt'				=> $i2+1,
+										'additional_id'		=> $room->additional[$i][$i1][$i2][0],
+									);
 
-					for ($i2=0; $i2 < count($room->additional[$i][$i1]); $i2++) { 
-						$data = array(
-									'id'				=> $id,
-									'id_booking_pax'	=> $i1+1,
-									'dt'				=> $i2+1,
-									'additional_id'		=> $room->additional[$i][$i1][$i2][0],
-								);
-
-						$this->model->booking_additional()->create($data);
+							$this->model->booking_additional()->create($data);
+						}
 					}
 				}
 			}
