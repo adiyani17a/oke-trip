@@ -124,6 +124,13 @@ class apiV1Controller extends Controller
 			$this->model->booking()->create($data);
 			$image_index = 0;
 
+			$image_index = $pricing[0]->value + $pricing[1]->value + $pricing[2]->value + $pricing[3]->value;
+
+			$this->model->itinerary_detail()->where('code',$data->code)
+				->update([
+					'seat_remain' => DB::raw("seat_remain - '$image_index'")
+				]);
+
 			for ($i=0; $i < $guest_leader->total_room; $i++) { 
 				$data = array(
 							'id'			=> $id,
