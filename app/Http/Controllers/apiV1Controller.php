@@ -175,7 +175,7 @@ class apiV1Controller extends Controller
 						$data = array(
 									'id'				=> $id,
 									'id_booking_pax'	=> $i1+1,
-									'dt'				=> $i2,
+									'dt'				=> $i2+1,
 									'additional_id'		=> $room->additional[$i][$i1][$i2][0],
 								);
 
