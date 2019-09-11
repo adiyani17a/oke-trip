@@ -7,7 +7,6 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use DB;
 use Auth;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable
 {
     use Notifiable;
@@ -77,15 +76,5 @@ class User extends Authenticatable
                 return false;
             }
         }
-    }
-
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-    
-    public function getJWTCustomClaims()
-    {
-        return [];
     }
 }
