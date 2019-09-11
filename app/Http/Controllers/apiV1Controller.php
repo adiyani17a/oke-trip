@@ -89,7 +89,7 @@ class apiV1Controller extends Controller
 			$remain = $this->model->itinerary_detail()->where('code',$itinerary_detail->code)->first();
 
 			if ($remain < $total_pax) {
-				return Response::json(['status'=>0,'message','Sorry the pax has been depleted'])
+				return Response::json(['status'=>0,'message','Sorry the pax has been depleted']);
 			}
 			$this->model->itinerary_detail()->where('code',$itinerary_detail->code)
 				->update([
