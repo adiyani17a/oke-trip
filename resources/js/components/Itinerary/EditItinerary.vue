@@ -188,6 +188,9 @@
                     <v-text-field label="Agent Com Price" v-money="money" ref="agentPrice" v-model="formDetail.agentPrice" :error-messages="agentPriceErrors"  required name="agentPrice" @blur="$v.formDetail.agentPrice.$touch()" ></v-text-field>
                   </v-flex>
                   <v-flex xs12 md6 style="padding: 10px">
+                    <v-text-field label="Staff Com Price" v-money="money" ref="staffPrice" v-model="formDetail.staffPrice" :error-messages="staffPriceErrors"  required name="staffPrice" @blur="$v.formDetail.staffPrice.$touch()" ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 md6 style="padding: 10px">
                     <v-text-field label="Tips Price" v-money="money" ref="tipsPrice" v-model="formDetail.tipsPrice" :error-messages="tipsPriceErrors"  required name="tipsPrice" @blur="$v.formDetail.tipsPrice.$touch()"></v-text-field>
                   </v-flex>
                   <v-flex xs12 md6 style="padding: 10px">
@@ -238,6 +241,7 @@
                         <td class="text-xs-right">{{ props.item.infantPrice  | currency}}</td>
                         <td class="text-xs-right">{{ props.item.minimalDP  | currency}}</td>
                         <td class="text-xs-right">{{ props.item.agentPrice  | currency}}</td>
+                        <td class="text-xs-right">{{ props.item.staffPrice  | currency}}</td>
                         <td class="text-xs-right">{{ props.item.tipsPrice  | currency}}</td>
                         <td class="text-xs-right">{{ props.item.visaPrice  | currency}}</td>
                         <td class="text-xs-right">{{ props.item.aptPrice  | currency}}</td>
@@ -382,6 +386,7 @@
           CwBPrice:'',
           infantPrice:'',
           agentPrice:'',
+          staffPrice:'',
           tipsPrice:'',
           visaPrice:'',
           aptPrice:'',
@@ -420,6 +425,7 @@
           { text: 'Infant Price', value: 'infant_price' },
           { text: 'Minimal DP', value: 'minimal_dp' },
           { text: 'Agent Com', value: 'agent_com' },
+          { text: 'Staff Com', value: 'staff_com' },
           { text: 'Tips', value: 'tips' },
           { text: 'Visa', value: 'visa' },
           { text: 'Apt Tax', value: 'apt_tax' },
@@ -465,6 +471,9 @@
                   required
               },
               agentPrice: {
+                  required
+              },
+              staffPrice: {
                   required
               },
               tipsPrice: {
@@ -587,6 +596,12 @@
               !this.$v.form.summary.required && errors.push('Summary is required.')
               return errors
           },
+          staffPriceErrors() {
+              const errors = [];
+              if (!this.$v.formDetail.staffPrice.$dirty) return errors
+              !this.$v.formDetail.staffPrice.required && errors.push('Staff Com Price is required.')
+              return errors
+          },
       },
       props: {
           dialog: false,
@@ -692,6 +707,7 @@
                 'CnBPrice':this.formDetail.CnBPrice,
                 'infantPrice':this.formDetail.infantPrice,
                 'agentPrice':this.formDetail.agentPrice,
+                'staffPrice':this.formDetail.staffPrice,
                 'tipsPrice':this.formDetail.tipsPrice,
                 'visaPrice':this.formDetail.visaPrice,
                 'aptPrice':this.formDetail.aptPrice,
@@ -709,6 +725,7 @@
               this.$refs.CnBPrice.$el.getElementsByTagName('input')[0].value = 0;
               this.$refs.infantPrice.$el.getElementsByTagName('input')[0].value = 0;
               this.$refs.agentPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.staffPrice.$el.getElementsByTagName('input')[0].value = 0;
               this.$refs.tipsPrice.$el.getElementsByTagName('input')[0].value = 0;
               this.$refs.visaPrice.$el.getElementsByTagName('input')[0].value = 0;
               this.$refs.aptPrice.$el.getElementsByTagName('input')[0].value = 0;
@@ -722,6 +739,7 @@
                 'CnBPrice':this.formDetail.CnBPrice,
                 'infantPrice':this.formDetail.infantPrice,
                 'agentPrice':this.formDetail.agentPrice,
+                'staffPrice':this.formDetail.staffPrice,
                 'tipsPrice':this.formDetail.tipsPrice,
                 'visaPrice':this.formDetail.visaPrice,
                 'aptPrice':this.formDetail.aptPrice,
@@ -736,6 +754,7 @@
               this.formDetail.itineraryItems[param].CnBPrice = this.formDetail.CnBPrice;
               this.formDetail.itineraryItems[param].infantPrice = this.formDetail.infantPrice;
               this.formDetail.itineraryItems[param].agentPrice = this.formDetail.agentPrice;
+              this.formDetail.itineraryItems[param].staffPrice = this.formDetail.staffPrice;
               this.formDetail.itineraryItems[param].tipsPrice = this.formDetail.tipsPrice;
               this.formDetail.itineraryItems[param].visaPrice = this.formDetail.visaPrice;
               this.formDetail.itineraryItems[param].aptPrice = this.formDetail.aptPrice;
@@ -752,6 +771,7 @@
               this.$refs.CnBPrice.$el.getElementsByTagName('input')[0].value = 0;
               this.$refs.infantPrice.$el.getElementsByTagName('input')[0].value = 0;
               this.$refs.agentPrice.$el.getElementsByTagName('input')[0].value = 0;
+              this.$refs.staffPrice.$el.getElementsByTagName('input')[0].value = 0;
               this.$refs.tipsPrice.$el.getElementsByTagName('input')[0].value = 0;
               this.$refs.visaPrice.$el.getElementsByTagName('input')[0].value = 0;
               this.$refs.aptPrice.$el.getElementsByTagName('input')[0].value = 0;
@@ -816,6 +836,7 @@
                     'CnBPrice':response.data.data.itinerary_detail[i].child_price,
                     'infantPrice':response.data.data.itinerary_detail[i].infant_price,
                     'agentPrice':response.data.data.itinerary_detail[i].agent_com,
+                    'staffPrice':response.data.data.itinerary_detail[i].staff_com,
                     'tipsPrice':response.data.data.itinerary_detail[i].agent_tip,
                     'visaPrice':response.data.data.itinerary_detail[i].agent_visa,
                     'aptPrice':response.data.data.itinerary_detail[i].agent_tax,
@@ -872,6 +893,7 @@
             this.formDetail.CnBPrice = this.formDetail.itineraryItems[param].CnBPrice; 
             this.formDetail.infantPrice = this.formDetail.itineraryItems[param].infantPrice;
             this.formDetail.agentPrice = this.formDetail.itineraryItems[param].agentPrice;
+            this.formDetail.staffPrice = this.formDetail.itineraryItems[param].staffPrice;
             this.formDetail.tipsPrice = this.formDetail.itineraryItems[param].tipsPrice;
             this.formDetail.visaPrice = this.formDetail.itineraryItems[param].visaPrice; 
             this.formDetail.aptPrice = this.formDetail.itineraryItems[param].aptPrice; 
@@ -883,6 +905,7 @@
             this.$refs.CnBPrice.$el.getElementsByTagName('input')[0].value = this.formDetail.itineraryItems[param].CnBPrice;
             this.$refs.infantPrice.$el.getElementsByTagName('input')[0].value = this.formDetail.itineraryItems[param].infantPrice;
             this.$refs.agentPrice.$el.getElementsByTagName('input')[0].value = this.formDetail.itineraryItems[param].agentPrice;
+            this.$refs.staffPrice.$el.getElementsByTagName('input')[0].value = this.formDetail.itineraryItems[param].staffPrice;
             this.$refs.tipsPrice.$el.getElementsByTagName('input')[0].value = this.formDetail.itineraryItems[param].tipsPrice;
             this.$refs.visaPrice.$el.getElementsByTagName('input')[0].value = this.formDetail.itineraryItems[param].visaPrice;
             this.$refs.aptPrice.$el.getElementsByTagName('input')[0].value = this.formDetail.itineraryItems[param].aptPrice;
@@ -899,6 +922,7 @@
             this.$refs.CnBPrice.$el.getElementsByTagName('input')[0].value = 0;
             this.$refs.infantPrice.$el.getElementsByTagName('input')[0].value = 0;
             this.$refs.agentPrice.$el.getElementsByTagName('input')[0].value = 0;
+            this.$refs.staffPrice.$el.getElementsByTagName('input')[0].value = 0;
             this.$refs.tipsPrice.$el.getElementsByTagName('input')[0].value = 0;
             this.$refs.visaPrice.$el.getElementsByTagName('input')[0].value = 0;
             this.$refs.aptPrice.$el.getElementsByTagName('input')[0].value = 0;
