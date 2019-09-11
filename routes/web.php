@@ -18,7 +18,10 @@ Route::get('/', function () {
 Auth::routes();
 
 
-
+Route::get('/logout', [
+      'uses' => "ApiTokenController@logout",
+      'as' => "logout"
+    ]);
 
 Route::post('/api/generate-token', 'ApiTokenController@generateToken');
 Route::group(['middleware' => 'auth'], function () {
@@ -40,15 +43,12 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('itinerary/{path}/{id}/{dt}', 'HomeController@index')->where('all', '^(?!api).*$');
   Route::get('group-menu', 'HomeController@index');
 
-	Route::get('api/get-token', [
+    Route::get('api/get-token', [
       'uses' => "ApiTokenController@getToken",
       'as' => "getToken"
     ]);
 
-    Route::get('/logout', [
-      'uses' => "ApiTokenController@logout",
-      'as' => "logout"
-    ]);
+    
 });
 
 Route::group(['middleware' => 'check-token'], function () {
