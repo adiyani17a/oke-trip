@@ -79,7 +79,7 @@ class apiV1Controller extends Controller
 			$room = json_decode($req->room);
 			$guest_leader = json_decode($req->guest_leader);
 			$pricing = json_decode($req->pricing);
-			$data = json_decode($req->data);
+			$itinerary_detail = json_decode($req->data);
 
 			// save booking
 
@@ -98,7 +98,7 @@ class apiV1Controller extends Controller
 						'kode'					=> $kode,
 						'users_id'				=> 1,
 						'telp'					=> $guest_leader->telp,
-						'itinerary_code'		=> $data->code,
+						'itinerary_code'		=> $itinerary_detail->code,
 						'status'				=> 'Waiting List',
 						'name'					=> $guest_leader->party_name,
 						'total_adult'			=> $pricing[0]->nominal,
@@ -125,8 +125,7 @@ class apiV1Controller extends Controller
 			$image_index = 0;
 
 			$image_index = $pricing[0]->value + $pricing[1]->value + $pricing[2]->value + $pricing[3]->value;
-			dd($data);
-			$this->model->itinerary_detail()->where('code',$data->code)
+			$this->model->itinerary_detail()->where('code',$itinerary_detail->code)
 				->update([
 					'seat_remain' => DB::raw("seat_remain - '$image_index'")
 				]);
