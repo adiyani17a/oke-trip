@@ -88,8 +88,8 @@ class apiV1Controller extends Controller
 			$total_pax = $pricing[0]->value + $pricing[1]->value + $pricing[2]->value + $pricing[3]->value;
 			$remain = $this->model->itinerary_detail()->where('code',$itinerary_detail->code)->first();
 
-			if ($remain < $total_pax) {
-				return Response::json(['status'=>0,'message','Sorry the pax has been depleted, please call customer service']);
+			if ($remain->seat_remain < $total_pax) {
+				return Response::json(['status'=>0,'message','Sorry the pax available only '.$remain->seat_remain.', please call customer service for further information']);
 			}
 			$this->model->itinerary_detail()->where('code',$itinerary_detail->code)
 				->update([
