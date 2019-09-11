@@ -125,7 +125,7 @@ class apiV1Controller extends Controller
 			$image_index = 0;
 
 			$image_index = $pricing[0]->value + $pricing[1]->value + $pricing[2]->value + $pricing[3]->value;
-
+			dd($data);
 			$this->model->itinerary_detail()->where('code',$data->code)
 				->update([
 					'seat_remain' => DB::raw("seat_remain - '$image_index'")
