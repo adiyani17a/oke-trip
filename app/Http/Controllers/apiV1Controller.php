@@ -83,6 +83,19 @@ class apiV1Controller extends Controller
 
 			// save booking
 
+
+			$total_pax = 0;
+			$total_pax = $pricing[0]->value + $pricing[1]->value + $pricing[2]->value + $pricing[3]->value;
+			$remain = $this->model->itinerary_detail()->where('code',$itinerary_detail->code)->first();
+
+			if ($remain < $total_pax) {
+				return Response::json(['status'=>0,'message','Sorry the pax has been depleted'])
+			}
+			$this->model->itinerary_detail()->where('code',$itinerary_detail->code)
+				->update([
+					'seat_remain' => DB::raw("seat_remain - '$total_pax'")
+				]);
+
 			$id = $this->model->booking()->max('id')+1;
 
 			$day = Carbon::now()->format('dmy');
@@ -122,12 +135,7 @@ class apiV1Controller extends Controller
 					);
 
 			$this->model->booking()->create($data);
-			$total_pax = 0;
-			$total_pax = $pricing[0]->value + $pricing[1]->value + $pricing[2]->value + $pricing[3]->value;
-			$this->model->itinerary_detail()->where('code',$itinerary_detail->code)
-				->update([
-					'seat_remain' => DB::raw("seat_remain - '$total_pax'")
-				]);
+
 
 			$image_index = 0;
 
