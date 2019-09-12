@@ -30,4 +30,9 @@ protected $fillable = [
     {
         return $this->belongsTo('App\User', 'users_id', 'id');
     }
+
+    public function handle_by()
+    {
+        return $this->belongsTo('App\User', 'handle_by', 'id');
+    }
 }
