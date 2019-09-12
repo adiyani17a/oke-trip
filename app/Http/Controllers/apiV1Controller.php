@@ -214,6 +214,7 @@ class apiV1Controller extends Controller
 			$last_login = strtotime(carbon::parse($check_token->created_at)->format('Y-m-d H:i:s'))+$check_token->last_activity;
 			$now = strtotime(carbon::now()->format('Y-m-d H:i:s'));
 			if ($last_login < $now) {
+				$this->model->token_management()->where('access_token',$req->token)->delete();
 				return response::json(['status'=>403,'message'=>'Token Expired']);
 			}else{
 				$time_remaining = $last_login - $now;
