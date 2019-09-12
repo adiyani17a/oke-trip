@@ -21,6 +21,7 @@ class Booking extends Migration
             $table->string('telp');
             $table->string('itinerary_code');
             $table->enum('status', ['Waiting List', 'Confirm','Cancel']);
+            $table->enum('payment_status', ['Waiting For Payment', 'Down Payment','Paid']);
             $table->string('name');
             $table->double('total_adult', 10, 2);
             $table->double('total_child_no_bed', 10, 2);
