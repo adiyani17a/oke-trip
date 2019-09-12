@@ -109,7 +109,7 @@ class apiV1Controller extends Controller
 			$data = array(
 						'id'					=> $id,
 						'kode'					=> $kode,
-						'users_id'				=> 1,
+						'users_id'				=> $req->id_user,
 						'telp'					=> $guest_leader->telp,
 						'itinerary_code'		=> $itinerary_detail->code,
 						'status'				=> 'Waiting List',
@@ -128,8 +128,8 @@ class apiV1Controller extends Controller
 						'total_room'			=> $guest_leader->total_room,
 						'total'					=> $req->total,
 						'handle_by'				=> 0,
-						'created_by'			=> '-',
-						'updated_by'			=> '-',
+						'created_by'			=> $req->created_by,
+						'updated_by'			=> $req->created_by,
 						'created_at'			=> carbon::now(),
 						'updated_at'			=> carbon::now(),
 					);
@@ -207,6 +207,8 @@ class apiV1Controller extends Controller
 
 	public function getBookingList(Request $req)
 	{
+
+		$data = $this->model->booking()->where('')
 		dd($req->all());
 	}
 }
