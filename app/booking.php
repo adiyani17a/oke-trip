@@ -28,6 +28,6 @@ protected $fillable = [
 
     public function users()
     {
-        return $this->belongsTo('App\users', 'id', 'users_id');
+        return $this->belongsTo('App\user', 'id', 'users_id');
     }
 }
