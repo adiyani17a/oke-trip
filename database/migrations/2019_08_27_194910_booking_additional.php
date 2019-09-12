@@ -14,7 +14,7 @@ class BookingAdditional extends Migration
     public function up()
     {
         Schema::create('booking_additional', function ($table) {
-            $table->engine = 'MyISAM';
+            $table->engine = 'innoDB';
             $table->integer('id');
             $table->integer('id_booking_pax');
             $table->integer('dt');

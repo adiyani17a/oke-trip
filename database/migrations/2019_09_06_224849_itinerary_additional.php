@@ -14,7 +14,7 @@ class ItineraryAdditional extends Migration
     public function up()
     {
         Schema::create('itinerary_additional', function ($table) {
-            $table->engine = 'MyISAM';
+            $table->engine = 'innoDB';
             $table->integer('id');
             $table->integer('dt');
             $table->integer('additional_id');

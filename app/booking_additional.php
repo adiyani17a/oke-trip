@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class booking_additional extends Model
 {
+    use \Awobaz\Compoships\Compoships;
     protected $table = 'booking_additional';
     protected $primaryKey = 'id';
     public $incrementing = false;
@@ -19,7 +20,7 @@ class booking_additional extends Model
 
     public function additional()
     {
-    	return $this->belongsTo('App\additional', 'id', 'additional_id');
+    	return $this->belongsTo('App\additional', 'additional_id', 'id');
     }
 
     public function booking_pax()

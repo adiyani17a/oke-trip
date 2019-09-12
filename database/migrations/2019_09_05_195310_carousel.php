@@ -14,7 +14,7 @@ class Carousel extends Migration
     public function up()
     {
         Schema::create('carousel', function ($table) {
-            $table->engine = 'MyISAM';
+            $table->engine = 'innoDB';
             $table->integer('id')->primary();
             $table->string('carousel_1')->nullable();
             $table->string('carousel_2')->nullable();

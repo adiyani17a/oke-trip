@@ -14,7 +14,7 @@ class Company extends Migration
     public function up()
     {
         Schema::create('company', function ($table) {
-            $table->engine = 'MyISAM';
+            $table->engine = 'innoDB';
             $table->integer('id')->primary();
             $table->string('name'); 
             $table->string('address'); 

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class BookingD extends Migration
+class PaymentHistory extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,15 @@ class BookingD extends Migration
      */
     public function up()
     {
-        Schema::create('booking_d', function ($table) {
+        Schema::create('payment_history', function ($table) {
             $table->engine = 'innoDB';
             $table->integer('id');
-            $table->integer('dt');
-            $table->string('bed');
-            $table->integer('total_bed');
-            $table->primary(array('id', 'dt'));
+            $table->integer('booking_id');
+            $table->integer('total_payment');
+            $table->string('payment_method');
+            $table->string('status_payment');
+            $table->primary('id');
             $table->timestamps();
-            $table->foreign('id')
-                  ->references('id')->on('booking')
-                  ->onDelete('cascade');
         });
     }
 
@@ -34,6 +32,6 @@ class BookingD extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('booking_d');
+        Schema::dropIfExists('payment_history');
     }
 }

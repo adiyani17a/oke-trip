@@ -14,7 +14,7 @@ class ItineraryDestination extends Migration
     public function up()
     {
         Schema::create('itinerary_destination', function ($table) {
-            $table->engine = 'MyISAM';
+            $table->engine = 'innoDB';
             $table->integer('id');
             $table->integer('dt');
             $table->integer('destination_id');

@@ -3,9 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
 class booking_pax extends Model
 {
+    use \Awobaz\Compoships\Compoships;
     protected $table = 'booking_pax';
     protected $primaryKey = 'id';
     public $incrementing = false;
@@ -18,7 +18,7 @@ class booking_pax extends Model
 
     public function booking_additional()
     {
-    	return $this->hasMany('App\booking_additional', 'id_bookin_pax', 'dt')->where('booking_additional.id','booking_pax.id');
+    	return $this->hasMany('App\booking_additional', ['id_booking_pax','id'], ['dt','id']);
     }
 
     public function booking_d()

@@ -14,7 +14,7 @@ class Regencies extends Migration
     public function up()
     {
         Schema::create('regencies', function ($table) {
-            $table->engine = 'MyISAM';
+            $table->engine = 'innoDB';
             $table->integer('id')->primary();
             $table->integer('province_id'); 
             $table->string('name'); 

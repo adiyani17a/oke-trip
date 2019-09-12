@@ -14,11 +14,13 @@ class ItinerarySchedule extends Migration
     public function up()
     {
         Schema::create('itinerary_schedule', function ($table) {
-            $table->integer('id')->primary();
+            $table->engine = 'innoDB';
+            $table->integer('id');
             $table->integer('dt'); 
             $table->text('caption'); 
             $table->string('title'); 
             $table->string('eat_service'); 
+            $table->->primary(array('id','dt'));
         });
     }
 

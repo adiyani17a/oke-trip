@@ -24,6 +24,8 @@ use App\booking;
 use App\booking_d;
 use App\booking_pax;
 use App\booking_additional;
+use App\payment_history;
+use App\payment_history_d;
 
 class models extends Model
 {
@@ -172,5 +174,19 @@ class models extends Model
         $booking_additional = new booking_additional();
 
         return $booking_additional; 
+    }
+
+    public function payment_history()
+    {
+        $payment_history = new payment_history();
+
+        return $payment_history; 
+    }
+
+    public function payment_history_d()
+    {
+        $payment_history_d = new payment_history_d();
+
+        return $payment_history_d; 
     }
 }

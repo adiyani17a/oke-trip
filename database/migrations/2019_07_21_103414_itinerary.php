@@ -14,6 +14,7 @@ class Itinerary extends Migration
     public function up()
     {
         Schema::create('itinerary', function ($table) {
+            $table->engine = 'innoDB';
             $table->integer('id')->primary();
             $table->string('code')->unique(); 
             $table->string('name'); 

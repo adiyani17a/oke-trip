@@ -14,6 +14,7 @@ class TourLeader extends Migration
     public function up()
     {
         Schema::create('tour_leader', function ($table) {
+            $table->engine = 'innoDB';
             $table->integer('id')->primary();
             $table->string('name'); 
             $table->string('address'); 

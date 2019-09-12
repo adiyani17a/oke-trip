@@ -14,7 +14,8 @@ class ItineraryDetail extends Migration
     public function up()
     {
         Schema::create('itinerary_detail', function ($table) {
-            $table->integer('id')->primary();
+            $table->engine = 'innoDB';
+            $table->integer('id');
             $table->integer('dt'); 
             $table->string('code'); 
             $table->integer('booked_by')->nullable(); 
@@ -38,6 +39,7 @@ class ItineraryDetail extends Migration
             $table->double('tour_leader_tips', 10, 2);
             $table->integer('created_by');
             $table->integer('updated_by');
+            $table->->primary(array('id','dt'));
             $table->timestamps();
         });
     }

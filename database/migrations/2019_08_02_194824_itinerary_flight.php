@@ -14,13 +14,15 @@ class ItineraryFlight extends Migration
     public function up()
     {
         Schema::create('itinerary_flight', function ($table) {
-            $table->integer('id')->primary();
+            $table->engine = 'innoDB';
+            $table->integer('id');
             $table->integer('dt'); 
             $table->string('flight_number'); 
             $table->string('departure'); 
             $table->string('arrival'); 
             $table->string('departure_airport_code'); 
             $table->string('arrival_airport_code'); 
+            $table->->primary(array('id','dt'));
         });
     }
 

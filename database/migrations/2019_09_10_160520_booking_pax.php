@@ -9,7 +9,7 @@ class BookingPax extends Migration
     public function up()
     {
         Schema::create('booking_pax', function ($table) {
-            $table->engine = 'MyISAM';
+            $table->engine = 'innoDB';
             $table->integer('id');
             $table->integer('dt');
             $table->integer('id_booking_d');
