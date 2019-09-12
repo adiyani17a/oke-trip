@@ -204,4 +204,9 @@ class apiV1Controller extends Controller
 	        return Response::json(['status'=>1,'message'=>'Success Saving Data','code'=>$kode]);
 		});
 	}
+
+	public function getBookingList(Request $req)
+	{
+		dd($req->all());
+	}
 }
