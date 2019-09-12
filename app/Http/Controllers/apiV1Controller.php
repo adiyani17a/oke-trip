@@ -208,7 +208,7 @@ class apiV1Controller extends Controller
 	public function getBookingList(Request $req)
 	{
 
-		$data = $this->model->booking()->where('')
+		// $data = $this->model->booking()->where('')
 		dd($req->all());
 	}
 }
