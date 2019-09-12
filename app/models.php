@@ -26,6 +26,7 @@ use App\booking_pax;
 use App\booking_additional;
 use App\payment_history;
 use App\payment_history_d;
+use App\tokenManagement;
 
 class models extends Model
 {
@@ -188,5 +189,12 @@ class models extends Model
         $payment_history_d = new payment_history_d();
 
         return $payment_history_d; 
+    }
+
+    public function token_management()
+    {
+        $token_management = new tokenManagement();
+
+        return $token_management; 
     }
 }

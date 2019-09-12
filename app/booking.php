@@ -21,6 +21,11 @@ protected $fillable = [
     	return $this->hasMany('App\booking_d', 'id', 'id');
     }
 
+    public function payment_history()
+    {
+        return $this->hasMany('App\payment_history', 'id', 'booking_id');
+    }
+
     public function users()
     {
         return $this->belongsTo('App\users', 'id', 'users_id');
