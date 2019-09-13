@@ -88,7 +88,6 @@ class apiV1Controller extends Controller
 		$remain = $this->model->itinerary_detail()->where('code',$itinerary_detail->code)->first();
 
 		if ($remain->seat_remain < $total_pax) {
-			DB::rollBack();
 			return Response::json(['status'=>0,'message','Sorry the pax available only '.$remain->seat_remain.', please call customer service for further information']);
 		}
 		$this->model->itinerary_detail()->where('code',$itinerary_detail->code)
@@ -165,7 +164,6 @@ class apiV1Controller extends Controller
                     Image::make(file_get_contents($file))->save($path);  
                     $path = '/dist/img/booking/'.$guest_leader->party_name.'/'. $filename;
                 }else{
-					DB::rollBack();
                     return Response::json(['status'=>0,'message'=>'There is Passport Image With 0 Value']);
                 }
 
