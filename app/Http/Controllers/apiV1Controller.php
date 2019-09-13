@@ -259,6 +259,7 @@ class apiV1Controller extends Controller
 
 		$data = $this->model->booking()	
 					 ->where('id',$id)
+					 ->where('users_id',$req->user_id)
 					 ->with(['booking_d'=>function($q){
 					 	$q->with(['booking_pax'=>function($q1){
 					 		$q1->with(['booking_additional'=>function($q2){
