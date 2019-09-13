@@ -234,7 +234,7 @@ class apiV1Controller extends Controller
 					 	}]);
 					 },'payment_history'=>function($q){
 					 	$q->with(['payment_history_d']);
-					 },'users','handle_by'])
+					 },'users','handle'])
 					 ->get();
 		
 		return response::json(['status'=>200,'data'=>$data,'time_remaining'=>$time_remaining]);
@@ -357,8 +357,6 @@ class apiV1Controller extends Controller
 
 	public function bookingListPdfPax($id)
 	{
-
-
 		$data = $this->model->booking()	
 					 ->where('id',$id)
 					 ->with(['booking_d'=>function($q){
@@ -369,12 +367,109 @@ class apiV1Controller extends Controller
 					 	}]);
 					 },'payment_history'=>function($q){
 					 	$q->with(['payment_history_d']);
-					 },'users','handle_by','itinerary_detail'=>function($q){
+					 },'users','handle','itinerary_detail'=>function($q){
 					 	$q->with(['itinerary']);
 					 }])
 					 ->first();
 
 		$pdf = PDF::loadView('customer', ['data' => $data]);
+		return $pdf->stream();
+	}
+
+	public function bookingListPdfInvoice($id)
+	{
+		$data['data'] = $this->model->booking()	
+					 ->where('id',$id)
+					 ->with(['booking_d'=>function($q){
+					 	$q->with(['booking_pax'=>function($q1){
+					 		$q1->with(['booking_additional'=>function($q2){
+					 			$q2->with(['additional']);
+					 		}]);
+					 	}]);
+					 },'payment_history'=>function($q){
+					 	$q->with(['payment_history_d']);
+					 },'users','handle','itinerary_detail'=>function($q){
+					 	$q->with(['itinerary']);
+					 }])
+					 ->first();
+
+
+
+		$data['invoice_list'] = [];
+		$main_list = ['Adult','Child With Bed','Child No Bed','Infant','Agent Com','Staff Com','Tips','Visa','Apt Tax And Surcharge'];
+		$temp = [];
+
+		foreach ($main_list as $i => $d) {
+			$temp['name'] = $main_list[$i];
+			$temp['type'] = $main_list[$i];
+			if ($main_list[$i] == 'Adult') {
+				$temp['chargePerAmount'] = $data['data']->itinerary_detail->adult_price;
+			}else if ($main_list[$i] == 'Child With Bed') {
+				$temp['chargePerAmount'] = $data['data']->itinerary_detail->child_bed_price;
+			}else if ($main_list[$i] == 'Child No Bed') {
+				$temp['chargePerAmount'] = $data['data']->itinerary_detail->child_price;
+			}else if ($main_list[$i] == 'Infant') {
+				$temp['chargePerAmount'] = $data['data']->itinerary_detail->infant_price;
+			}else if ($main_list[$i] == 'Agent Com') {
+				$temp['chargePerAmount'] = $data['data']->itinerary_detail->agent_com;
+			}else if ($main_list[$i] == 'Staff Com') {
+				$temp['chargePerAmount'] = $data['data']->itinerary_detail->staff_com;
+			}else if ($main_list[$i] == 'Tips') {
+				$temp['chargePerAmount'] = $data['data']->itinerary_detail->agent_tip;
+			}else if ($main_list[$i] == 'Visa') {
+				$temp['chargePerAmount'] = $data['data']->itinerary_detail->agent_visa;
+			}else if ($main_list[$i] == 'Apt Tax And Surcharge') {
+				$temp['chargePerAmount'] = $data['data']->itinerary_detail->agent_tax;
+			}
+			$temp['nominal'] = 0;
+			$temp['value'] = 0;
+			array_push($data['invoice_list'], $temp);
+		}
+
+
+		foreach ($data['data']->itinerary_detail->itinerary->itinerary_additional as $i => $d) {
+			$temp['name'] = $d->additional->name;
+			$temp['type'] = $d->additional->id;
+			$temp['chargePerAmount'] = $d->additional->price;
+			$temp['nominal'] = 0;
+			$temp['value'] = 0;
+
+			array_push($data['invoice_list'], $temp);
+		}
+
+		foreach ($data['invoice_list'] as $i => $d) {
+			foreach ($data['data']->booking_d as $i1 => $d1) {
+				foreach ($d1->booking_pax as $i2 => $d2) {
+					if ($d2->type == $data['invoice_list'][$i]['name']) {
+						$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+						$data['invoice_list'][$i]['value'] += 1;
+					}elseif($data['invoice_list'][$i]['name'] == 'Agent Com'){
+						$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+						$data['invoice_list'][$i]['value'] += 1;
+					}elseif($data['invoice_list'][$i]['name'] == 'Staff Com'){
+						$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+						$data['invoice_list'][$i]['value'] += 1;
+					}elseif($data['invoice_list'][$i]['name'] == 'Tips'){
+						$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+						$data['invoice_list'][$i]['value'] += 1;
+					}elseif($data['invoice_list'][$i]['name'] == 'Visa'){
+						$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+						$data['invoice_list'][$i]['value'] += 1;
+					}elseif($data['invoice_list'][$i]['name'] == 'Apt Tax And Surcharge'){
+						$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+						$data['invoice_list'][$i]['value'] += 1;
+					}
+				}
+			}
+
+			foreach ($data['data']->itinerary_detail->itinerary->itinerary_additional as $i1 => $d1) {
+				if ($data['invoice_list'][$i]['type'] == $d1->additional->id) {
+					$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+					$data['invoice_list'][$i]['value'] += 1;
+				}
+			}
+		}
+		$pdf = PDF::loadView('invoice', ['data' => $data]);
 		return $pdf->stream();
 	}
 }

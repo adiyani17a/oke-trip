@@ -31,7 +31,7 @@ protected $fillable = [
         return $this->belongsTo('App\User', 'users_id', 'id');
     }
 
-    public function handle_by()
+    public function handle()
     {
         return $this->belongsTo('App\User', 'handle_by', 'id');
     }

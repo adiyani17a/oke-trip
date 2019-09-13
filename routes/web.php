@@ -381,6 +381,11 @@ Route::group(['middleware' => 'cors'], function () {
         'uses' => "apiV1Controller@bookingListPdfPax",
         'as' => "bookingListPdfPax"
       ]);
+
+      Route::get('/get-booking-list/pdf/invoice/{id}', [
+        'uses' => "apiV1Controller@bookingListPdfInvoice",
+        'as' => "bookingListPdfInvoice"
+      ]);
     });
   });
 });
