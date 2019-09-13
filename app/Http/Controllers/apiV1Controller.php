@@ -193,7 +193,7 @@ class apiV1Controller extends Controller
 					if (count($room->additional[$i][$i1][$i2]) != 0) {
 						$data = array(
 									'id'				=> $id,
-									'id_booking_d'		=> $i+1
+									'id_booking_d'		=> $i+1,
 									'id_booking_pax'	=> $i1+1,
 									'dt'				=> $additional_counting,
 									'additional_id'		=> $room->additional[$i][$i1][$i2][0],
