@@ -23,7 +23,7 @@ protected $fillable = [
 
     public function payment_history()
     {
-        return $this->hasMany('App\payment_history', 'booking_id', 'id');
+        return $this->hasMany('App\payment_history', 'id', 'booking_id');
     }
 
     public function users()
