@@ -189,6 +189,7 @@ class apiV1Controller extends Controller
 				$this->model->booking_pax()->create($data);
 				$image_index++;
 				$additional_counting = 1;
+				dd($room->additional);
 				for ($i2=0; $i2 < count($room->additional[$i][$i1]); $i2++) { 
 					if (count($room->additional[$i][$i1][$i2]) != 0) {
 						
@@ -199,7 +200,7 @@ class apiV1Controller extends Controller
 									'additional_id'		=> $room->additional[$i][$i1][$i2][0],
 								);
 
-						
+
 						$this->model->booking_additional()->create($data);
 						$additional_counting++;
 					}
