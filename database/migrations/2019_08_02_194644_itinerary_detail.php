@@ -29,6 +29,7 @@ class ItineraryDetail extends Migration
             $table->double('infant_price', 10, 2);
             $table->double('minimal_dp', 10, 2);
             $table->double('agent_com', 10, 2);
+            $table->double('staff_com', 10, 2);
             $table->double('agent_tip', 10, 2);
             $table->double('agent_visa', 10, 2);
             $table->double('agent_tax', 10, 2);

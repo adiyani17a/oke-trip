@@ -20,6 +20,7 @@ class PaymentHistoryD extends Migration
             $table->integer('bank');
             $table->string('nominal');
             $table->string('account_name');
+            $table->string('account_number');
             $table->string('image');
             $table->string('date');
             $table->primary(array('id', 'dt'));
