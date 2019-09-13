@@ -274,7 +274,7 @@ class apiV1Controller extends Controller
 
 
 		$data['invoice_list'] = [];
-		$main_list = ['Adult','Child With Bed','Child No Bed','Infant'];
+		$main_list = ['Adult','Child With Bed','Child No Bed','Infant','Agent Com','Staff Com','Tips','Visa','Apt Tax And Surcharge'];
 		$temp = [];
 
 		foreach ($main_list as $i => $d) {
@@ -288,6 +288,16 @@ class apiV1Controller extends Controller
 				$temp['chargePerAmount'] = $data['data']->itinerary_detail->child_price;
 			}else if ($main_list[$i] == 'Infant') {
 				$temp['chargePerAmount'] = $data['data']->itinerary_detail->infant_price;
+			}else if ($main_list[$i] == 'Agent Com') {
+				$temp['chargePerAmount'] = $data['data']->itinerary_detail->agent_com;
+			}else if ($main_list[$i] == 'Staff Com') {
+				$temp['chargePerAmount'] = $data['data']->itinerary_detail->staff_com;
+			}else if ($main_list[$i] == 'Tips') {
+				$temp['chargePerAmount'] = $data['data']->itinerary_detail->agent_tip;
+			}else if ($main_list[$i] == 'Visa') {
+				$temp['chargePerAmount'] = $data['data']->itinerary_detail->agent_visa;
+			}else if ($main_list[$i] == 'Apt Tax And Surcharge') {
+				$temp['chargePerAmount'] = $data['data']->itinerary_detail->agent_tax;
 			}
 			$temp['nominal'] = 0;
 			$temp['value'] = 0;
@@ -305,11 +315,25 @@ class apiV1Controller extends Controller
 			array_push($data['invoice_list'], $temp);
 		}
 
-
 		foreach ($data['invoice_list'] as $i => $d) {
 			foreach ($data['data']->booking_d as $i1 => $d1) {
 				foreach ($d1->booking_pax as $i2 => $d2) {
 					if ($d2->type == $data['invoice_list'][$i]['name']) {
+						$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+						$data['invoice_list'][$i]['value'] += 1;
+					}elseif($data['invoice_list'][$i]['name'] == 'Agent Com'){
+						$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+						$data['invoice_list'][$i]['value'] += 1;
+					}elseif($data['invoice_list'][$i]['name'] == 'Staff Com'){
+						$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+						$data['invoice_list'][$i]['value'] += 1;
+					}elseif($data['invoice_list'][$i]['name'] == 'Tips'){
+						$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+						$data['invoice_list'][$i]['value'] += 1;
+					}elseif($data['invoice_list'][$i]['name'] == 'Visa'){
+						$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+						$data['invoice_list'][$i]['value'] += 1;
+					}elseif($data['invoice_list'][$i]['name'] == 'Apt Tax And Surcharge'){
 						$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
 						$data['invoice_list'][$i]['value'] += 1;
 					}
