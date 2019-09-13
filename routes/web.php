@@ -376,6 +376,11 @@ Route::group(['middleware' => 'cors'], function () {
         'uses' => "apiV1Controller@getBookingListDetail",
         'as' => "getBookingListDetail"
       ]);
+
+      Route::get('/get-booking-list/pdf/pax/{id}', [
+        'uses' => "apiV1Controller@bookingListPdfPax",
+        'as' => "bookingListPdfPax"
+      ]);
     });
   });
 });

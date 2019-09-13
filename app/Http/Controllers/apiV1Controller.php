@@ -10,6 +10,7 @@ use DB;
 use carbon\carbon;
 use Storage;
 use Image;
+use PDF;
 use Illuminate\Support\Facades\Hash;
 
 class apiV1Controller extends Controller
@@ -352,5 +353,28 @@ class apiV1Controller extends Controller
 
 
 		return response::json(['status'=>200,'data'=>$data,'time_remaining'=>$time_remaining]);
+	}
+
+	public function bookingListPdfPax($id)
+	{
+
+
+		$data = $this->model->booking()	
+					 ->where('id',$id)
+					 ->with(['booking_d'=>function($q){
+					 	$q->with(['booking_pax'=>function($q1){
+					 		$q1->with(['booking_additional'=>function($q2){
+					 			$q2->with(['additional']);
+					 		}]);
+					 	}]);
+					 },'payment_history'=>function($q){
+					 	$q->with(['payment_history_d']);
+					 },'users','handle_by','itinerary_detail'=>function($q){
+					 	$q->with(['itinerary']);
+					 }])
+					 ->first();
+
+		$pdf = PDF::loadView('customer', ['data' => $data]);
+		return $pdf->stream();
 	}
 }

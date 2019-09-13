@@ -40,4 +40,5 @@ class itinerary extends Model
     {
         return $this->hasMany('App\itinerary_additional', 'id', 'id');
     }
+
 }

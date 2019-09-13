@@ -20,7 +20,7 @@ class itinerary_detail extends Model
 
     public function booking()
     {
-    	return $this->hasMany('App\booking', 'itinerary_code', 'id');
+    	return $this->hasMany('App\booking', 'itinerary_code', 'code');
     }
 
     public function itinerary()
