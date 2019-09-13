@@ -239,7 +239,7 @@ class apiV1Controller extends Controller
 		return response::json(['status'=>200,'data'=>$data,'time_remaining'=>$time_remaining]);
 	}
 
-	public function getBookingListDetail($id)
+	public function getBookingListDetail(Request $req,$id)
 	{
 
 		$check_token = $this->model->token_management()->where('access_token',$req->token)->first();
@@ -256,7 +256,7 @@ class apiV1Controller extends Controller
 		}else{
 				return response::json(['status'=>401,'message'=>'Unauthorized']);
 		}
-		
+
 		$data = $this->model->booking()	
 					 ->where('id',$id)
 					 ->with(['booking_d'=>function($q){
