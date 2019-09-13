@@ -13,7 +13,7 @@ class payment_history extends Model
     const UPDATED_AT = 'updated_at';
     const CREATED_AT = 'created_at';
     protected $fillable = [
-							'id', 'booking_id', 'total_payment', 'payment_method', 'status_payment', 'created_at', 'updated_at'
+							'id','code','booking_id', 'total_payment', 'payment_method', 'status_payment', 'created_at', 'updated_at'
     					];
 
     public function booking()
