@@ -14,7 +14,7 @@ class booking_additional extends Model
     const UPDATED_AT = 'updated_at';
     const CREATED_AT = 'created_at';
     protected $fillable = [
-							'id', 'id_booking_pax', 'dt', 'additional_id'
+							'id', 'id_booking_pax', 'dt', 'additional_id','id_booking_d'
     					];
 
 

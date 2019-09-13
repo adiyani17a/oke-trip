@@ -18,7 +18,7 @@ class booking_pax extends Model
 
     public function booking_additional()
     {
-    	return $this->hasMany('App\booking_additional', ['id_booking_pax','id'], ['dt','id']);
+    	return $this->hasMany('App\booking_additional', ['id_booking_pax','id_booking_d','id'], ['dt','id_booking_d','id']);
     }
 
     public function booking_d()

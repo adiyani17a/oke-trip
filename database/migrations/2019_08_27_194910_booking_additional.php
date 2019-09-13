@@ -19,7 +19,9 @@ class BookingAdditional extends Migration
             $table->integer('id_booking_pax');
             $table->integer('dt');
             $table->integer('additional_id');
-            $table->primary(array('id', 'dt','id_booking_pax'));
+            $table->integer('id_booking_d');
+
+            $table->primary(array('id', 'dt','id_booking_pax','id_booking_d'));
             $table->foreign('id')
                   ->references('id')->on('booking')
                   ->onDelete('cascade');
