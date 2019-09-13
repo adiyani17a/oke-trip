@@ -35,4 +35,9 @@ protected $fillable = [
     {
         return $this->belongsTo('App\User', 'handle_by', 'id');
     }
+
+    public function itinerary_detail()
+    {
+        return $this->belongsTo('App\itinerary_detail', 'itinerary_code', 'code');
+    }
 }

@@ -257,7 +257,7 @@ class apiV1Controller extends Controller
 				return response::json(['status'=>401,'message'=>'Unauthorized']);
 		}
 
-		$data = $this->model->booking()	
+		$data['data'] = $this->model->booking()	
 					 ->where('id',$id)
 					 ->where('users_id',$req->user_id)
 					 ->with(['booking_d'=>function($q){
@@ -270,6 +270,61 @@ class apiV1Controller extends Controller
 					 	$q->with(['payment_history_d']);
 					 },'users','handle_by'])
 					 ->first();
+
+
+
+		$data['invoice_list'] = [];
+		$main_list = ['Adult','Child With Bed','Child No Bed','Infant'];
+		$temp = [];
+
+		foreach ($main_list as $i => $d) {
+			$temp['name'] = $main_list[$i];
+			$temp['type'] = $main_list[$i];
+			if ($main_list[$i] == 'Adult') {
+				$temp['chargePerAmount'] = $data['data']->itinerary_detail->adult_price;
+			}else if ($main_list[$i] == 'Child With Bed') {
+				$temp['chargePerAmount'] = $data['data']->itinerary_detail->child_bed_price;
+			}else if ($main_list[$i] == 'Child No Bed') {
+				$temp['chargePerAmount'] = $data['data']->itinerary_detail->child_price;
+			}else if ($main_list[$i] == 'Infant') {
+				$temp['chargePerAmount'] = $data['data']->itinerary_detail->infant_price;
+			}
+			$temp['nominal'] = 0;
+			$temp['value'] = 0;
+			array_push($data['invoice_list'], $temp);
+		}
+
+
+		foreach ($data['data']->itinerary_detail->itinerary->itinerary_additional as $i => $d) {
+			$temp['name'] = $d->additional->name;
+			$temp['type'] = $d->additional->id;
+			$temp['chargePerAmount'] = $d->additional->price;
+			$temp['nominal'] = 0;
+			$temp['value'] = 0;
+
+			array_push($data['invoice_list'], $temp);
+		}
+
+
+		foreach ($data['invoice_list'] as $i => $d) {
+			foreach ($data['data']->booking_d as $i1 => $d1) {
+				foreach ($d1->booking_pax as $i2 => $d2) {
+					if ($d2->type == $data['invoice_list'][$i]['name']) {
+						$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+						$data['invoice_list'][$i]['value'] += 1;
+					}
+				}
+			}
+
+			foreach ($data['data']->itinerary_detail->itinerary->itinerary_additional as $i1 => $d1) {
+				if ($data['invoice_list'][$i]['type'] == $d1->additional->id) {
+					$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+					$data['invoice_list'][$i]['value'] += 1;
+				}
+			}
+		}
+
+
 		return response::json(['status'=>200,'data'=>$data,'time_remaining'=>$time_remaining]);
 	}
 }
