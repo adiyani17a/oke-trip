@@ -196,8 +196,9 @@ class apiV1Controller extends Controller
 									'id'				=> $id,
 									'id_booking_pax'	=> $i1+1,
 									'dt'				=> $additional_counting,
-									'additional_id'		=> $room->additional[$i][$i1][$i2][0],
+									'additional_id'		=> $room->additional[$i][$i1][$i2][0].'_'.$room->name[$i][$i1],
 								);
+
 
 						$this->model->booking_additional()->create($data);
 						$additional_counting++;
@@ -205,6 +206,7 @@ class apiV1Controller extends Controller
 				}
 			}
 		}
+
 		DB::commit();
         return Response::json(['status'=>1,'message'=>'Success Saving Data','code'=>$kode]);
 	}
