@@ -75,7 +75,6 @@ class apiV1Controller extends Controller
 
 	public function saveBooking(Request $req)
 	{
-		DB::beginTransaction();
 		$room = json_decode($req->room);
 		$guest_leader = json_decode($req->guest_leader);
 		$pricing = json_decode($req->pricing);
@@ -196,7 +195,7 @@ class apiV1Controller extends Controller
 									'id'				=> $id,
 									'id_booking_pax'	=> $i1+1,
 									'dt'				=> $additional_counting,
-									'additional_id'		=> $room->additional[$i][$i1][$i2][0].'_'.$room->name[$i][$i1],
+									'additional_id'		=> $room->additional[$i][$i1][$i2][0],
 								);
 
 
@@ -207,7 +206,6 @@ class apiV1Controller extends Controller
 			}
 		}
 
-		DB::commit();
         return Response::json(['status'=>1,'message'=>'Success Saving Data','code'=>$kode]);
 	}
 
