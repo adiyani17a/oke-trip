@@ -103,8 +103,8 @@ class apiV1Controller extends Controller
 		$kode = 'BK'.$day.str_pad($id, 3, '0', STR_PAD_LEFT);
 
 		$total_additional = 0;
-		for ($i=0; $i < (count($pricing)-4); $i++) { 
-			$total_additional += $pricing[$i+4]->nominal;
+		for ($i=0; $i < (count($pricing)-9); $i++) { 
+			$total_additional += $pricing[$i+9]->nominal;
 		}
 
 		$data = array(
@@ -345,13 +345,13 @@ class apiV1Controller extends Controller
 						$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
 						$data['invoice_list'][$i]['value'] += 1;
 					}
-				}
-			}
 
-			foreach ($data['data']->itinerary_detail->itinerary->itinerary_additional as $i1 => $d1) {
-				if ($data['invoice_list'][$i]['type'] == $d1->additional->id) {
-					$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
-					$data['invoice_list'][$i]['value'] += 1;
+					foreach ($d2->booking_additional as $i3 => $d3 ) {
+						if ($data['invoice_list'][$i]['type'] == $d3->additional->id) {
+							$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+							$data['invoice_list'][$i]['value'] += 1;
+						}
+					}
 				}
 			}
 		}
@@ -464,13 +464,13 @@ class apiV1Controller extends Controller
 						$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
 						$data['invoice_list'][$i]['value'] += 1;
 					}
-				}
-			}
 
-			foreach ($data['data']->itinerary_detail->itinerary->itinerary_additional as $i1 => $d1) {
-				if ($data['invoice_list'][$i]['type'] == $d1->additional->id) {
-					$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
-					$data['invoice_list'][$i]['value'] += 1;
+					foreach ($d2->booking_additional as $i3 => $d3) {
+						if ($data['invoice_list'][$i]['type'] == $d3->additional->id) {
+							$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+							$data['invoice_list'][$i]['value'] += 1;
+						}
+					}
 				}
 			}
 		}

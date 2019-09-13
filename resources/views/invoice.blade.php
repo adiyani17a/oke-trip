@@ -161,7 +161,11 @@
 				</tr>
 			@endif
 			@php
+			if ($data['invoice_list'][$i]['type'] == 'Agent Com' or $data['invoice_list'][$i]['type'] == 'Staff Com') {
+				$total -= $data['invoice_list'][$i]['nominal'];
+			}else{
 				$total += $data['invoice_list'][$i]['nominal'];
+			}
 			@endphp
 		@endforeach
 		<tr class="total">
