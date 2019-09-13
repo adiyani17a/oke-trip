@@ -371,6 +371,11 @@ Route::group(['middleware' => 'cors'], function () {
         'uses' => "apiV1Controller@getBookingList",
         'as' => "getBookingList"
       ]);
+
+      Route::get('/get-booking-list/{id}', [
+        'uses' => "apiV1Controller@getBookingListDetail",
+        'as' => "getBookingListDetail"
+      ]);
     });
   });
 });
