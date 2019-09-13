@@ -267,10 +267,9 @@ class apiV1Controller extends Controller
 					 		}]);
 					 	}]);
 					 },'payment_history'=>function($q){
-					 	$q->with(['payment_history']);
+					 	$q->with(['payment_history_d']);
 					 },'users','handle_by'])
 					 ->first();
-
 		return response::json(['status'=>200,'data'=>$data,'time_remaining'=>$time_remaining]);
 	}
 }
