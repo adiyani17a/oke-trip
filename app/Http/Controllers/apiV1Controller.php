@@ -268,7 +268,9 @@ class apiV1Controller extends Controller
 					 	}]);
 					 },'payment_history'=>function($q){
 					 	$q->with(['payment_history_d']);
-					 },'users','handle_by'])
+					 },'users','handle_by','itinerary_detail'=>function($q){
+					 	$q->with(['itinerary']);
+					 }])
 					 ->first();
 
 
