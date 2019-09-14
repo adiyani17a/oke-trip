@@ -587,10 +587,10 @@
               !this.$v.form.summary.required && errors.push('Summary is required.')
               return errors
           },
-          staffErrors() {
+          staffPriceErrors() {
               const errors = [];
-              if (!this.$v.form.staff.$dirty) return errors
-              !this.$v.form.staff.required && errors.push('Staff Com is required.')
+              if (!this.$v.formDetail.staffPrice.$dirty) return errors
+              !this.$v.formDetail.staffPrice.required && errors.push('Staff Com is required.')
               return errors
           },
       },
