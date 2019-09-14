@@ -33,7 +33,7 @@ protected $fillable = [
 
     public function handle()
     {
-        return $this->belongsTo('App\User', 'handle_by', 'id');
+        return $this->belongsTo('App\User', 'id', 'handle_by');
     }
 
     public function itinerary_detail()
