@@ -828,6 +828,7 @@
             this.formDetail.adultPrice = this.formDetail.itineraryItems[param].adultPrice; 
             this.formDetail.CwBPrice = this.formDetail.itineraryItems[param].CwBPrice;
             this.formDetail.CnBPrice = this.formDetail.itineraryItems[param].CnBPrice; 
+            console.log(this.formDetail.itineraryItems[param].CnBPrice);
             this.formDetail.infantPrice = this.formDetail.itineraryItems[param].infantPrice;
             this.formDetail.agentPrice = this.formDetail.itineraryItems[param].agentPrice;
             this.formDetail.staffPrice = this.formDetail.itineraryItems[param].staffPrice;
@@ -836,6 +837,17 @@
             this.formDetail.aptPrice = this.formDetail.itineraryItems[param].aptPrice; 
             this.formDetail.seat = this.formDetail.itineraryItems[param].seat; 
             this.formDetail.minimalDP = this.formDetail.itineraryItems[param].minimalDP; 
+
+            this.$refs.adultPrice.$el.getElementsByTagName('input')[0].value = this.formDetail.itineraryItems[param].adultPrice;
+            this.$refs.CwBPrice.$el.getElementsByTagName('input')[0].value = this.formDetail.itineraryItems[param].CwBPrice;
+            this.$refs.CnBPrice.$el.getElementsByTagName('input')[0].value = this.formDetail.itineraryItems[param].CnBPrice;
+            this.$refs.infantPrice.$el.getElementsByTagName('input')[0].value = this.formDetail.itineraryItems[param].infantPrice;
+            this.$refs.agentPrice.$el.getElementsByTagName('input')[0].value = this.formDetail.itineraryItems[param].agentPrice;
+            this.$refs.staffPrice.$el.getElementsByTagName('input')[0].value = this.formDetail.itineraryItems[param].staffPrice;
+            this.$refs.tipsPrice.$el.getElementsByTagName('input')[0].value = this.formDetail.itineraryItems[param].tipsPrice;
+            this.$refs.visaPrice.$el.getElementsByTagName('input')[0].value = this.formDetail.itineraryItems[param].visaPrice;
+            this.$refs.aptPrice.$el.getElementsByTagName('input')[0].value = this.formDetail.itineraryItems[param].aptPrice;
+            this.$refs.minimalDP.$el.getElementsByTagName('input')[0].value = this.formDetail.itineraryItems[param].minimalDP;
             this.idEdit = param;  
             this.formDetailEdit = true;
           },
