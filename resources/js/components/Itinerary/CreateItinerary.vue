@@ -644,7 +644,7 @@
                     this.text = response.data.message;
                     if (response.data.status == 1) {
                       this.color = 'success';
-                      router.push({ name: "Itinerary"})
+                      this.$router.push({ name: "Itinerary"})
 
                     } else {
                       this.color = 'error'
