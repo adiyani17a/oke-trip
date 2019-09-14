@@ -224,6 +224,7 @@
                             } else {
                                 this.dataItem[i].active = false
                             }
+                            
                             if (this.dataItem[i].image != null) {
                                 this.dataItem[i].image = '.' + this.dataItem[i].image;
                             }

@@ -102,6 +102,7 @@
                   </v-flex>
                   <v-flex xs12 md6 style="padding: 10px">
                     <h5>Add Flight Detail</h5>
+
                     <div v-for="index in addFlightDetail">
                       <v-layout wrap border style="padding: 10px">
                         <v-flex xs4 class="text-center pa-2" >
@@ -810,22 +811,29 @@
                 this.form.note[1] = response.data.data.note_2;
                 this.form.note[2] = response.data.data.note_3;
 
-                this.addDetailSchedule = response.data.data.itinerary_schedule.length;
-                this.addFlightDetail = response.data.data.itinerary_flight.length;
-
-                for (var i = 0; i < this.addDetailSchedule; i++) {
-                  this.form.title[i] = response.data.data.itinerary_schedule[i].title
-                  this.form.bld[i] = response.data.data.itinerary_schedule[i].eat_service
-                  this.form.caption[i] = response.data.data.itinerary_schedule[i].caption
+                if (response.data.data.itinerary_schedule.length != 0) {
+                  this.addDetailSchedule = response.data.data.itinerary_schedule.length
+                  for (var i = 0; i < this.addDetailSchedule; i++) {
+                    this.form.title[i] = response.data.data.itinerary_schedule[i].title
+                    this.form.bld[i] = response.data.data.itinerary_schedule[i].eat_service
+                    this.form.caption[i] = response.data.data.itinerary_schedule[i].caption
+                  }
                 }
 
-                for (var i = 0; i < this.addFlightDetail; i++) {
-                  this.form.flight[i] = response.data.data.itinerary_flight[i].flight_number
-                  this.form.departureAirportCode[i] = response.data.data.itinerary_flight[i].departure_airport_code
-                  this.form.arrivalAirportCode[i] = response.data.data.itinerary_flight[i].arrival_airport_code
-                  this.form.departure[i] = response.data.data.itinerary_flight[i].departure
-                  this.form.arrival[i] = response.data.data.itinerary_flight[i].arrival
+                if (response.data.data.itinerary_flight.length != 0) {
+                  this.addFlightDetail = response.data.data.itinerary_flight.length;
+                  for (var i = 0; i < this.addFlightDetail; i++) {
+                    this.form.flight[i] = response.data.data.itinerary_flight[i].flight_number
+                    this.form.departureAirportCode[i] = response.data.data.itinerary_flight[i].departure_airport_code
+                    this.form.arrivalAirportCode[i] = response.data.data.itinerary_flight[i].arrival_airport_code
+                    this.form.departure[i] = response.data.data.itinerary_flight[i].departure
+                    this.form.arrival[i] = response.data.data.itinerary_flight[i].arrival
+                  }
                 }
+
+                  
+
+                  
 
                 for (var i = 0; i < response.data.data.itinerary_detail.length; i++) {
                   let data = {

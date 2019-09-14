@@ -896,6 +896,22 @@ class apiController extends Controller
         });
     }
 
+    public function changeStatusHotDeal(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+
+            if(!Auth::user()->hasAccess('Itinerary','edit')){
+                return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Edit This Data']);
+            } 
+
+            $input['hot_deals'] = $req->param;
+            $input['updated_by'] = Auth::user()->id;
+            $input['updated_at'] = carbon::now();
+            $this->model->itinerary()->where('id',$req->id)->update($input);
+            return Response::json(['status'=>1,'message'=>'Success Change data']);
+        });
+    }
+
     public function saveItinerary(Request $req)
     {
         return DB::transaction(function() use ($req) {  
@@ -1680,5 +1696,112 @@ class apiController extends Controller
 
             return Response::json(['status'=>1,'message'=>'Success Updating data']);
         });
+    }
+
+    public function datatableBookingList(Request $req)
+    {
+        $data =  $this->model->booking()->with(['users','handle'])->paginate($req->showing);
+        return Response::json(['data'=>$data]);
+    }
+
+    public function editBookingList(Request $req)
+    {
+        $data['data'] = $this->model->booking() 
+                     ->where('id',$req->id)
+                     ->with(['booking_d'=>function($q){
+                        $q->with(['booking_pax'=>function($q1){
+                            $q1->with(['booking_additional'=>function($q2){
+                                $q2->with(['additional']);
+                            }]);
+                        }]);
+                     },'payment_history'=>function($q){
+                        $q->with(['payment_history_d']);
+                     },'users','handle','itinerary_detail'=>function($q){
+                        $q->with(['itinerary'=>function($q1){
+                            $q1->with(['itinerary_additional'=>function($q2){
+                                $q2->with(['additional']);
+                            }]);
+                        }]);
+                     }])
+                     ->first();
+
+
+
+        $data['invoice_list'] = [];
+        $main_list = ['Adult','Child With Bed','Child No Bed','Infant','Agent Com','Staff Com','Tips','Visa','Apt Tax And Surcharge'];
+        $temp = [];
+        foreach ($main_list as $i => $d) {
+            $temp['name'] = $main_list[$i];
+            $temp['type'] = $main_list[$i];
+            if ($main_list[$i] == 'Adult') {
+                $temp['chargePerAmount'] = $data['data']->itinerary_detail->adult_price;
+            }else if ($main_list[$i] == 'Child With Bed') {
+                $temp['chargePerAmount'] = $data['data']->itinerary_detail->child_bed_price;
+            }else if ($main_list[$i] == 'Child No Bed') {
+                $temp['chargePerAmount'] = $data['data']->itinerary_detail->child_price;
+            }else if ($main_list[$i] == 'Infant') {
+                $temp['chargePerAmount'] = $data['data']->itinerary_detail->infant_price;
+            }else if ($main_list[$i] == 'Agent Com') {
+                $temp['chargePerAmount'] = $data['data']->itinerary_detail->agent_com;
+            }else if ($main_list[$i] == 'Staff Com') {
+                $temp['chargePerAmount'] = $data['data']->itinerary_detail->staff_com;
+            }else if ($main_list[$i] == 'Tips') {
+                $temp['chargePerAmount'] = $data['data']->itinerary_detail->agent_tip;
+            }else if ($main_list[$i] == 'Visa') {
+                $temp['chargePerAmount'] = $data['data']->itinerary_detail->agent_visa;
+            }else if ($main_list[$i] == 'Apt Tax And Surcharge') {
+                $temp['chargePerAmount'] = $data['data']->itinerary_detail->agent_tax;
+            }
+            $temp['nominal'] = 0;
+            $temp['value'] = 0;
+            array_push($data['invoice_list'], $temp);
+        }
+
+
+        foreach ($data['data']->itinerary_detail->itinerary->itinerary_additional as $i => $d) {
+            $temp['name'] = $d->additional->name;
+            $temp['type'] = $d->additional->id;
+            $temp['chargePerAmount'] = $d->additional->price;
+            $temp['nominal'] = 0;
+            $temp['value'] = 0;
+
+            array_push($data['invoice_list'], $temp);
+        }
+
+        foreach ($data['invoice_list'] as $i => $d) {
+            foreach ($data['data']->booking_d as $i1 => $d1) {
+                foreach ($d1->booking_pax as $i2 => $d2) {
+                    if ($d2->type == $data['invoice_list'][$i]['name']) {
+                        $data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+                        $data['invoice_list'][$i]['value'] += 1;
+                    }elseif($data['invoice_list'][$i]['name'] == 'Agent Com'){
+                        $data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+                        $data['invoice_list'][$i]['value'] += 1;
+                    }elseif($data['invoice_list'][$i]['name'] == 'Staff Com'){
+                        $data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+                        $data['invoice_list'][$i]['value'] += 1;
+                    }elseif($data['invoice_list'][$i]['name'] == 'Tips'){
+                        $data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+                        $data['invoice_list'][$i]['value'] += 1;
+                    }elseif($data['invoice_list'][$i]['name'] == 'Visa'){
+                        $data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+                        $data['invoice_list'][$i]['value'] += 1;
+                    }elseif($data['invoice_list'][$i]['name'] == 'Apt Tax And Surcharge'){
+                        $data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+                        $data['invoice_list'][$i]['value'] += 1;
+                    }
+
+                    foreach ($d2->booking_additional as $i3 => $d3 ) {
+                        if ($data['invoice_list'][$i]['type'] == $d3->additional->id) {
+                            $data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+                            $data['invoice_list'][$i]['value'] += 1;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return response::json(['status'=>1,'data'=>$data]);
     }
 }

@@ -52,8 +52,15 @@
             <div v-if="header.type == 'currency'" class="text-xs-center">
               {{ props.item[header.value] | currency}}
             </div>
+            <div v-if="header.type == 'hot deals'" class="text-xs-center">
+              <v-btn color="primary" text-color="white" v-if="props.item[header.value] == 'Y'" @click="hotDeals('N',props.item.id)">Hot Deals</v-btn>
+              <v-btn color="warning" text-color="white" v-if="props.item[header.value] == 'N'" @click="hotDeals('Y',props.item.id)">Not Hot Deals</v-btn>
+            </div>
             <div v-if="header.type == 'default' || header.type == undefined">
               {{ props.item[header.value] }}
+            </div>
+            <div v-if="header.type == 'label'">
+              <v-chip :color="props.item.color" class="text-white">{{ props.item[header.value] }}</v-chip>
             </div>
 	      	</td>
 	      </template>
@@ -207,6 +214,9 @@
       },
       checkboxChange(data,id){
         this.$emit('checkboxChange',data.id)
+      },
+      hotDeals(param,id){
+        this.$emit('hotDeals',param,id)
       }
     }
   }

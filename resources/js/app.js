@@ -53,6 +53,13 @@ let routes = [{
     },
     component: require('./components/BookingList/BookingList.vue').default
 }, {
+    path: '/booking-list/edit/:id',
+    name: 'EditBookingList',
+    meta: {
+        breadcrumb: 'Edit Booking List',
+    },
+    component: require('./components/BookingList/EditBookingList.vue').default
+}, {
     path: '/group-menu',
     name: 'Group Menu',
     meta: {
@@ -195,4 +202,9 @@ let app = new Vue({
         accounting.setAttribute('src', '/js/accounting/accounting.js')
         document.head.appendChild(accounting)
     },
+    data(){
+        return{
+            url_image : process.env.MIX_URL_IMAGE,
+        }
+    }
 });

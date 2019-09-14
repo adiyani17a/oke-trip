@@ -41,6 +41,7 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('itinerary/{path}', 'HomeController@index')->where('all', '^(?!api).*$');
   Route::get('itinerary/{path}/{id}', 'HomeController@index')->where('all', '^(?!api).*$');
   Route::get('itinerary/{path}/{id}/{dt}', 'HomeController@index')->where('all', '^(?!api).*$');
+  Route::get('booking-list/{path}/{id}', 'HomeController@index')->where('all', '^(?!api).*$');
   Route::get('group-menu', 'HomeController@index');
 
     Route::get('api/get-token', [
@@ -227,6 +228,11 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "changeStatusItinerary"
       ]);
 
+      Route::post('/change-status-hot-deal', [
+        'uses' => "apiController@changeStatusHotDeal",
+        'as' => "changeStatusHotDeal"
+      ]);
+
       Route::get('/menu-list', [
         'uses' => "apiController@menuListItinerary",
         'as' => "menuListItinerary"
@@ -335,6 +341,23 @@ Route::group(['middleware' => 'check-token'], function () {
       ]);
     });
 
+
+    Route::group(["prefix" => "booking-list"], function(){
+      Route::get('/datatable', [
+        'uses' => "apiController@datatableBookingList",
+        'as' => "datatableBookingList"
+      ]);
+
+      Route::get('/edit', [
+        'uses' => "apiController@editBookingList",
+        'as' => "editBookingList"
+      ]);
+
+      Route::post('/change-status', [
+        'uses' => "apiController@changeStatusBookingList",
+        'as' => "changeStatusBookingList"
+      ]);
+    });
 	});
 });
 

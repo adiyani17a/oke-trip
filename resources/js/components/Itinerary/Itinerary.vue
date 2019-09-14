@@ -59,6 +59,7 @@
                                                  @selectedCheckbox="selectedCheckbox"
                                                  @callingApi="callingApi"
                                                  @switchChange="switchChange"
+                                                 @hotDeals="hotDeals"
                                                  >
                             </datatable-component>
                         </div>
@@ -304,6 +305,7 @@
                     { text: 'Flight By', value: 'flight_by' ,type:'default'},
                     { text: 'Active', value: 'active' ,type:'switch',class:'text-xs-center'},
                     { text: 'Created At', value: 'created_at',type:'default' },
+                    { text: 'is Hot Deals', value: 'hot_deals',type:'hot deals' },
                 ],
                 loadingDataTable:false,
                 apiReady:false,
@@ -335,6 +337,25 @@
             },
         },
         methods:{
+            hotDeals(param,id){
+              axios.post('/api/itinerary/change-status-hot-deal', {
+                      id: id,
+                      param: param,
+                  })
+                  .then(response => {
+                      this.snackbar = true;
+                      this.text = response.data.message;
+                      this.callingApi();
+                      this.dialogDelete = false;
+                  })
+                  .catch(error => {
+                      console.log(error)
+                      this.snackbar = true;
+                      this.text = error;
+                      this.errored = true
+                      this.dialogDelete = false;
+                  })
+            },
             onClickChild(value){
                 this.api = '/api/additional/datatable'
             },
