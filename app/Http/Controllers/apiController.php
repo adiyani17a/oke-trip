@@ -1279,7 +1279,6 @@ class apiController extends Controller
             if(!Auth::user()->hasAccess('Itinerary','delete')){
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             }
-
             foreach ($req->data as $i => $d) {
                 $this->model->itinerary()->where('id',$req->data[$i]['id'])->delete();
             }

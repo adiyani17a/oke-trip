@@ -380,7 +380,7 @@
             deleteData(){
 
                 axios
-                    .delete('/api/additional/delete',{
+                    .delete('/api/itinerary/delete',{
                         data:{
                             data:this.select,
                         }
