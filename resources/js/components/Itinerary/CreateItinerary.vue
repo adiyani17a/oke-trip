@@ -653,9 +653,8 @@
                     this.imageReady = false;
                 })
                 .catch(error => {
-                    console.log(error)
                     this.snackbar = true;
-                    this.text = error;
+                    this.text = error.message;
                     this.errored = true
                 })
                 .finally(() => this.$emit('closeDialog', this.dialogs))
