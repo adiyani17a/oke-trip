@@ -642,11 +642,13 @@
                 .then(response => {
                     this.dialogSave = false;
                     this.snackbar = true;
-                    this.text = response.data.message;
                     if (response.data.status == 1) {
+                      this.text = response.data.message;
                       this.color = 'success';
-                      this.$router.push({ name: 'Itinerary' });
+                      this.$router.push({ name: "Itinerary"})
+
                     } else {
+                      this.text = response.message;
                       this.color = 'error'
                     }
                     this.imageReady = false;
