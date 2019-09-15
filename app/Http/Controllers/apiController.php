@@ -771,7 +771,6 @@ class apiController extends Controller
                 $file = $req->gambar;
                 if ($file != null) {
                     $old_path = $this->model->additional()->where('id','=',$req->id)->first();
-                    unlink('.'.$old_path->image);
                     $filename = 'additional_'.$req->name.'.'.'jpg';
                     $path = './dist/img/additional';
                     if (!file_exists($path)) {
@@ -805,6 +804,8 @@ class apiController extends Controller
             }
 
             foreach ($req->data as $i => $d) {
+                $data = $this->model->additional()->where('id',$req->data[$i]['id'])->first();
+                    unlink('.'.$data->image);
                 $this->model->additional()->where('id',$req->data[$i]['id'])->delete();
             }
 
@@ -1829,17 +1830,24 @@ class apiController extends Controller
         $total_pax = 0;
         $total_pax = $pricing[0]->value + $pricing[1]->value + $pricing[2]->value + $pricing[3]->value;
 
-        $this->model->itinerary_detail()->where('code',$itinerary_detail->code)->update(['seat_remain'=> DB::raw("seat_remain + '$total_old'")]);
+        if ($data->status != 'Rejected') {
+            $this->model->itinerary_detail()->where('code',$itinerary_detail->code)->update(['seat_remain'=> DB::raw("seat_remain + '$total_old'")]);
+        }
+
         $remain = $this->model->itinerary_detail()->where('code',$itinerary_detail->code)->first();
 
         if ($remain->seat_remain < $total_pax) {
             DB::rollBack();
             return Response::json(['status'=>0,'message','Sorry the pax available only '.$remain->seat_remain.', please call customer service for further information']);
         }
-        $this->model->itinerary_detail()->where('code',$itinerary_detail->code)
-            ->update([
-                'seat_remain' => DB::raw("seat_remain - '$total_pax'")
-            ]);
+
+        if ($req->status != 'Rejected') {
+            $this->model->itinerary_detail()->where('code',$itinerary_detail->code)
+                ->update([
+                    'seat_remain' => DB::raw("seat_remain - '$total_pax'")
+                ]);
+        }
+            
 
         $id = $req->id;
 

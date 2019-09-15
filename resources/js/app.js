@@ -48,6 +48,7 @@ let routes = [{
     component: require('./components/PaketTour.vue').default
 }, {
     path: '/booking-list',
+    name: 'BookingList',
     meta: {
         breadcrumb: 'Booking List',
     },

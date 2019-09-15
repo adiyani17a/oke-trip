@@ -10,17 +10,11 @@
                 <div class="card">
                     <div class="card-header">
                         <h5 style="margin-top: 10px;display: inline-block;"><b>{{ namaFitur }}</b></h5>
-                        <v-btn v-if="select.length == 1 && select[0].status != 'Waiting List'" color="warning pull-right" @click="approveData">Edit
+                        <v-btn v-if="select.length == 1 && select[0].status == 'Confirm'" color="warning pull-right" @click="approveData">Edit
                             <v-icon dark right>fas fa-pencil-alt</v-icon>
-                        </v-btn>
-                        <v-btn v-if="select.length == 1" color="error pull-right" @click="dialogDelete = true">Delete
-                            <v-icon dark right>fas fa-trash-alt</v-icon>
                         </v-btn>
                         <v-btn v-if="select.length == 1 && select[0].status == 'Waiting List'" color="info pull-right" @click="approveData">Approve
                             <v-icon dark right>fas fa-check</v-icon>
-                        </v-btn>
-                        <v-btn v-if="select.length > 1" color="error pull-right" @click="dialogDelete = true">Bulk Delete
-                            <v-icon dark right>fas fa-trash</v-icon>
                         </v-btn>
                     </div>
                     <div class="card-body">
@@ -212,7 +206,7 @@
                                 this.dataItem[i].color = 'warning';
                             } else if (this.dataItem[i].status == 'Confirm') {
                                 this.dataItem[i].color = 'primary';
-                            } else if (this.dataItem[i].status == 'Cancel') {
+                            } else if (this.dataItem[i].status == 'Rejected') {
                                 this.dataItem[i].color = 'error';
                             }
 
