@@ -19,6 +19,12 @@
                 <v-flex xs12>
                   <v-text-field label="Password*" v-model="password"  required name="password" @blur="$v.password.$touch()" :error-messages="passwordErrors"></v-text-field>
                 </v-flex>
+                 <v-flex xs12>
+                  <v-text-field label="Telp*" v-model="telp"  required name="telp" @blur="$v.telp.$touch()" :error-messages="telpErrors"></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field label="Address*" v-model="address"  required name="address" @blur="$v.address.$touch()" :error-messages="addressErrors"></v-text-field>
+                </v-flex>
                 <v-flex xs12 :if="imageReady == true">
                   <v-select
                     v-model="role"
@@ -76,6 +82,8 @@
       imageWidth:400,
       imageHeight:300,
       imageReady: false,
+      telp: '',
+      address: '',
       dialogs:false,
       nameRules: [
         v => !!v || 'Name is required',
@@ -94,6 +102,8 @@
       email: { required, email },
       password: { required },
       role: { required },
+      telp: { required },
+      address: { required },
     },
     computed:{
       nameErrors () {
@@ -121,6 +131,18 @@
         !this.$v.role.required && errors.push('Role is required.')
         return errors
       },
+      telpErrors () {
+        const errors = []
+        if (!this.$v.telp.$dirty) return errors
+        !this.$v.telp.required && errors.push('Telp is required.')
+        return errors
+      },
+      addressErrors () {
+        const errors = []
+        if (!this.$v.address.$dirty) return errors
+        !this.$v.address.required && errors.push('Address is required.')
+        return errors
+      },
     },
     props:{
       dialog: false,
@@ -142,6 +164,8 @@
           this.email = this.idData[0].email
           this.role = this.idData[0].role_id
           this.password =  this.idData[0].password;
+          this.telp =  this.idData[0].telp;
+          this.address =  this.idData[0].address;
           this.imageData = this.idData[0].image;
           let feature ='administrator-user';
           axios
@@ -161,6 +185,8 @@
           this.role =  '';
           this.imageData =  '';
           this.password =  '';
+          this.telp =  '';
+          this.address =  '';
         }    
       }
     },
@@ -175,6 +201,8 @@
             this.email = this.idData[0].email
             this.role = this.idData[0].role_id
             this.password =  this.idData[0].password;
+            this.telp =  this.idData[0].telp;
+            this.address =  this.idData[0].address;
             this.imageData = this.idData[0].image;
           }else{
             this.id =  '';
@@ -183,6 +211,8 @@
             this.password =  '';
             this.role =  null;
             this.imageData =  '';
+            this.telp =  '';
+            this.address =  '';
           }
         }else{
           this.$v.$touch()
@@ -195,6 +225,8 @@
           formData.append('name',this.name)
           formData.append('email',this.email)
           formData.append('password',this.password)
+          formData.append('telp',this.telp)
+          formData.append('address',this.address)
           formData.append('role_id',this.role)
           formData.append('gambar',this.$refs.tes.images)
           axios.post( '/api/administrator-user/save',
@@ -213,6 +245,8 @@
                 this.id =  '';
                 this.name =  '';
                 this.email =  '';
+                this.telp =  '';
+                this.address =  '';
                 this.role =  null;
                 this.imageData =  null;
                 this.$refs.tes.images = [];

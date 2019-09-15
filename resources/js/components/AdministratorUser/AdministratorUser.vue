@@ -134,6 +134,8 @@
                 headers:[
                     { text: 'Name', value: 'name',class:'text-xs-left',type:'default'},
                     { text: 'Email', value: 'email' ,type:'default'},
+                    { text: 'Telp', value: 'telp' ,type:'default'},
+                    { text: 'Address', value: 'address' ,type:'default'},
                     { text: 'Role', value: 'role_name' ,type:'default'},
                     { text: 'Image', value: 'image' ,type:'image'},
                     { text: 'Active', value: 'active' ,type:'switch',class:'text-xs-center'},

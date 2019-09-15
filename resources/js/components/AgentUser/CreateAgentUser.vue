@@ -19,6 +19,12 @@
                 <v-flex xs12>
                   <v-text-field label="Password*" v-model="password"  required name="password" @blur="$v.password.$touch()" :error-messages="passwordErrors"></v-text-field>
                 </v-flex>
+                <v-flex xs12>
+                  <v-text-field label="Telp*" v-model="telp"  required name="telp" @blur="$v.telp.$touch()" :error-messages="telpErrors"></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field label="Address*" v-model="address"  required name="address" @blur="$v.address.$touch()" :error-messages="addressErrors"></v-text-field>
+                </v-flex>
                 <v-flex xs12 :if="imageReady == true">
                   <v-select
                     v-model="role"
@@ -86,6 +92,8 @@
       password: '',
       role: '',
       company: '',
+      telp: '',
+      address: '',
       imageWidth:400,
       imageHeight:300,
       imageReady: false,
@@ -109,6 +117,8 @@
       password: { required },
       role: { required },
       company: { required },
+      telp: { required },
+      address: { required },
     },
     computed:{
       nameErrors () {
@@ -142,6 +152,18 @@
         !this.$v.company.required && errors.push('Company is required.')
         return errors
       },
+      telpErrors () {
+        const errors = []
+        if (!this.$v.telp.$dirty) return errors
+        !this.$v.telp.required && errors.push('Telp is required.')
+        return errors
+      },
+      addressErrors () {
+        const errors = []
+        if (!this.$v.address.$dirty) return errors
+        !this.$v.address.required && errors.push('Address is required.')
+        return errors
+      },
     },
     props:{
       dialog: false,
@@ -165,6 +187,8 @@
           this.role = this.idData[0].role_id
           this.company = this.idData[0].company_id
           this.password =  this.idData[0].password;
+          this.telp =  this.idData[0].telp;
+          this.address =  this.idData[0].address;
           let feature ='agent-user';
           axios
             .get('/api/convert-image-base-64?id='+this.id+'&feature='+feature)
@@ -183,6 +207,8 @@
           this.imageData =  '';
           this.password =  '';
           this.company = '';
+          this.telp = '';
+          this.address = '';
         }    
       },
     },
@@ -198,12 +224,16 @@
             this.role = this.idData[0].role_id
             this.password =  this.idData[0].password;
             this.company = this.idData[0].company_id
+            this.telp = this.idData[0].telp
+            this.address = this.idData[0].address
             this.imageData = this.idData[0].image
           }else{
             this.id =  '';
             this.name =  '';
             this.email =  '';
             this.password =  '';
+            this.telp =  '';
+            this.address =  '';
             this.role =  null;
             this.imageData =  '';
           }
@@ -219,6 +249,8 @@
           formData.append('name',this.name)
           formData.append('email',this.email)
           formData.append('password',this.password)
+          formData.append('telp',this.telp)
+          formData.append('address',this.address)
           formData.append('role_id',this.role)
           formData.append('company_id',this.company)
           formData.append('gambar',this.$refs.tes.images)
@@ -243,6 +275,8 @@
                 this.$refs.tes.images = [];
                 this.password =  '';
                 this.company = '';
+                this.telp = '';
+                this.address = '';
               }else{
                 this.color = 'error'
               }
