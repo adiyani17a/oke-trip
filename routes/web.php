@@ -353,6 +353,11 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "editBookingList"
       ]);
 
+      Route::post('/update', [
+        'uses' => "apiController@updateBookingList",
+        'as' => "updateBookingList"
+      ]);
+
       Route::post('/change-status', [
         'uses' => "apiController@changeStatusBookingList",
         'as' => "changeStatusBookingList"

@@ -1801,7 +1801,156 @@ class apiController extends Controller
             }
         }
 
+        $data['user'] = $this->model->user()->get();
 
         return response::json(['status'=>1,'data'=>$data]);
+    }
+
+    public function updateBookingList(Request $req)
+    {
+        DB::beginTransaction();
+        $data = $this->model->booking()->where('id',$req->id)->first();
+        $room = json_decode($req->room);
+        $guest_leader = json_decode($req->guest_leader);
+        $pricing = json_decode($req->pricing);
+
+        // save booking
+
+        $itinerary_detail = $data->itinerary_detail;
+
+        $total_old  = 0;
+
+        foreach ($data->booking_d as $i => $d) {
+            foreach ($d->booking_pax as $i1 => $d1) {
+                $total_old +=1;
+            }
+        }
+
+        $total_pax = 0;
+        $total_pax = $pricing[0]->value + $pricing[1]->value + $pricing[2]->value + $pricing[3]->value;
+
+        $this->model->itinerary_detail()->where('code',$itinerary_detail->code)->update(['seat_remain'=> DB::raw("seat_remain + '$total_old'")]);
+        $remain = $this->model->itinerary_detail()->where('code',$itinerary_detail->code)->first();
+
+        if ($remain->seat_remain < $total_pax) {
+            DB::rollBack();
+            return Response::json(['status'=>0,'message','Sorry the pax available only '.$remain->seat_remain.', please call customer service for further information']);
+        }
+        $this->model->itinerary_detail()->where('code',$itinerary_detail->code)
+            ->update([
+                'seat_remain' => DB::raw("seat_remain - '$total_pax'")
+            ]);
+
+        $id = $req->id;
+
+        $day = Carbon::now()->format('dmy');
+
+        $total_additional = 0;
+        for ($i=0; $i < (count($pricing)-9); $i++) { 
+            $total_additional += $pricing[$i+9]->nominal;
+        }
+
+        $data = array(
+                    'users_id'              => $req->id_user,
+                    'telp'                  => $guest_leader->telp,
+                    'itinerary_code'        => $itinerary_detail->code,
+                    'status'                => $req->status,
+                    'name'                  => $guest_leader->party_name,
+                    'total_adult'           => $pricing[0]->nominal,
+                    'total_child_no_bed'    => $pricing[1]->nominal,
+                    'total_child_with_bed'  => $pricing[2]->nominal,
+                    'total_infant'          => $pricing[3]->nominal,
+                    'agent_com'             => $pricing[4]->nominal,
+                    'staff_com'             => $pricing[5]->nominal,
+                    'tips'                  => $pricing[6]->nominal,
+                    'visa'                  => $pricing[7]->nominal,
+                    'tax'                   => $pricing[8]->nominal,
+                    'remark'                => $req->remark,
+                    'total_additional'      => $total_additional,
+                    'total_room'            => count($room->bed),
+                    'total'                 => $req->total,
+                    'handle_by'             => Auth::user()->id,
+                    'updated_by'            => Auth::user()->name,
+                    'updated_at'            => carbon::now(),
+                );
+
+        $this->model->booking()->where('id',$id)->update($data);
+
+        $this->model->booking_d()->where('id',$id)->delete();
+        $this->model->booking_pax()->where('id',$id)->delete();
+        $this->model->booking_additional()->where('id',$id)->delete();
+
+        for ($i=0; $i < count($room->bed); $i++) { 
+
+            
+
+            $data = array(
+                        'id'            => $id,
+                        'dt'            => $i+1,
+                        'bed'           => $room->bed[$i],
+                        'total_bed'     => count($room->name[$i]),
+                    );
+
+
+            $this->model->booking_d()->create($data);
+            for ($i1=0; $i1 < count($room->name[$i]); $i1++) { 
+
+                $file = $req->passport_image[$i][$i1];
+
+                if ($file != null) {
+                    if (!is_string($file)) {
+                        $filename = 'booking_'.$req->name.$id.$i.$i1.'.'.'jpg';
+                        $path = './dist/img/booking/'.$guest_leader->party_name;
+                        if (!file_exists($path)) {
+                            $oldmask = umask(0);
+                            mkdir($path, 0777,true);
+                            umask($oldmask);
+                        }
+                        $path = 'dist/img/booking/'.$guest_leader->party_name.'/'. $filename;
+                        Image::make(file_get_contents($file))->save($path);  
+                        $path = '/dist/img/booking/'.$guest_leader->party_name.'/'. $filename;
+                    }else{
+                        $path = $file;
+                    }
+                }else{
+                    DB::rollBack();
+                    return Response::json(['status'=>0,'message'=>'There is Passport Image With 0 Value']);
+                }
+                $data = array(
+                            'id'                => $id,
+                            'dt'                => $i1+1,
+                            'id_booking_d'      => $i+1,
+                            'name'              => $room->name[$i][$i1],
+                            'passport'          => $room->passport[$i][$i1],
+                            'exp_date'          => carbon::parse($room->expired_at[$i][$i1])->format('Y-m-d'),
+                            'issuing'           => $room->issuing[$i][$i1],
+                            'gender'            => $room->gender[$i][$i1],
+                            'birth_date'        => carbon::parse($room->birth_date[$i][$i1])->format('Y-m-d'),
+                            'birth_place'       => $room->birth_place[$i][$i1],
+                            'remark'            => $room->note[$i][$i1],
+                            'type'              => $room->type[$i][$i1],
+                            'passport_image'    => $path,
+                        );
+
+                $this->model->booking_pax()->create($data);
+                $additional_counting = 1;
+                for ($i2=0; $i2 < count($room->additional[$i][$i1]); $i2++) { 
+                    if ($room->additional[$i][$i1][$i2] != 0) {
+                        $data = array(
+                                    'id'                => $id,
+                                    'id_booking_d'      => $i+1,
+                                    'id_booking_pax'    => $i1+1,
+                                    'dt'                => $additional_counting,
+                                    'additional_id'     => $room->additional[$i][$i1][$i2],
+                                );
+
+                        $this->model->booking_additional()->create($data);
+                        $additional_counting++;
+                    }
+                }
+            }
+        }
+        DB::commit();
+        return Response::json(['status'=>1,'message'=>'Success Updating Data']);
     }
 }
