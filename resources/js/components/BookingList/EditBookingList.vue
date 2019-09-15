@@ -1,46 +1,132 @@
 <template>
 	<div class="container">
-		<v-layout row>
-	      	<v-flex xs12>
-		        <v-card tile flat class="p-3">
-		          	<v-text-field
-				      v-model="guest_leader.party_name"
-				      label="Party Name"
-				      @blur="$v.guest_leader.party_name.$touch()" :error-messages="partyNameErrors"
-				    ></v-text-field>
-
-				    <v-text-field
-				      v-model="guest_leader.telp"
-				      label="Telp"
-				      @blur="$v.guest_leader.telp.$touch()" :error-messages="telpErrors"
-				    ></v-text-field>
-		        </v-card>
-
-		        <v-card tile flat class="p-3" v-for="(item,i) in items.booking_d" v-bind:key="item.dt">
-		          	<table class="table ">
-		          		<tr>
-		          			<td colspan="2"><h4 class="py-4">Room {{ i+1 }}</h4></td>
-		          			<td colspan="2">
-		          				<v-select
-			          			  :items="bedOptions"
-			          			  v-model="room.bed"
-			          			  label="Select Bed"
-			          			></v-select>
-		          			</td>
-		          			<td colspan="2" class="text-center">
-		          				<v-btn color="primary" class="px-2"><i class="fa fa-plus"></i>&nbsp;Infant</v-btn>
-		          			</td>
-		          		</tr>
-		          		<tr v-for="(pax,i) in item.booking_pax">
-		          			<td>Nama</td>
-		          			<td>
-		          				<input type="text" class="form-control" name="">
-		          			</td>
-		          		</tr>
-		          	</table>
-		        </v-card>
-	        </v-flex>
-	    </v-layout>
+		<div class="row">
+			<div class="col-sm-12">
+				<v-text-field
+				  name="party_name"
+				  label="Party Name"
+				  class="input-group--focused"
+				  single-line
+				></v-text-field>
+				<v-text-field
+				  name="party_name"
+				  label="Telp"
+				  class="input-group--focused"
+				  single-line
+				></v-text-field>
+				<v-btn color="success"><i class="fa fa-plus"></i>&nbsp;Room</v-btn>
+			</div>
+			<div class="col-sm-12">
+				<div class="card">
+					<div class="card-header">
+						<h3 class="pull-left py-2">Room 1</h3>
+						<div class="row">
+							<div class="col-sm-6">
+								<v-btn class="pull-right" color="primary"><i class="fa fa-plus"></i>&nbsp;Infant</v-btn>
+							</div>
+							<div class="col-sm-6">
+								<v-select
+								  :items="bedOptions"
+								  label="Select Bed"
+								></v-select>
+							</div>
+						</div>
+					</div>
+					<div class="card-body row">
+						<div class="col-sm-6">
+							<v-text-field
+							  label="Name"
+							  class="input-group--focused"
+							  single-line
+							></v-text-field>
+							<v-menu
+		                      v-model="room.menu_birth_date"
+		                      :close-on-content-click="false"
+		                      :nudge-right="40"
+		                      transition="scale-transition"
+		                      offset-y
+		                      full-width
+		                      min-width="1px"
+		                    >
+		                      <template v-slot:activator="{ on }">
+		                        <v-text-field
+		                          v-model="room.date_birth"
+		                          label="Birth Date"
+		                          prepend-icon="event"
+		                          readonly
+		                          v-on="on"
+		                        ></v-text-field>
+		                      </template>
+		                      <v-date-picker v-model="room.date_birth" @input="room.menu_birth_date = false"></v-date-picker>
+		                    </v-menu>
+							<v-text-field
+							  label="Passport"
+							  class="input-group--focused"
+							  single-line
+							></v-text-field>
+							<v-menu
+		                      v-model="room.menu_expired_at"
+		                      :close-on-content-click="false"
+		                      :nudge-right="40"
+		                      transition="scale-transition"
+		                      offset-y
+		                      full-width
+		                      min-width="1px"
+		                    >
+		                      <template v-slot:activator="{ on }">
+		                        <v-text-field
+		                          v-model="room.expired_at"
+		                          label="Passport Expired"
+		                          prepend-icon="event"
+		                          readonly
+		                          v-on="on"
+		                        ></v-text-field>
+		                      </template>
+		                      <v-date-picker v-model="room.expired_at" @input="room.menu_expired_at = false"></v-date-picker>
+		                    </v-menu>
+		                    <v-text-field
+							  label="Issuing"
+							  class="input-group--focused"
+							  single-line
+							></v-text-field>
+						</div>
+						<div class="col-sm-6">
+							<v-select
+							  :items="gender"
+							  label="Select Gender"
+							></v-select>
+							<v-text-field
+							  label="Birth Place"
+							  class="input-group--focused"
+							  single-line
+							></v-text-field>
+							<v-text-field
+							  label="Note"
+							  class="input-group--focused"
+							  single-line
+							></v-text-field>
+							<div class="final preview_div satu row">
+								<div class="preview_image col-sm-12">
+									<img style="width: 100%;height: 200px;border: 1px solid hotpink" id="passport_image_preview">
+								</div>
+								<div class="file-upload upl_3 col-sm-12 py-3">
+									<div class="file-select">
+										<div class="file-select-button fileName" >Passport</div>
+										<div class="file-select-name noFile">Choose Passport</div>
+										<input type="file" class="chooseFile" id="final" name="fc" @change="uploadImage()">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<v-checkbox v-model="room.additional" label="FPG INSURANCE"></v-checkbox>
+							<v-checkbox v-model="room.additional" label="PREMIUM MEAT"></v-checkbox>
+							<hr>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </template>
 <script type="text/javascript">
@@ -64,6 +150,10 @@
 	            	'Double/Twin + CnB',
 	            	'Double/Twin + CwB',
 	            ],
+	            gender:[
+	            	'Male',
+	            	'Female'
+	            ],
 	            count:{
 	            	adult:0,
 	            	child:0,
@@ -76,8 +166,21 @@
 					telp:null,
 				},
 				room:{
-					name:[],
 					bed:[],
+              		total_bed:[],
+              		name:[],
+              		date_birth:'2019-09-01',
+              		passport:[],
+              		passport_image:[],
+              		expired_at:'2019-09-01',
+              		issuing:[],
+              		gender:[],
+              		place_birth:[],
+              		note:[],
+              		additional:[],
+              		type:[],
+              		menu_birth_date:false,
+              		menu_expired_at:false,
 				}
 			}
 		},
@@ -122,6 +225,25 @@
 	        Vue.filter('currency', function(val){
 	          return accounting.formatNumber(val)
 	        })
+
+	        $('.chooseFile').bind('change', function() {
+	            var filename = $(this).val();
+	            var fsize = $(this)[0].files[0].size;
+	            if (fsize > 5048576) //do something if file size more than 1 mb (1048576)
+	            {
+	                alert('Data To Big');
+	                return false;
+	            }
+	            var parent = $(this).parents(".preview_div");
+	            if (/^\s*$/.test(filename)) {
+	                $(parent).find('.file-upload').removeClass('active');
+	                $(parent).find(".noFile").text("No file chosen...");
+	            } else {
+	                $(parent).find('.file-upload').addClass('active');
+	                $(parent).find(".noFile").text(filename.replace("C:\\fakepath\\", ""));
+	            }
+	        });
+
 	        axios.get('/api/get-token')
 	            .then(response => {
 	                axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token;
@@ -177,9 +299,12 @@
 	                })
 	                .finally(() => this.loadingDataTable = true, this.isLoading = false)
 			},
-			changeImage(param,id,id_booking,dt){
-
-			}
+			uploadImage(){
+                var input = $('#final');
+                this.room.passport_image = input[0].files[0];
+                var image = window.URL.createObjectURL(this.room.passport_image);
+                $('#passport_image_preview').attr('src',image);
+	        },
 		}
 	}
 </script>

@@ -42,7 +42,7 @@
                               v-for="(item, index) in itineraryOptions"
                               :key="index"
                               @click=""
-                            >
+                              >
                               <v-list-tile-title @click="modalAction(item.value)" :class="item.class">{{ item.title }}</v-list-tile-title>
                             </v-list-tile>
                           </v-list>
