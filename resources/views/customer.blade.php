@@ -165,19 +165,20 @@
 					@endphp
 					@foreach($d1->booking_pax as $i2 => $d2)
 					<tr class="border">
-						<td  class="px-2 py-2 border-l @if(count($d1->booking_pax) == $i2) border-b @endif">{{ $count }}</td>
-						<td  class="px-2 py-2 @if(count($d1->booking_pax) == $i2) border-b @endif">{{ $d2->name }}</td>
-						<td  class="px-2 py-2 @if(count($d1->booking_pax) == $i2) border-b @endif">{{ $d2->passport }}</td>
+						<td  class="px-2 py-2 border-l @if(count($d1->booking_pax)-1 == $i2) border-b @endif">{{ $count }}</td>
+						<td  class="px-2 py-2 @if(count($d1->booking_pax)-1 == $i2) border-b @endif">{{ $d2->name }}</td>
+						<td  class="px-2 py-2 @if(count($d1->booking_pax)-1 == $i2) border-b @endif">{{ $d2->passport }}</td>
 						@if($i2 == 0)
-						<td  class="px-2 py-2 border-r @if(count($d1->booking_pax) == $i2) border-b @endif" rowspan="{{ count($d1->booking_pax) }}">{{ $d1->bed }}</td>
+						<td  class="px-2 py-2 border-r border-b " rowspan="{{ count($d1->booking_pax) }}">{{ $d1->bed }}</td>
 						@endif
 						@php
 							$count++;
-							if ($d1->type == 'Adult') {
+							if ($d2->type == 'Adult') {
 								$adult += 1;
-							}elseif($d1->type == 'Child With Bed' or $d1->type == 'Child No Bed'){
+							}elseif($d2->type == 'Child With Bed' or $d2->type == 'Child No Bed'){
 								$child += 1;
-							}elseif($d1->type == 'Infant'){
+							}elseif($d2->type == 'Infant'){
+
 								$infant += 1;
 							}
 						@endphp
