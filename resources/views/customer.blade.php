@@ -165,11 +165,11 @@
 					@endphp
 					@foreach($d1->booking_pax as $i2 => $d2)
 					<tr class="border">
-						<td  class="px-2 py-2 border-l @if(count($d1->booking_pax)-1 == $i2) border-b @endif">{{ $count }}</td>
-						<td  class="px-2 py-2 @if(count($d1->booking_pax)-1 == $i2) border-b @endif">{{ $d2->name }}</td>
-						<td  class="px-2 py-2 @if(count($d1->booking_pax)-1 == $i2) border-b @endif">{{ $d2->passport }}</td>
+						<td  class="px-2 py-2 border-l @if(count($d1->booking_pax) == $i2) border-b @endif">{{ $count }}</td>
+						<td  class="px-2 py-2 @if(count($d1->booking_pax) == $i2) border-b @endif">{{ $d2->name }}</td>
+						<td  class="px-2 py-2 @if(count($d1->booking_pax) == $i2) border-b @endif">{{ $d2->passport }}</td>
 						@if($i2 == 0)
-						<td  class="px-2 py-2 border-r @if(count($d1->booking_pax)-1 == $i2) border-b @endif" rowspan="{{ count($d1->booking_pax) }}">{{ $d1->bed }}</td>
+						<td  class="px-2 py-2 border-r @if(count($d1->booking_pax) == $i2) border-b @endif" rowspan="{{ count($d1->booking_pax) }}">{{ $d1->bed }}</td>
 						@endif
 						@php
 							$count++;
