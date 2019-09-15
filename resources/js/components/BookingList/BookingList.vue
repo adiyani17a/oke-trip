@@ -10,7 +10,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h5 style="margin-top: 10px;display: inline-block;"><b>{{ namaFitur }}</b></h5>
-                        <v-btn v-if="select.length == 1 && select[0].status != 'Waiting List'" color="warning pull-right" @click="editData">Edit
+                        <v-btn v-if="select.length == 1 && select[0].status != 'Waiting List'" color="warning pull-right" @click="approveData">Edit
                             <v-icon dark right>fas fa-pencil-alt</v-icon>
                         </v-btn>
                         <v-btn v-if="select.length == 1" color="error pull-right" @click="dialogDelete = true">Delete

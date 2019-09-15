@@ -129,14 +129,17 @@
 					</thead>
 				</table>
 			</div>
-			<div class="col-sm-4">
+			<div class="col-sm-3">
 				<v-btn color="success" @click="addRoom(room.bed.length)"><i class="fa fa-plus"></i>&nbsp;Room</v-btn>
 			</div>
-			<div class="col-sm-4">
+			<div class="col-sm-3">
 				<v-btn color="primary" @click="showModalProcess = true;saveDataParam = 'Confirm'"><i class="fa fa-check"></i>&nbsp;Approve</v-btn>
 			</div>
-			<div class="col-sm-4">
+			<div class="col-sm-3">
 				<v-btn color="warning" @click="showModalProcess = true;saveDataParam = 'Rejected'"><i class="fas fa-ban"></i>&nbsp;Reject</v-btn>
+			</div>
+			<div class="col-sm-3">
+				<v-btn color="default" @click="$router.push({name:'BookingList'})">Back</v-btn>
 			</div>
 			<div class="col-sm-12">
 				<hr>
