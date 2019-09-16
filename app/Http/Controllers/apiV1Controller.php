@@ -38,7 +38,7 @@ class apiV1Controller extends Controller
 		$data['hotDeal'] = $this->model->itinerary()->with(['itinerary_detail'=>function($q){
 									$q->where('start','>=',$now);
 								}])
-								->whereHave('itinerary_detail',function($q) use ($now){
+								->whereHas('itinerary_detail',function($q) use ($now){
 									$q->where('start','>=',$now);
 								})
 								->where('hot_deals','Y')->where('active','true')->take(4)->get();
