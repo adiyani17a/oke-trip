@@ -499,6 +499,12 @@ class apiV1Controller extends Controller
 				return response::json(['status'=>401,'message'=>'Unauthorized']);
 		}
 
+
+		$id = $this->model->payment_history()->max('id')+1;
+
+		$day = Carbon::now()->format('dmy');
+		$data['code'] = 'P'.$day.str_pad($id, 5, '0', STR_PAD_LEFT);
+
 		$data['data'] = $this->model->booking()	
 					 ->where('id',$id)
 					 ->where('users_id',$req->user_id)
