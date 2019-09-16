@@ -219,7 +219,7 @@ let app = new Vue({
                     if (d.status == 'Waiting List') {
                         this.mailBox.push({
                             id:this.idMailBox,
-                            avatar: '.' + d.users.image,
+                            avatar: this.url_image + d.users.image,
                             title: 'Ada booking baru belum dikonfirmasi',
                             subtitle: '<a href="' + this.url_image + 'booking-list"><span class="text--primary">Agent ' + d.users.name + '</span> &mdash; what will you do?</a>'
                         })
@@ -234,9 +234,9 @@ let app = new Vue({
                             if (d1.status_payment == 'Pending') {
                                 this.mailBox.push({
                                     id:this.idMailBox,
-                                    avatar: '.' + d.users.image,
+                                    avatar: this.url_image + d.users.image,
                                     title: 'Ada pembayaran baru belum dikonfirmasi',
-                                    subtitle: '<a href="' + this.url_image + 'booking-list"><span class="text--primary">Agent ' + d.users.name + '</span> &mdash; what will you do?</a>'
+                                    subtitle: '<a href="' + this.url_image + 'payment-list/'+d.kode+'"><span class="text--primary">Agent ' + d.users.name + '</span> &mdash; what will you do?</a>'
                                 })
 
                                 this.mailBox.push({
