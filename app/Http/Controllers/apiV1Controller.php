@@ -33,7 +33,15 @@ class apiV1Controller extends Controller
 
 	public function getDataHome()
 	{
-		$data['hotDeal'] = $this->model->itinerary()->with(['itinerary_detail'])->where('hot_deals','Y')->where('active','true')->take(4)->get();
+
+		$now = carbon::now()->format('Y-m-d');
+		$data['hotDeal'] = $this->model->itinerary()->with(['itinerary_detail'=>function($q){
+									$q->where('start','>=',$now);
+								}])
+								->whereHave('itinerary_detail',function($q) use ($now){
+									$q->where('start','>=',$now);
+								})
+								->where('hot_deals','Y')->where('active','true')->take(4)->get();
 		$data['destination'] = $this->model->destination()->with(['itinerary_destination'])->take(6)->get();
 		$data['carousel'] = $this->model->carousel()->first();
 
@@ -62,7 +70,9 @@ class apiV1Controller extends Controller
 
 	public function getItineraryDetail($id)
 	{
-		$data = $this->model->itinerary()->with(['itinerary_detail','itinerary_destination' => function($q){
+		$data = $this->model->itinerary()->with(['itinerary_detail'=>function($q){
+											$q->where('start','>=',$now);
+										},'itinerary_destination' => function($q){
 											$q->with(['destination']);
 										},'itinerary_flight','itinerary_schedule','itinerary_additional'=> function($q){
 											$q->with(['additional']);
@@ -675,5 +685,53 @@ class apiV1Controller extends Controller
 		DB::commit();
 
         return Response::json(['status'=>1,'message'=>'Success Saving Data','code'=>$code]);
+	}
+
+	public function getDataItinerary(Request $req)
+	{
+
+		if ($req->price != 'All Range Value') {
+			$price = explode('-', $req->price);
+		}else{
+			$price = '';
+		}
+
+		if (!isset($req->date)) {
+			$date['startDate'] = carbon::now()->startOfMonth()->format('Y-m-d');
+			$date['endDate'] = carbon::now()->endOfMonth()->format('Y-m-d');
+		}else{
+			$date['startDate'] = carbon::parse($req->date[0])->format('Y-m-d');
+			$date['endDate'] = carbon::parse($req->date[1])->format('Y-m-d');
+		}
+		$country = $req->country;
+		$data = $this->model->itinerary()
+				->with(['itinerary_detail'])
+				->whereHas('itinerary_destination',function($q) use ($country){
+					if (count($country) != 0) {
+						foreach ($country as $i => $d) {
+							if ($i == 0) {
+								$q->where('destination_id',$country[$i]);
+							}else{
+								$q->orWhere('destination_id',$country[$i]);
+							}
+						}
+					}
+				})
+				->whereHas('itinerary_detail',function($q) use ($price,$date){
+					if ($price != '') {
+						$q->where('adult_price','>=',filter_var($price[0],FILTER_SANITIZE_NUMBER_INT));
+						$q->where('adult_price','<=',filter_var($price[1],FILTER_SANITIZE_NUMBER_INT));
+					}
+					$q->where('start','>=',$date['startDate']);
+					$q->where('end','<=',$date['endDate']);
+				})
+				->get();
+
+		
+
+		$country = $this->model->destination()->where('active','true')->get();
+
+
+		return response::json(['status'=>200,'data'=>$data,'country'=>$country]);
 	}
 }

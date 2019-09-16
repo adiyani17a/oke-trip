@@ -443,6 +443,11 @@ Route::group(['middleware' => 'cors'], function () {
         'uses' => "apiV1Controller@getData",
         'as' => "getData"
       ]);
+
+      Route::post('/get-data-itinerary', [
+        'uses' => "apiV1Controller@getDataItinerary",
+        'as' => "getDataItinerary"
+      ]);
     });
   });
 });
