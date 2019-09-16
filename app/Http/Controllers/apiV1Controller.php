@@ -482,7 +482,7 @@ class apiV1Controller extends Controller
 		return $pdf->stream();
 	}
 
-	public function payment(Request $Req,$id)
+	public function payment(Request $req,$id)
 	{
 		$check_token = $this->model->token_management()->where('access_token',$req->token)->first();
 
