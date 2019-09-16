@@ -631,6 +631,25 @@ class apiV1Controller extends Controller
 
 		for ($i=0; $i < count($req->account_name); $i++) { 
 
+
+			$file = $req->passport_image[$image_index];
+
+            if ($file != null) {
+                $filename = 'payment_'.$id.$i.$req->account_number.'.'.'jpg';
+                $path = './dist/img/payment/';
+                if (!file_exists($path)) {
+                	$oldmask = umask(0);
+                    mkdir($path, 0777,true);
+                    umask($oldmask);
+                }
+                $path = 'dist/img/payment/'. $filename;
+                Image::make(file_get_contents($file))->save($path);  
+                $path = '/dist/img/payment/'. $filename;
+            }else{
+				DB::rollBack();
+                return Response::json(['status'=>0,'message'=>'There is Payment Proof Image With 0 Value']);
+            }
+
 			$data = array(
 					'id' => $id,
 					'dt' => $i+1,
@@ -638,6 +657,7 @@ class apiV1Controller extends Controller
 					'nominal'=> $req->nominal[$i],
 					'account_name' => $req->account_name[$i],
 					'account_number' =>$req->account_number[$i],
+					'image' => $path,
 					'date' => carbon::parse($req->date[$i])->format('Y-m-d')
 				);
 
