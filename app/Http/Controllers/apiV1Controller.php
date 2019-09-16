@@ -35,7 +35,7 @@ class apiV1Controller extends Controller
 	{
 
 		$now = carbon::now()->format('Y-m-d');
-		$data['hotDeal'] = $this->model->itinerary()->with(['itinerary_detail'=>function($q){
+		$data['hotDeal'] = $this->model->itinerary()->with(['itinerary_detail'=>function($q) use ($now){
 									$q->where('start','>=',$now);
 								}])
 								->whereHas('itinerary_detail',function($q) use ($now){
@@ -70,7 +70,8 @@ class apiV1Controller extends Controller
 
 	public function getItineraryDetail($id)
 	{
-		$data = $this->model->itinerary()->with(['itinerary_detail'=>function($q){
+		$now = carbon::now()->format('Y-m-d');
+		$data = $this->model->itinerary()->with(['itinerary_detail'=>function($q) use ($now){
 											$q->where('start','>=',$now);
 										},'itinerary_destination' => function($q){
 											$q->with(['destination']);
