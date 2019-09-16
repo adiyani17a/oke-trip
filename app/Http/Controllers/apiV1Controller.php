@@ -606,4 +606,10 @@ class apiV1Controller extends Controller
 
 		return response::json(['status'=>200,'data'=>$data,'time_remaining'=>$time_remaining]);
 	}
+
+	public function paymentSave(Request $req)
+	{
+		DB::beginTransaction();
+		dd($req->all());
+	}
 }

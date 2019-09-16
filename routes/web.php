@@ -419,6 +419,11 @@ Route::group(['middleware' => 'cors'], function () {
         'uses' => "apiV1Controller@payment",
         'as' => "payment"
       ]);
+
+      Route::post('/payment/save', [
+        'uses' => "apiV1Controller@paymentSave",
+        'as' => "paymentSave"
+      ]);
     });
   });
 });
