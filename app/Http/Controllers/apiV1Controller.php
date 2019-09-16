@@ -611,7 +611,7 @@ class apiV1Controller extends Controller
 	{
 		DB::beginTransaction();
 
-		$id = $this->model->payament_history()->max('id')+1;
+		$id = $this->model->payment_history()->max('id')+1;
 
 		$day = Carbon::now()->format('dmy');
 		$code = 'P'.$day.str_pad($id, 5, '0', STR_PAD_LEFT);
