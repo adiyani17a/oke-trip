@@ -12,8 +12,8 @@ use Storage;
 use Image;
 use PDF;
 use Illuminate\Support\Facades\Hash;
-ini_set('post_max_size', '128MB');
-ini_set('upload_max_filesize', '2048MB');
+// ini_set('post_max_size', '128MB');
+// ini_set('upload_max_filesize', '2048MB');
 class apiV1Controller extends Controller
 {
     protected $model;
