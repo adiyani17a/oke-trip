@@ -10,10 +10,10 @@
                 <div class="card">
                     <div class="card-header">
                         <h5 style="margin-top: 10px;display: inline-block;"><b>{{ namaFitur }}</b></h5>
-                        <v-btn v-if="select.length == 1 && select[0].status == 'Confirm'" color="warning pull-right" @click="approveData">Edit
-                            <v-icon dark right>fas fa-pencil-alt</v-icon>
+                        <v-btn v-if="select.length == 1 && select[0].status_payment == 'Pending'" color="info pull-right" @click="dialog=true">Approve
+                            <v-icon dark right>fas fa-check</v-icon>
                         </v-btn>
-                        <v-btn v-if="select.length == 1 && select[0].status == 'Waiting List'" color="info pull-right" @click="approveData">Approve
+                        <v-btn v-if="select.length == 1 && select[0].status_payment != 'Pending'" color="warning pull-right" @click="dialog=true">Preview Data
                             <v-icon dark right>fas fa-check</v-icon>
                         </v-btn>
                     </div>
@@ -32,6 +32,90 @@
                             </datatable-component>
                         </div>
                     </div>
+                    <template  style="z-index: 999999999999999999999">
+                      <div class="text-xs-center">
+                        <v-dialog
+                          v-model="dialog"
+                          width="1000"
+
+                        >
+                          <v-card>
+                            <v-card-title
+                              class="headline grey lighten-2"
+                              primary-title
+                            >
+                                Payment List
+                            </v-card-title>
+
+                            <v-card-text>
+                                <table class="table" v-if="select.length != 0">
+                                    <tr>
+                                        <td>Code</td>
+                                        <td>: {{ select[0].code }}</td>
+                                        <td>Date</td>
+                                        <td>: {{ select[0].created_at }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Payment</td>
+                                        <td>: {{ select[0].total_payment | currency }}</td>
+                                        <td>Payment Method</td>
+                                        <td>: {{ select[0].payment_method }}</td>
+                                    </tr>
+                                </table>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <th class="border p-1">Proof</th>
+                                        <th class="border p-1">Account Name</th>
+                                        <th class="border p-1">Account Number</th>
+                                        <th class="border p-1">Bank Name</th>
+                                        <th class="border p-1">Date Payment</th>
+                                        <th class="border p-1">Nominal</th>
+                                    </thead>
+                                    <tbody v-if="select.length != 0">
+                                        <tr v-for="(item,i) in select[0].payment_history_d">
+                                            <td class="text-center border p-2" style="width: 20%;">
+                                                <img style="width: 100%;height: 100px;" :src="$root.url_image+item.image">       
+                                            </td>
+                                            <td class="text-center border p-2">{{ item.account_name }}</td>
+                                            <td class="text-center border p-2">{{ item.account_number }}</td>
+                                            <td class="text-center border p-2">{{ item.bank }}</td>
+                                            <td class="text-center border p-2">{{ item.date }}</td>
+                                            <td class="text-right border p-2">{{ item.nominal | currency }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </v-card-text>
+                            <v-divider></v-divider>
+                            <v-card-actions v-if="select.length != 0">
+                              <v-spacer></v-spacer>
+                              <v-btn
+                                color="primary"
+                                flat
+                                @click="approveData('Approve')"
+                                v-if="!approveLoading && select[0].status_payment == 'Pending'"
+                              >
+                                Approve
+                              </v-btn>
+                              <v-btn
+                                color="primary"
+                                flat
+                                v-if="approveLoading && select[0].status_payment == 'Pending'"
+                                >
+                                <i class="fa fa-spin fa-spinner"></i>
+                              </v-btn>
+                              <v-btn
+                                color="error"
+                                flat
+                                @click="approveData('Rejected')"
+                                v-if="!approveLoading && select[0].status_payment == 'Pending'"
+                              >
+                                Reject
+                              </v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </v-dialog>
+                      </div>
+                    </template>
                     <v-dialog
                       v-model="dialogDelete"
                       max-width="290"
@@ -91,9 +175,10 @@
     export default {
         mounted() {
             console.log('Intialize Main Page...')
-            let breadcrumb = '<router-link to="/booking-list">Booking List</router-link>';
+            let breadcrumb = '<router-link to="/company">Payment List</router-link>';
             $('#crumb').html(breadcrumb);
-            axios.get('/api/get-token')
+            axios
+                .get('/api/get-token')
                 .then(response => {
                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token;
 
@@ -115,36 +200,29 @@
                 select: [],
                 isLoading: true,
                 fullPage: true,
+                approveLoading:false,
                 dialog: false,
                 dialogDelete: false,
+                approvePayment:false,
                 headers: [{
-                    text: 'Code Booking',
-                    value: 'kode',
-                    url: this.$root.url_image,
-                    urlAdder: 'payment-list',
+                    text: 'Code',
+                    value: 'code',
                     class: 'text-xs-left',
-                    type: 'link-badge'
-                }, {
-                    text: 'Created at',
-                    value: 'created_at',
                     type: 'default'
                 }, {
-                    text: 'Party Name',
-                    value: 'name',
-                    type: 'default'
+                    text: 'Total Payment',
+                    value: 'total_payment',
+                    type: 'currency',
+                    class: 'text-xs-right',
                 }, {
-                    text: 'Status',
-                    value: 'status',
+                    text: 'Status Payment',
+                    value: 'status_payment',
                     type: 'label'
                 }, {
-                    text: 'Book By',
-                    value: 'users_name',
+                    text: 'Created At',
+                    value: 'created_at',
                     type: 'default'
-                }, {
-                    text: 'Handle By',
-                    value: 'handle_name',
-                    type: 'default'
-                }],
+                },],
                 loadingDataTable: false,
                 apiReady: false,
                 pagination: {
@@ -174,7 +252,7 @@
         },
         methods: {
             onClickChild(value) {
-                this.api = '/api/booking-list/datatable'
+                this.api = '/api/payment-list/datatable'
             },
             selectedCheckbox(selected) {
                 this.select = selected;
@@ -188,7 +266,8 @@
                 if (page == undefined) {
                     page = this.currentPage;
                 }
-                axios.get('/api/booking-list/datatable?page=' + page + '&showing=' + show)
+                axios
+                    .get('/api/payment-list/datatable/'+this.$route.params.id+'?page=' + page + '&showing=' + show)
                     .then(response => {
                         this.loadingDataTable = false
                         this.dataItem = response.data.data.data
@@ -197,27 +276,16 @@
                         this.pagination.rowsPerPage = show;
                         this.pagination.totalItem = response.data.data.total;
                         this.totalItem = response.data.data.total;
-                        console.log(this.dataItem);
                         for (var i = 0; i < this.dataItem.length; i++) {
-
-                            if (this.dataItem[i].handle != null) {
-                                this.dataItem[i].handle_name = this.dataItem[i].handle.name;
-                            }
-
-                            if (this.dataItem[i].status == 'Waiting List') {
+                            if (this.dataItem[i].status_payment == 'Pending') {
                                 this.dataItem[i].color = 'warning';
-                            } else if (this.dataItem[i].status == 'Confirm') {
+                            } else if (this.dataItem[i].status_payment == 'Approve') {
                                 this.dataItem[i].color = 'primary';
-                            } else if (this.dataItem[i].status == 'Rejected') {
+                            } else if (this.dataItem[i].status_payment == 'Rejected') {
                                 this.dataItem[i].color = 'error';
                             }
 
-                            if (this.dataItem[i].users != null) {
-                                this.dataItem[i].users_name = this.dataItem[i].users.name;
-                            }
-
-
-                            if (this.idData.length == 1) {
+                            if (this.idData.length == 1 ) {
                                 if (this.idData[0].id == this.dataItem[i].id) {
                                     this.idData[0] = undefined;
                                 }
@@ -233,7 +301,7 @@
             deleteData() {
 
                 axios
-                    .delete('/api/booking-list/delete', {
+                    .delete('/api/payment-list/delete', {
                         data: {
                             data: this.select,
                         }
@@ -293,7 +361,8 @@
                 console.log(this.currentPage);
             },
             switchChange(data, id, param) {
-                axios.post('/api/booking-list/change-status', {
+                axios
+                    .post('/api/payment-list/change-status', {
                         data: data,
                         id: id,
                         param: param,
@@ -312,8 +381,41 @@
                         this.dialogDelete = false;
                     })
             },
-            approveData(){
-                this.$router.push({name:'EditBookingList',params:{id:this.select[0].id}});
+            approveData(param){
+                let formData = new FormData();
+                this.approveLoading = true;
+              
+                formData.append('status_payment',param);
+                formData.append('id',this.select[0].id);
+
+                axios.post('/api/payment-list/update',
+                        formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        }
+                    )
+                    .then(response => {
+                        this.snackbar = true;
+                        this.text = response.data.message;
+                        if (response.data.status == 1) {
+                            this.color = 'success'
+                            this.approveLoading = false;
+                            this.dialog =false;
+                            this.select = [];
+                            this.callingApi();
+
+                        } else {
+                            this.color = 'error'
+                        }
+                    })
+                    .catch(error => {
+                        this.snackbar = true;
+                        this.text = error;
+                        this.color = 'error'
+                        this.dialog =false;
+                        this.approveLoading = false;
+                    })
             }
         }
     }

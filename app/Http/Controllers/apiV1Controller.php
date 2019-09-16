@@ -23,6 +23,14 @@ class apiV1Controller extends Controller
 		$this->model = new models();
 	}
 
+	public function getData()
+    {
+        $data =  $this->model->booking()->with(['users','handle','payment_history'])->orderBy('created_at','ASC')->get();
+
+
+        return Response::json(['data'=>$data]);
+    }
+
 	public function getDataHome()
 	{
 		$data['hotDeal'] = $this->model->itinerary()->with(['itinerary_detail'])->where('hot_deals','Y')->where('active','true')->take(4)->get();
@@ -622,7 +630,9 @@ class apiV1Controller extends Controller
 					'code' =>$code,
 					'total_payment' => $req->total_payment,
 					'payment_method' =>$req->payment_method,
-					'status_payment' =>'Pending'
+					'status_payment' =>'Pending',
+					'created_by' => $req->created_by, 
+					'updated_by' => $req->created_by, 
 				);
 
 		$this->model->payment_history()->create($data);

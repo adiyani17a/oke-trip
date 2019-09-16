@@ -22,6 +22,8 @@ class apiController extends Controller
 		$this->model = new models();
 	}
 
+    
+
     public function convertImageBase64(Request $req)
     {
 
@@ -1958,6 +1960,25 @@ class apiController extends Controller
                 }
             }
         }
+        DB::commit();
+        return Response::json(['status'=>1,'message'=>'Success Updating Data']);
+    }
+
+    public function paymentListDatatable(Request $req,$id)
+    {
+        $booking = $this->model->booking()->where('kode',$id)->first();
+
+        $data = $this->model->payment_history()->with(['payment_history_d'])->where('booking_id',$booking->id)->paginate($req->showing);
+
+
+        return response::json(['data'=>$data]);
+    }
+
+    public function updatePaymentList(Request $req)
+    {
+        DB::beginTransaction();
+
+        $this->model->payment_history()->where('id',$req->id)->update(['status_payment'=>$req->status_payment,'updated_by'=>Auth::user()->name]);
         DB::commit();
         return Response::json(['status'=>1,'message'=>'Success Updating Data']);
     }

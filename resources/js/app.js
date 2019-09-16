@@ -159,6 +159,13 @@ let routes = [{
     },
     component: require('./components/Carousel/Carousel.vue').default
 }, {
+    path: '/payment-list/:id',
+    name: 'PaymentList',
+    meta: {
+        breadcrumb: 'Payment List',
+    },
+    component: require('./components/PaymentList/PaymentList.vue').default
+}, {
     path: '/tour-leader',
     name: 'Tour Leader',
     component: require('./components/TourLeader/tourLeader.vue').default
@@ -198,14 +205,61 @@ Vue.component('filter-bar-component', require('./components/FilterBar.vue').defa
 let app = new Vue({
     el: '#app',
     router,
-    mounted(){
+    mounted() {
         let accounting = document.createElement('script')
         accounting.setAttribute('src', '/js/accounting/accounting.js')
         document.head.appendChild(accounting)
+        axios.get('/api/v1/getData')
+            .then(response => {
+
+
+                console.log(response.data.data);
+                this.idMailBox = 0;
+                response.data.data.forEach((d, i) => {
+                    if (d.status == 'Waiting List') {
+                        this.mailBox.push({
+                            id:this.idMailBox,
+                            avatar: '.' + d.users.image,
+                            title: 'Ada booking baru belum dikonfirmasi',
+                            subtitle: '<a href="' + this.url_image + 'booking-list"><span class="text--primary">Agent ' + d.users.name + '</span> &mdash; what will you do?</a>'
+                        })
+
+                        this.mailBox.push({
+                            divider: true, inset: true
+                        })
+
+                        this.idMailBox++;
+                    }else if(d.status == 'Confirm'){
+                        d.payment_history.forEach((d1,i1)=>{
+                            if (d1.status_payment == 'Pending') {
+                                this.mailBox.push({
+                                    id:this.idMailBox,
+                                    avatar: '.' + d.users.image,
+                                    title: 'Ada pembayaran baru belum dikonfirmasi',
+                                    subtitle: '<a href="' + this.url_image + 'booking-list"><span class="text--primary">Agent ' + d.users.name + '</span> &mdash; what will you do?</a>'
+                                })
+
+                                this.mailBox.push({
+                                    divider: true, inset: true
+                                })
+                                this.idMailBox++;
+                            }
+                        });
+                    }
+                })
+
+            })
+            .catch(error => {
+                console.log(error)
+                this.errored = true
+            })
+            .finally(() => this.apiReady = true)
     },
-    data(){
-        return{
-            url_image : process.env.MIX_URL_IMAGE,
+    data() {
+        return {
+            url_image: process.env.MIX_URL_IMAGE,
+            mailBox: [],
+            idMailBox:0,
         }
     }
 });

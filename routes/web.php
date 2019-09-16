@@ -42,6 +42,7 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('itinerary/{path}/{id}', 'HomeController@index')->where('all', '^(?!api).*$');
   Route::get('itinerary/{path}/{id}/{dt}', 'HomeController@index')->where('all', '^(?!api).*$');
   Route::get('booking-list/{path}/{id}', 'HomeController@index')->where('all', '^(?!api).*$');
+  Route::get('payment-list/{id}', 'HomeController@index')->where('all', '^(?!api).*$');
   Route::get('group-menu', 'HomeController@index');
 
     Route::get('api/get-token', [
@@ -363,6 +364,19 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "changeStatusBookingList"
       ]);
     });
+
+    Route::group(["prefix" => "payment-list"], function(){
+
+      Route::get('datatable/{id}', [
+        'uses' => "apiController@paymentListDatatable",
+        'as' => "paymentListDatatable"
+      ]);
+
+      Route::post('/update', [
+        'uses' => "apiController@updatePaymentList",
+        'as' => "updatePaymentList"
+      ]);
+    });
 	});
 });
 
@@ -423,6 +437,11 @@ Route::group(['middleware' => 'cors'], function () {
       Route::post('/pay/save', [
         'uses' => "apiV1Controller@paymentSave",
         'as' => "paymentSave"
+      ]);
+
+      Route::get('/getData', [
+        'uses' => "apiV1Controller@getData",
+        'as' => "getData"
       ]);
     });
   });

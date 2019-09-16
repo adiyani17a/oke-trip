@@ -16,6 +16,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
+  <style type="text/css">
+    .hidden{
+      display: none;
+    }
+  </style>
 </head>
 <body class="hold-transition sidebar-mini" style="scroll-behavior: smooth;">
 <div class="wrapper" id="app">
@@ -28,10 +33,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index3.html" class="nav-link">Home</a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
+        <a href="{{ url('/') }}" class="nav-link">Home</a>
       </li>
     </ul>
 
@@ -50,9 +52,58 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <ul class="navbar-nav ml-auto">
       <!-- Messages Dropdown Menu -->
+      <li class="nav-item d-none d-sm-inline-block" style="margin-right: 100px;position: relative;">
+        <v-badge
+          color="red"
+          class="mail-trigger"
+          style="cursor: pointer;"
+        >
+          <template v-slot:badge>
+            <span v-html="idMailBox"></span>
+          </template>
+          <v-icon large color="grey">mail</v-icon>
+        </v-badge>
+        <template>
+          <v-layout class="hidden mail-box" row style="position: absolute;width: 700px;left: -500px;">
+            <v-flex xs12 sm6 offset-sm3 style="max-height:500px;overflow-y: scroll;">
+              <v-card>
+                <v-list three-line>
+                  <template v-for="(item, index) in mailBox">
+                    <v-subheader
+                      v-if="item.header"
+                    >
+                    </v-subheader>
+
+                    <v-divider
+                      v-else-if="item.divider"
+                      :key="index"
+                      :inset="item.inset"
+                    ></v-divider>
+
+                    <v-list-tile
+                      v-else
+                      avatar
+                      @click=""
+                    >
+                      <v-list-tile-avatar>
+                        <img :src="item.avatar">
+                      </v-list-tile-avatar>
+
+                      <v-list-tile-content>
+                        <v-list-tile-title v-html="item.title"></v-list-tile-title>
+                        <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+                      </v-list-tile-content>
+                    </v-list-tile>
+                  </template>
+                </v-list>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </template>
+      </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="{{ url('/logout') }}" class="nav-link">
-          <i class="fas fa-power-off"></i>
+          <v-icon>fas fa-power-off</v-icon>
         </a>
       </li>
     </ul>
@@ -86,7 +137,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="{{ url('/') }}" class="nav-link ">
+            <a href="http://oke-trip.com" class="nav-link ">
               <i class="nav-icon fas fa-home"></i>
               <p>Paket Tour</p>
             </a>
@@ -198,6 +249,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
     var par = $('.router-link-active').parents('.nav-item');
     $(par).addClass('menu-open');
   });
+
+  $('.mail-trigger').click(function(){
+    if ($('.mail-box').hasClass('hidden')) {
+      $('.mail-box').removeClass('hidden');
+    }else{
+      $('.mail-box').addClass('hidden');
+    }
+  })
 
 </script>
 </body>

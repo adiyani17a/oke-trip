@@ -40,6 +40,16 @@
 		        ></v-checkbox>
 	     	 	</td>
 	        <td v-for="header in headers" :class="header.class" >
+            <div v-if="header.type == 'link-badge'">
+              <v-badge color="orange">
+                <template v-slot:badge>
+                 2
+                </template>
+                <span>
+                  <a :href="header.url+header.urlAdder+'/'+props.item[header.value]">{{ props.item[header.value] }}</a>
+                </span>
+              </v-badge>
+            </div>
             <div v-if="header.type == 'image'" class="text-xs-center">
               <div v-if="props.item[header.value] != null">
                 <v-img :src="props.item[header.value]" aspect-ratio="1.7"></v-img>
