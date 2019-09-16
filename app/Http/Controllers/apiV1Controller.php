@@ -632,7 +632,7 @@ class apiV1Controller extends Controller
 		for ($i=0; $i < count($req->account_name); $i++) { 
 
 
-			$file = $req->passport_image[$image_index];
+			$file = $req->payment_proof[$i];
 
             if ($file != null) {
                 $filename = 'payment_'.$id.$i.$req->account_number.'.'.'jpg';
