@@ -53,7 +53,7 @@
                 </div>
               </v-flex>
               <v-flex xs12 style="padding: 10px">
-                <label>Upload Final PDF</label>
+                <label>Upload Tata Tertib PDF</label>
                 <div class="tata_tertib preview_div satu row">
                   <div class="file-upload upl_3 col-sm-8 py-3" v-bind:class="{ active: tatibActive }">
                     <div class="file-select">
