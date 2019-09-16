@@ -414,6 +414,11 @@ Route::group(['middleware' => 'cors'], function () {
         'uses' => "apiV1Controller@bookingListPdfInvoice",
         'as' => "bookingListPdfInvoice"
       ]);
+
+      Route::post('/payment/{id}', [
+        'uses' => "apiV1Controller@payment",
+        'as' => "payment"
+      ]);
     });
   });
 });
