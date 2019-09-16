@@ -735,4 +735,17 @@ class apiV1Controller extends Controller
 
 		return response::json(['status'=>200,'data'=>$data,'country'=>$country]);
 	}
+
+	public function getPartner(Request $req)
+	{
+		if ($req->city != 'null') {
+			$data = $this->model->company()->where('city_id',$req->city)->where('active','true')->get();
+		}else{
+			$data = $this->model->company()->where('active','true')->get();
+		}
+
+		$city = $this->model->city()->get();
+
+		return response::json(['status'=>200,'data'=>$data,'city'=>$city]);
+	}
 }

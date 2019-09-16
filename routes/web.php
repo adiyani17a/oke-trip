@@ -448,6 +448,11 @@ Route::group(['middleware' => 'cors'], function () {
         'uses' => "apiV1Controller@getDataItinerary",
         'as' => "getDataItinerary"
       ]);
+
+      Route::post('/partner', [
+        'uses' => "apiV1Controller@getPartner",
+        'as' => "getPartner"
+      ]);
     });
   });
 });
