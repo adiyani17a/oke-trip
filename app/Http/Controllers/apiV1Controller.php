@@ -610,6 +610,39 @@ class apiV1Controller extends Controller
 	public function paymentSave(Request $req)
 	{
 		DB::beginTransaction();
-		dd($req->all());
+
+		$id = $this->model->payament_history()->max('id')+1;
+
+		$day = Carbon::now()->format('dmy');
+		$code = 'P'.$day.str_pad($id, 5, '0', STR_PAD_LEFT);
+		$code = carbon::now()->format('d F Y');
+
+		$data = array(
+					'id' => $id,
+					'booking_id' $req->booking_id,
+					'code' $code,
+					'total_payment' => $req->total_payment,
+					'payment_method' =>$req->payment_method,
+					'status_payment' =>'Pending'
+				);
+
+		$this->model->payment_history()->create($data);
+
+
+		for ($i=0; $i < count($req->account_name); $i++) { 
+
+			$data = array(
+					'id' => $id,
+					'dt' => $i+1,
+					'bank' $req->bank_name[$i],
+					'nominal' $req->nominal[$i],
+					'account_name' => $req->account_name[$i],
+					'account_number' =>$req->account_number[$i],
+					'date' => carbon::parse($req->date[$i])->format('Y-m-d')
+				);
+
+			$this->model->payment_history_d()->create($data);
+		}
+        return Response::json(['status'=>1,'message'=>'Success Saving Data','code'=>$code]);
 	}
 }
