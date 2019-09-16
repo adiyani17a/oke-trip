@@ -500,10 +500,10 @@ class apiV1Controller extends Controller
 		}
 
 
-		$id = $this->model->payment_history()->max('id')+1;
+		$index = $this->model->payment_history()->max('id')+1;
 
 		$day = Carbon::now()->format('dmy');
-		$data['code'] = 'P'.$day.str_pad($id, 5, '0', STR_PAD_LEFT);
+		$data['code'] = 'P'.$day.str_pad($index, 5, '0', STR_PAD_LEFT);
 		$data['date'] = carbon::now()->format('d F Y');
 
 		$data['data'] = $this->model->booking()	
