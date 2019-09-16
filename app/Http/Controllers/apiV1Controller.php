@@ -559,9 +559,13 @@ class apiV1Controller extends Controller
 			array_push($data['invoice_list'], $temp);
 		}
 
+
+		$data['dp'] = 0;
+
 		foreach ($data['invoice_list'] as $i => $d) {
 			foreach ($data['data']->booking_d as $i1 => $d1) {
 				foreach ($d1->booking_pax as $i2 => $d2) {
+					$data['dp']+= $data['data']->itinerary_detail->minimal_dp;
 					if ($d2->type == $data['invoice_list'][$i]['name']) {
 						$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
 						$data['invoice_list'][$i]['value'] += 1;
