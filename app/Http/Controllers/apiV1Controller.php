@@ -635,7 +635,7 @@ class apiV1Controller extends Controller
 			$file = $req->payment_proof[$i];
 
             if ($file != null) {
-                $filename = 'payment_'.$id.$i.$req->account_number.'.'.'jpg';
+                $filename = 'payment_'.$id.$i.$req->account_numbe[$i].'.'.'jpg';
                 $path = './dist/img/payment/';
                 if (!file_exists($path)) {
                 	$oldmask = umask(0);
