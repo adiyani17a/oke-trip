@@ -643,6 +643,7 @@ class apiV1Controller extends Controller
 
 			$this->model->payment_history_d()->create($data);
 		}
+		
         return Response::json(['status'=>1,'message'=>'Success Saving Data','code'=>$code]);
 	}
 }
