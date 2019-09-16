@@ -619,8 +619,8 @@ class apiV1Controller extends Controller
 
 		$data = array(
 					'id' => $id,
-					'booking_id' $req->booking_id,
-					'code' $code,
+					'booking_id' => $req->booking_id,
+					'code' =>$code,
 					'total_payment' => $req->total_payment,
 					'payment_method' =>$req->payment_method,
 					'status_payment' =>'Pending'
@@ -643,7 +643,7 @@ class apiV1Controller extends Controller
 
 			$this->model->payment_history_d()->create($data);
 		}
-		
+
         return Response::json(['status'=>1,'message'=>'Success Saving Data','code'=>$code]);
 	}
 }
