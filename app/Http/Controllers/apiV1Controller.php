@@ -634,8 +634,8 @@ class apiV1Controller extends Controller
 			$data = array(
 					'id' => $id,
 					'dt' => $i+1,
-					'bank' $req->bank_name[$i],
-					'nominal' $req->nominal[$i],
+					'bank' => $req->bank_name[$i],
+					'nominal'=> $req->nominal[$i],
 					'account_name' => $req->account_name[$i],
 					'account_number' =>$req->account_number[$i],
 					'date' => carbon::parse($req->date[$i])->format('Y-m-d')
