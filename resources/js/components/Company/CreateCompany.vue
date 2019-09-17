@@ -68,7 +68,7 @@
 <script>
   import { required, maxLength, email } from 'vuelidate/lib/validators'
   import VueDropify from 'vue-dropify';
-
+  Vue.component('text-editor', require('../textEditor.vue').default)
   export default {
     data: () => ({
       id: '',

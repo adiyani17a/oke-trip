@@ -52,6 +52,11 @@ class apiController extends Controller
             $imgfile = file_get_contents($image);
 
             $base64 = 'data:image/jpg' . ';base64,' . base64_encode($imgfile);
+        }elseif ($req->feature == 'blog') {
+            $image = '.'.$this->model->blog()->where('id',$req->id)->first()->image;
+            $imgfile = file_get_contents($image);
+
+            $base64 = 'data:image/jpg' . ';base64,' . base64_encode($imgfile);
         }
 
         return Response::json($base64);
@@ -78,7 +83,7 @@ class apiController extends Controller
                     $filename = 'destination_'.$req->name.'.'.'jpg';
                     $path = './dist/img/destination';
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
                     $path = 'dist/img/destination/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
@@ -108,7 +113,7 @@ class apiController extends Controller
                     $filename = 'destination_'.$req->name.'.'.'jpg';
                     $path = './dist/img/destination';
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
                     $path = 'dist/img/destination/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
@@ -481,7 +486,7 @@ class apiController extends Controller
                     $filename = 'admin_'.$req->name.'.'.'jpg';
                     $path = './dist/img/user';
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
                     $path = 'dist/img/user/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
@@ -509,7 +514,7 @@ class apiController extends Controller
                     $filename = 'admin_'.$req->name.'.'.'jpg';
                     $path = './dist/img/user';
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
                     $path = 'dist/img/user/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
@@ -617,7 +622,7 @@ class apiController extends Controller
                     $filename = 'admin_'.$req->name.'.'.'jpg';
                     $path = './dist/img/user';
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
                     $path = 'dist/img/user/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
@@ -645,7 +650,7 @@ class apiController extends Controller
                     $filename = 'admin_'.$req->name.'.'.'jpg';
                     $path = './dist/img/user';
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
                     $path = 'dist/img/user/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
@@ -741,7 +746,7 @@ class apiController extends Controller
                     $filename = 'additional_'.$req->name.'.'.'jpg';
                     $path = './dist/img/additional';
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
                     $path = 'dist/img/additional/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
@@ -776,7 +781,7 @@ class apiController extends Controller
                     $filename = 'additional_'.$req->name.'.'.'jpg';
                     $path = './dist/img/additional';
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
                     $path = 'dist/img/additional/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
@@ -928,7 +933,7 @@ class apiController extends Controller
                     $carousel_1 = 'carousel_1_'.$id.'.'.'jpg';
                     $path = './dist/img/itinerary';
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
                     $carousel_1 = 'dist/img/itinerary/' . $carousel_1;
                     Image::make(file_get_contents($file))->save($carousel_1);  
@@ -941,7 +946,7 @@ class apiController extends Controller
                     $carousel_2 = 'carousel_2_'.$id.'.'.'jpg';
                     $path = './dist/img/itinerary';
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
                     $carousel_2 = 'dist/img/itinerary/' . $carousel_2;
                     Image::make(file_get_contents($file))->save($carousel_2);  
@@ -955,7 +960,7 @@ class apiController extends Controller
                     $path = './dist/img/itinerary';
 
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
 
                     $carousel_3 = 'dist/img/itinerary/' . $carousel_3;
@@ -970,7 +975,7 @@ class apiController extends Controller
                     $path = 'dist/pdf/itinerary';
 
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
 
                     $file->move($path,$pdf);
@@ -983,7 +988,7 @@ class apiController extends Controller
                     $flyer = 'flyer_'.$id.'.'.'jpg';
                     $path = './dist/img/itinerary';
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
 
                     $flyer = 'dist/img/itinerary/' . $flyer;
@@ -1110,7 +1115,7 @@ class apiController extends Controller
                     $carousel_1 = 'carousel_1_'.$id.'.'.'jpg';
                     $path = './dist/img/itinerary';
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
                     $carousel_1 = 'dist/img/itinerary/' . $carousel_1;
                     Image::make(file_get_contents($file))->save($carousel_1);  
@@ -1122,7 +1127,7 @@ class apiController extends Controller
                     $carousel_2 = 'carousel_2_'.$id.'.'.'jpg';
                     $path = './dist/img/itinerary';
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
                     $carousel_2 = 'dist/img/itinerary/' . $carousel_2;
                     Image::make(file_get_contents($file))->save($carousel_2);  
@@ -1135,7 +1140,7 @@ class apiController extends Controller
                     $path = './dist/img/itinerary';
 
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
 
                     $carousel_3 = 'dist/img/itinerary/' . $carousel_3;
@@ -1150,7 +1155,7 @@ class apiController extends Controller
                     $path = 'dist/pdf/itinerary';
 
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
 
                     $file->move($path,$pdf);
@@ -1163,7 +1168,7 @@ class apiController extends Controller
                     $flyer = 'flyer_'.$id.'.'.'jpg';
                     $path = './dist/img/itinerary';
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
 
                     $flyer = 'dist/img/itinerary/' . $flyer;
@@ -1342,7 +1347,7 @@ class apiController extends Controller
                 $path = 'dist/pdf/itinerary_detail';
 
                 if (!file_exists($path)) {
-                    mkdir($path, 777, true);
+                    mkdir($path, 0777, true);
                 }
 
                 $file->move($path,$pdf);
@@ -1357,7 +1362,7 @@ class apiController extends Controller
                 $path = 'dist/pdf/itinerary_detail';
 
                 if (!file_exists($path)) {
-                    mkdir($path, 777, true);
+                    mkdir($path, 0777, true);
                 }
 
                 $file->move($path,$pdf);
@@ -1372,7 +1377,7 @@ class apiController extends Controller
                 $path = 'dist/pdf/itinerary_detail';
 
                 if (!file_exists($path)) {
-                    mkdir($path, 777, true);
+                    mkdir($path, 0777, true);
                 }
 
                 $file->move($path,$pdf);
@@ -1444,7 +1449,7 @@ class apiController extends Controller
                     $filename = 'leader_'.$req->name.'_'.$id.'.'.'jpg';
                     $path = './dist/img/tourLeader';
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
                     $path = 'dist/img/tourLeader/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
@@ -1473,7 +1478,7 @@ class apiController extends Controller
                     $filename = 'leader_'.$req->name.'_'.$id.'.'.'jpg';
                     $path = './dist/img/tourLeader';
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
                     $filename = '/dist/img/tourLeader/' . $filename;
                     Image::make(file_get_contents($file))->save($filename);  
@@ -1540,7 +1545,7 @@ class apiController extends Controller
                     $filename = 'company_'.$req->name.'_'.$id.'.'.'jpg';
                     $path = './dist/img/company';
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
                     $path = 'dist/img/company/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
@@ -1569,7 +1574,7 @@ class apiController extends Controller
                     $filename = 'company_'.$req->name.'_'.$id.'.'.'jpg';
                     $path = './dist/img/company';
                     if (!file_exists($path)) {
-                        mkdir($path, 777, true);
+                        mkdir($path, 0777, true);
                     }
                     $filename = '/dist/img/company/' . $filename;
                     Image::make(file_get_contents($file))->save($filename);  
@@ -1657,7 +1662,7 @@ class apiController extends Controller
                 $filename = 'carousel_1.'.'jpg';
                 $path = 'dist/img/carousel';
                 if (!file_exists($path)) {
-                    mkdir($path, 777, true);
+                    mkdir($path, 0777, true);
                 }
                 $carousel_1 = '/dist/img/carousel/' . $filename;
                 $file->move($path,$filename);
@@ -1669,7 +1674,7 @@ class apiController extends Controller
                 $filename = 'carousel_2.'.'jpg';
                 $path = 'dist/img/carousel';
                 if (!file_exists($path)) {
-                    mkdir($path, 777, true);
+                    mkdir($path, 0777, true);
                 }
                 $carousel_2 = '/dist/img/carousel/' . $filename;
                 $file->move($path,$filename);
@@ -1681,7 +1686,7 @@ class apiController extends Controller
                 $filename = 'carousel_3.'.'jpg';
                 $path = 'dist/img/carousel';
                 if (!file_exists($path)) {
-                    mkdir($path, 777, true);
+                    mkdir($path, 0777, true);
                 }
                 $carousel_3 = '/dist/img/carousel/' . $filename;
                 $file->move($path,$filename);
@@ -1981,5 +1986,84 @@ class apiController extends Controller
         $this->model->payment_history()->where('id',$req->id)->update(['status_payment'=>$req->status_payment,'updated_by'=>Auth::user()->name]);
         DB::commit();
         return Response::json(['status'=>1,'message'=>'Success Updating Data']);
+    }
+
+    public function blogDatatable(Request $req)
+    {
+        $data = $this->model->blog()->paginate($req->show);
+        return Response::json(['data'=>$data]);
+    }
+
+    public function saveBlog(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+            if (!isset($req->id) or $req->id == '' or $req->id == null) {
+                if(!Auth::user()->hasAccess('Company','create')){
+                    return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Create This Data']);
+                }
+
+                $input = $req->all();
+                $id = $this->model->blog()->max('id')+1;
+
+                $file = $req->image;
+                if ($file != null) {
+                    $filename = 'blog'.'_'.$id.'.'.'jpg';
+                    $path = './dist/img/blog';
+                    if (!file_exists($path)) {
+                        mkdir($path, 0777, true);
+                    }
+                    $path = 'dist/img/blog/' . $filename;
+                    Image::make(file_get_contents($file))->save($path);  
+                    $filename = '/dist/img/blog/' . $filename;
+                }else{
+                    $filename = null;
+                }
+
+                $input['image'] = $filename;
+                $input['id'] = $id;
+                $input['created_by'] = Auth::user()->name;
+                $input['updated_by'] = Auth::user()->name;
+                $this->model->blog()->create($input);
+                return Response::json(['status'=>1,'message'=>'Success saving data']);
+            }else{
+                if(!Auth::user()->hasAccess('Company','edit')){
+                    return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Edit This Data']);
+                }
+
+                $input = $req->all();
+                unset($input['image']);
+                $id = $req->id;
+                $file = $req->image;
+                if ($file != null) {
+                    $filename = 'blog'.'_'.$id.'.'.'jpg';
+                    $path = './dist/img/blog/';
+                    if (!file_exists($path)) {
+                        mkdir($path, 0777, true);
+                    }
+                    $filename = './dist/img/blog/' . $filename;
+                    Image::make(file_get_contents($file))->save($filename);  
+                    $filename = '/dist/img/blog/' . $filename;
+                    $input['image'] = $filename;
+
+                }else{
+                    $filename = null;
+                }
+                $input['updated_by'] = Auth::user()->name;
+                $this->model->blog()->where('id',$req->id)->update($input);
+
+                return Response::json(['status'=>1,'message'=>'Success updating data']);
+            }
+        });
+    }
+
+    public function deleteBlog(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+            foreach ($req->data as $i => $d) {
+                $this->model->blog()->where('id',$req->data[$i]['id'])->delete();
+            }
+
+            return Response::json(['status'=>1,'message'=>'Success deleting data']);
+        });
     }
 }

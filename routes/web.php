@@ -377,6 +377,24 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "updatePaymentList"
       ]);
     });
+
+    Route::group(["prefix" => "blog"], function(){
+
+      Route::get('datatable', [
+        'uses' => "apiController@blogDatatable",
+        'as' => "blogDatatable"
+      ]);
+
+      Route::post('/save', [
+        'uses' => "apiController@saveBlog",
+        'as' => "saveBlog"
+      ]);
+
+      Route::delete('/delete', [
+        'uses' => "apiController@deleteBlog",
+        'as' => "deleteBlog"
+      ]);
+    });
 	});
 });
 

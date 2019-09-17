@@ -159,6 +159,13 @@ let routes = [{
     },
     component: require('./components/Carousel/Carousel.vue').default
 }, {
+    path: '/blog',
+    name: 'Blog',
+    meta: {
+        breadcrumb: 'Blog',
+    },
+    component: require('./components/Blog/Blog.vue').default
+}, {
     path: '/payment-list/:id',
     name: 'PaymentList',
     meta: {
@@ -213,7 +220,6 @@ let app = new Vue({
             .then(response => {
 
 
-                console.log(response.data.data);
                 this.idMailBox = 0;
                 response.data.data.forEach((d, i) => {
                     if (d.status == 'Waiting List') {
