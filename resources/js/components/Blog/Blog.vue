@@ -225,7 +225,6 @@
                     .finally(() => this.loadingDataTable = true, this.isLoading = false)
             },
             deleteData() {
-
                 axios
                     .delete('/api/blog/delete', {
                         data: {
