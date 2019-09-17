@@ -27,8 +27,9 @@ class apiV1Controller extends Controller
     {
         $data =  $this->model->booking()->with(['users','handle','payment_history'])->orderBy('created_at','ASC')->get();
 
+        $blog = $this->model->blog()->get();
 
-        return Response::json(['data'=>$data]);
+        return Response::json(['data'=>$data,'blog'=>$blog]);
     }
 
 	public function getDataHome()
@@ -747,5 +748,12 @@ class apiV1Controller extends Controller
 		$city = $this->model->city()->get();
 
 		return response::json(['status'=>200,'data'=>$data,'city'=>$city]);
+	}
+
+	public function getBlog()
+	{
+		$data = $this->model->blog()->get();
+
+		return response::json(['status'=>200,'data'=>$data]);
 	}
 }
