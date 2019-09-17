@@ -28,7 +28,7 @@ class apiV1Controller extends Controller
         $data =  $this->model->booking()->with(['users','handle','payment_history'])->orderBy('created_at','ASC')->get();
 
 
-        return Response::json(['data'=>$data,'blog'=>$blog]);
+        return Response::json(['data'=>$data]);
     }
 
 	public function getDataHome()
