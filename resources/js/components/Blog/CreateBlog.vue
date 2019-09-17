@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialogs" persistent max-width="800px" style="z-index: 9999999999 !important;">
+    <v-dialog v-model="dialogs" persistent max-width="600px" style="z-index: 99999999999999999999999999 !important;">
       <v-card>
         <v-card-title>
           <span class="headline">{{ this.$route.name }}</span>
