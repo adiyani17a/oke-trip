@@ -19,6 +19,7 @@ class Blog extends Migration
             $table->string('head_line');
             $table->text('content');
             $table->string('image');
+            $table->string('summary');
             $table->string('created_by');
             $table->string('updated_by');
             $table->timestamps();

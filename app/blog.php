@@ -13,6 +13,6 @@ class blog extends Model
     const UPDATED_AT = 'updated_at';
     const CREATED_AT = 'created_at';
     protected $fillable = [
-							'id', 'content','image', 'head_line', 'created_by','updated_by'
+							'id', 'content','image', 'head_line', 'created_by','updated_by','summary'
     					];
 }

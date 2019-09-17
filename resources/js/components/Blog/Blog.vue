@@ -139,6 +139,10 @@
                     value: 'head_line',
                     type: 'default'
                 }, {
+                    text: 'Summary',
+                    value: 'summary',
+                    type: 'default'
+                }, {
                     text: 'Create at',
                     value: 'created_at',
                     type: 'default'

@@ -17,6 +17,9 @@
                   <v-text-field label="Head Line*" v-model="headLine" required name="headLine" @blur="$v.headLine.$touch()" :error-messages="headLineErrors"></v-text-field>
                 </v-flex>
                 <v-flex xs12>
+                  <v-text-field label="Summary*" :counter="200" maxlength="200" v-model="summary" required name="summary" @blur="$v.summary.$touch()" :error-messages="summaryErrors"></v-text-field>
+                </v-flex>
+                <v-flex xs12>
                   <text-editor :contentModel="contentModel" @textContent="textContent"></text-editor>
                 </v-flex>
                 <v-flex xs12>
@@ -62,6 +65,7 @@
       image: '',
       content: '',
       headLine: '',
+      summary: '',
       imageWidth:400,
       imageHeight:300,
       imageReady: false,
@@ -82,6 +86,7 @@
       image: { required },
       content: { required },
       headLine: { required },
+      summary: { required },
     },
     computed:{
       imageErrors () {
@@ -100,6 +105,12 @@
         const errors = []
         if (!this.$v.headLine.$dirty) return errors
         !this.$v.headLine.required && errors.push('Head Line is required.')
+        return errors
+      },
+      summaryErrors () {
+        const errors = []
+        if (!this.$v.summary.$dirty) return errors
+        !this.$v.summary.required && errors.push('Summary is required.')
         return errors
       },
     },
@@ -126,6 +137,7 @@
             this.image = this.idData[0].image
             this.content = this.idData[0].content
             this.contentModel = this.idData[0].content
+            this.summary = this.idData[0].summary
 
             this.headLine = this.idData[0].head_line
             let feature = 'blog';
@@ -145,6 +157,7 @@
             this.contentModel='';
             this.headLine = '';
             this.$refs.tes.images = [];
+            this.summary = '';
         }
       },
       saveAndCloseDialog(param){
@@ -163,6 +176,7 @@
           formData.append('head_line',this.headLine)
           formData.append('content',this.content)
           formData.append('image',this.image)
+          formData.append('summary',this.summary)
           axios.post( '/api/blog/save',
               formData,
               {

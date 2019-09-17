@@ -471,6 +471,17 @@ Route::group(['middleware' => 'cors'], function () {
         'uses' => "apiV1Controller@getPartner",
         'as' => "getPartner"
       ]);
+
+      Route::post('/get-blog', [
+        'uses' => "apiV1Controller@getBlog",
+        'as' => "getBlog"
+      ]);
+
+      Route::post('/get-blog-data/{id}', [
+        'uses' => "apiV1Controller@getBlogData",
+        'as' => "getBlogData"
+      ]);
+
     });
   });
 });

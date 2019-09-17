@@ -27,7 +27,6 @@ class apiV1Controller extends Controller
     {
         $data =  $this->model->booking()->with(['users','handle','payment_history'])->orderBy('created_at','ASC')->get();
 
-        $blog = $this->model->blog()->get();
 
         return Response::json(['data'=>$data,'blog'=>$blog]);
     }
@@ -45,6 +44,12 @@ class apiV1Controller extends Controller
 								->where('hot_deals','Y')->where('active','true')->take(4)->get();
 		$data['destination'] = $this->model->destination()->with(['itinerary_destination'])->take(6)->get();
 		$data['carousel'] = $this->model->carousel()->first();
+        $data['blog'] = $this->model->blog()->get();
+
+
+        foreach ($data['blog'] as $key => $value) {
+        	$data['blog'][$key]->date = carbon::parse($value->created_at)->format('F d, Y');
+        }
 
 		foreach ($data['destination'] as $i => $d) {
 			if (count($d->itinerary_destination) != 0) {
@@ -705,6 +710,7 @@ class apiV1Controller extends Controller
 			$date['startDate'] = carbon::parse($req->date[0])->format('Y-m-d');
 			$date['endDate'] = carbon::parse($req->date[1])->format('Y-m-d');
 		}
+
 		$country = $req->country;
 		$data = $this->model->itinerary()
 				->with(['itinerary_detail'])
@@ -750,9 +756,18 @@ class apiV1Controller extends Controller
 		return response::json(['status'=>200,'data'=>$data,'city'=>$city]);
 	}
 
-	public function getBlog()
+	public function getBlog(Request $req)
 	{
 		$data = $this->model->blog()->get();
+
+		return response::json(['status'=>200,'data'=>$data]);
+	}
+
+	public function getBlogData(Request $req,$id)
+	{
+		$data = $this->model->blog()->where('id',$id)->first();
+
+		$data->date = carbon::parse($data->created_at)->format('F d, Y');
 
 		return response::json(['status'=>200,'data'=>$data]);
 	}
