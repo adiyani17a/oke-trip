@@ -136,14 +136,15 @@
                     >
                       <template v-slot:activator="{ on }">
                         <v-text-field
-                          v-model="formDetail.dateStart"
+                          v-model="formDetail.dateStartFormatted"
                           label="Date Start"
                           prepend-icon="event"
                           readonly
                           v-on="on"
+                          @blur="formDetail.dateStart = parseDate(formDetail.dateStartFormatted)"
                         ></v-text-field>
                       </template>
-                      <v-date-picker v-model="formDetail.dateStart" @input="menu = false"></v-date-picker>
+                      <v-date-picker v-model="formDetail.dateStart" @change="formDetail.dateStartFormatted = formatDate(formDetail.dateStart)" @input="menu = false"></v-date-picker>
                     </v-menu>
                   </v-flex>
                   <v-flex xs12 md6 style="padding: 10px">
@@ -158,14 +159,15 @@
                     >
                       <template v-slot:activator="{ on }">
                         <v-text-field
-                          v-model="formDetail.dateEnd"
+                          v-model="formDetail.dateEndFormatted"
                           label="Date End"
                           prepend-icon="event"
+                          @blur="formDetail.dateEnd = parseDate(formDetail.dateEndFormatted)"
                           readonly
                           v-on="on"
                         ></v-text-field>
                       </template>
-                      <v-date-picker v-model="formDetail.dateEnd" @input="menu1 = false"></v-date-picker>
+                      <v-date-picker v-model="formDetail.dateEnd" @change="formDetail.dateEndFormatted = formatDate(formDetail.dateEnd)" @input="menu1 = false"></v-date-picker>
                     </v-menu>
                   </v-flex>
                   <v-flex xs12 md6 style="padding: 10px">
@@ -271,7 +273,8 @@
                           color="default darken-1"
                           flat="flat"
                           @click="confirmationSave('cancel')"
-                        >
+                          v-if="!loadingSave"
+                          >
                           Cancel
                         </v-btn>
 
@@ -279,8 +282,18 @@
                           color="green darken-1"
                           flat="flat"
                           @click="confirmationSave('confirm')"
-                        >
-                          Yes, Save
+                          v-if="!loadingSave"
+                          >
+                            Yes, Save
+                        </v-btn>
+
+                        <v-btn
+                          color="green darken-1"
+                          flat="flat"
+                          @click="confirmationSave('confirm')"
+                          v-if="loadingSave"
+                          >
+                            <i class="fa fa-spinner fa-spin"></i>
                         </v-btn>
                       </v-card-actions>
                     </v-card>
@@ -342,7 +355,7 @@
 
 
       },
-      data: () => ({
+      data: vm => ({
         addDetailSchedule : 1,
         loadingWizard: false,
         addFlightDetail : 1,
@@ -384,10 +397,13 @@
           seat:'',
           dateStart: new Date().toISOString().substr(0, 10),
           dateEnd: new Date().toISOString().substr(0, 10),
+          dateStartFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
+          dateEndFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
           menu: false,
           menu1: false,
           itineraryItems:[],
         },
+        loadingSave:false,
         formDetailEdit : false,
         destinationOptions:[],
         additionalOptions:[],
@@ -609,13 +625,25 @@
           apiReady:function(){
               console.log('Generate Token...')
               this.callingApi();
-          }
+          },
       },
       methods: {
+          formatDate(date) {
+              if (!date) return null
+
+              const [year, month, day] = date.split('-')
+              return `${day}/${month}/${year}`
+          },
+          parseDate(date) {
+              if (!date) return null
+
+              const [day,month, year] = date.split('/')
+              return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+          },
           saveAndCloseDialog() {
 
             let formData = new FormData();
-
+            this.loadingSave = true;
             // for ( var key in this.form ) {
             //     formData.append(key, this.form [key]);
             // }
@@ -651,11 +679,13 @@
                       this.color = 'error'
                     }
                     this.imageReady = false;
+                    this.loadingSave = false;
                 })
                 .catch(error => {
                     this.snackbar = true;
                     this.text = error.message;
                     this.errored = true
+                    this.loadingSave = false;
                 })
                 .finally(() => this.$emit('closeDialog', this.dialogs))
        
