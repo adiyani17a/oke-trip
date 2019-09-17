@@ -120,6 +120,7 @@
 			<td colspan="2" style="text-align: right;">
 				<label>Flight Date</label>
 				<p>{{ carbon\carbon::parse($data->itinerary_detail->start)->format('d-F-Y') }} - {{ carbon\carbon::parse($data->itinerary_detail->end)->format('d-F-Y') }}</p>
+				<p>{{ $data->itinerary_code }}</p>
 			</td>
 		</tr>
 		

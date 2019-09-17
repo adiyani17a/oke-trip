@@ -1339,7 +1339,6 @@ class apiController extends Controller
     {
         return DB::transaction(function() use ($req) {  
             $input = [];
-
             $file = $req->finalConfirmation;
 
             if (is_object($file)) {
@@ -1384,9 +1383,10 @@ class apiController extends Controller
                 $pdf = $path.'/'.$pdf;
                 $input['flayer_jpg'] = $pdf;
             }
-
+            if ($req->booked_by != 'null') {
+                $input['booked_by'] = $req->booked_by;
+            }
             $input['tour_leader_id'] = $req->tour_leader_id;
-            $input['booked_by'] = $req->booked_by;
             $input['tour_leader_tips'] = filter_var($req->tour_leader_tips,FILTER_SANITIZE_NUMBER_INT);
             $input['updated_by'] = Auth::user()->id;
             $input['updated_at'] = carbon::now();
