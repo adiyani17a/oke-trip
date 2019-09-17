@@ -42,8 +42,8 @@
 	        <td v-for="header in headers" :class="header.class" >
             <div v-if="header.type == 'link-badge'">
               <v-badge color="orange">
-                <template v-slot:badge>
-                 2
+                <template v-slot:badge v-if="props.item.payment_history.length != 0">
+                 {{ props.item.payment_history.length }}
                 </template>
                 <span>
                   <a :href="header.url+header.urlAdder+'/'+props.item[header.value]">{{ props.item[header.value] }}</a>

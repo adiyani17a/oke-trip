@@ -199,7 +199,7 @@
                         this.totalItem = response.data.data.total;
                         console.log(this.dataItem);
                         for (var i = 0; i < this.dataItem.length; i++) {
-
+                      
                             if (this.dataItem[i].handle != null) {
                                 this.dataItem[i].handle_name = this.dataItem[i].handle.name;
                             }
