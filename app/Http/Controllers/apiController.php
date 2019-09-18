@@ -22,8 +22,6 @@ class apiController extends Controller
 		$this->model = new models();
 	}
 
-    
-
     public function convertImageBase64(Request $req)
     {
 

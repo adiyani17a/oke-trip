@@ -28,15 +28,15 @@
                       <table class="table" v-if="payment_history.length != 0">
                           <tr>
                               <td>Code</td>
-                              <td>: {{ payment_history.code }}</td>
+                              <td>: {{ payment_history[0].code }}</td>
                               <td>Date</td>
-                              <td>: {{ payment_history.created_at }}</td>
+                              <td>: {{ payment_history[0].created_at }}</td>
                           </tr>
                           <tr>
                               <td>Total Payment</td>
-                              <td>: {{ payment_history.total_payment | currency }}</td>
+                              <td>: {{ payment_history[0].total_payment | currency }}</td>
                               <td>Payment Method</td>
-                              <td>: {{ payment_history.payment_method }}</td>
+                              <td>: {{ payment_history[0].payment_method }}</td>
                           </tr>
                       </table>
                       <table class="table table-bordered">
@@ -49,7 +49,7 @@
                               <th class="border p-1">Nominal</th>
                           </thead>
                           <tbody v-if="payment_history.length != 0">
-                              <tr v-for="(item,i) in payment_history.payment_history_d">
+                              <tr v-for="(item,i) in payment_history[0].payment_history_d">
                                   <td class="text-center border p-2" style="width: 20%;">
                                       <img style="width: 100%;height: 100px;" :src="$root.url_image+item.image">       
                                   </td>
@@ -69,14 +69,14 @@
                       color="primary"
                       flat
                       @click="approveData('Approve')"
-                      v-if="!approveLoading && payment_history.status_payment == 'Pending'"
+                      v-if="!approveLoading && payment_history[0].status_payment == 'Pending'"
                     >
                       Approve
                     </v-btn>
                     <v-btn
                       color="primary"
                       flat
-                      v-if="approveLoading && payment_history.status_payment == 'Pending'"
+                      v-if="approveLoading && payment_history[0].status_payment == 'Pending'"
                       >
                       <i class="fa fa-spin fa-spinner"></i>
                     </v-btn>
@@ -84,7 +84,7 @@
                       color="error"
                       flat
                       @click="approveData('Rejected')"
-                      v-if="!approveLoading && payment_history.status_payment == 'Pending'"
+                      v-if="!approveLoading && payment_history[0].status_payment == 'Pending'"
                     >
                       Reject
                     </v-btn>
@@ -121,11 +121,11 @@
                   >
                 </v-select>
               </v-flex>
-              <v-flex xs12 md6 style="padding: 10px" v-if="payment_history != null">
-                <v-btn color="success" @click="dialog = true" v-if="payment_history.status_payment == 'Pending'">
+              <v-flex xs12 md6 style="padding: 10px" v-if="payment_history.length != 0">
+                <v-btn color="success" @click="dialog = true" v-if="payment_history[0].status_payment == 'Pending'">
                   Approve DP Payment
                 </v-btn>
-                <v-btn color="info" @click="dialog = true" v-if="payment_history.status_payment != 'Pending'">
+                <v-btn color="info" @click="dialog = true" v-if="payment_history[0].status_payment != 'Pending'">
                   View Payment
                 </v-btn>
                 </v-select>
@@ -261,25 +261,6 @@
         return accounting.formatNumber(val)
       })
 
-      $('.chooseFile').bind('change', function () {
-          var filename = $(this).val();
-          var fsize = $(this)[0].files[0].size;
-          if(fsize>5048576) //do something if file size more than 1 mb (1048576)
-          {
-            alert('Data To Big');
-            return false;
-          }
-          var parent = $(this).parents(".preview_div");
-          if (/^\s*$/.test(filename)) {
-              $(parent).find('.file-upload').removeClass('active');
-              $(parent).find(".noFile").text("No file chosen..."); 
-          }
-          else {
-              $(parent).find('.file-upload').addClass('active');
-              $(parent).find(".noFile").text(filename.replace("C:\\fakepath\\", "")); 
-          }
-      });
-
       axios
           .get('/api/get-token')
           .then(response => {
@@ -363,11 +344,14 @@
               this.tataTertib = response.data.data.term_pdf;
               this.flayer = response.data.data.flayer_jpg;
               this.isBooked = response.data.data.booked_by;
-              this.payment_history = response.data.data.payment_history[0];
-              if (this.payment_history.status_payment == 'Approve') {
-                this.isPaid = true;
+              this.payment_history = response.data.data.payment_history;
+              if (this.payment_history.length != 0) { 
+                if (this.payment_history[0].status_payment == 'Approve') {
+                  this.isPaid = true;
+                }
               }
-              console.log(this.isBooked);
+                
+
               if (this.finalConfirmation != '') {
                 this.finalActive = true;
                 this.finalName = this.finalConfirmation.replace(/^.*[\\\/]/, '');
@@ -415,6 +399,25 @@
         this.pdfPreview = true;
       },
       uploadPDF(param){
+        $('.chooseFile').bind('change', function() {
+            console.log('tes')
+            var filename = $(this).val();
+            var fsize = $(this)[0].files[0].size;
+            if (fsize > 5048576) //do something if file size more than 1 mb (1048576)
+            {
+                alert('Data To Big');
+                return false;
+            }
+            var parent = $(this).parents(".preview_div");
+            if (/^\s*$/.test(filename)) {
+                $(parent).find('.file-upload').removeClass('active');
+                $(parent).find(".noFile").text("No file chosen...");
+            } else {
+                $(parent).find('.file-upload').addClass('active');
+                $(parent).find(".noFile").text(filename.replace("C:\\fakepath\\", ""));
+            }
+        });
+        
         if (param == 'final') {
           var input =  $('#final');
           this.finalConfirmation = input[0].files[0];  

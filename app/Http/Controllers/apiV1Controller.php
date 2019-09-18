@@ -26,8 +26,11 @@ class apiV1Controller extends Controller
 	public function getData()
     {
         $data =  $this->model->booking()->with(['users','handle','payment_history'])->orderBy('created_at','ASC')->get();
+        $itinerary =  $this->model->itinerary_detail()
+        				   ->whereHas('payment_history')
+        				   ->with(['payment_history','users'])->orderBy('created_at','ASC')->get();
 
-        return Response::json(['data'=>$data]);
+        return Response::json(['data'=>$data,'itinerary'=>$itinerary]);
     }
 
 	public function getDataHome(Request $req)

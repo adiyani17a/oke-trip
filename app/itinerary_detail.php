@@ -32,4 +32,9 @@ class itinerary_detail extends Model
     {
         return $this->belongsTo('App\itinerary', 'id', 'id');
     }
+
+    public function users()
+    {
+        return $this->belongsTo('App\user', 'booked_by', 'id');
+    }
 }

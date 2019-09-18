@@ -218,8 +218,6 @@ let app = new Vue({
         document.head.appendChild(accounting)
         axios.get('/api/v1/getData')
             .then(response => {
-
-
                 this.idMailBox = 0;
                 response.data.data.forEach((d, i) => {
                     if (d.status == 'Waiting List') {
@@ -227,7 +225,7 @@ let app = new Vue({
                             id:this.idMailBox,
                             avatar: this.url_image + d.users.image,
                             title: 'Ada booking baru belum dikonfirmasi',
-                            subtitle: '<a href="' + this.url_image + 'booking-list"><span class="text--primary">Agent ' + d.users.name + '</span> &mdash; what will you do?</a>'
+                            subtitle: '<a href="' + this.url_image + 'booking-list"><span class="text--primary">From Agent ' + d.users.name + '</span> &mdash; what will you do?</a>'
                         })
 
                         this.mailBox.push({
@@ -241,8 +239,8 @@ let app = new Vue({
                                 this.mailBox.push({
                                     id:this.idMailBox,
                                     avatar: this.url_image + d.users.image,
-                                    title: 'Ada pembayaran baru belum dikonfirmasi',
-                                    subtitle: '<a href="' + this.url_image + 'payment-list/'+d.kode+'"><span class="text--primary">Agent ' + d.users.name + '</span> &mdash; what will you do?</a>'
+                                    title: 'Ada pembayaran booking baru belum dikonfirmasi',
+                                    subtitle: '<a href="' + this.url_image + 'payment-list/'+d.kode+'"><span class="text--primary">From Agent ' + d.users.name + '</span> &mdash; what will you do?</a>'
                                 })
 
                                 this.mailBox.push({
@@ -254,6 +252,22 @@ let app = new Vue({
                     }
                 })
 
+                response.data.itinerary.forEach((d, i) => {
+                    if (d.payment_history[0].status_payment == 'Pending') {
+                        this.mailBox.push({
+                            id:this.idMailBox,
+                            avatar: this.url_image + d.users.image,
+                            title: 'Ada pembayaran itinerary baru belum dikonfirmasi',
+                            subtitle: '<a href="' + this.url_image + 'itinerary/detail/'+d.id+'/'+d.dt+'"><span class="text--primary">From Agent ' + d.users.name + '</span> &mdash; what will you do?</a>'
+                        })
+
+                        this.mailBox.push({
+                            divider: true, inset: true
+                        })
+
+                        this.idMailBox++;
+                    }
+                })
             })
             .catch(error => {
                 console.log(error)
