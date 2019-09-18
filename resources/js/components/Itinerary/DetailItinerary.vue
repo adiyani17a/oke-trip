@@ -9,7 +9,91 @@
               <v-icon dark right>fas fa-home</v-icon>
             </v-btn>
           </div>
-          <div class="card-body">
+          <template  style="z-index: 999999999999999999999">
+            <div class="text-xs-center">
+              <v-dialog
+                v-model="dialog"
+                width="1000"
+
+              >
+                <v-card>
+                  <v-card-title
+                    class="headline grey lighten-2"
+                    primary-title
+                  >
+                      Payment List
+                  </v-card-title>
+
+                  <v-card-text>
+                      <table class="table" v-if="payment_history.length != 0">
+                          <tr>
+                              <td>Code</td>
+                              <td>: {{ payment_history.code }}</td>
+                              <td>Date</td>
+                              <td>: {{ payment_history.created_at }}</td>
+                          </tr>
+                          <tr>
+                              <td>Total Payment</td>
+                              <td>: {{ payment_history.total_payment | currency }}</td>
+                              <td>Payment Method</td>
+                              <td>: {{ payment_history.payment_method }}</td>
+                          </tr>
+                      </table>
+                      <table class="table table-bordered">
+                          <thead>
+                              <th class="border p-1">Proof</th>
+                              <th class="border p-1">Account Name</th>
+                              <th class="border p-1">Account Number</th>
+                              <th class="border p-1">Bank Name</th>
+                              <th class="border p-1">Date Payment</th>
+                              <th class="border p-1">Nominal</th>
+                          </thead>
+                          <tbody v-if="payment_history.length != 0">
+                              <tr v-for="(item,i) in payment_history.payment_history_d">
+                                  <td class="text-center border p-2" style="width: 20%;">
+                                      <img style="width: 100%;height: 100px;" :src="$root.url_image+item.image">       
+                                  </td>
+                                  <td class="text-center border p-2">{{ item.account_name }}</td>
+                                  <td class="text-center border p-2">{{ item.account_number }}</td>
+                                  <td class="text-center border p-2">{{ item.bank }}</td>
+                                  <td class="text-center border p-2">{{ item.date }}</td>
+                                  <td class="text-right border p-2">{{ item.nominal | currency }}</td>
+                              </tr>
+                          </tbody>
+                      </table>
+                  </v-card-text>
+                  <v-divider></v-divider>
+                  <v-card-actions v-if="payment_history.length != 0">
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="primary"
+                      flat
+                      @click="approveData('Approve')"
+                      v-if="!approveLoading && payment_history.status_payment == 'Pending'"
+                    >
+                      Approve
+                    </v-btn>
+                    <v-btn
+                      color="primary"
+                      flat
+                      v-if="approveLoading && payment_history.status_payment == 'Pending'"
+                      >
+                      <i class="fa fa-spin fa-spinner"></i>
+                    </v-btn>
+                    <v-btn
+                      color="error"
+                      flat
+                      @click="approveData('Rejected')"
+                      v-if="!approveLoading && payment_history.status_payment == 'Pending'"
+                    >
+                      Reject
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </div>
+          </template>
+          <div class="card-body" v-if="apiReady == true">
             <v-layout wrap class="px-5 py-5">
               <v-flex xs12 md6 style="padding: 10px">
                 <v-select
@@ -32,7 +116,18 @@
                   :items="isBookedOptions"
                   item-text="name"
                   item-value="id"
+                  :clearable="true"
+                  :disabled="isPaid"
                   >
+                </v-select>
+              </v-flex>
+              <v-flex xs12 md6 style="padding: 10px" v-if="payment_history != null">
+                <v-btn color="success" @click="dialog = true" v-if="payment_history.status_payment == 'Pending'">
+                  Approve DP Payment
+                </v-btn>
+                <v-btn color="info" @click="dialog = true" v-if="payment_history.status_payment != 'Pending'">
+                  View Payment
+                </v-btn>
                 </v-select>
               </v-flex>
               <v-flex xs12 style="padding: 10px">
@@ -203,6 +298,7 @@
       isBooked: '',
       tourLeaderOptions: [],
       isBookedOptions: [],
+      approveLoading:false,
       apiReady:false,
       pdfPreview:false,
       finalConfirmation:'',
@@ -218,6 +314,9 @@
       timeout: 6000,
       mode: '',
       color:'warning',
+      payment_history:[],
+      dialog:false,
+      isPaid:false,
       textPreview: 'No data can be preview',
 
       money: {
@@ -264,6 +363,10 @@
               this.tataTertib = response.data.data.term_pdf;
               this.flayer = response.data.data.flayer_jpg;
               this.isBooked = response.data.data.booked_by;
+              this.payment_history = response.data.data.payment_history[0];
+              if (this.payment_history.status_payment == 'Approve') {
+                this.isPaid = true;
+              }
               console.log(this.isBooked);
               if (this.finalConfirmation != '') {
                 this.finalActive = true;
@@ -356,9 +459,45 @@
             .catch(error => {
                 console.log(error)
                 this.snackbar = true;
-                this.text = error;
+                this.textPreview = error;
                 this.errored = true
             })
+      },
+      approveData(param) {
+          let formData = new FormData();
+          this.approveLoading = true;
+
+          formData.append('status_payment', param);
+          formData.append('id', this.payment_history.id);
+
+          axios.post('/api/payment-list/update',
+                  formData, {
+                      headers: {
+                          'Content-Type': 'multipart/form-data'
+                      }
+                  }
+              )
+              .then(response => {
+                  this.snackbar = true;
+                  this.textPreview = response.data.message;
+                  if (response.data.status == 1) {
+                      this.color = 'success'
+                      this.approveLoading = false;
+                      this.dialog = false;
+                      this.select = [];
+                      this.callingApi();
+
+                  } else {
+                      this.color = 'error'
+                  }
+              })
+              .catch(error => {
+                  this.snackbar = true;
+                  this.text = error;
+                  this.color = 'error'
+                  this.dialog = false;
+                  this.approveLoading = false;
+              })
       }
     }
   }

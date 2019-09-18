@@ -1180,8 +1180,6 @@ class apiController extends Controller
 
                 $this->model->itinerary()->where('id',$req->id)->update($data);
 
-                $this->model->itinerary_detail()->where('id',$req->id)->delete();
-
                 $this->model->itinerary_flight()->where('id',$req->id)->delete();
 
                 $this->model->itinerary_schedule()->where('id',$req->id)->delete();
@@ -1193,8 +1191,6 @@ class apiController extends Controller
                 for ($i=0; $i < count($formDetail->itineraryItems); $i++) { 
                     $data = array(
                         'id' => $id,
-                        'dt' => $i+1,
-                        'code' => $form->code.'/'.str_pad($i+1,3,'0',STR_PAD_LEFT),
                         'seat' => $formDetail->itineraryItems[$i]->seat,
                         'seat_remain' => $formDetail->itineraryItems[$i]->seat,
                         'start' => $formDetail->itineraryItems[$i]->dateStart,
@@ -1209,10 +1205,19 @@ class apiController extends Controller
                         'agent_tip' => filter_var($formDetail->itineraryItems[$i]->tipsPrice,FILTER_SANITIZE_NUMBER_INT),
                         'agent_visa' => filter_var($formDetail->itineraryItems[$i]->visaPrice,FILTER_SANITIZE_NUMBER_INT),
                         'agent_tax' => filter_var($formDetail->itineraryItems[$i]->aptPrice,FILTER_SANITIZE_NUMBER_INT),
-                        'created_by' => Auth::user()->id,
                         'updated_by' => Auth::user()->id,
                     );
-                    $this->model->itinerary_detail()->create($data);
+
+                    if (!isset($formDetail->itineraryItems[$i]->dt)) {
+                        $dt = $this->model->itinerary_detail()->where('id',$id)->max('dt')+1;
+                        $data['dt'] = $dt;
+                        $data['code'] = $form->code.'/'.str_pad($dt,3,'0',STR_PAD_LEFT);
+                        $data['created_by'] = Auth::user()->id;
+                        $this->model->itinerary_detail()->create($data);
+                    }else{
+                        $data['dt'] = $formDetail->itineraryItems[$i]->dt;
+                        $this->model->itinerary_detail()->where('id',$id)->where('dt',$formDetail->itineraryItems[$i]->dt)->update($data);
+                    }
                 }
 
                 for ($i=0; $i < count($form->title); $i++) { 
@@ -1325,6 +1330,9 @@ class apiController extends Controller
     {
 
         $data = $this->model->itinerary_detail()
+                    ->with(['payment_history'=>function($q){
+                        $q->with(['payment_history_d']);
+                    }])
                     ->where('id',$req->id)
                     ->where('dt',$req->dt)
                     ->first();
@@ -1383,13 +1391,23 @@ class apiController extends Controller
                 $pdf = $path.'/'.$pdf;
                 $input['flayer_jpg'] = $pdf;
             }
-            if ($req->booked_by != 'null') {
+
+            $check = $this->model->itinerary_detail()->where('id',$req->id)->first();
+
+            if ($req->booked_by == 'null' or $req->booked_by == 'undefined') {
+                $input['booked_at'] = null;
+                $input['booked_by'] = null;
+            }else{
                 $input['booked_by'] = $req->booked_by;
+                if ($check->booked_by == null) {
+                    $input['booked_at'] = carbon::now();
+                }
             }
             $input['tour_leader_id'] = $req->tour_leader_id;
             $input['tour_leader_tips'] = filter_var($req->tour_leader_tips,FILTER_SANITIZE_NUMBER_INT);
             $input['updated_by'] = Auth::user()->id;
             $input['updated_at'] = carbon::now();
+
             $this->model->itinerary_detail()->where('id',$req->id)->where('dt',$req->dt)->update($input);
             return Response::json(['status'=>1,'message'=>'Success update data']);
         });

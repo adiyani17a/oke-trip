@@ -837,6 +837,7 @@
 
                 for (var i = 0; i < response.data.data.itinerary_detail.length; i++) {
                   let data = {
+                    'dt':response.data.data.itinerary_detail[i].dt,
                     'dateStart':response.data.data.itinerary_detail[i].start,
                     'dateEnd':response.data.data.itinerary_detail[i].end,
                     'adultPrice':response.data.data.itinerary_detail[i].adult_price,
@@ -852,7 +853,6 @@
                     'minimalDP':response.data.data.itinerary_detail[i].minimal_dp,
                     'action':'action',
                   } 
-
                   this.formDetail.itineraryItems.push(data);
                 }
 

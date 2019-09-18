@@ -23,6 +23,11 @@ class itinerary_detail extends Model
     	return $this->hasMany('App\booking', 'itinerary_code', 'code');
     }
 
+    public function payment_history()
+    {
+        return $this->hasMany('App\payment_history', 'itinerary_code', 'code');
+    }
+
     public function itinerary()
     {
         return $this->belongsTo('App\itinerary', 'id', 'id');
