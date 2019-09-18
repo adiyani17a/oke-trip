@@ -417,7 +417,7 @@
                 $(parent).find(".noFile").text(filename.replace("C:\\fakepath\\", ""));
             }
         });
-        
+
         if (param == 'final') {
           var input =  $('#final');
           this.finalConfirmation = input[0].files[0];  
@@ -471,7 +471,9 @@
           this.approveLoading = true;
 
           formData.append('status_payment', param);
-          formData.append('id', this.payment_history.id);
+          if (this.payment_history.length != 0) {
+            formData.append('id', this.payment_history[0].id);
+          }
 
           axios.post('/api/payment-list/update',
                   formData, {
