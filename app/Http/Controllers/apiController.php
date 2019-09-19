@@ -1165,12 +1165,13 @@ class apiController extends Controller
                 if ($file != null) {
                     $flyer = 'flyer_'.$id.'.'.'jpg';
                     $path = './dist/img/itinerary';
+
                     if (!file_exists($path)) {
                         mkdir($path, 0777, true);
                     }
 
-                    $flyer = 'dist/img/itinerary/' . $flyer;
-                    Image::make(file_get_contents($file))->save($flyer);  
+                    $file->move($path,$flyer);
+                    $flyer = $path.'/'.$flyer;
                     $data['flayer_image'] = $flyer;
                 }
 
