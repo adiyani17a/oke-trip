@@ -1515,12 +1515,12 @@ class apiController extends Controller
     public function deleteTourLeader(Request $req)
     {
         return DB::transaction(function() use ($req) {  
-
             if(!Auth::user()->hasAccess('Tour Leader','delete')){
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             }
 
             foreach ($req->data as $i => $d) {
+                dd($req->data[$i]);
                 $this->model->tour_leader()->where('id',$req->data[$i]['id'])->delete();
             }
 
