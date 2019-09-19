@@ -1520,7 +1520,6 @@ class apiController extends Controller
             }
 
             foreach ($req->data as $i => $d) {
-                dd($req->data[$i]);
                 $this->model->tour_leader()->where('id',$req->data[$i]['id'])->delete();
             }
 
