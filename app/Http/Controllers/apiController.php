@@ -1519,7 +1519,7 @@ class apiController extends Controller
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             }
 
-            foreach ($req->data as $i => $d) {
+            foreach ($req->data['data'] as $i => $d) {
                 $this->model->tour_leader()->where('id',$req->data['data'][$i]['id'])->delete();
             }
 
