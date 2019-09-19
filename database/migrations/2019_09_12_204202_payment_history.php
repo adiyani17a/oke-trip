@@ -17,9 +17,11 @@ class PaymentHistory extends Migration
             $table->engine = 'innoDB';
             $table->integer('id');
             $table->integer('booking_id');
+            $table->integer('itinerary_code');
             $table->integer('total_payment');
             $table->string('payment_method');
             $table->string('status_payment');
+            $table->enum('type', ['BOOKING', 'ITINERARY']);
             $table->primary('id');
             $table->timestamps();
         });

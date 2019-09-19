@@ -452,6 +452,11 @@ Route::group(['middleware' => 'cors'], function () {
         'as' => "payment"
       ]);
 
+      Route::post('/payment-itinerary', [
+        'uses' => "apiV1Controller@paymentItinerary",
+        'as' => "paymentItinerary"
+      ]);
+
       Route::post('/pay/save', [
         'uses' => "apiV1Controller@paymentSave",
         'as' => "paymentSave"

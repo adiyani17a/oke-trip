@@ -26,19 +26,27 @@ class apiV1Controller extends Controller
 	public function getData()
     {
         $data =  $this->model->booking()->with(['users','handle','payment_history'])->orderBy('created_at','ASC')->get();
+        $itinerary =  $this->model->itinerary_detail()
+        				   ->whereHas('payment_history')
+        				   ->with(['payment_history','users'])->orderBy('created_at','ASC')->get();
 
-        return Response::json(['data'=>$data]);
+        return Response::json(['data'=>$data,'itinerary'=>$itinerary]);
     }
 
-	public function getDataHome()
+	public function getDataHome(Request $req)
 	{
 
+		$users_id = $req->users_id;
 		$now = carbon::now()->format('Y-m-d');
 		$data['hotDeal'] = $this->model->itinerary()->with(['itinerary_detail'=>function($q) use ($now){
 									$q->where('start','>=',$now);
 								}])
-								->whereHas('itinerary_detail',function($q) use ($now){
+								->whereHas('itinerary_detail',function($q) use ($now,$users_id){
 									$q->where('start','>=',$now);
+									$q->where('booked_by',null);
+									if ($users_id != 'undefined') {
+										$q->orWhere('booked_by',$users_id);
+									}
 								})
 								->where('hot_deals','Y')->where('active','true')->take(4)->get();
 		$data['destination'] = $this->model->destination()->with(['itinerary_destination'])->take(6)->get();
@@ -73,11 +81,18 @@ class apiV1Controller extends Controller
 		return Response::json($data);
 	}
 
-	public function getItineraryDetail($id)
+	public function getItineraryDetail(Request $req,$id)
 	{
+
+		$users_id = $req->users_id;
 		$now = carbon::now()->format('Y-m-d');
-		$data = $this->model->itinerary()->with(['itinerary_detail'=>function($q) use ($now){
+		$data = $this->model->itinerary()->with(['itinerary_detail'=> function($q) use ($now,$users_id){
 											$q->where('start','>=',$now);
+											$q->where('booked_by',null);
+											$q->where('seat_remain','>',0);
+											if ($users_id != 'undefined') {
+												$q->orWhere('booked_by',$users_id);
+											}
 										},'itinerary_destination' => function($q){
 											$q->with(['destination']);
 										},'itinerary_flight','itinerary_schedule','itinerary_additional'=> function($q){
@@ -267,10 +282,25 @@ class apiV1Controller extends Controller
 					 	}]);
 					 },'payment_history'=>function($q){
 					 	$q->with(['payment_history_d']);
-					 },'users','handle'])
+					 },'users','handle','itinerary_detail'=>function($q){
+					 	$q->with(['payment_history']);
+					 }])
 					 ->get();
+
+
+		$itinerary = $this->model->itinerary_detail()
+					 ->where('booked_by',$req->user_id)
+					 ->with(['payment_history'])
+					 ->get();
+
+
+		foreach ($itinerary as $i => $d) {
+			$itinerary[$i]->date_start = carbon::parse($d->start)->format('d/m/Y');
+			$itinerary[$i]->date_end = carbon::parse($d->end)->format('d/m/Y');
+			$itinerary[$i]->expired = carbon::parse($d->booked_at)->subDay(-7)->format('Y-m-d');
+		}
 		
-		return response::json(['status'=>200,'data'=>$data,'time_remaining'=>$time_remaining]);
+		return response::json(['status'=>200,'data'=>$data,'itinerary'=>$itinerary,'time_remaining'=>$time_remaining]);
 	}
 
 	public function getBookingListDetail(Request $req,$id)
@@ -303,7 +333,7 @@ class apiV1Controller extends Controller
 					 },'payment_history'=>function($q){
 					 	$q->with(['payment_history_d']);
 					 },'users','handle','itinerary_detail'=>function($q){
-					 	$q->with(['itinerary']);
+					 	$q->with(['itinerary','payment_history']);
 					 }])
 					 ->first();
 
@@ -542,7 +572,7 @@ class apiV1Controller extends Controller
 					 },'payment_history'=>function($q){
 					 	$q->with(['payment_history_d']);
 					 },'users','handle','itinerary_detail'=>function($q){
-					 	$q->with(['itinerary']);
+					 	$q->with(['itinerary','payment_history']);
 					 }])
 					 ->first();
 
@@ -596,8 +626,8 @@ class apiV1Controller extends Controller
 		foreach ($data['invoice_list'] as $i => $d) {
 			foreach ($data['data']->booking_d as $i1 => $d1) {
 				foreach ($d1->booking_pax as $i2 => $d2) {
-					$data['dp']+= $data['data']->itinerary_detail->minimal_dp;
 					if ($d2->type == $data['invoice_list'][$i]['name']) {
+						$data['dp']+= $data['data']->itinerary_detail->minimal_dp;
 						$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
 						$data['invoice_list'][$i]['value'] += 1;
 					}elseif($data['invoice_list'][$i]['name'] == 'Agent Com'){
@@ -642,14 +672,20 @@ class apiV1Controller extends Controller
 
 		$data = array(
 					'id' => $id,
-					'booking_id' => $req->booking_id,
 					'code' =>$code,
 					'total_payment' => $req->total_payment,
 					'payment_method' =>$req->payment_method,
 					'status_payment' =>'Pending',
+					'type' =>$req->type,
 					'created_by' => $req->created_by, 
 					'updated_by' => $req->created_by, 
 				);
+
+		if ($req->type == 'ITINERARY') {
+			$data['itinerary_code'] = $req->booking_id;
+		}else{
+			$data['booking_id'] = $req->booking_id;
+		}
 
 		$this->model->payment_history()->create($data);
 
@@ -660,7 +696,7 @@ class apiV1Controller extends Controller
 			$file = $req->payment_proof[$i];
 
             if ($file != null) {
-                $filename = 'payment_'.$id.$i.$req->account_numbe[$i].'.'.'jpg';
+                $filename = 'payment_'.$id.$i.$req->account_number[$i].'.'.'jpg';
                 $path = './dist/img/payment/';
                 if (!file_exists($path)) {
                 	$oldmask = umask(0);
@@ -711,6 +747,7 @@ class apiV1Controller extends Controller
 		}
 
 		$country = $req->country;
+		$users_id = $req->users_id;
 		$data = $this->model->itinerary()
 				->with(['itinerary_detail'])
 				->whereHas('itinerary_destination',function($q) use ($country){
@@ -724,16 +761,20 @@ class apiV1Controller extends Controller
 						}
 					}
 				})
-				->whereHas('itinerary_detail',function($q) use ($price,$date){
+				->whereHas('itinerary_detail',function($q) use ($price,$date,$users_id){
 					if ($price != '') {
 						$q->where('adult_price','>=',filter_var($price[0],FILTER_SANITIZE_NUMBER_INT));
 						$q->where('adult_price','<=',filter_var($price[1],FILTER_SANITIZE_NUMBER_INT));
 					}
 					$q->where('start','>=',$date['startDate']);
 					$q->where('end','<=',$date['endDate']);
+					$q->where('seat_remain','>',0);
+					$q->where(function($q1) use ($users_id){
+						$q1->Where('booked_by',null);
+						$q1->orWhere('booked_by',$users_id);
+					});
 				})
 				->get();
-
 		
 
 		$country = $this->model->destination()->where('active','true')->get();
@@ -769,5 +810,39 @@ class apiV1Controller extends Controller
 		$data->date = carbon::parse($data->created_at)->format('F d, Y');
 
 		return response::json(['status'=>200,'data'=>$data]);
+	}
+
+	public function paymentItinerary(Request $req)
+	{
+		$check_token = $this->model->token_management()->where('access_token',$req->token)->first();
+
+		if ($check_token != null) {
+			$last_login = strtotime(carbon::parse($check_token->created_at)->format('Y-m-d H:i:s'))+$check_token->last_activity;
+			$now = strtotime(carbon::now()->format('Y-m-d H:i:s'));
+			if ($last_login < $now) {
+				$this->model->token_management()->where('access_token',$req->token)->delete();
+				return response::json(['status'=>403,'message'=>'Token Expired']);
+			}else{
+				$time_remaining = $last_login - $now;
+			}
+		}else{
+				return response::json(['status'=>401,'message'=>'Unauthorized']);
+		}
+
+
+		$index = $this->model->payment_history()->max('id')+1;
+
+		$day = Carbon::now()->format('dmy');
+		$data['code'] = 'P'.$day.str_pad($index, 5, '0', STR_PAD_LEFT);
+		$data['date'] = carbon::now()->format('d F Y');
+
+		$data['data'] = $this->model->itinerary_detail()
+					 ->where('booked_by',$req->user_id)
+					 ->where('code',$req->code)
+					 ->with(['payment_history'])
+					 ->first();
+
+
+		return response::json(['status'=>200,'data'=>$data,'time_remaining'=>$time_remaining]);
 	}
 }
