@@ -213,7 +213,7 @@
             },
             deleteData(){
                 axios
-                    .delete('/api/menu-list/delete',{
+                    .post('/api/menu-list/delete',{
                         data:{
                             data:this.select,
                         }

@@ -401,7 +401,7 @@
             deleteData(){
 
                 axios
-                    .delete('/api/itinerary/delete',{
+                    .post('/api/itinerary/delete',{
                         data:{
                             data:this.select,
                         }

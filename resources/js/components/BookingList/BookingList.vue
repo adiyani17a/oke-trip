@@ -233,7 +233,7 @@
             deleteData() {
 
                 axios
-                    .delete('/api/booking-list/delete', {
+                    .post('/api/booking-list/delete', {
                         data: {
                             data: this.select,
                         }

@@ -43,7 +43,7 @@
       :multi-line="mode === 'multi-line'"
       :timeout="timeout"
       :vertical="mode === 'vertical'"
-    >
+      >
       {{ text }}
       <v-btn
         dark
