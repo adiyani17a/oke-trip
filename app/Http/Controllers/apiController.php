@@ -1520,8 +1520,7 @@ class apiController extends Controller
             }
 
             foreach ($req->data as $i => $d) {
-                dd($req->data[$i]->id);
-                $this->model->tour_leader()->where('id',$req->data[$i]['id'])->delete();
+                $this->model->tour_leader()->where('id',$req->data['data'][$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
