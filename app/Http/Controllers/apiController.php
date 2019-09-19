@@ -2084,4 +2084,5 @@ class apiController extends Controller
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
         });
     }
+    
 }
