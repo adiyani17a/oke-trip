@@ -1114,13 +1114,15 @@ class apiController extends Controller
                 $file = $req->carousel1;
 
                 if ($file != 'undefined') {
-                    $carousel_1 = 'carousel_1_'.$id.'.'.'jpg';
+                   $carousel_1 = 'carousel_1_'.$id.'.'.'jpg';
                     $path = './dist/img/itinerary';
+
                     if (!file_exists($path)) {
                         mkdir($path, 0777, true);
                     }
-                    $carousel_1 = 'dist/img/itinerary/' . $carousel_1;
-                    Image::make(file_get_contents($file))->save($carousel_1);  
+
+                    $file->move($path,$carousel_1);
+                    $carousel_1 = $path.'/'.$carousel_1;
                     $data['carousel_1'] = $carousel_1;
                 }
 
@@ -1128,11 +1130,13 @@ class apiController extends Controller
                 if ($file != 'undefined') {
                     $carousel_2 = 'carousel_2_'.$id.'.'.'jpg';
                     $path = './dist/img/itinerary';
+
                     if (!file_exists($path)) {
                         mkdir($path, 0777, true);
                     }
-                    $carousel_2 = 'dist/img/itinerary/' . $carousel_2;
-                    Image::make(file_get_contents($file))->save($carousel_2);  
+
+                    $file->move($path,$carousel_2);
+                    $carousel_2 = $path.'/'.$carousel_2;
                     $data['carousel_2'] = $carousel_2;
                 }
 
@@ -1145,14 +1149,14 @@ class apiController extends Controller
                         mkdir($path, 0777, true);
                     }
 
-                    $carousel_3 = 'dist/img/itinerary/' . $carousel_3;
-                    Image::make(file_get_contents($file))->save($carousel_3);  
+                    $file->move($path,$carousel_3);
+                    $carousel_3 = $path.'/'.$carousel_3;
                     $data['carousel_3'] = $carousel_3;
                 }
 
                 $file = $req->pdf;
 
-                if ($file != null) {
+                if ($file != 'undefined') {
                     $pdf = 'pdf_'.$id.'.'.'pdf';
                     $path = 'dist/pdf/itinerary';
 
@@ -1166,7 +1170,7 @@ class apiController extends Controller
                 }
 
                 $file = $req->flyer;
-                if ($file != null) {
+                if ($file != 'undefined') {
                     $flyer = 'flyer_'.$id.'.'.'jpg';
                     $path = './dist/img/itinerary';
 
