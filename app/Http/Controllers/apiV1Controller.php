@@ -178,7 +178,7 @@ class apiV1Controller extends Controller
 					'updated_at'			=> carbon::now(),
 				);
 
-		$this->model->booking()->create($data);
+		$this->model->booking()->insert($data);
 
 
 		$image_index = 0;
@@ -191,7 +191,7 @@ class apiV1Controller extends Controller
 						'total_bed'		=> $room->total_bed[$i],
 					);
 
-			$this->model->booking_d()->create($data);
+			$this->model->booking_d()->insert($data);
 
 			for ($i1=0; $i1 < count($room->name[$i]); $i1++) { 
 
@@ -229,7 +229,7 @@ class apiV1Controller extends Controller
 							'passport_image'	=> $path,
 						);
 
-				$this->model->booking_pax()->create($data);
+				$this->model->booking_pax()->insert($data);
 				$image_index++;
 				$additional_counting = 1;
 				for ($i2=0; $i2 < count($room->additional[$i][$i1]); $i2++) { 
@@ -243,7 +243,7 @@ class apiV1Controller extends Controller
 								);
 
 
-						$this->model->booking_additional()->create($data);
+						$this->model->booking_additional()->insert($data);
 						$additional_counting++;
 					}
 				}
@@ -687,7 +687,7 @@ class apiV1Controller extends Controller
 			$data['booking_id'] = $req->booking_id;
 		}
 
-		$this->model->payment_history()->create($data);
+		$this->model->payment_history()->insert($data);
 
 
 		for ($i=0; $i < count($req->account_name); $i++) { 
@@ -722,7 +722,7 @@ class apiV1Controller extends Controller
 					'date' => carbon::parse($req->date[$i])->format('Y-m-d')
 				);
 
-			$this->model->payment_history_d()->create($data);
+			$this->model->payment_history_d()->insert($data);
 		}
 		DB::commit();
 
