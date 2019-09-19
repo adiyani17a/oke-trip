@@ -71,7 +71,7 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "saveGroupMenu"
       ]);
 
-      Route::delete('/delete', [
+      Route::post('/delete', [
         'uses' => "apiController@deleteGroupMenu",
         'as' => "deleteGroupMenu"
       ]);
@@ -88,7 +88,7 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "saveMenuList"
       ]);
 
-      Route::delete('/delete', [
+      Route::post('/delete', [
         'uses' => "apiController@deleteMenuList",
         'as' => "deleteMenuList"
       ]);
@@ -110,7 +110,7 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "saveRole"
       ]);
 
-      Route::delete('/delete', [
+      Route::post('/delete', [
         'uses' => "apiController@deleteRole",
         'as' => "deleteRole"
       ]);
@@ -146,7 +146,7 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "saveAdministratorUser"
       ]);
 
-      Route::delete('/delete', [
+      Route::post('/delete', [
         'uses' => "apiController@deleteAdministratorUser",
         'as' => "deleteAdministratorUser"
       ]);
@@ -168,7 +168,7 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "saveAgentUser"
       ]);
 
-      Route::delete('/delete', [
+      Route::post('/delete', [
         'uses' => "apiController@deleteAgentUser",
         'as' => "deleteAgentUser"
       ]);
@@ -185,7 +185,7 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "saveDestination"
       ]);
 
-      Route::delete('/delete', [
+      Route::post('/delete', [
         'uses' => "apiController@deleteDestination",
         'as' => "deleteDestination"
       ]);
@@ -207,7 +207,7 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "saveAdditional"
       ]);
 
-      Route::delete('/delete', [
+      Route::post('/delete', [
         'uses' => "apiController@deleteAdditional",
         'as' => "deleteAdditional"
       ]);
@@ -244,7 +244,7 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "saveItinerary"
       ]);
 
-      Route::delete('/delete', [
+      Route::post('/delete', [
         'uses' => "apiController@deleteItinerary",
         'as' => "deleteItinerary"
       ]);
@@ -324,7 +324,7 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "saveCompany"
       ]);
 
-      Route::delete('/delete', [
+      Route::post('/delete', [
         'uses' => "apiController@deleteCompany",
         'as' => "deleteCompany"
       ]);
@@ -390,7 +390,7 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "saveBlog"
       ]);
 
-      Route::delete('/delete', [
+      Route::post('/delete', [
         'uses' => "apiController@deleteBlog",
         'as' => "deleteBlog"
       ]);

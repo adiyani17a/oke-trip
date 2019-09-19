@@ -211,7 +211,7 @@
             deleteData(){
 
                 axios
-                    .delete('/api/destination/delete',{
+                    .post('/api/destination/delete',{
                         data:{
                             data:this.select,
                         }

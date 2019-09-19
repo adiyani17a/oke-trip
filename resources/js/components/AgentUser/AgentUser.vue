@@ -225,7 +225,7 @@
             deleteData(){
 
                 axios
-                    .delete('/api/agent-user/delete',{
+                    .post('/api/agent-user/delete',{
                         data:{
                             data:this.select,
                         }
