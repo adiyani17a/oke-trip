@@ -1496,7 +1496,7 @@ class apiController extends Controller
                     if (!file_exists($path)) {
                         mkdir($path, 0777, true);
                     }
-                    $filename = '/dist/img/tourLeader/' . $filename;
+                    $filename = 'dist/img/tourLeader/' . $filename;
                     Image::make(file_get_contents($file))->save($filename);  
                     $input['image'] = $filename;
 
