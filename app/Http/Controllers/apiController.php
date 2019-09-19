@@ -824,11 +824,15 @@ class apiController extends Controller
         foreach ($data as $i => $d) {
             if (count($d->itinerary_destination) != 0) {
                 foreach ($d->itinerary_destination as $i1 => $d1) {
-                    if (count($d->itinerary_destination)-1 == $i1) {
-                        $data[$i]->destination .= $d1->destination->name;
+                    if ($d1->destination != null){
+                        if (count($d->itinerary_destination)-1 == $i1) {
+                            $data[$i]->destination .= $d1->destination->name;
+                        }else{
+                            $data[$i]->destination .= $d1->destination->name.', ';
+                        }
                     }else{
-                        $data[$i]->destination .= $d1->destination->name.', ';
-                    }
+                        $data[$i]->destination = 'Master Not Found';
+                    } 
                 }
             }
         }
