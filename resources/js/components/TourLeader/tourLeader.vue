@@ -255,7 +255,7 @@
             deleteData() {
 
                 axios
-                    .delete('/api/tour-leader/delete', {
+                    .post('/api/tour-leader/delete', {
                         data: {
                             data: this.select,
                         }

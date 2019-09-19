@@ -292,7 +292,7 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "saveTourLeader"
       ]);
 
-      Route::delete('/delete', [
+      Route::post('/delete', [
         'uses' => "apiController@deleteTourLeader",
         'as' => "deleteTourLeader"
       ]);
