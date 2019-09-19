@@ -2013,64 +2013,65 @@ class apiController extends Controller
 
     public function saveBlog(Request $req)
     {
-        return DB::transaction(function() use ($req) {  
-            if (!isset($req->id) or $req->id == '' or $req->id == null) {
-                if(!Auth::user()->hasAccess('Company','create')){
-                    return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Create This Data']);
-                }
+        // return DB::transaction(function() use ($req) {  
+        //     if (!isset($req->id) or $req->id == '' or $req->id == null) {
+        //         if(!Auth::user()->hasAccess('Company','create')){
+        //             return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Create This Data']);
+        //         }
 
-                $input = $req->all();
-                $id = $this->model->blog()->max('id')+1;
+        //         $input = $req->all();
+        //         $id = $this->model->blog()->max('id')+1;
 
-                $file = $req->image;
-                if ($file != null) {
-                    $filename = 'blog'.'_'.$id.'.'.'jpg';
-                    $path = './dist/img/blog';
-                    if (!file_exists($path)) {
-                        mkdir($path, 0777, true);
-                    }
-                    $path = 'dist/img/blog/' . $filename;
-                    Image::make(file_get_contents($file))->save($path);  
-                    $filename = '/dist/img/blog/' . $filename;
-                }else{
-                    $filename = null;
-                }
+        //         $file = $req->image;
+        //         if ($file != null) {
+        //             $filename = 'blog'.'_'.$id.'.'.'jpg';
+        //             $path = './dist/img/blog';
+        //             if (!file_exists($path)) {
+        //                 mkdir($path, 0777, true);
+        //             }
+        //             $path = 'dist/img/blog/' . $filename;
+        //             Image::make(file_get_contents($file))->save($path);  
+        //             $filename = '/dist/img/blog/' . $filename;
+        //         }else{
+        //             $filename = null;
+        //         }
 
-                $input['image'] = $filename;
-                $input['id'] = $id;
-                $input['created_by'] = Auth::user()->name;
-                $input['updated_by'] = Auth::user()->name;
-                $this->model->blog()->create($input);
-                return Response::json(['status'=>1,'message'=>'Success saving data']);
-            }else{
-                if(!Auth::user()->hasAccess('Company','edit')){
-                    return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Edit This Data']);
-                }
+        //         $input['image'] = $filename;
+        //         $input['id'] = $id;
+        //         $input['created_by'] = Auth::user()->name;
+        //         $input['updated_by'] = Auth::user()->name;
+        //         $this->model->blog()->create($input);
+        //         return Response::json(['status'=>1,'message'=>'Success saving data']);
+        //     }else{
+        //         if(!Auth::user()->hasAccess('Company','edit')){
+        //             return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Edit This Data']);
+        //         }
 
-                $input = $req->all();
-                unset($input['image']);
-                $id = $req->id;
-                $file = $req->image;
-                if ($file != null) {
-                    $filename = 'blog'.'_'.$id.'.'.'jpg';
-                    $path = './dist/img/blog/';
-                    if (!file_exists($path)) {
-                        mkdir($path, 0777, true);
-                    }
-                    $path = './dist/img/blog/' . $filename;
-                    Image::make(file_get_contents($file))->save($path);  
-                    $filename = '/dist/img/blog/' . $filename;
-                    $input['image'] = $filename;
+        //         $input = $req->all();
+        //         unset($input['image']);
+        //         $id = $req->id;
+        //         $file = $req->image;
+        //         if ($file != null) {
+        //             $filename = 'blog'.'_'.$id.'.'.'jpg';
+        //             $path = './dist/img/blog/';
+        //             if (!file_exists($path)) {
+        //                 mkdir($path, 0777, true);
+        //             }
+        //             $path = './dist/img/blog/' . $filename;
+        //             Image::make(file_get_contents($file))->save($path);  
+        //             $filename = '/dist/img/blog/' . $filename;
+        //             $input['image'] = $filename;
 
-                }else{
-                    $filename = null;
-                }
-                $input['updated_by'] = Auth::user()->name;
-                $this->model->blog()->where('id',$req->id)->update($input);
+        //         }else{
+        //             $filename = null;
+        //         }
+        //         $input['updated_by'] = Auth::user()->name;
+        //         $this->model->blog()->where('id',$req->id)->update($input);
 
-                return Response::json(['status'=>1,'message'=>'Success updating data']);
-            }
-        });
+        //         return Response::json(['status'=>1,'message'=>'Success updating data']);
+        //     }
+        // });
+        dd($req->all());
     }
 
     public function deleteBlog(Request $req)
