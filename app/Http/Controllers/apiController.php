@@ -1567,8 +1567,8 @@ class apiController extends Controller
                     }
                     $path = 'dist/img/company/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
+                    chmod($path, 0755);
                     $filename = '/dist/img/company/' . $filename;
-                    chmod($filename, 0755);
 
                 }else{
                     $filename = null;
