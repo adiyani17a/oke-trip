@@ -52,7 +52,7 @@
             </div>
             <div v-if="header.type == 'image'" class="text-xs-center">
               <div v-if="props.item[header.value] != null">
-                <v-img :src="props.item[header.value]" aspect-ratio="1.7"></v-img>
+                <v-img :src="props.item[header.value]+'?'+new Date()" aspect-ratio="1.7"></v-img>
               </div>
             </div>
             <div v-if="header.type == 'switch'" class="text-xs-center">
