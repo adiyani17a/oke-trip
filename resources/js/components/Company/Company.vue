@@ -229,11 +229,11 @@
                                 this.dataItem[i].image = '.' + this.dataItem[i].image;
                             }
 
-                            if (this.idData.length == 1 ) {
-                                if (this.idData[0].id == this.dataItem[i].id) {
-                                    this.idData[0] = undefined;
-                                }
-                            }
+                            // if (this.idData.length == 1 ) {
+                            //     if (this.idData[0].id == this.dataItem[i].id) {
+                            //         this.idData[0] = undefined;
+                            //     }
+                            // }
                         }
                     })
                     .catch(error => {
