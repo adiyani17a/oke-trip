@@ -218,6 +218,7 @@
                             if (this.idData.length == 1 ) {
                                 if (this.idData[0].id == this.dataItem[i].id) {
                                     this.idData[0] = undefined;
+this.currentPage = 1;
                                 }
                             }
                         }
