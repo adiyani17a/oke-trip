@@ -1584,16 +1584,16 @@ class apiController extends Controller
 
                 $input = $req->all();
                 unset($input['image']);
-
                 $file = $req->image;
                 if ($file != null) {
-                    $filename = 'company_'.$req->name.'_'.$id.'.'.'jpg';
+                    $filename = 'company'.'_'.$req->id.'.'.'jpg';
                     $path = './dist/img/company';
                     if (!file_exists($path)) {
                         mkdir($path, 0777, true);
                     }
-                    $filename = '/dist/img/company/' . $filename;
+                    $filename = 'dist/img/company/' . $filename;
                     Image::make(file_get_contents($file))->save($filename);  
+                    $filename = '/dist/img/company/' . $filename;
                     $input['image'] = $filename;
 
                 }else{
