@@ -15,12 +15,12 @@ ini_set('post_max_size', '2048MB');
 ini_set('upload_max_filesize', '2048MB');
 class apiController extends Controller
 {
-    protected $model;
+	protected $model;
 
-    public function __construct()
-    {
-        $this->model = new models();
-    }
+	public function __construct()
+	{
+		$this->model = new models();
+	}
 
     public function convertImageBase64(Request $req)
     {
@@ -61,14 +61,14 @@ class apiController extends Controller
     }
 
     public function datatableDestination(Request $req)
-    {   
+    {	
         $data =  $this->model->destination()->paginate($req->showing);
         
 
         foreach ($data as $i => $d) {
             $data[$i]->action = '';
         }
-        return Response::json($data);
+    	return Response::json($data);
     }
 
     public function saveDestination(Request $req)
@@ -94,7 +94,7 @@ class apiController extends Controller
                 $input['created_by'] = Auth::user()->name;
                 $input['updated_by'] = Auth::user()->name;
                 $input['image'] = $path;
-                $this->model->destination()->insert($input);
+                $this->model->destination()->create($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
 
@@ -135,8 +135,8 @@ class apiController extends Controller
     public function deleteDestination(Request $req)
     {
         return DB::transaction(function() use ($req) {  
-            foreach ($req->data['data'] as $i => $d) {
-                $this->model->destination()->where('id',$req->data['data'][$i]['id'])->delete();
+            foreach ($req->data as $i => $d) {
+                $this->model->destination()->where('id',$req->data[$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
@@ -162,7 +162,7 @@ class apiController extends Controller
                 $input['created_by'] = Auth::user()->name;
                 $input['updated_by'] = Auth::user()->name;
                 $input['name'] = ucwords($input['name']);
-                $this->model->groupMenu()->insert($input);
+                $this->model->groupMenu()->create($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
                 if(Auth::user()->role_id != 1){
@@ -182,8 +182,8 @@ class apiController extends Controller
             if(Auth::user()->role_id != 1){
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             } 
-            foreach ($req->data['data'] as $i => $d) {
-                $this->model->groupMenu()->where('id',$req->data['data'][$i]['id'])->delete();
+            foreach ($req->data as $i => $d) {
+                $this->model->groupMenu()->where('id',$req->data[$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
@@ -216,7 +216,7 @@ class apiController extends Controller
                 $input['name'] = ucwords($input['name']);
                 $input['slug'] = strtolower(str_replace(' ','-',$input['slug']));
                 $input['url'] = strtolower(str_replace(' ','-',$input['url']));
-                $this->model->menuList()->insert($input);
+                $this->model->menuList()->create($input);
 
                 $role = $this->model->role()->get();
 
@@ -246,7 +246,7 @@ class apiController extends Controller
                     $menu['updated_by'] = Auth::user()->name;
                     $menu['created_at'] = carbon::now();
                     $menu['updated_at'] = carbon::now();
-                    $this->model->privilege()->insert($menu);
+                    $this->model->privilege()->create($menu);
                 }
 
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
@@ -271,8 +271,8 @@ class apiController extends Controller
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             } 
 
-            foreach ($req->data['data'] as $i => $d) {
-                $this->model->menuList()->where('id',$req->data['data'][$i]['id'])->delete();
+            foreach ($req->data as $i => $d) {
+                $this->model->menuList()->where('id',$req->data[$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
@@ -353,7 +353,7 @@ class apiController extends Controller
                 $input['created_by'] = Auth::user()->name;
                 $input['updated_by'] = Auth::user()->name;
                 $input['name'] = ucwords($input['name']);
-                $this->model->role()->insert($input);
+                $this->model->role()->create($input);
 
 
                 $menuList = $this->model->menuList()->get();
@@ -384,7 +384,7 @@ class apiController extends Controller
                     $menu['created_at'] = carbon::now();
                     $menu['updated_at'] = carbon::now();
 
-                    $this->model->privilege()->insert($menu);
+                    $this->model->privilege()->create($menu);
                 }
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
@@ -416,9 +416,9 @@ class apiController extends Controller
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             } 
 
-            foreach ($req->data['data'] as $i => $d) {
-                $this->model->role()->where('id',$req->data['data'][$i]['id'])->delete();
-                $this->model->privilege()->where('role_id',$req->data['data'][$i]['id'])->delete();
+            foreach ($req->data as $i => $d) {
+                $this->model->role()->where('id',$req->data[$i]['id'])->delete();
+                $this->model->privilege()->where('role_id',$req->data[$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
@@ -500,7 +500,7 @@ class apiController extends Controller
                 $input['type_user'] = 'ADMIN';
                 $input['active'] = 'true';
                 $input['image'] = $path;
-                $this->model->user()->insert($input);
+                $this->model->user()->create($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
                 if(!Auth::user()->hasAccess('Administrator User','edit')){
@@ -545,8 +545,8 @@ class apiController extends Controller
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             }
 
-            foreach ($req->data['data'] as $i => $d) {
-                $this->model->user()->where('id',$req->data['data'][$i]['id'])->delete();
+            foreach ($req->data as $i => $d) {
+                $this->model->user()->where('id',$req->data[$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
@@ -636,7 +636,7 @@ class apiController extends Controller
                 $input['type_user'] = 'AGENT';
                 $input['active'] = 'true';
                 $input['image'] = $path;
-                $this->model->user()->insert($input);
+                $this->model->user()->create($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
                 if(!Auth::user()->hasAccess('Agent User','edit')){
@@ -681,8 +681,8 @@ class apiController extends Controller
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             }
 
-            foreach ($req->data['data'] as $i => $d) {
-                $this->model->user()->where('id',$req->data['data'][$i]['id'])->delete();
+            foreach ($req->data as $i => $d) {
+                $this->model->user()->where('id',$req->data[$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
@@ -760,7 +760,7 @@ class apiController extends Controller
                 $input['updated_at'] = carbon::now();
                 $input['active'] = 'true';
                 $input['image'] = $path;
-                $this->model->additional()->insert($input);
+                $this->model->additional()->create($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
                 if(!Auth::user()->hasAccess('Additional','edit')){
@@ -808,10 +808,10 @@ class apiController extends Controller
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             }
 
-            foreach ($req->data['data'] as $i => $d) {
-                $data = $this->model->additional()->where('id',$req->data['data'][$i]['id'])->first();
+            foreach ($req->data as $i => $d) {
+                $data = $this->model->additional()->where('id',$req->data[$i]['id'])->first();
                     unlink('.'.$data->image);
-                $this->model->additional()->where('id',$req->data['data'][$i]['id'])->delete();
+                $this->model->additional()->where('id',$req->data[$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
@@ -824,15 +824,11 @@ class apiController extends Controller
         foreach ($data as $i => $d) {
             if (count($d->itinerary_destination) != 0) {
                 foreach ($d->itinerary_destination as $i1 => $d1) {
-                    if ($d1->destination != null){
-                        if (count($d->itinerary_destination)-1 == $i1) {
-                            $data[$i]->destination .= $d1->destination->name;
-                        }else{
-                            $data[$i]->destination .= $d1->destination->name.', ';
-                        }
+                    if (count($d->itinerary_destination)-1 == $i1) {
+                        $data[$i]->destination .= $d1->destination->name;
                     }else{
-                        $data[$i]->destination = 'Master Not Found';
-                    } 
+                        $data[$i]->destination .= $d1->destination->name.', ';
+                    }
                 }
             }
         }
@@ -1020,7 +1016,7 @@ class apiController extends Controller
                     'updated_by' => Auth::user()->id,
                 );
 
-                $this->model->itinerary()->insert($data);
+                $this->model->itinerary()->create($data);
                 for ($i=0; $i < count($formDetail->itineraryItems); $i++) { 
                     $data = array(
                         'id' => $id,
@@ -1043,7 +1039,7 @@ class apiController extends Controller
                         'created_by' => Auth::user()->id,
                         'updated_by' => Auth::user()->id,
                     );
-                    $this->model->itinerary_detail()->insert($data);
+                    $this->model->itinerary_detail()->create($data);
                 }
 
                 for ($i=0; $i < count($form->title); $i++) { 
@@ -1054,7 +1050,7 @@ class apiController extends Controller
                         'title' => $form->title[$i],
                         'eat_service' => $form->bld[$i],
                     );
-                    $this->model->itinerary_schedule()->insert($data);
+                    $this->model->itinerary_schedule()->create($data);
                 }
 
                 for ($i=0; $i < count($form->flight); $i++) { 
@@ -1068,7 +1064,7 @@ class apiController extends Controller
                         'arrival' => $form->arrival[$i],
                     );
 
-                    $this->model->itinerary_flight()->insert($data);
+                    $this->model->itinerary_flight()->create($data);
                 }
 
                 for ($i=0; $i < count($form->destination); $i++) { 
@@ -1078,7 +1074,7 @@ class apiController extends Controller
                         'destination_id' => $form->destination[$i],
                     );
 
-                    $this->model->itinerary_destination()->insert($data);
+                    $this->model->itinerary_destination()->create($data);
                 }
 
                 for ($i=0; $i < count($form->additional); $i++) { 
@@ -1088,7 +1084,7 @@ class apiController extends Controller
                         'additional_id' => $form->additional[$i],
                     );
 
-                    $this->model->itinerary_additional()->insert($data);
+                    $this->model->itinerary_additional()->create($data);
                 }
 
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
@@ -1215,7 +1211,7 @@ class apiController extends Controller
                         $data['dt'] = $dt;
                         $data['code'] = $form->code.'/'.str_pad($dt,3,'0',STR_PAD_LEFT);
                         $data['created_by'] = Auth::user()->id;
-                        $this->model->itinerary_detail()->insert($data);
+                        $this->model->itinerary_detail()->create($data);
                     }else{
                         $data['dt'] = $formDetail->itineraryItems[$i]->dt;
                         $this->model->itinerary_detail()->where('id',$id)->where('dt',$formDetail->itineraryItems[$i]->dt)->update($data);
@@ -1230,7 +1226,7 @@ class apiController extends Controller
                         'title' => $form->title[$i],
                         'eat_service' => $form->bld[$i],
                     );
-                    $this->model->itinerary_schedule()->insert($data);
+                    $this->model->itinerary_schedule()->create($data);
                 }
 
                 for ($i=0; $i < count($form->flight); $i++) { 
@@ -1244,7 +1240,7 @@ class apiController extends Controller
                         'arrival' => $form->arrival[$i],
                     );
 
-                    $this->model->itinerary_flight()->insert($data);
+                    $this->model->itinerary_flight()->create($data);
                 }
 
                 for ($i=0; $i < count($form->destination); $i++) { 
@@ -1254,7 +1250,7 @@ class apiController extends Controller
                         'destination_id' => $form->destination[$i],
                     );
 
-                    $this->model->itinerary_destination()->insert($data);
+                    $this->model->itinerary_destination()->create($data);
                 }
 
                 for ($i=0; $i < count($form->additional); $i++) { 
@@ -1264,7 +1260,7 @@ class apiController extends Controller
                         'additional_id' => $form->additional[$i],
                     );
 
-                    $this->model->itinerary_additional()->insert($data);
+                    $this->model->itinerary_additional()->create($data);
                 }
 
                 return Response::json(['status'=>1,'message'=>'Success updating data']);
@@ -1311,8 +1307,8 @@ class apiController extends Controller
             if(!Auth::user()->hasAccess('Itinerary','delete')){
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             }
-            foreach ($req->data['data'] as $i => $d) {
-                $this->model->itinerary()->where('id',$req->data['data'][$i]['id'])->delete();
+            foreach ($req->data as $i => $d) {
+                $this->model->itinerary()->where('id',$req->data[$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
@@ -1483,7 +1479,7 @@ class apiController extends Controller
                 $input['id'] = $id;
                 $input['created_by'] = Auth::user()->name;
                 $input['updated_by'] = Auth::user()->name;
-                $this->model->tour_leader()->insert($input);
+                $this->model->tour_leader()->create($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
                 if(!Auth::user()->hasAccess('Tour Leader','edit')){
@@ -1500,7 +1496,7 @@ class apiController extends Controller
                     if (!file_exists($path)) {
                         mkdir($path, 0777, true);
                     }
-                    $filename = 'dist/img/tourLeader/' . $filename;
+                    $filename = '/dist/img/tourLeader/' . $filename;
                     Image::make(file_get_contents($file))->save($filename);  
                     $input['image'] = $filename;
 
@@ -1519,12 +1515,13 @@ class apiController extends Controller
     public function deleteTourLeader(Request $req)
     {
         return DB::transaction(function() use ($req) {  
+
             if(!Auth::user()->hasAccess('Tour Leader','delete')){
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             }
 
-            foreach ($req->data['data'] as $i => $d) {
-                $this->model->tour_leader()->where('id',$req->data['data'][$i]['id'])->delete();
+            foreach ($req->data as $i => $d) {
+                $this->model->user()->where('id',$req->data[$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
@@ -1578,7 +1575,7 @@ class apiController extends Controller
                 $input['id'] = $id;
                 $input['created_by'] = Auth::user()->name;
                 $input['updated_by'] = Auth::user()->name;
-                $this->model->company()->insert($input);
+                $this->model->company()->create($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
                 if(!Auth::user()->hasAccess('Company','edit')){
@@ -1639,8 +1636,8 @@ class apiController extends Controller
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             }
 
-            foreach ($req->data['data'] as $i => $d) {
-                $this->model->company()->where('id',$req->data['data'][$i]['id'])->delete();
+            foreach ($req->data as $i => $d) {
+                $this->model->company()->where('id',$req->data[$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
@@ -1666,7 +1663,7 @@ class apiController extends Controller
 
             if ($data == null) {
                 $id = $this->model->carousel()->max('id')+1;
-                $this->model->carousel()->insert([
+                $this->model->carousel()->create([
                     'id' => $id,
                     'created_by' => Auth::user()->name,
                     'updated_by' => Auth::user()->name,
@@ -1928,7 +1925,7 @@ class apiController extends Controller
                     );
 
 
-            $this->model->booking_d()->insert($data);
+            $this->model->booking_d()->create($data);
             for ($i1=0; $i1 < count($room->name[$i]); $i1++) { 
 
                 $file = $req->passport_image[$i][$i1];
@@ -1968,7 +1965,7 @@ class apiController extends Controller
                             'passport_image'    => $path,
                         );
 
-                $this->model->booking_pax()->insert($data);
+                $this->model->booking_pax()->create($data);
                 $additional_counting = 1;
                 for ($i2=0; $i2 < count($room->additional[$i][$i1]); $i2++) { 
                     if ($room->additional[$i][$i1][$i2] != 0) {
@@ -1980,7 +1977,7 @@ class apiController extends Controller
                                     'additional_id'     => $room->additional[$i][$i1][$i2],
                                 );
 
-                        $this->model->booking_additional()->insert($data);
+                        $this->model->booking_additional()->create($data);
                         $additional_counting++;
                     }
                 }
@@ -2019,7 +2016,7 @@ class apiController extends Controller
     {
         return DB::transaction(function() use ($req) {  
             if (!isset($req->id) or $req->id == '' or $req->id == null) {
-                if(!Auth::user()->hasAccess('Blog','create')){
+                if(!Auth::user()->hasAccess('Company','create')){
                     return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Create This Data']);
                 }
 
@@ -2036,15 +2033,15 @@ class apiController extends Controller
                     $path = 'dist/img/blog/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
                     $filename = '/dist/img/blog/' . $filename;
-                    $input['image'] = $filename;
                 }else{
                     $filename = null;
                 }
 
+                $input['image'] = $filename;
                 $input['id'] = $id;
                 $input['created_by'] = Auth::user()->name;
                 $input['updated_by'] = Auth::user()->name;
-                $this->model->blog()->insert($input);
+                $this->model->blog()->create($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
                 if(!Auth::user()->hasAccess('Company','edit')){
@@ -2080,12 +2077,11 @@ class apiController extends Controller
     public function deleteBlog(Request $req)
     {
         return DB::transaction(function() use ($req) {  
-            foreach ($req->data['data'] as $i => $d) {
-                $this->model->blog()->where('id',$req->data['data'][$i]['id'])->delete();
+            foreach ($req->data as $i => $d) {
+                $this->model->blog()->where('id',$req->data[$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
         });
     }
-    
 }
