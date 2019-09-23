@@ -11,8 +11,8 @@ use carbon\carbon;
 use Storage;
 use Image;
 use Illuminate\Support\Facades\Hash;
-// ini_set('post_max_size', '128MB');
-// ini_set('upload_max_filesize', '2048MB');
+ini_set('post_max_size', '2048MB');
+ini_set('upload_max_filesize', '2048MB');
 class apiController extends Controller
 {
     protected $model;
