@@ -135,8 +135,8 @@ class apiController extends Controller
     public function deleteDestination(Request $req)
     {
         return DB::transaction(function() use ($req) {  
-            foreach ($req->data as $i => $d) {
-                $this->model->destination()->where('id',$req->data[$i]['id'])->delete();
+            foreach ($req->data['data'] as $i => $d) {
+                $this->model->destination()->where('id',$req->data['data'][$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
@@ -182,8 +182,8 @@ class apiController extends Controller
             if(Auth::user()->role_id != 1){
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             } 
-            foreach ($req->data as $i => $d) {
-                $this->model->groupMenu()->where('id',$req->data[$i]['id'])->delete();
+            foreach ($req->data['data'] as $i => $d) {
+                $this->model->groupMenu()->where('id',$req->data['data'][$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
@@ -271,8 +271,8 @@ class apiController extends Controller
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             } 
 
-            foreach ($req->data as $i => $d) {
-                $this->model->menuList()->where('id',$req->data[$i]['id'])->delete();
+            foreach ($req->data['data'] as $i => $d) {
+                $this->model->menuList()->where('id',$req->data['data'][$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
@@ -416,8 +416,8 @@ class apiController extends Controller
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             } 
 
-            foreach ($req->data as $i => $d) {
-                $this->model->role()->where('id',$req->data[$i]['id'])->delete();
+            foreach ($req->data['data'] as $i => $d) {
+                $this->model->role()->where('id',$req->data['data'][$i]['id'])->delete();
                 $this->model->privilege()->where('role_id',$req->data[$i]['id'])->delete();
             }
 
@@ -545,8 +545,8 @@ class apiController extends Controller
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             }
 
-            foreach ($req->data as $i => $d) {
-                $this->model->user()->where('id',$req->data[$i]['id'])->delete();
+            foreach ($req->data['data'] as $i => $d) {
+                $this->model->user()->where('id',$req->data['data'][$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
@@ -681,8 +681,8 @@ class apiController extends Controller
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             }
 
-            foreach ($req->data as $i => $d) {
-                $this->model->user()->where('id',$req->data[$i]['id'])->delete();
+            foreach ($req->data['data'] as $i => $d) {
+                $this->model->user()->where('id',$req->data['data'][$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
@@ -808,10 +808,10 @@ class apiController extends Controller
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             }
 
-            foreach ($req->data as $i => $d) {
-                $data = $this->model->additional()->where('id',$req->data[$i]['id'])->first();
+            foreach ($req->data['data'] as $i => $d) {
+                $data = $this->model->additional()->where('id',$req->data['data'][$i]['id'])->first();
                     unlink('.'.$data->image);
-                $this->model->additional()->where('id',$req->data[$i]['id'])->delete();
+                $this->model->additional()->where('id',$req->data['data'][$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
@@ -1307,8 +1307,8 @@ class apiController extends Controller
             if(!Auth::user()->hasAccess('Itinerary','delete')){
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             }
-            foreach ($req->data as $i => $d) {
-                $this->model->itinerary()->where('id',$req->data[$i]['id'])->delete();
+            foreach ($req->data['data'] as $i => $d) {
+                $this->model->itinerary()->where('id',$req->data['data'][$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
@@ -1520,8 +1520,8 @@ class apiController extends Controller
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             }
 
-            foreach ($req->data as $i => $d) {
-                $this->model->user()->where('id',$req->data[$i]['id'])->delete();
+            foreach ($req->data['data'] as $i => $d) {
+                $this->model->user()->where('id',$req->data['data'][$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
@@ -1636,8 +1636,8 @@ class apiController extends Controller
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
             }
 
-            foreach ($req->data as $i => $d) {
-                $this->model->company()->where('id',$req->data[$i]['id'])->delete();
+            foreach ($req->data['data'] as $i => $d) {
+                $this->model->company()->where('id',$req->data['data'][$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
