@@ -1558,7 +1558,7 @@ class apiController extends Controller
 
                 $file = $req->image;
                 if ($file != null) {
-                    $filename = 'company_'.$req->name.'_'.$id.'.'.'jpg';
+                    $filename = 'company_'.$id.'.'.'jpg';
                     $path = './dist/img/company';
                     if (!file_exists($path)) {
                         $oldmask = umask(0);
