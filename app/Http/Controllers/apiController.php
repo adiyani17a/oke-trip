@@ -1561,7 +1561,9 @@ class apiController extends Controller
                     $filename = 'company_'.$req->name.'_'.$id.'.'.'jpg';
                     $path = './dist/img/company';
                     if (!file_exists($path)) {
-                        mkdir($path, 0777, true);
+                        $oldmask = umask(0);
+                        mkdir($path, 0777,true);
+                        umask($oldmask);
                     }
                     $path = 'dist/img/company/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
