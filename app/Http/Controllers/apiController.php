@@ -94,7 +94,7 @@ class apiController extends Controller
                 $input['created_by'] = Auth::user()->name;
                 $input['updated_by'] = Auth::user()->name;
                 $input['image'] = $path;
-                $this->model->destination()->create($input);
+                $this->model->destination()->insert($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
 
@@ -162,7 +162,7 @@ class apiController extends Controller
                 $input['created_by'] = Auth::user()->name;
                 $input['updated_by'] = Auth::user()->name;
                 $input['name'] = ucwords($input['name']);
-                $this->model->groupMenu()->create($input);
+                $this->model->groupMenu()->insert($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
                 if(Auth::user()->role_id != 1){
@@ -216,7 +216,7 @@ class apiController extends Controller
                 $input['name'] = ucwords($input['name']);
                 $input['slug'] = strtolower(str_replace(' ','-',$input['slug']));
                 $input['url'] = strtolower(str_replace(' ','-',$input['url']));
-                $this->model->menuList()->create($input);
+                $this->model->menuList()->insert($input);
 
                 $role = $this->model->role()->get();
 
@@ -353,7 +353,7 @@ class apiController extends Controller
                 $input['created_by'] = Auth::user()->name;
                 $input['updated_by'] = Auth::user()->name;
                 $input['name'] = ucwords($input['name']);
-                $this->model->role()->create($input);
+                $this->model->role()->insert($input);
 
 
                 $menuList = $this->model->menuList()->get();
@@ -500,7 +500,7 @@ class apiController extends Controller
                 $input['type_user'] = 'ADMIN';
                 $input['active'] = 'true';
                 $input['image'] = $path;
-                $this->model->user()->create($input);
+                $this->model->user()->insert($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
                 if(!Auth::user()->hasAccess('Administrator User','edit')){
@@ -636,7 +636,7 @@ class apiController extends Controller
                 $input['type_user'] = 'AGENT';
                 $input['active'] = 'true';
                 $input['image'] = $path;
-                $this->model->user()->create($input);
+                $this->model->user()->insert($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
                 if(!Auth::user()->hasAccess('Agent User','edit')){
@@ -760,7 +760,7 @@ class apiController extends Controller
                 $input['updated_at'] = carbon::now();
                 $input['active'] = 'true';
                 $input['image'] = $path;
-                $this->model->additional()->create($input);
+                $this->model->additional()->insert($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
                 if(!Auth::user()->hasAccess('Additional','edit')){
@@ -1479,7 +1479,7 @@ class apiController extends Controller
                 $input['id'] = $id;
                 $input['created_by'] = Auth::user()->name;
                 $input['updated_by'] = Auth::user()->name;
-                $this->model->tour_leader()->create($input);
+                $this->model->tour_leader()->insert($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
                 if(!Auth::user()->hasAccess('Tour Leader','edit')){
@@ -1575,7 +1575,7 @@ class apiController extends Controller
                 $input['id'] = $id;
                 $input['created_by'] = Auth::user()->name;
                 $input['updated_by'] = Auth::user()->name;
-                $this->model->company()->create($input);
+                $this->model->company()->insert($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
                 if(!Auth::user()->hasAccess('Company','edit')){
@@ -2041,7 +2041,7 @@ class apiController extends Controller
                 $input['id'] = $id;
                 $input['created_by'] = Auth::user()->name;
                 $input['updated_by'] = Auth::user()->name;
-                $this->model->blog()->create($input);
+                $this->model->blog()->insert($input);
                 return Response::json(['status'=>1,'message'=>'Success saving data']);
             }else{
                 if(!Auth::user()->hasAccess('Company','edit')){
