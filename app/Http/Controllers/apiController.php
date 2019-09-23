@@ -2077,8 +2077,8 @@ class apiController extends Controller
     public function deleteBlog(Request $req)
     {
         return DB::transaction(function() use ($req) {  
-            foreach ($req->data as $i => $d) {
-                $this->model->blog()->where('id',$req->data[$i]['id'])->delete();
+            foreach ($req->data['data'] as $i => $d) {
+                $this->model->blog()->where('id',$req->data['data'][$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
