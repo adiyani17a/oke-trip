@@ -1584,12 +1584,8 @@ class apiController extends Controller
 
                 $input = $req->all();
                 unset($input['image']);
-               $file = $req->image;
+                $file = $req->image;
                 if ($file != null) {
-                    $old_path = $this->model->company()->where('id','=',$req->id)->first();
-                    if ($old_path->image != null) {
-                        unlink('.'.$old_path->image);
-                    }
                     $filename = 'company_'.$req->id.'.'.'jpg';
                     $path = './dist/img/company';
                     if (!file_exists($path)) {
