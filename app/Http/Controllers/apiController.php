@@ -85,6 +85,7 @@ class apiController extends Controller
                     }
                     $path = 'dist/img/destination/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
+                    chmod($path, 0755);
                     $path = '/dist/img/destination/' . $filename;
                 }else{
                     $filename = null;
@@ -115,6 +116,7 @@ class apiController extends Controller
                     }
                     $path = 'dist/img/destination/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
+                    chmod($path, 0755);
                     $path = '/dist/img/destination/' . $filename;
                 }else{
                     $filename = null;
@@ -488,6 +490,7 @@ class apiController extends Controller
                     }
                     $path = 'dist/img/user/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
+                    chmod($path, 0755);
                     $path = '/dist/img/user/' . $filename;
                 }else{
                     $filename = null;
@@ -516,6 +519,7 @@ class apiController extends Controller
                     }
                     $path = 'dist/img/user/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
+                    chmod($path, 0755);
                     $path = '/dist/img/user/' . $filename;
                     $input['image'] = $path;
                 }else{
@@ -624,6 +628,7 @@ class apiController extends Controller
                     }
                     $path = 'dist/img/user/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
+                    chmod($path, 0755);
                     $path = '/dist/img/user/' . $filename;
                 }else{
                     $filename = null;
@@ -652,6 +657,7 @@ class apiController extends Controller
                     }
                     $path = 'dist/img/user/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
+                    chmod($path, 0755);
                     $path = '/dist/img/user/' . $filename;
                     $input['image'] = $path;
                 }else{
@@ -748,6 +754,7 @@ class apiController extends Controller
                     }
                     $path = 'dist/img/additional/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
+                    chmod($path, 0755);
                     $path = '/dist/img/additional/' . $filename;
                 }else{
                     $filename = null;
@@ -783,6 +790,7 @@ class apiController extends Controller
                     }
                     $path = 'dist/img/additional/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
+                    chmod($path, 0755);
                     $path = '/dist/img/additional/' . $filename;
                     $input['image'] = $path;
                 }else{
@@ -935,6 +943,7 @@ class apiController extends Controller
                     }
                     $carousel_1 = 'dist/img/itinerary/' . $carousel_1;
                     Image::make(file_get_contents($file))->save($carousel_1);  
+                    chmod($carousel_1, 0755);
                 }else{
                     $carousel_1 = null;
                 }
@@ -948,6 +957,7 @@ class apiController extends Controller
                     }
                     $carousel_2 = 'dist/img/itinerary/' . $carousel_2;
                     Image::make(file_get_contents($file))->save($carousel_2);  
+                    chmod($carousel_2, 0755);
                 }else{
                     $carousel_2 = null;
                 }
@@ -963,6 +973,7 @@ class apiController extends Controller
 
                     $carousel_3 = 'dist/img/itinerary/' . $carousel_3;
                     Image::make(file_get_contents($file))->save($carousel_3);  
+                    chmod($carousel_3, 0755);
                 }else{
                     $carousel_3 = null;
                 }
@@ -978,6 +989,7 @@ class apiController extends Controller
 
                     $file->move($path,$pdf);
                     $pdf = $path.'/'.$pdf;
+                    chmod($pdf, 0755);
                 }else{
                     $pdf = null;
                 }
@@ -991,6 +1003,7 @@ class apiController extends Controller
 
                     $flyer = 'dist/img/itinerary/' . $flyer;
                     Image::make(file_get_contents($file))->save($flyer);  
+                    chmod($flyer, 0755);
                 }else{
                     $flyer = null;
                 }
@@ -1117,6 +1130,7 @@ class apiController extends Controller
                     }
                     $carousel_1 = 'dist/img/itinerary/' . $carousel_1;
                     Image::make(file_get_contents($file))->save($carousel_1);  
+                    chmod($carousel_1, 0755);
                     $data['carousel_1'] = $carousel_1;
                 }
 
@@ -1129,6 +1143,7 @@ class apiController extends Controller
                     }
                     $carousel_2 = 'dist/img/itinerary/' . $carousel_2;
                     Image::make(file_get_contents($file))->save($carousel_2);  
+                    chmod($carousel_2, 0755);
                     $data['carousel_2'] = $carousel_2;
                 }
 
@@ -1143,6 +1158,7 @@ class apiController extends Controller
 
                     $carousel_3 = 'dist/img/itinerary/' . $carousel_3;
                     Image::make(file_get_contents($file))->save($carousel_3);  
+                    chmod($carousel_3, 0755);
                     $data['carousel_3'] = $carousel_3;
                 }
 
@@ -1158,6 +1174,7 @@ class apiController extends Controller
 
                     $file->move($path,$pdf);
                     $pdf = $path.'/'.$pdf;
+                    chmod($pdf, 0755);
                     $data['pdf'] = $pdf;
                 }
 
@@ -1171,6 +1188,7 @@ class apiController extends Controller
 
                     $flyer = 'dist/img/itinerary/' . $flyer;
                     Image::make(file_get_contents($file))->save($flyer);  
+                    chmod($flyer, 0755);
                     $data['flayer_image'] = $flyer;
                 }
 
@@ -1357,6 +1375,7 @@ class apiController extends Controller
 
                 $file->move($path,$pdf);
                 $pdf = $path.'/'.$pdf;
+                chmod($pdf, 0755);
                 $input['final_pdf'] = $pdf;
             }
 
@@ -1372,6 +1391,7 @@ class apiController extends Controller
 
                 $file->move($path,$pdf);
                 $pdf = $path.'/'.$pdf;
+                chmod($pdf, 0755);
                 $input['term_pdf'] = $pdf;
             }
 
@@ -1387,6 +1407,7 @@ class apiController extends Controller
 
                 $file->move($path,$pdf);
                 $pdf = $path.'/'.$pdf;
+                chmod($pdf, 0755);
                 $input['flayer_jpg'] = $pdf;
             }
 
@@ -1469,8 +1490,8 @@ class apiController extends Controller
                     }
                     $path = 'dist/img/tourLeader/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
+                    chmod($path, 0755);
                     $filename = '/dist/img/tourLeader/' . $filename;
-
                 }else{
                     $filename = null;
                 }
@@ -1498,6 +1519,7 @@ class apiController extends Controller
                     }
                     $filename = '/dist/img/tourLeader/' . $filename;
                     Image::make(file_get_contents($file))->save($filename);  
+                    chmod($filename, 0755);
                     $input['image'] = $filename;
 
                 }else{
@@ -1685,6 +1707,7 @@ class apiController extends Controller
                 }
                 $carousel_1 = '/dist/img/carousel/' . $filename;
                 $file->move($path,$filename);
+                chmod($carousel_1, 0755);
                 $input['carousel_1'] = $carousel_1;
             }
 
@@ -1697,6 +1720,7 @@ class apiController extends Controller
                 }
                 $carousel_2 = '/dist/img/carousel/' . $filename;
                 $file->move($path,$filename);
+                chmod($carousel_2, 0755);
                 $input['carousel_2'] = $carousel_2;
             }
 
@@ -1709,6 +1733,7 @@ class apiController extends Controller
                 }
                 $carousel_3 = '/dist/img/carousel/' . $filename;
                 $file->move($path,$filename);
+                chmod($carousel_3, 0755);
                 $input['carousel_3'] = $carousel_3;
             }
 
@@ -1944,6 +1969,7 @@ class apiController extends Controller
                         }
                         $path = 'dist/img/booking/'.$guest_leader->party_name.'/'. $filename;
                         Image::make(file_get_contents($file))->save($path);  
+                        chmod($path, 0755);
                         $path = '/dist/img/booking/'.$guest_leader->party_name.'/'. $filename;
                     }else{
                         $path = $file;
@@ -2035,6 +2061,7 @@ class apiController extends Controller
                     }
                     $path = 'dist/img/blog/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
+                    chmod($path, 0755);
                     $filename = '/dist/img/blog/' . $filename;
                 }else{
                     $filename = null;
@@ -2063,6 +2090,7 @@ class apiController extends Controller
                     }
                     $path = './dist/img/blog/' . $filename;
                     Image::make(file_get_contents($file))->save($path);  
+                    chmod($path, 0755);
                     $filename = '/dist/img/blog/' . $filename;
                     $input['image'] = $filename;
 
