@@ -306,6 +306,7 @@ class apiV1Controller extends Controller
 	public function getBookingListDetail(Request $req,$id)
 	{
 
+		dd($data);
 		$check_token = $this->model->token_management()->where('access_token',$req->token)->first();
 
 		if ($check_token != null) {
@@ -338,7 +339,6 @@ class apiV1Controller extends Controller
 					 ->first();
 
 
-		dd($data);
 		$data['invoice_list'] = [];
 		$main_list = ['Adult','Child With Bed','Child No Bed','Infant','Agent Com','Staff Com','Tips','Visa','Apt Tax And Surcharge'];
 		$temp = [];
