@@ -306,12 +306,12 @@ class apiV1Controller extends Controller
 	public function getBookingListDetail(Request $req,$id)
 	{
 
-		dd($data);
 		$check_token = $this->model->token_management()->where('access_token',$req->token)->first();
 
 		if ($check_token != null) {
 			$last_login = strtotime(carbon::parse($check_token->created_at)->format('Y-m-d H:i:s'))+$check_token->last_activity;
 			$now = strtotime(carbon::now()->format('Y-m-d H:i:s'));
+		dd($check_token.' - '.$now);
 			if ($last_login < $now) {
 				$this->model->token_management()->where('access_token',$req->token)->delete();
 				return response::json(['status'=>403,'message'=>'Token Expired']);
