@@ -311,7 +311,6 @@ class apiV1Controller extends Controller
 		if ($check_token != null) {
 			$last_login = strtotime(carbon::parse($check_token->created_at)->format('Y-m-d H:i:s'))+$check_token->last_activity;
 			$now = strtotime(carbon::now()->format('Y-m-d H:i:s'));
-		dd($last_login.' - '.$now);
 			if ($last_login < $now) {
 				$this->model->token_management()->where('access_token',$req->token)->delete();
 				return response::json(['status'=>403,'message'=>'Token Expired']);
@@ -338,6 +337,7 @@ class apiV1Controller extends Controller
 					 }])
 					 ->first();
 
+		dd($data['data']);
 
 		$data['invoice_list'] = [];
 		$main_list = ['Adult','Child With Bed','Child No Bed','Infant','Agent Com','Staff Com','Tips','Visa','Apt Tax And Surcharge'];
