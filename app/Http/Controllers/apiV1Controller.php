@@ -337,8 +337,6 @@ class apiV1Controller extends Controller
 					 }])
 					 ->first();
 
-		return $data['data'];
-
 		$data['invoice_list'] = [];
 		$main_list = ['Adult','Child With Bed','Child No Bed','Infant','Agent Com','Staff Com','Tips','Visa','Apt Tax And Surcharge'];
 		$temp = [];
