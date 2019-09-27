@@ -1311,7 +1311,7 @@ class apiController extends Controller
             }else{
             	$message = 'Success updating data';
             }
-            
+
             DB::commit();
             return Response::json(['status'=>1,'message'=>$message]);
         }
@@ -1352,17 +1352,29 @@ class apiController extends Controller
 
     public function deleteItinerary(Request $req)
     {
-        return DB::transaction(function() use ($req) {  
-
-            if(!Auth::user()->hasAccess('Itinerary','delete')){
-                return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
+		DB::beginTransaction();
+        if(!Auth::user()->hasAccess('Itinerary','delete')){
+        	DB::rollBack();
+            return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
+        }
+        foreach ($req->data['data'] as $i => $d) {
+            $checking = $this->model->itinerary()->where('id',$req->data['data'][$i]['id'])->first();
+            $validate = 0;
+            foreach ($checking->itinerary_detail as $i1 => $d1) {
+            	if (count($checking->booking) != 0) {
+            		$validate += 1;
+	            }
             }
-            foreach ($req->data['data'] as $i => $d) {
-                $this->model->itinerary()->where('id',$req->data['data'][$i]['id'])->delete();
-            }
-
-            return Response::json(['status'=>1,'message'=>'Success deleting data']);
-        });
+	        
+	        if ($validate == 0) {
+	           	$this->model->itinerary()->where('id',$req->data['data'][$i]['id'])->delete();
+	        }else{
+	        	DB::rollBack();
+            	return Response::json(['status'=>0,'message'=>'Failed deleting data, some itinerary has booking data already. If you want force delete, call developer']);
+	        }
+        }
+        DB::commit();
+        return Response::json(['status'=>1,'message'=>'Success deleting data']);
     }
 
     public function menuListItinerary(Request $req)
