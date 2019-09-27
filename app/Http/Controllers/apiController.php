@@ -1311,9 +1311,8 @@ class apiController extends Controller
             }else{
             	$message = 'Success updating data';
             }
+            
             DB::commit();
-
-
             return Response::json(['status'=>1,'message'=>$message]);
         }
         
