@@ -735,7 +735,6 @@ class apiV1Controller extends Controller
 		}else{
 			$price = '';
 		}
-		$date
 		if (!isset($req->date)) {
 			$date['startDate'] = null;
 			$date['endDate'] = null;
@@ -764,6 +763,7 @@ class apiV1Controller extends Controller
 						$q->where('adult_price','>=',filter_var($price[0],FILTER_SANITIZE_NUMBER_INT));
 						$q->where('adult_price','<=',filter_var($price[1],FILTER_SANITIZE_NUMBER_INT));
 					}
+					
 					if ($date['startDate'] != null) {
 						$q->where('start','>=',$date['startDate']);
 						$q->where('end','<=',$date['endDate']);
