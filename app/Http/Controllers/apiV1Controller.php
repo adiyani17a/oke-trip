@@ -735,10 +735,10 @@ class apiV1Controller extends Controller
 		}else{
 			$price = '';
 		}
-
+		$date
 		if (!isset($req->date)) {
-			$date['startDate'] = carbon::now()->startOfMonth()->format('Y-m-d');
-			$date['endDate'] = carbon::now()->endOfMonth()->format('Y-m-d');
+			$date['startDate'] = null;
+			$date['endDate'] = null;
 		}else{
 			$date['startDate'] = carbon::parse($req->date[0])->format('Y-m-d');
 			$date['endDate'] = carbon::parse($req->date[1])->format('Y-m-d');
@@ -764,8 +764,10 @@ class apiV1Controller extends Controller
 						$q->where('adult_price','>=',filter_var($price[0],FILTER_SANITIZE_NUMBER_INT));
 						$q->where('adult_price','<=',filter_var($price[1],FILTER_SANITIZE_NUMBER_INT));
 					}
-					$q->where('start','>=',$date['startDate']);
-					$q->where('end','<=',$date['endDate']);
+					if ($date['startDate'] != null) {
+						$q->where('start','>=',$date['startDate']);
+						$q->where('end','<=',$date['endDate']);
+					}
 					$q->where('seat_remain','>',0);
 					$q->where(function($q1) use ($users_id){
 						$q1->Where('booked_by',null);
