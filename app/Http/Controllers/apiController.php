@@ -635,6 +635,8 @@ class apiController extends Controller
                 }
 
                 $input = $req->all();
+                unset($input['password']);
+                unset($input['gambar']);
                 $input['updated_by'] = Auth::user()->name;
                 $input['updated_at'] = carbon::now();
                 $input['password'] =  Hash::make($req->password);
