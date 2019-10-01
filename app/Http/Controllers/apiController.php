@@ -420,7 +420,7 @@ class apiController extends Controller
 
             foreach ($req->data['data'] as $i => $d) {
                 $this->model->role()->where('id',$req->data['data'][$i]['id'])->delete();
-                $this->model->privilege()->where('role_id',$req->data[$i]['id'])->delete();
+                $this->model->privilege()->where('role_id',$req->data['data'][$i]['id'])->delete();
             }
 
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
