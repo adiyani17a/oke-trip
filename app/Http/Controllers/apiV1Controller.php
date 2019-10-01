@@ -344,41 +344,45 @@ class apiV1Controller extends Controller
 		foreach ($main_list as $i => $d) {
 			$temp['name'] = $main_list[$i];
 			$temp['type'] = $main_list[$i];
-			if ($main_list[$i] == 'Adult') {
-				$temp['chargePerAmount'] = $data['data']->itinerary_detail->adult_price;
-			}else if ($main_list[$i] == 'Child With Bed') {
-				$temp['chargePerAmount'] = $data['data']->itinerary_detail->child_bed_price;
-			}else if ($main_list[$i] == 'Child No Bed') {
-				$temp['chargePerAmount'] = $data['data']->itinerary_detail->child_price;
-			}else if ($main_list[$i] == 'Infant') {
-				$temp['chargePerAmount'] = $data['data']->itinerary_detail->infant_price;
-			}else if ($main_list[$i] == 'Agent Com') {
-				$temp['chargePerAmount'] = $data['data']->itinerary_detail->agent_com;
-			}else if ($main_list[$i] == 'Staff Com') {
-				$temp['chargePerAmount'] = $data['data']->itinerary_detail->staff_com;
-			}else if ($main_list[$i] == 'Tips') {
-				$temp['chargePerAmount'] = $data['data']->itinerary_detail->agent_tip;
-			}else if ($main_list[$i] == 'Visa') {
-				$temp['chargePerAmount'] = $data['data']->itinerary_detail->agent_visa;
-			}else if ($main_list[$i] == 'Apt Tax And Surcharge') {
-				$temp['chargePerAmount'] = $data['data']->itinerary_detail->agent_tax;
+			$temp['chargePerAmount'] = 0;
+			if ($data['data']->itinerary_detail != null) {
+				if ($main_list[$i] == 'Adult') {
+					$temp['chargePerAmount'] = $data['data']->itinerary_detail->adult_price;
+				}else if ($main_list[$i] == 'Child With Bed') {
+					$temp['chargePerAmount'] = $data['data']->itinerary_detail->child_bed_price;
+				}else if ($main_list[$i] == 'Child No Bed') {
+					$temp['chargePerAmount'] = $data['data']->itinerary_detail->child_price;
+				}else if ($main_list[$i] == 'Infant') {
+					$temp['chargePerAmount'] = $data['data']->itinerary_detail->infant_price;
+				}else if ($main_list[$i] == 'Agent Com') {
+					$temp['chargePerAmount'] = $data['data']->itinerary_detail->agent_com;
+				}else if ($main_list[$i] == 'Staff Com') {
+					$temp['chargePerAmount'] = $data['data']->itinerary_detail->staff_com;
+				}else if ($main_list[$i] == 'Tips') {
+					$temp['chargePerAmount'] = $data['data']->itinerary_detail->agent_tip;
+				}else if ($main_list[$i] == 'Visa') {
+					$temp['chargePerAmount'] = $data['data']->itinerary_detail->agent_visa;
+				}else if ($main_list[$i] == 'Apt Tax And Surcharge') {
+					$temp['chargePerAmount'] = $data['data']->itinerary_detail->agent_tax;
+				}
 			}
 			$temp['nominal'] = 0;
 			$temp['value'] = 0;
 			array_push($data['invoice_list'], $temp);
 		}
 
+		if ($data['data']->itinerary_detail != null) {
+			foreach ($data['data']->itinerary_detail->itinerary->itinerary_additional as $i => $d) {
+				$temp['name'] = $d->additional->name;
+				$temp['type'] = $d->additional->id;
+				$temp['chargePerAmount'] = $d->additional->price;
+				$temp['nominal'] = 0;
+				$temp['value'] = 0;
 
-		foreach ($data['data']->itinerary_detail->itinerary->itinerary_additional as $i => $d) {
-			$temp['name'] = $d->additional->name;
-			$temp['type'] = $d->additional->id;
-			$temp['chargePerAmount'] = $d->additional->price;
-			$temp['nominal'] = 0;
-			$temp['value'] = 0;
-
-			array_push($data['invoice_list'], $temp);
+				array_push($data['invoice_list'], $temp);
+			}
 		}
-
+		
 		foreach ($data['invoice_list'] as $i => $d) {
 			foreach ($data['data']->booking_d as $i1 => $d1) {
 				foreach ($d1->booking_pax as $i2 => $d2) {
@@ -403,9 +407,11 @@ class apiV1Controller extends Controller
 					}
 
 					foreach ($d2->booking_additional as $i3 => $d3 ) {
-						if ($data['invoice_list'][$i]['type'] == $d3->additional->id) {
-							$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
-							$data['invoice_list'][$i]['value'] += 1;
+						if ($d3->additional != null) {
+							if ($data['invoice_list'][$i]['type'] == $d3->additional->id) {
+								$data['invoice_list'][$i]['nominal'] += $data['invoice_list'][$i]['chargePerAmount'];
+								$data['invoice_list'][$i]['value'] += 1;
+							}
 						}
 					}
 				}
@@ -735,10 +741,9 @@ class apiV1Controller extends Controller
 		}else{
 			$price = '';
 		}
-
 		if (!isset($req->date)) {
-			$date['startDate'] = carbon::now()->startOfMonth()->format('Y-m-d');
-			$date['endDate'] = carbon::now()->endOfMonth()->format('Y-m-d');
+			$date['startDate'] = null;
+			$date['endDate'] = null;
 		}else{
 			$date['startDate'] = carbon::parse($req->date[0])->format('Y-m-d');
 			$date['endDate'] = carbon::parse($req->date[1])->format('Y-m-d');
@@ -764,8 +769,11 @@ class apiV1Controller extends Controller
 						$q->where('adult_price','>=',filter_var($price[0],FILTER_SANITIZE_NUMBER_INT));
 						$q->where('adult_price','<=',filter_var($price[1],FILTER_SANITIZE_NUMBER_INT));
 					}
-					$q->where('start','>=',$date['startDate']);
-					$q->where('end','<=',$date['endDate']);
+
+					if ($date['startDate'] != null) {
+						$q->where('start','>=',$date['startDate']);
+						$q->where('end','<=',$date['endDate']);
+					}
 					$q->where('seat_remain','>',0);
 					$q->where(function($q1) use ($users_id){
 						$q1->Where('booked_by',null);
