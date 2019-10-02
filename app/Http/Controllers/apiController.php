@@ -574,8 +574,6 @@ class apiController extends Controller
 
         }
 
- 
-
         $role = $this->model->role()->where('active','true')->get();
         $company = $this->model->company()->select('id as value','name')->get();
 
