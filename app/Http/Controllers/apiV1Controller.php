@@ -791,10 +791,10 @@ class apiV1Controller extends Controller
 
 	public function getPartner(Request $req)
 	{
-		if ($req->city != 'null') {
-			$data = $this->model->company()->where('city_id',$req->city)->where('active','true')->get();
-		}else{
+		if ($req->city == 'null' or $req->city == null or $req->city == '') {
 			$data = $this->model->company()->where('active','true')->get();
+		}else{
+			$data = $this->model->company()->where('city_id',$req->city)->where('active','true')->get();
 		}
 
 		$city = $this->model->city()->get();
