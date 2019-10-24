@@ -20,7 +20,7 @@
                   <v-text-field label="Summary*" :counter="200" maxlength="200" v-model="summary" required name="summary" @blur="$v.summary.$touch()" :error-messages="summaryErrors"></v-text-field>
                 </v-flex>
                 <v-flex xs12>
-                  <text-editor :contentModel="contentModel" @textContent="textContent"></text-editor>
+                  <text-editor :contentModel="contentModel" contentName="Blog" @textContent="textContent"></text-editor>
                 </v-flex>
                 <v-flex xs12>
                 </v-flex>

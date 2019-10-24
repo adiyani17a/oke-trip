@@ -28,6 +28,8 @@ use App\payment_history;
 use App\payment_history_d;
 use App\tokenManagement;
 use App\blog;
+use App\about;
+use App\term_condition;
 
 class models extends Model
 {
@@ -204,5 +206,19 @@ class models extends Model
         $blog = new blog();
 
         return $blog; 
+    }
+
+    public function about()
+    {
+        $about = new about();
+
+        return $about; 
+    }
+
+    public function term_condition()
+    {
+        $term_condition = new term_condition();
+
+        return $term_condition; 
     }
 }

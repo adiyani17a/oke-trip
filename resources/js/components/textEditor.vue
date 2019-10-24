@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--Use the component in the right place of the template-->
-    <h5>Term & Condition</h5>
+    <h5><p>{{ contentName }}</p></h5>
     <hr>
     <tiptap-vuetify
       v-model="content"
@@ -24,7 +24,8 @@ export default {
         TiptapVuetify
     },
     props:{
-        contentModel:String
+        contentModel:String,
+        contentName:String,
     },
     data: () => ({
         // declare extensions you want to use

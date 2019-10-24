@@ -197,6 +197,12 @@ let routes = [{
 }, {
     path: '/payment-report',
     component: require('./components/Report/paymentReport.vue').default
+}, {
+    path: '/about',
+    component: require('./components/About/About.vue').default
+}, {
+    path: '/term-condition',
+    component: require('./components/TermCondition/TermCondition.vue').default
 }, ]
 
 const router = new VueRouter({
