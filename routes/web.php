@@ -515,7 +515,6 @@ Route::group(['middleware' => 'cors'], function () {
         'uses' => "apiV1Controller@getAbout",
         'as' => "getAbout"
       ]);
-i
       Route::post('/get-term-condition', [
         'uses' => "apiV1Controller@getTermCondition",
         'as' => "getTermCondition"
