@@ -851,4 +851,18 @@ class apiV1Controller extends Controller
 
 		return response::json(['status'=>200,'data'=>$data,'time_remaining'=>$time_remaining]);
 	}
+
+	public function getAbout()
+	{
+		$data = $this->model->about()->get();
+
+		return response::json(['status'=>200,'data'=>$data]);
+	}
+
+	public function getTermCondition()
+	{
+		$data = $this->model->term_condition()->get();
+
+		return response::json(['status'=>200,'data'=>$data]);
+	}
 }

@@ -2158,4 +2158,73 @@ class apiController extends Controller
             return Response::json(['status'=>1,'message'=>'Success deleting data']);
         });
     }
+
+    public function termCondition(Request $req)
+    {
+        $data = $this->model->term_condition()->first();
+        return response::json(['status'=>1,'data'=>$data]);
+    }
+
+    public function saveTermCondition (Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+
+            if(!Auth::user()->hasAccess('Term And Condition','create')){
+                return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Save This Data']);
+            }
+
+            $data = $this->model->term_condition()->first();
+
+            if ($data == null) {
+                $id = $this->model->term_condition()->max('id')+1;
+                $this->model->term_condition()->create([
+                    'id' => $id,
+                    'content' => $req->content,
+                    'created_by' => Auth::user()->name,
+                    'updated_by' => Auth::user()->name,
+                ]);
+            }
+
+            $input['content'] = $req->content;
+            $input['updated_by'] = Auth::user()->name;
+
+            $this->model->term_condition()->where('id',1)->update($input);
+
+            return Response::json(['status'=>1,'message'=>'Success Updating data']);
+        });
+    }
+
+    public function about(Request $req)
+    {
+        $data = $this->model->term_condition()->first();
+        return response::json(['status'=>1,'data'=>$data]);
+    }
+
+    public function saveAbout(Request $req)
+    {
+        return DB::transaction(function() use ($req) {  
+            if(!Auth::user()->hasAccess('About','create')){
+                return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Save This Data']);
+            }
+
+            $data = $this->model->term_condition()->first();
+
+            if ($data == null) {
+                $id = $this->model->term_condition()->max('id')+1;
+                $this->model->term_condition()->create([
+                    'id' => $id,
+                    'content' => $req->content,
+                    'created_by' => Auth::user()->name,
+                    'updated_by' => Auth::user()->name,
+                ]);
+            }
+
+            $input['content'] = $req->content;
+            $input['updated_by'] = Auth::user()->name;
+
+            $this->model->term_condition()->where('id',1)->update($input);
+
+            return Response::json(['status'=>1,'message'=>'Success Updating data']);
+        });
+    }
 }

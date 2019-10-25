@@ -4,19 +4,12 @@
       <div class="col-md-12">
         <div class="card">
           <div class="card-header">
-            <h5 style="margin-top: 10px;display: inline-block;"><b>Carousel</b></h5>
-            <v-btn  color="warning pull-right" @click="$router.push({ name: 'Carousel' })">Back
-              <v-icon dark right>fas fa-home</v-icon>
-            </v-btn>
+            <h5 style="margin-top: 10px;display: inline-block;"><b>About</b></h5>
           </div>
           <div class="card-body">
-            <v-layout wrap class="px-5 py-5">
-              <v-flex xs12 style="padding: 10px" class="row">
-                <div v-for="index in 3" class="col-sm-4">
-                  <h5>Carousel {{ index }}</h5>
-                  <vue-dropify :id="'carousel_'+index" :multiple="false" @change="changeImage('carousel',index)" ref="carousel" message="Upload Carousel By Click Here"></vue-dropify> 
-                  <v-text-field label="Note" v-model="note[index-1]" required name="note[]" ></v-text-field>
-                </div>
+            <v-layout wrap>
+              <v-flex xs12>
+                <text-editor :contentModel="contentModel" contentName="Content" @textContent="textContent"></text-editor>
               </v-flex>
               <v-flex xs12>
                 <v-btn color="blue darken-1 white--text" text @click="saveAndCloseDialog()">Save</v-btn>
@@ -78,6 +71,7 @@
           mode: '',
           timeout: 3000,
           carousel: [],
+          contentModel:'',
           note: [],
           text: '',
           apiReady:false,
@@ -91,14 +85,13 @@
       },
       methods: {
           callingApi() {
-            axios.get('/api/carousel')
+            axios.get('/api/about')
                 .then(response => {
-                    this.$refs.carousel[0].images.push(response.data.data.carousel_1);
-                    this.$refs.carousel[1].images.push(response.data.data.carousel_2);
-                    this.$refs.carousel[2].images.push(response.data.data.carousel_3);
-                    this.note.push(response.data.data.note_1);
-                    this.note.push(response.data.data.note_2);
-                    this.note.push(response.data.data.note_3);
+                  console.log(response);
+                  if (response.data.data != null) {
+                    this.contentModel = response.data.data.content;
+                    this.content = response.data.data.content;
+                  }
                 })
                 .catch(error => {
                     console.log(error)
@@ -115,15 +108,9 @@
               let formData = new FormData();
 
               formData.append('id', this.id)
-              for (var i = 0; i < this.note.length; i++) {
-                  formData.append('note_' + [i + 1], this.note[i]);
-              }
-
-              for (var i = 0; i < this.carousel.length; i++) {
-                  formData.append('carousel_' + [i + 1], this.carousel[i]);
-              }
-
-              axios.post('/api/carousel/save',
+              formData.append('content', this.content)
+     
+              axios.post('/api/about/save',
                       formData, {
                           headers: {
                               'Content-Type': 'multipart/form-data'
@@ -152,6 +139,9 @@
                   .finally(() => this.$emit('closeDialog', this.dialogs))
 
           },
+          textContent(content){
+            this.content = content;
+          }
       }
   }
 </script>

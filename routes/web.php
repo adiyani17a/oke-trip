@@ -395,6 +395,30 @@ Route::group(['middleware' => 'check-token'], function () {
         'as' => "deleteBlog"
       ]);
     });
+
+    Route::group(["prefix" => "term-condition"], function(){
+      Route::get('/', [
+        'uses' => "apiController@termCondition",
+        'as' => "termCondition"
+      ]);
+
+      Route::post('/save', [
+        'uses' => "apiController@saveTermCondition",
+        'as' => "saveTermCondition"
+      ]);
+    });
+
+    Route::group(["prefix" => "about"], function(){
+      Route::get('/', [
+        'uses' => "apiController@about",
+        'as' => "about"
+      ]);
+
+      Route::post('/save', [
+        'uses' => "apiController@saveAbout",
+        'as' => "saveAbout"
+      ]);
+    });
 	});
 });
 
@@ -487,6 +511,15 @@ Route::group(['middleware' => 'cors'], function () {
         'as' => "getBlogData"
       ]);
 
+      Route::post('/get-about', [
+        'uses' => "apiV1Controller@getAbout",
+        'as' => "getAbout"
+      ]);
+i
+      Route::post('/get-term-condition', [
+        'uses' => "apiV1Controller@getTermCondition",
+        'as' => "getTermCondition"
+      ]);
     });
   });
 });
