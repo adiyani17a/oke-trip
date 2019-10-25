@@ -854,14 +854,14 @@ class apiV1Controller extends Controller
 
 	public function getAbout()
 	{
-		$data = $this->model->about()->get();
+		$data = $this->model->about()->first();
 
 		return response::json(['status'=>200,'data'=>$data]);
 	}
 
 	public function getTermCondition()
 	{
-		$data = $this->model->term_condition()->get();
+		$data = $this->model->term_condition()->first();
 
 		return response::json(['status'=>200,'data'=>$data]);
 	}

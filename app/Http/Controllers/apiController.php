@@ -2207,11 +2207,11 @@ class apiController extends Controller
                 return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Save This Data']);
             }
 
-            $data = $this->model->term_condition()->first();
+            $data = $this->model->about()->first();
 
             if ($data == null) {
-                $id = $this->model->term_condition()->max('id')+1;
-                $this->model->term_condition()->create([
+                $id = $this->model->about()->max('id')+1;
+                $this->model->about()->create([
                     'id' => $id,
                     'content' => $req->content,
                     'created_by' => Auth::user()->name,
@@ -2222,7 +2222,7 @@ class apiController extends Controller
             $input['content'] = $req->content;
             $input['updated_by'] = Auth::user()->name;
 
-            $this->model->term_condition()->where('id',1)->update($input);
+            $this->model->about()->where('id',1)->update($input);
 
             return Response::json(['status'=>1,'message'=>'Success Updating data']);
         });
