@@ -99,7 +99,7 @@
         search:'',
   			pagination:{},
         page: 1,
-      	selected: ['true'],
+      	selected: [],
         loading:true,
         showingPage: [10, 20, 50, 100, 1000],
         show: 10,

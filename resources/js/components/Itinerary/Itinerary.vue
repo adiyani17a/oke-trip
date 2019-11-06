@@ -362,7 +362,6 @@
             selectedCheckbox(selected){
                 this.select = selected;
                 this.idData = selected;
-                console.log(this.idData);
             },
             callingApi(page,show){
                 if (show == undefined) {
