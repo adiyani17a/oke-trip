@@ -251,7 +251,7 @@ class apiV1Controller extends Controller
 		}
 
 		DB::commit();
-        return Response::json(['status'=>1,'message'=>'Success Saving Data','code'=>$kode]);
+        return Response::json(['status'=>1,'message'=>'Success Saving Data','code'=>$kode,'id'=>$id]);
 	}
 
 	public function getBookingList(Request $req)

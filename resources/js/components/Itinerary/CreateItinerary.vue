@@ -330,7 +330,6 @@
   Vue.component('text-editor', require('../textEditor.vue').default)
 
   export default {
-
       directives: {
           money: VMoney
       },
