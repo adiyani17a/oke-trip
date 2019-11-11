@@ -1232,7 +1232,7 @@ class apiController extends Controller
                             'agent_tax' => filter_var($formDetail->itineraryItems[$i]->aptPrice,FILTER_SANITIZE_NUMBER_INT),
                             'updated_by' => Auth::user()->id,
                         );
-                        
+
 	                    $dt = $this->model->itinerary_detail()->where('id',$id)->max('dt')+1;
 	                    $data['dt'] = $dt;
             			array_push($notDelete, $dt);
@@ -1303,7 +1303,7 @@ class apiController extends Controller
 
             foreach ($checking as $i => $d) {
             	if (count($d->booking) == 0) {
-            		$this->model->itinerary_detail()->where('id',$req->id)->whereNotIn('dt',$d->dt)->delete();
+            		$this->model->itinerary_detail()->where('id',$req->id)->where('dt',$d->dt)->delete();
             	}else{
             		array_push($forbidenDelete, $d->code);
             	}
