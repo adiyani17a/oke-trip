@@ -1214,6 +1214,25 @@ class apiController extends Controller
             foreach ($old_detail as $x => $y) {
             	for ($i=0; $i < count($formDetail->itineraryItems); $i++) { 
 	                if (!isset($formDetail->itineraryItems[$i]->dt)) {
+                        $data = array(
+                            'id' => $id,
+                            'seat' => $formDetail->itineraryItems[$i]->seat,
+                            'seat_remain' => $formDetail->itineraryItems[$i]->seat,
+                            'start' => $formDetail->itineraryItems[$i]->dateStart,
+                            'end' => $formDetail->itineraryItems[$i]->dateEnd,
+                            'adult_price' => filter_var($formDetail->itineraryItems[$i]->adultPrice,FILTER_SANITIZE_NUMBER_INT),
+                            'child_price' => filter_var($formDetail->itineraryItems[$i]->CnBPrice,FILTER_SANITIZE_NUMBER_INT),
+                            'child_bed_price' => filter_var($formDetail->itineraryItems[$i]->CwBPrice,FILTER_SANITIZE_NUMBER_INT),
+                            'infant_price' => filter_var($formDetail->itineraryItems[$i]->infantPrice,FILTER_SANITIZE_NUMBER_INT),
+                            'minimal_dp' => filter_var($formDetail->itineraryItems[$i]->minimalDP,FILTER_SANITIZE_NUMBER_INT),
+                            'agent_com' => filter_var($formDetail->itineraryItems[$i]->agentPrice,FILTER_SANITIZE_NUMBER_INT),
+                            'staff_com' => filter_var($formDetail->itineraryItems[$i]->staffPrice,FILTER_SANITIZE_NUMBER_INT),
+                            'agent_tip' => filter_var($formDetail->itineraryItems[$i]->tipsPrice,FILTER_SANITIZE_NUMBER_INT),
+                            'agent_visa' => filter_var($formDetail->itineraryItems[$i]->visaPrice,FILTER_SANITIZE_NUMBER_INT),
+                            'agent_tax' => filter_var($formDetail->itineraryItems[$i]->aptPrice,FILTER_SANITIZE_NUMBER_INT),
+                            'updated_by' => Auth::user()->id,
+                        );
+                        
 	                    $dt = $this->model->itinerary_detail()->where('id',$id)->max('dt')+1;
 	                    $data['dt'] = $dt;
             			array_push($notDelete, $dt);
@@ -1221,7 +1240,36 @@ class apiController extends Controller
 	                    $data['created_by'] = Auth::user()->id;
 	                    $this->model->itinerary_detail()->create($data);
 	                }else{
-                        if (count($d->booking) == 0) {
+                        $dataBooking = $this->model->itinerary_detail()->where('id',$id)->where('dt',$formDetail->itineraryItems[$i]->dt)->first();
+                        if (!empty($dataBooking)) {
+                            if (count($dataBooking->booking) == 0) {
+                                $data = array(
+                                    'id' => $id,
+                                    'seat' => $formDetail->itineraryItems[$i]->seat,
+                                    'seat_remain' => $formDetail->itineraryItems[$i]->seat,
+                                    'start' => $formDetail->itineraryItems[$i]->dateStart,
+                                    'end' => $formDetail->itineraryItems[$i]->dateEnd,
+                                    'adult_price' => filter_var($formDetail->itineraryItems[$i]->adultPrice,FILTER_SANITIZE_NUMBER_INT),
+                                    'child_price' => filter_var($formDetail->itineraryItems[$i]->CnBPrice,FILTER_SANITIZE_NUMBER_INT),
+                                    'child_bed_price' => filter_var($formDetail->itineraryItems[$i]->CwBPrice,FILTER_SANITIZE_NUMBER_INT),
+                                    'infant_price' => filter_var($formDetail->itineraryItems[$i]->infantPrice,FILTER_SANITIZE_NUMBER_INT),
+                                    'minimal_dp' => filter_var($formDetail->itineraryItems[$i]->minimalDP,FILTER_SANITIZE_NUMBER_INT),
+                                    'agent_com' => filter_var($formDetail->itineraryItems[$i]->agentPrice,FILTER_SANITIZE_NUMBER_INT),
+                                    'staff_com' => filter_var($formDetail->itineraryItems[$i]->staffPrice,FILTER_SANITIZE_NUMBER_INT),
+                                    'agent_tip' => filter_var($formDetail->itineraryItems[$i]->tipsPrice,FILTER_SANITIZE_NUMBER_INT),
+                                    'agent_visa' => filter_var($formDetail->itineraryItems[$i]->visaPrice,FILTER_SANITIZE_NUMBER_INT),
+                                    'agent_tax' => filter_var($formDetail->itineraryItems[$i]->aptPrice,FILTER_SANITIZE_NUMBER_INT),
+                                    'updated_by' => Auth::user()->id,
+                                );
+                            }else{
+                                $data = array(
+                                    'id' => $id,
+                                    'seat' => $formDetail->itineraryItems[$i]->seat,
+                                    'seat_remain' => $formDetail->itineraryItems[$i]->seat,
+                                    'updated_by' => Auth::user()->id,
+                                );
+                            }
+                        }else{
                             $data = array(
                                 'id' => $id,
                                 'seat' => $formDetail->itineraryItems[$i]->seat,
@@ -1238,13 +1286,6 @@ class apiController extends Controller
                                 'agent_tip' => filter_var($formDetail->itineraryItems[$i]->tipsPrice,FILTER_SANITIZE_NUMBER_INT),
                                 'agent_visa' => filter_var($formDetail->itineraryItems[$i]->visaPrice,FILTER_SANITIZE_NUMBER_INT),
                                 'agent_tax' => filter_var($formDetail->itineraryItems[$i]->aptPrice,FILTER_SANITIZE_NUMBER_INT),
-                                'updated_by' => Auth::user()->id,
-                            );
-                        }else{
-                            $data = array(
-                                'id' => $id,
-                                'seat' => $formDetail->itineraryItems[$i]->seat,
-                                'seat_remain' => $formDetail->itineraryItems[$i]->seat,
                                 'updated_by' => Auth::user()->id,
                             );
                         }
