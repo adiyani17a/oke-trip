@@ -133,7 +133,7 @@ class apiV1Controller extends Controller
 
 		if ($remain->seat_remain < $total_pax) {
 			DB::rollBack();
-			return Response::json(['status'=>0,'message','Sorry the pax available only '.$remain->seat_remain.', please call customer service for further information']);
+			return Response::json(['status'=>0,'message'=>'Sorry the pax available only '.$remain->seat_remain.', please call customer service for further information']);
 		}
 		$this->model->itinerary_detail()->where('code',$itinerary_detail->code)
 			->update([
