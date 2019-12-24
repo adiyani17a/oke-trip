@@ -1845,8 +1845,11 @@ class apiController extends Controller
 
     public function datatableBookingList(Request $req)
     {
-        $data =  $this->model->booking()->with(['users','handle','payment_history'=>function($q){
+        $data =  $this->model->booking()
+        ->with(['users','handle','payment_history'=>function($q){
             $q->where('status_payment','Pending');
+        },'itinerary_detail'=>function($q){
+            $q->with(['itinerary']);
         }])->paginate($req->showing);
         return Response::json(['data'=>$data]);
     }

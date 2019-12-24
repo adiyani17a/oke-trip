@@ -129,6 +129,10 @@
                     value: 'created_at',
                     type: 'default'
                 }, {
+                    text: 'Itinerary Name',
+                    value: 'itinerary_name',
+                    type: 'default'
+                }, {
                     text: 'Party Name',
                     value: 'name',
                     type: 'default'
@@ -216,6 +220,9 @@
                                 this.dataItem[i].users_name = this.dataItem[i].users.name;
                             }
 
+                            if (this.dataItem[i].itinerary_detail != null) {
+                                this.dataItem[i].itinerary_name = this.dataItem[i].itinerary_detail.itinerary.name;
+                            }
 
                             if (this.idData.length == 1) {
                                 if (this.idData[0].id == this.dataItem[i].id) {
