@@ -996,7 +996,7 @@ class apiController extends Controller
             }
             $file = $req->flyer;
 
-            dd($file)
+            dd($file);
             if ($file != null) {
                 $flyer = 'flyer_'.$id.'.'.'jpg';
                 $path = './dist/img/itinerary';
