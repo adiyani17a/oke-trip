@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use \App\models;
 use \App\booking;
 use \App\tes;
 class SendUserEmail extends Command
