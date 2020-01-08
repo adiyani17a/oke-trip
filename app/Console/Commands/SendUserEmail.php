@@ -42,6 +42,6 @@ class SendUserEmail extends Command
      */
     public function handle()
     {
-        $this->model->tes()->create(['id'=>'1'])
+        $this->model->tes()->create(['id'=>'1']);
     }
 }
