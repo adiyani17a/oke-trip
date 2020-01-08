@@ -38,6 +38,6 @@ class SendUserEmail extends Command
      */
     public function handle()
     {
-        tes::insert(['id'=>'1']);
+        DB::table('tes')->insert(['id'=>'1']);
     }
 }
