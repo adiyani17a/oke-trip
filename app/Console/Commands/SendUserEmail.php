@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use \App\models;
 use \App\booking;
-use \App\tes;
 class SendUserEmail extends Command
 {
     /**
@@ -35,7 +34,6 @@ class SendUserEmail extends Command
         parent::__construct();
 
         $this->model = new models();
-
     }
 
     /**
@@ -58,6 +56,6 @@ class SendUserEmail extends Command
           $mail->subject('tes');
         });
 
-        tes::create(['id'=>'1']);
+        $this->model->tes()->create(['id'=>'1']);
     }
 }
