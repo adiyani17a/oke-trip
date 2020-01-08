@@ -40,4 +40,14 @@ class booking extends Model
     {
         return $this->belongsTo('App\itinerary_detail', 'itinerary_code', 'code');
     }
+
+    public function log_itinerary()
+    {
+        return $this->hasOne('App\log_itinerary', 'booking_id', 'id');
+    }
+
+    public function log_itinerary_detail()
+    {
+        return $this->hasOne('App\log_itinerary_detail', 'booking_id', 'id');
+    }
 }

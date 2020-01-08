@@ -227,8 +227,33 @@ class models extends Model
         return $tes = new \App\tes();
     }
 
+    public function log_itinerary()
+    {
+        return $log_itinerary = new \App\log_itinerary();
+    }
+
     public function log_itinerary_detail()
     {
         return $log_itinerary_detail = new \App\log_itinerary_detail();
+    }
+
+    public function log_itinerary_schedule()
+    {
+        return $log_itinerary_schedule = new \App\log_itinerary_schedule();
+    }
+
+    public function log_itinerary_additional()
+    {
+        return $log_itinerary_additional = new \App\log_itinerary_additional();
+    }
+
+    public function log_itinerary_flight()
+    {
+        return $log_itinerary_flight = new \App\log_itinerary_flight();
+    }
+
+    public function log_itinerary_destination()
+    {
+        return $log_itinerary_destination = new \App\log_itinerary_destination();
     }
 }

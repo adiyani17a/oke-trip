@@ -21,7 +21,7 @@ class SendUserEmail extends Command
      * The console command description.
      *
      * @var string
-     */
+ */
     protected $description = 'Sending Email To User Who Still Have Payment To Be Pay';
 
     /**
