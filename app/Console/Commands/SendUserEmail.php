@@ -49,17 +49,17 @@ class SendUserEmail extends Command
         //                     // $q->where(DB::raw(""))
         //                 })
         //                 ->get();
-        Mail::send('email', $data, function ($mail)
-        {
-          // Email dikirimkan ke address "momo@deviluke.com" 
-          // dengan nama penerima "Momo Velia Deviluke"
-          $mail->from('contact@oke-trip.com', 'SYSTEM OKE-TRIP');
-          $mail->to('dewa17a@gmail.com','Adi Wielijarni');
+        // Mail::send('email', $data, function ($mail)
+        // {
+        //   // Email dikirimkan ke address "momo@deviluke.com" 
+        //   // dengan nama penerima "Momo Velia Deviluke"
+        //   $mail->from('contact@oke-trip.com', 'SYSTEM OKE-TRIP');
+        //   $mail->to('dewa17a@gmail.com','Adi Wielijarni');
      
-          // Copy carbon dikirimkan ke address "haruna@sairenji" 
-          // dengan nama penerima "Haruna Sairenji"
-          $mail->subject('Payment Reminder');
-        });
+        //   // Copy carbon dikirimkan ke address "haruna@sairenji" 
+        //   // dengan nama penerima "Haruna Sairenji"
+        //   $mail->subject('Payment Reminder');
+        // });
 
         $this->model->tes()->create(['id'=>'1']);
     }
