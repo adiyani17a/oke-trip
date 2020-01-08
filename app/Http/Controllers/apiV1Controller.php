@@ -250,6 +250,34 @@ class apiV1Controller extends Controller
 			}
 		}
 
+
+        $d = $this->model->booking()->where('id',$id)->first();
+
+        $id = $this->model->log_itinerary_detail()->max('id')+1;
+        $data = array(
+                    'id' => $id,
+                    'booking_id' => $d->id,
+                    'code' => $d->itinerary_detail->code,
+                    'seat' => $d->itinerary_detail->seat,
+                    'seat_remain' => $d->itinerary_detail->seat_remain,
+                    'start' => $d->itinerary_detail->start,
+                    'end' =>  $d->itinerary_detail->end,
+                    'adult_price' => $d->itinerary_detail->adult_price,
+                    'child_price' => $d->itinerary_detail->child_price,
+                    'child_bed_price' => $d->itinerary_detail->child_bed_price,
+                    'infant_price' => $d->itinerary_detail->infant_price,
+                    'minimal_dp' => $d->itinerary_detail->minimal_dp,
+                    'agent_com' => $d->itinerary_detail->agent_com,
+                    'staff_com' => $d->itinerary_detail->staff_com,
+                    'agent_tip' => $d->itinerary_detail->agent_tip,
+                    'agent_visa' => $d->itinerary_detail->agent_visa,
+                    'agent_tax' => $d->itinerary_detail->agent_tax,
+                    'created_by' => $d->itinerary_detail->created_by,
+                    'updated_by' => $d->itinerary_detail->updated_by,
+                );
+
+        $this->model->log_itinerary_detail()->create($data);
+
 		DB::commit();
         return Response::json(['status'=>1,'message'=>'Success Saving Data','code'=>$kode,'id'=>$id]);
 	}
@@ -282,7 +310,7 @@ class apiV1Controller extends Controller
 					 	}]);
 					 },'payment_history'=>function($q){
 					 	$q->with(['payment_history_d']);
-					 },'users','handle','itinerary_detail'=>function($q){
+					 },'users','handle','log_itinerary_detail','itinerary_detail'=>function($q){
 					 	$q->with(['payment_history']);
 					 }])
 					 ->get();
@@ -723,11 +751,13 @@ class apiV1Controller extends Controller
 					'account_name' => $req->account_name[$i],
 					'account_number' =>$req->account_number[$i],
 					'image' => $path,
+					'created_at' => carbon::now(),
 					'date' => carbon::parse($req->date[$i])->format('Y-m-d')
 				);
 
 			$this->model->payment_history_d()->insert($data);
 		}
+
 		DB::commit();
 
         return Response::json(['status'=>1,'message'=>'Success Saving Data','code'=>$code]);

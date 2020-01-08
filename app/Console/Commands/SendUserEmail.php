@@ -44,11 +44,11 @@ class SendUserEmail extends Command
     public function handle()
     {
         $data = [];
-        $booking = $this->model->booking()
-                        ->whereHas('payment_history' => function($q){
-                            $q->where(DB::raw(""))
-                        })
-                        ->get();
+        // $booking = $this->model->booking()
+        //                 ->whereHas('payment_history' => function($q){
+        //                     // $q->where(DB::raw(""))
+        //                 })
+        //                 ->get();
         Mail::send('email', $data, function ($mail)
         {
           // Email dikirimkan ke address "momo@deviluke.com" 

@@ -226,4 +226,9 @@ class models extends Model
     {
         return $tes = new \App\tes();
     }
+
+    public function log_itinerary_detail()
+    {
+        return $log_itinerary_detail = new \App\log_itinerary_detail();
+    }
 }
