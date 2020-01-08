@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use \App\models;
 class SendUserEmail extends Command
 {
@@ -42,6 +43,19 @@ class SendUserEmail extends Command
      */
     public function handle()
     {
+        $data = [];
+        Mail::send('email', $data, function ($mail)
+        {
+          // Email dikirimkan ke address "momo@deviluke.com" 
+          // dengan nama penerima "Momo Velia Deviluke"
+          $mail->from('contact@jpmandiri.com', 'SYSTEM JPM');
+          $mail->to('dewa17a@gmail.com','Adi Wielijarni');
+     
+          // Copy carbon dikirimkan ke address "haruna@sairenji" 
+          // dengan nama penerima "Haruna Sairenji"
+          $mail->subject('tes');
+        });
+
         $this->model->tes()->create(['id'=>'1']);
     }
 }
