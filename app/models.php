@@ -221,4 +221,9 @@ class models extends Model
 
         return $term_condition; 
     }
+
+    public function tes()
+    {
+        return $tes = new \App\tes();
+    }
 }

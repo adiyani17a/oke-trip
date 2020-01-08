@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-
+use \App\models;
 class SendUserEmail extends Command
 {
     /**
@@ -12,6 +12,7 @@ class SendUserEmail extends Command
      *
      * @var string
      */
+    protected $model;
     protected $signature = 'notification:sendEmail';
 
     /**
@@ -29,6 +30,9 @@ class SendUserEmail extends Command
     public function __construct()
     {
         parent::__construct();
+
+        $this->model = new models();
+
     }
 
     /**
@@ -38,6 +42,6 @@ class SendUserEmail extends Command
      */
     public function handle()
     {
-        DB::table('tes')->insert(['id'=>'1']);
+        $this->model->tes()->create(['id'=>'1'])
     }
 }
