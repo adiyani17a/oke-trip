@@ -2281,4 +2281,15 @@ class apiController extends Controller
             return Response::json(['status'=>1,'message'=>'Success Updating data']);
         });
     }
+
+    public function tes()
+    {
+        $booking = $this->model->booking()
+                        ->whereHas('payment_history' => function($q){
+                            $q->where(DB::raw("sum(total_payment) !="))
+                        })
+                        ->get();
+
+        dd($booking);
+    }
 }

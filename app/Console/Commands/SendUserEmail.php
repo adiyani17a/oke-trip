@@ -44,16 +44,21 @@ class SendUserEmail extends Command
     public function handle()
     {
         $data = [];
+        $booking = $this->model->booking()
+                        ->whereHas('payment_history' => function($q){
+                            $q->where(DB::raw(""))
+                        })
+                        ->get();
         Mail::send('email', $data, function ($mail)
         {
           // Email dikirimkan ke address "momo@deviluke.com" 
           // dengan nama penerima "Momo Velia Deviluke"
-          $mail->from('contact@jpmandiri.com', 'SYSTEM JPM');
+          $mail->from('contact@oke-trip.com', 'SYSTEM OKE-TRIP');
           $mail->to('dewa17a@gmail.com','Adi Wielijarni');
      
           // Copy carbon dikirimkan ke address "haruna@sairenji" 
           // dengan nama penerima "Haruna Sairenji"
-          $mail->subject('tes');
+          $mail->subject('Payment Reminder');
         });
 
         $this->model->tes()->create(['id'=>'1']);

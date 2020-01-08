@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
+Route::get('tes','apiController@tes');
 
 Route::get('/logout', [
       'uses' => "ApiTokenController@logout",
