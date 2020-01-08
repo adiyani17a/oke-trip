@@ -10,7 +10,7 @@ class tes extends Model
     protected $primaryKey = 'id';
     public $incrementing = false;
     public $remember_token = false;
-    const $timestamps = false;
+    public $timestamps = false;
     protected $fillable = [
     						'id'
     					];
