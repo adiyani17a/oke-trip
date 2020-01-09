@@ -10,6 +10,7 @@ use DB;
 use carbon\carbon;
 use Storage;
 use Image;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 ini_set('post_max_size', '2048MB');
 ini_set('upload_max_filesize', '2048MB');
@@ -2286,11 +2287,10 @@ class apiController extends Controller
         });
     }
 
-    public function tes()
+    public function generateLog()
     {
         $booking = $this->model->booking()
                         ->get();
-
 
         foreach ($booking as $i => $d) {
             $id = $this->model->log_itinerary()->max('id')+1;
@@ -2396,5 +2396,35 @@ class apiController extends Controller
 
             $this->model->log_itinerary_detail()->create($data);
         }
+    }
+
+    public function tes()
+    {
+        $booking = $this->model->booking()
+                        ->whereHas('itinerary_detail',function($q){
+                            $q->where('start','>',carbon::now()->format('Y-m-d'));
+                        })
+                        ->get();
+
+        foreach ($booking as $i => $d) {
+            if ($d->total >= $d->payment_history->sum('total_payment')) {
+                $date = (strtotime($d->itinerary_detail->start) - strtotime(carbon::now()->format('Y-m-d')))/86400;
+                if ( $date == 43 ) {
+                    $data = ['d'=>$d];
+                    Mail::send('email', $data, function ($mail)
+                    {
+                      // Email dikirimkan ke address "momo@deviluke.com" 
+                      // dengan nama penerima "Momo Velia Deviluke"
+                      $mail->from('oke.trip5394@gmail.com', 'SYSTEM OKE-TRIP');
+                      $mail->to('dewa17a@gmail.com','Adi Wielijarni');
+                 
+                      // Copy carbon dikirimkan ke address "haruna@sairenji" 
+                      // dengan nama penerima "Haruna Sairenji"
+                      $mail->subject('Payment Reminder');
+                    });
+                }
+            }
+        }
+
     }
 }

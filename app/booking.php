@@ -21,6 +21,11 @@ class booking extends Model
     	return $this->hasMany('App\booking_d', 'id', 'id');
     }
 
+    public function booking_pax()
+    {
+        return $this->hasMany('App\booking_pax', 'id', 'id');
+    }
+
     public function payment_history()
     {
         return $this->hasMany('App\payment_history', 'booking_id', 'id');

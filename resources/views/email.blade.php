@@ -4,8 +4,13 @@
   <table style="max-width:670px;margin:50px auto 10px;background-color:#fff;padding:50px;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 3px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.24);-moz-box-shadow:0 1px 3px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.24);box-shadow:0 1px 3px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.24); border-top: solid 10px green;">
     <thead>
       <tr>
-        <th style="text-align:left;"><img style="max-width: 150px;" src="https://www.bachanatours.in/book/img/logo.png" alt="bachana tours"></th>
-        <th style="text-align:right;font-weight:400;">05th Apr, 2017</th>
+        <th colspan="2">Reminder</th>
+      </tr>
+      <tr>
+        <th style="text-align:left;">
+          <img src="http://panel.oke-trip.com/dist/img/AdminLTELogo.png" style="width: 100px;height: 100px;" alt="Oke-Trip">
+        </th>
+        <th style="text-align:right;font-weight:400;">{{ carbon\carbon::now()->format('d F Y') }}</th>
       </tr>
     </thead>
     <tbody>
@@ -14,9 +19,16 @@
       </tr>
       <tr>
         <td colspan="2" style="border: solid 1px #ddd; padding:10px 20px;">
-          <p style="font-size:14px;margin:0 0 6px 0;"><span style="font-weight:bold;display:inline-block;min-width:150px">Order status</span><b style="color:green;font-weight:normal;margin:0">Success</b></p>
-          <p style="font-size:14px;margin:0 0 6px 0;"><span style="font-weight:bold;display:inline-block;min-width:146px">Transaction ID</span> abcd1234567890</p>
-          <p style="font-size:14px;margin:0 0 0 0;"><span style="font-weight:bold;display:inline-block;min-width:146px">Order amount</span> Rs. 6000.00</p>
+          <p style="font-size:14px;margin:0 0 6px 0;"><span style="font-weight:bold;display:inline-block;min-width:150px">Order status</span><b style="color:red;font-weight:normal;margin:0">Waiting For Repayment</b></p>
+          <p style="font-size:14px;margin:0 0 6px 0;"><span style="font-weight:bold;display:inline-block;min-width:146px">Booking ID</span> {{ $d->kode }}</p>
+          <p style="font-size:14px;margin:0 0 6px 0;"><span style="font-weight:bold;display:inline-block;min-width:146px">Order amount</span> Rp. {{ number_format($d->total) }}</p>
+          <p style="font-size:14px;margin:0 0 0 0;"><span style="font-weight:bold;display:inline-block;min-width:146px">Rest Of Bill</span>
+            @if (!is_null($d->payment_history))
+              Rp. {{ number_format($d->total-$d->payment_history->where('status_payment','Approve')->sum('total_payment')) }}
+            @else
+              Rp. {{ number_format($d->total) }}
+            @endif
+          </p>
         </td>
       </tr>
       <tr>
@@ -24,18 +36,17 @@
       </tr>
       <tr>
         <td style="width:50%;padding:20px;vertical-align:top">
-          <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px">Name</span> Palash Basak</p>
-          <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">Email</span> palash@gmail.com</p>
-          <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">Phone</span> +91-1234567890</p>
-          <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">ID No.</span> 2556-1259-9842</p>
+          <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px">Name</span> {{ $d->users->name }}</p>
+          <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">Email</span> {{ $d->users->email }}</p>
+          <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">Phone</span> {{ $d->users->telp }}</p>
         </td>
         <td style="width:50%;padding:20px;vertical-align:top">
-          <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">Address</span> Khudiram Pally, Malbazar, West Bengal, India, 735221</p>
-          <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">Number of gusets</span> 2</p>
-          <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">Duration of your vacation</span> 25/04/2017 to 28/04/2017 (3 Days)</p>
+          <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">Address</span> {{ $d->users->address }}</p>
+          <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">Number of Pax</span> {{ $d->booking_pax->count() }}</p>
+          <p style="margin:0 0 10px 0;padding:0;font-size:14px;"><span style="display:block;font-weight:bold;font-size:13px;">Duration of your vacation</span> {{ carbon\carbon::parse($d->itinerary_detail->start)->format('d/m/Y') }} to {{ carbon\carbon::parse($d->itinerary_detail->end)->format('d/m/Y') }} ({{ (strtotime($d->itinerary_detail->end) - strtotime($d->itinerary_detail->start)) /86400 }} Days)</p>
         </td>
       </tr>
-      <tr>
+{{--       <tr>
         <td colspan="2" style="font-size:20px;padding:30px 15px 0 15px;">Items</td>
       </tr>
       <tr>
@@ -49,14 +60,14 @@
           <p style="font-size:14px;margin:0;padding:10px;border:solid 1px #ddd;font-weight:bold;"><span style="display:block;font-size:13px;font-weight:normal;">River side camping with guide</span> Rs. 1500 <b style="font-size:12px;font-weight:300;"> /person/day</b></p>
           <p style="font-size:14px;margin:0;padding:10px;border:solid 1px #ddd;font-weight:bold;"><span style="display:block;font-size:13px;font-weight:normal;">Trackking and hiking with guide</span> Rs. 1000 <b style="font-size:12px;font-weight:300;"> /person/day</b></p>
         </td>
-      </tr>
+      </tr> --}}
     </tbody>
     <tfooter>
       <tr>
         <td colspan="2" style="font-size:14px;padding:50px 15px 0 15px;">
-          <strong style="display:block;margin:0 0 10px 0;">Regards</strong> Bachana Tours<br> Gorubathan, Pin/Zip - 735221, Darjeeling, West bengal, India<br><br>
-          <b>Phone:</b> 03552-222011<br>
-          <b>Email:</b> contact@bachanatours.in
+          <strong style="display:block;margin:0 0 10px 0;">Regards</strong> Oke Trip<br> Jl. Nginden Intan Raya No.7 Ngenden Jangkungan<br> Kec. Sukolilo, Kota SBY<br> Jawa Timur 60118<br><br>
+          <b>Phone:</b> 5992855<br>
+          <b>Email:</b> oke-trip@gmail.com
         </td>
       </tr>
     </tfooter>
