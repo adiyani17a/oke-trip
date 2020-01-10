@@ -103,9 +103,9 @@
 	}
 </style>
 <div class="invoice-box" style="margin-bottom: 10px;">
-	<table cellpadding="0" cellspacing="0" style="width: 100%;">
+	<table cellpadding="0" cellspacing="0" style="width: 100%;font-size: 10px;">
 		<tr class="top">
-			<td colspan="2">
+			<td colspan="7">
 				<table>
 					<tr>
 						<td class="title">
@@ -117,18 +117,33 @@
 					</tr>
 				</table>
 			</td>
-			<td colspan="2" style="text-align: right;">
+			<td colspan="3" style="text-align: right;">
 				<label>Flight Date</label>
 				<p>{{ carbon\carbon::parse($data->itinerary_detail->start)->format('d-F-Y') }} - {{ carbon\carbon::parse($data->itinerary_detail->end)->format('d-F-Y') }}</p>
 				<p>{{ $data->itinerary_code }}</p>
 			</td>
 		</tr>
-		
+		<tr>
+			<td colspan="2" style="text-align: left;">
+				<label>Flight Details :</label>
+				<p style="color: hotpink">{!! $data->flight_detail !!}</p>
+			</td>
+		</tr>
 		<tr class="heading">
-			<th class="px-2 py-2 border">No</th>
-			<th class="px-2 py-2 border">Name</th>
-			<th class="px-2 py-2 border">Passport</th>
-			<th class="px-2 py-2 border">Type</th>
+			<th rowspan="2" class="px-2 py-2 border">No</th>
+			<th rowspan="2" class="px-2 py-2 border">Name</th>
+			<th rowspan="2" class="px-2 py-2 border">Gender</th>
+			<th rowspan="2" class="px-2 py-2 border">Room Type</th>
+			<th colspan="3" class="px-2 py-2 border">Passport</th>
+			<th colspan="2" class="px-2 py-2 border">Birth</th>
+			<th rowspan="2" class="px-2 py-2 border">CP</th>
+		</tr>
+		<tr class="heading">
+			<th class="px-2 py-2 border" width="10%">Number</th>
+			<th class="px-2 py-2 border">Issued</th>
+			<th class="px-2 py-2 border">Expired</th>
+			<th class="px-2 py-2 border">Place</th>
+			<th class="px-2 py-2 border">Date</th>
 		</tr>
 		@php
 			$count = 1;
@@ -144,34 +159,52 @@
 		@endphp
 		@foreach($data->itinerary_detail->booking as $i => $d)
 			<tr>
-				<td class="px-2 py-2 border" style="background-color: #efef;" colspan="4">
+				<td class="px-2 py-2 border" style="background-color: #efef;" colspan="10">
 					Booking Code : {{ $d->kode }}
 				</td>
 			</tr>
-				@foreach($d->booking_d as $i1 => $d1)
-					@php
-						if ($d1->bed == 'Single Bed') {
-							$single += 1;
-						}else if($d1->bed == 'Double Bed'){
-							$double += 1;
-						}else if($d1->bed == 'Twin Bed'){
-							$twin += 1;
-						}else if($d1->bed == 'Triple Bed'){
-							$triple += 1;
-						}else if($d1->bed == 'Double/Twin + CnB'){
-							$doubleCnB += 1;
-						}else if($d1->bed == 'Double/Twin + CwB'){
-							$doubleCwB += 1;
-						}
-					@endphp
-					@foreach($d1->booking_pax as $i2 => $d2)
+			@foreach($d->booking_d as $i1 => $d1)
+				@php
+					if ($d1->bed == 'Single Bed') {
+						$single += 1;
+					}else if($d1->bed == 'Double Bed'){
+						$double += 1;
+					}else if($d1->bed == 'Twin Bed'){
+						$twin += 1;
+					}else if($d1->bed == 'Triple Bed'){
+						$triple += 1;
+					}else if($d1->bed == 'Double/Twin + CnB'){
+						$doubleCnB += 1;
+					}else if($d1->bed == 'Double/Twin + CwB'){
+						$doubleCwB += 1;
+					}
+				@endphp
+				@foreach($d1->booking_pax as $i2 => $d2)
 					<tr class="border">
-						<td  class="px-2 py-2 border-l @if(count($d1->booking_pax)-1 == $i2) border-b @endif">{{ $count }}</td>
+						<td  class="text-center px-2 py-2 border-l @if(count($d1->booking_pax)-1 == $i2) border-b @endif">{{ $count }}</td>
 						<td  class="px-2 py-2 @if(count($d1->booking_pax)-1 == $i2) border-b @endif">{{ $d2->name }}</td>
-						<td  class="px-2 py-2 @if(count($d1->booking_pax)-1 == $i2) border-b @endif">{{ $d2->passport }}</td>
+						<td  class="px-2 py-2 @if(count($d1->booking_pax)-1 == $i2) border-b @endif">{{ ucwords($d2->gender) }}</td>
 						@if($i2 == 0)
-						<td  class="px-2 py-2 border-r border-b " rowspan="{{ count($d1->booking_pax) }}">{{ $d1->bed }}</td>
+						<td  class="px-2 py-2 border-b" rowspan="{{ count($d1->booking_pax) }}">{{ ucwords($d1->bed) }}</td>
 						@endif
+						<td  class="px-2 py-2 @if(count($d1->booking_pax)-1 == $i2) border-b @endif">
+							{{ $d2->passport }}
+						</td>
+						<td  class="px-2 py-2 @if(count($d1->booking_pax)-1 == $i2) border-b @endif">
+							{{ $d2->issuing }}
+						</td>
+						<td  class="px-2 py-2 @if(count($d1->booking_pax)-1 == $i2) border-b @endif">
+							{{ carbon\carbon::parse($d2->exp_date)->format('d-M-y') }}
+						</td>
+						<td  class="px-2 py-2 @if(count($d1->booking_pax)-1 == $i2) border-b @endif">
+							{{ $d2->birth_place }}
+						</td>
+						<td  class="px-2 py-2 @if(count($d1->booking_pax)-1 == $i2) border-b @endif">
+							{{ carbon\carbon::parse($d2->birth_date)->format('d-M-y') }}
+						</td>
+						<td  class="px-2 py-2 border-r  @if(count($d1->booking_pax)-1 == $i2) border-b @endif">
+							{{ $d->users->telp }}
+						</td>
 						@php
 							$count++;
 							if ($d2->type == 'Adult') {
@@ -184,11 +217,13 @@
 							}
 						@endphp
 					</tr>
-					@endforeach
 				@endforeach
+			@endforeach
 		@endforeach
+	</table>
+	<table style="font-size: 10px;">
 		<tr>
-			<td colspan="2">
+			<td colspan="10">
 				<table>
 					<tr>
 						<td class="px-2 py-2" colspan="2">

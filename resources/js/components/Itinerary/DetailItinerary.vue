@@ -131,6 +131,19 @@
                 </v-select>
               </v-flex>
               <v-flex xs12 style="padding: 10px">
+               <ul>
+                 <li>
+                  <a href="http://panel.oke-trip.com/api/v1/get-booking-list/pdf/pax/29">Rooming List & Passport List</a>
+                 </li>
+                 <li>
+                  <a href="http://panel.oke-trip.com/api/v1/get-booking-list/pdf/pax/29">Pembagian Kamar</a>
+                 </li>
+                 <li>
+                  <a href="http://panel.oke-trip.com/api/v1/get-booking-list/pdf/pax/29">Foto Passport</a>
+                 </li>
+               </ul>
+              </v-flex>
+              <v-flex xs12 style="padding: 10px">
                 <label>Upload Final PDF</label>
                 <div class="final preview_div satu row">
                   <div class="file-upload upl_3 col-sm-8 py-3" v-bind:class="{ active: finalActive }">

@@ -524,7 +524,6 @@ class apiV1Controller extends Controller
 			}
 		}
 
-
 		return response::json(['status'=>200,'data'=>$data,'time_remaining'=>$time_remaining]);
 	}
 
@@ -544,8 +543,8 @@ class apiV1Controller extends Controller
 					 	$q->with(['itinerary']);
 					 }])
 					 ->first();
-
-		$pdf = PDF::loadView('customer', ['data' => $data]);
+		$data->flight_detail = str_replace('|', '<br>', $data->itinerary_detail->flight_detail);
+		$pdf = PDF::loadView('customer', ['data' => $data])->setPaper('a4', 'landscape');
 		return $pdf->stream();
 	}
 
