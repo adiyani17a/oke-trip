@@ -253,10 +253,10 @@ class apiV1Controller extends Controller
 
         $d = $this->model->booking()->where('id',$id)->first();
 
-        $id = $this->model->log_itinerary_detail()->max('id')+1;
+        $id_log = $this->model->log_itinerary_detail()->max('id')+1;
         // LOG ITINERARY
         $data = array(
-            'id' => $id,
+            'id' => $id_log,
             'booking_id' => $d->id,
             'name' => $d->itinerary_detail->itinerary->name,
             'flight_by' => $d->itinerary_detail->itinerary->flight_by,
@@ -281,7 +281,7 @@ class apiV1Controller extends Controller
         // LOG ITINERARY FLIGHT
         foreach ($d->itinerary_detail->itinerary->itinerary_flight as $i1 => $d1) {
             $data = array(
-                'id' => $id,
+                'id' => $id_log,
                 'dt' => $i1+1,
                 'booking_id' => $d->id,
                 'flight_number' => $d1->flight_number,
@@ -297,7 +297,7 @@ class apiV1Controller extends Controller
         // LOG ITINERARY SCHEDULE
         foreach ($d->itinerary_detail->itinerary->itinerary_schedule as $i1 => $d1) {
             $data = array(
-                'id' => $id,
+                'id' => $id_log,
                 'dt' => $i1+1,
                 'booking_id' => $d->id,
                 'caption' => $d1->caption,
@@ -310,7 +310,7 @@ class apiV1Controller extends Controller
         // LOG ITINERARY DESTINATION
         foreach ($d->itinerary_detail->itinerary->itinerary_destination as $i1 => $d1) {
             $data = array(
-                'id' => $id,
+                'id' => $id_log,
                 'dt' => $i1+1,
                 'booking_id' => $d->id,
                 'destination_id' => $d1->destination_id,
@@ -333,7 +333,7 @@ class apiV1Controller extends Controller
         // LOG ITINERARY DETAIL
 
         $data = array(
-                    'id' => $id,
+                    'id' => $id_log,
                     'booking_id' => $d->id,
                     'code' => $d->itinerary_detail->code,
                     'seat' => $d->itinerary_detail->seat,
@@ -355,8 +355,8 @@ class apiV1Controller extends Controller
                 );
 
         $this->model->log_itinerary_detail()->create($data);
-
 		DB::commit();
+
         return Response::json(['status'=>1,'message'=>'Success Saving Data','code'=>$kode,'id'=>$id]);
 	}
 

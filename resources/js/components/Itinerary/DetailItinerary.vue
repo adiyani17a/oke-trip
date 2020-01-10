@@ -181,6 +181,9 @@
                   </div>
                 </div>
               </v-flex>
+              <v-flex xs12 md6 style="padding: 10px">
+                <v-text-field ref="flightDetail" label="Flight Detail* Use | To Split" v-model="flightDetail" @blur="$v.flightDetail.$touch()" :error-messages="flightDetailErrors" ></v-text-field>
+              </v-flex>
               <v-flex xs12 md-6 style="padding: 10px" class="right">
                 <v-btn color="warning" @click="saveData">
                   <v-icon>fas fa-edit</v-icon>&nbsp;Update 
@@ -253,6 +256,7 @@
     validations: {
       tourLeader: { required},
       tourLeaderTips: { required},
+      flightDetailErrors: { required},
     },
     mounted(){
       let breadcrumb = 'Itinerary <router-link to="/additional">/ Detail</router-link>';
@@ -277,6 +281,7 @@
       tourLeader: '',
       tourLeaderTips: '',
       isBooked: '',
+      flightDetail:'',
       tourLeaderOptions: [],
       isBookedOptions: [],
       approveLoading:false,
@@ -344,6 +349,7 @@
               this.tataTertib = response.data.data.term_pdf;
               this.flayer = response.data.data.flayer_jpg;
               this.isBooked = response.data.data.booked_by;
+              this.flightDetail = response.data.data.flight_detail;
               this.payment_history = response.data.data.payment_history;
               if (this.payment_history.length != 0) { 
                 if (this.payment_history[0].status_payment == 'Approve') {
@@ -351,7 +357,6 @@
                 }
               }
                 
-
               if (this.finalConfirmation != '') {
                 this.finalActive = true;
                 this.finalName = this.finalConfirmation.replace(/^.*[\\\/]/, '');
@@ -441,6 +446,7 @@
         formData.append('tataTertib', this.tataTertib)
         formData.append('flayer', this.flayer)
         formData.append('booked_by', this.isBooked)
+        formData.append('flight_detail', this.flightDetail)
         axios.post('/api/itinerary/save-detail',
                 formData, {
                     headers: {

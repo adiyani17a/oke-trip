@@ -1522,6 +1522,7 @@ class apiController extends Controller
             }
             $input['tour_leader_id'] = $req->tour_leader_id;
             $input['tour_leader_tips'] = filter_var($req->tour_leader_tips,FILTER_SANITIZE_NUMBER_INT);
+            $input['flight_detail'] = $req->flight_detail;
             $input['updated_by'] = Auth::user()->id;
             $input['updated_at'] = carbon::now();
 
