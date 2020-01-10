@@ -55,7 +55,7 @@ class SendUserEmail extends Command
                 if ($d->total >= $d->payment_history->sum('total_payment')) {
                     $date = (strtotime($d->itinerary_detail->start) - strtotime(carbon::now()->format('Y-m-d')))/86400;
                     if ( $date == 42 ) {
-                        $details['email'] = 'adiyani17a@gmail.com';
+                        $details['email'] = $d->users->email;
                         dispatch(new App\Jobs\SendEmail($details,$d));
                     }
                 }
