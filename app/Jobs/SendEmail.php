@@ -34,6 +34,9 @@ class SendEmail implements ShouldQueue
     public function handle()
     {
         $email = new Reminder($this->d);
-        Mail::to($this->details['email'])->send($email);
+        $detail = $this->details['email'];
+
+        Mail::to($this->details['email'])
+            ->send($email);
     }
 }

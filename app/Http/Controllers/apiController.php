@@ -2407,7 +2407,6 @@ class apiController extends Controller
                                 $q->where('start','>',carbon::now()->format('Y-m-d'));
                             })
                             ->get();
-
             foreach ($booking as $i => $d) {
                 if ($d->total >= $d->payment_history->sum('total_payment')) {
                     $date = (strtotime($d->itinerary_detail->start) - strtotime(carbon::now()->format('Y-m-d')))/86400;
