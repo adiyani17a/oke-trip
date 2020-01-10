@@ -256,4 +256,9 @@ class models extends Model
     {
         return $log_itinerary_destination = new \App\log_itinerary_destination();
     }
+
+    public function system_control()
+    {
+        return $system_control = new \App\system_control();
+    }
 }

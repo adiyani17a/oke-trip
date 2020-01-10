@@ -43,24 +43,36 @@ class SendUserEmail extends Command
      */
     public function handle()
     {
-        $data = [];
-        // $booking = $this->model->booking()
-        //                 ->whereHas('payment_history' => function($q){
-        //                     // $q->where(DB::raw(""))
-        //                 })
-        //                 ->get();
-        // Mail::send('email', $data, function ($mail)
-        // {
-        //   // Email dikirimkan ke address "momo@deviluke.com" 
-        //   // dengan nama penerima "Momo Velia Deviluke"
-        //   $mail->from('contact@oke-trip.com', 'SYSTEM OKE-TRIP');
-        //   $mail->to('dewa17a@gmail.com','Adi Wielijarni');
-     
-        //   // Copy carbon dikirimkan ke address "haruna@sairenji" 
-        //   // dengan nama penerima "Haruna Sairenji"
-        //   $mail->subject('Payment Reminder');
-        // });
+        $control = $this->model->system_control()->find(1);
+        if ($control == 'Y') {
+            $booking = $this->model->booking()
+                            ->whereHas('itinerary_detail',function($q){
+                                $q->where('start','>',carbon::now()->format('Y-m-d'));
+                            })
+                            ->get();
 
-        $this->model->tes()->create(['id'=>'1']);
+            foreach ($booking as $i => $d) {
+                if ($d->total >= $d->payment_history->sum('total_payment')) {
+                    $date = (strtotime($d->itinerary_detail->start) - strtotime(carbon::now()->format('Y-m-d')))/86400;
+                    if ( $date == 3 ) {
+                        $data = ['d'=>$d];
+                        Mail::send('email', $data, function ($mail)
+                        {
+                          // Email dikirimkan ke address "momo@deviluke.com" 
+                          // dengan nama penerima "Momo Velia Deviluke"
+                          $mail->from('no-reply@oke-trip.com', 'SYSTEM OKE-TRIP');
+                          $mail->to('adiyani17a@gmail.com','Adi Wielijarni');
+                     
+                          // Copy carbon dikirimkan ke address "haruna@sairenji" 
+                          // dengan nama penerima "Haruna Sairenji"
+                          $mail->subject('Payment Reminder');
+                        });
+                    }
+                }
+            }
+            return 'Success';
+        }else{
+            return 'Failure';
+        }
     }
 }
