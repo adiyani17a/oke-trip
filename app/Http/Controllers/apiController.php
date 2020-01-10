@@ -2401,7 +2401,7 @@ class apiController extends Controller
     public function tes()
     {
         $control = $this->model->system_control()->find(1);
-        if ($control == 'Y') {
+        if ($control->status == 'Y') {
             $booking = $this->model->booking()
                             ->whereHas('itinerary_detail',function($q){
                                 $q->where('start','>',carbon::now()->format('Y-m-d'));
@@ -2412,18 +2412,8 @@ class apiController extends Controller
                 if ($d->total >= $d->payment_history->sum('total_payment')) {
                     $date = (strtotime($d->itinerary_detail->start) - strtotime(carbon::now()->format('Y-m-d')))/86400;
                     if ( $date == 42 ) {
-                        $data = ['d'=>$d];
-                        Mail::send('email', $data, function ($mail)
-                        {
-                          // Email dikirimkan ke address "momo@deviluke.com" 
-                          // dengan nama penerima "Momo Velia Deviluke"
-                          $mail->from('no-reply@oke-trip.com', 'SYSTEM OKE-TRIP');
-                          $mail->to('adiyani17a@gmail.com','Adi Wielijarni');
-                     
-                          // Copy carbon dikirimkan ke address "haruna@sairenji" 
-                          // dengan nama penerima "Haruna Sairenji"
-                          $mail->subject('Payment Reminder');
-                        });
+                        $details['email'] = 'adiyani17a@gmail.com';
+                        dispatch(new \App\Jobs\SendEmail($details,$d));
                     }
                 }
             }

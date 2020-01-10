@@ -54,19 +54,9 @@ class SendUserEmail extends Command
             foreach ($booking as $i => $d) {
                 if ($d->total >= $d->payment_history->sum('total_payment')) {
                     $date = (strtotime($d->itinerary_detail->start) - strtotime(carbon::now()->format('Y-m-d')))/86400;
-                    if ( $date == 3 ) {
-                        $data = ['d'=>$d];
-                        Mail::send('email', $data, function ($mail)
-                        {
-                          // Email dikirimkan ke address "momo@deviluke.com" 
-                          // dengan nama penerima "Momo Velia Deviluke"
-                          $mail->from('no-reply@oke-trip.com', 'SYSTEM OKE-TRIP');
-                          $mail->to('adiyani17a@gmail.com','Adi Wielijarni');
-                     
-                          // Copy carbon dikirimkan ke address "haruna@sairenji" 
-                          // dengan nama penerima "Haruna Sairenji"
-                          $mail->subject('Payment Reminder');
-                        });
+                    if ( $date == 42 ) {
+                        $details['email'] = 'adiyani17a@gmail.com';
+                        dispatch(new App\Jobs\SendEmail($details,$d));
                     }
                 }
             }
