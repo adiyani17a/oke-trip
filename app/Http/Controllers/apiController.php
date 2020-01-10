@@ -2409,9 +2409,7 @@ class apiController extends Controller
         foreach ($booking as $i => $d) {
             if ($d->total >= $d->payment_history->sum('total_payment')) {
                 $date = (strtotime($d->itinerary_detail->start) - strtotime(carbon::now()->format('Y-m-d')))/86400;
-                dd($date);
                 if ( $date == 42 ) {
-                    $data = ['d'=>$d];
                     Mail::send('email', $data, function ($mail)
                     {
                       // Email dikirimkan ke address "momo@deviluke.com" 
@@ -2426,5 +2424,6 @@ class apiController extends Controller
                 }
             }
         }
+        return 'Success';
     }
 }
