@@ -2415,8 +2415,8 @@ class apiController extends Controller
                     {
                       // Email dikirimkan ke address "momo@deviluke.com" 
                       // dengan nama penerima "Momo Velia Deviluke"
-                      $mail->from('oke.trip5394@gmail.com', 'SYSTEM OKE-TRIP');
-                      $mail->to('dewa17a@gmail.com','Adi Wielijarni');
+                      $mail->from('no-reply@oke-trip.com', 'SYSTEM OKE-TRIP');
+                      $mail->to('adiyani17a@gmail.com','Adi Wielijarni');
                  
                       // Copy carbon dikirimkan ke address "haruna@sairenji" 
                       // dengan nama penerima "Haruna Sairenji"
