@@ -251,110 +251,110 @@ class apiV1Controller extends Controller
 		}
 
 
-        $d = $this->model->booking()->where('id',$id)->first();
+        // $d = $this->model->booking()->where('id',$id)->first();
 
-        $id_log = $this->model->log_itinerary_detail()->max('id')+1;
-        // LOG ITINERARY
-        $data = array(
-            'id' => $id_log,
-            'booking_id' => $d->id,
-            'name' => $d->itinerary_detail->itinerary->name,
-            'flight_by' => $d->itinerary_detail->itinerary->flight_by,
-            'code' => $d->itinerary_detail->itinerary->code,
-            'term_condition' => $d->itinerary_detail->itinerary->term_condition,
-            'highlight' => $d->itinerary_detail->itinerary->highlight,
-            'carousel_1' => $d->itinerary_detail->itinerary->carousel_1,
-            'carousel_2' => $d->itinerary_detail->itinerary->carousel_2,
-            'carousel_3' => $d->itinerary_detail->itinerary->carousel_3,
-            'note_1' => $d->itinerary_detail->itinerary->note_1,
-            'note_2' => $d->itinerary_detail->itinerary->note_2,
-            'note_3' => $d->itinerary_detail->itinerary->note_3,
-            'pdf' => $d->itinerary_detail->itinerary->pdf,
-            'flayer_image' => $d->itinerary_detail->itinerary->flayer_image,
-            'summary' => $d->itinerary_detail->itinerary->summary,
-            'created_by' => $d->itinerary_detail->itinerary->created_by,
-            'updated_by' => $d->itinerary_detail->itinerary->updated_by,
-        );
+        // $id_log = $this->model->log_itinerary_detail()->max('id')+1;
+        // // LOG ITINERARY
+        // $data = array(
+        //     'id' => $id_log,
+        //     'booking_id' => $d->id,
+        //     'name' => $d->itinerary_detail->itinerary->name,
+        //     'flight_by' => $d->itinerary_detail->itinerary->flight_by,
+        //     'code' => $d->itinerary_detail->itinerary->code,
+        //     'term_condition' => $d->itinerary_detail->itinerary->term_condition,
+        //     'highlight' => $d->itinerary_detail->itinerary->highlight,
+        //     'carousel_1' => $d->itinerary_detail->itinerary->carousel_1,
+        //     'carousel_2' => $d->itinerary_detail->itinerary->carousel_2,
+        //     'carousel_3' => $d->itinerary_detail->itinerary->carousel_3,
+        //     'note_1' => $d->itinerary_detail->itinerary->note_1,
+        //     'note_2' => $d->itinerary_detail->itinerary->note_2,
+        //     'note_3' => $d->itinerary_detail->itinerary->note_3,
+        //     'pdf' => $d->itinerary_detail->itinerary->pdf,
+        //     'flayer_image' => $d->itinerary_detail->itinerary->flayer_image,
+        //     'summary' => $d->itinerary_detail->itinerary->summary,
+        //     'created_by' => $d->itinerary_detail->itinerary->created_by,
+        //     'updated_by' => $d->itinerary_detail->itinerary->updated_by,
+        // );
 
-        $this->model->log_itinerary()->create($data);
+        // $this->model->log_itinerary()->create($data);
 
-        // LOG ITINERARY FLIGHT
-        foreach ($d->itinerary_detail->itinerary->itinerary_flight as $i1 => $d1) {
-            $data = array(
-                'id' => $id_log,
-                'dt' => $i1+1,
-                'booking_id' => $d->id,
-                'flight_number' => $d1->flight_number,
-                'departure_airport_code' => $d1->departure_airport_code,
-                'arrival_airport_code' => $d1->arrival_airport_code,
-                'departure' => $d1->departure,
-                'arrival' => $d1->arrival,
-            );
+        // // LOG ITINERARY FLIGHT
+        // foreach ($d->itinerary_detail->itinerary->itinerary_flight as $i1 => $d1) {
+        //     $data = array(
+        //         'id' => $id_log,
+        //         'dt' => $i1+1,
+        //         'booking_id' => $d->id,
+        //         'flight_number' => $d1->flight_number,
+        //         'departure_airport_code' => $d1->departure_airport_code,
+        //         'arrival_airport_code' => $d1->arrival_airport_code,
+        //         'departure' => $d1->departure,
+        //         'arrival' => $d1->arrival,
+        //     );
 
-            $this->model->log_itinerary_flight()->create($data);
-        }
+        //     $this->model->log_itinerary_flight()->create($data);
+        // }
 
-        // LOG ITINERARY SCHEDULE
-        foreach ($d->itinerary_detail->itinerary->itinerary_schedule as $i1 => $d1) {
-            $data = array(
-                'id' => $id_log,
-                'dt' => $i1+1,
-                'booking_id' => $d->id,
-                'caption' => $d1->caption,
-                'title' => $d1->title,
-                'eat_service' => $d1->eat_service,
-            );
-            $this->model->log_itinerary_schedule()->create($data);
-        }
+        // // LOG ITINERARY SCHEDULE
+        // foreach ($d->itinerary_detail->itinerary->itinerary_schedule as $i1 => $d1) {
+        //     $data = array(
+        //         'id' => $id_log,
+        //         'dt' => $i1+1,
+        //         'booking_id' => $d->id,
+        //         'caption' => $d1->caption,
+        //         'title' => $d1->title,
+        //         'eat_service' => $d1->eat_service,
+        //     );
+        //     $this->model->log_itinerary_schedule()->create($data);
+        // }
 
-        // LOG ITINERARY DESTINATION
-        foreach ($d->itinerary_detail->itinerary->itinerary_destination as $i1 => $d1) {
-            $data = array(
-                'id' => $id_log,
-                'dt' => $i1+1,
-                'booking_id' => $d->id,
-                'destination_id' => $d1->destination_id,
-            );
+        // // LOG ITINERARY DESTINATION
+        // foreach ($d->itinerary_detail->itinerary->itinerary_destination as $i1 => $d1) {
+        //     $data = array(
+        //         'id' => $id_log,
+        //         'dt' => $i1+1,
+        //         'booking_id' => $d->id,
+        //         'destination_id' => $d1->destination_id,
+        //     );
 
-            $this->model->log_itinerary_destination()->create($data);
-        }
+        //     $this->model->log_itinerary_destination()->create($data);
+        // }
 
-        // LOG ITINERARY ADDITIONAL
-        foreach ($d->itinerary_detail->itinerary->itinerary_additional as $i1 => $d1) {
-            $data = array(
-                'id' => $id,
-                'dt' => $i1+1,
-                'booking_id' => $d->id,
-                'additional_id' => $d1->additional_id,
-            );
+        // // LOG ITINERARY ADDITIONAL
+        // foreach ($d->itinerary_detail->itinerary->itinerary_additional as $i1 => $d1) {
+        //     $data = array(
+        //         'id' => $id,
+        //         'dt' => $i1+1,
+        //         'booking_id' => $d->id,
+        //         'additional_id' => $d1->additional_id,
+        //     );
 
-            $this->model->log_itinerary_additional()->create($data);
-        }
-        // LOG ITINERARY DETAIL
+        //     $this->model->log_itinerary_additional()->create($data);
+        // }
+        // // LOG ITINERARY DETAIL
 
-        $data = array(
-                    'id' => $id_log,
-                    'booking_id' => $d->id,
-                    'code' => $d->itinerary_detail->code,
-                    'seat' => $d->itinerary_detail->seat,
-                    'seat_remain' => $d->itinerary_detail->seat_remain,
-                    'start' => $d->itinerary_detail->start,
-                    'end' =>  $d->itinerary_detail->end,
-                    'adult_price' => $d->itinerary_detail->adult_price,
-                    'child_price' => $d->itinerary_detail->child_price,
-                    'child_bed_price' => $d->itinerary_detail->child_bed_price,
-                    'infant_price' => $d->itinerary_detail->infant_price,
-                    'minimal_dp' => $d->itinerary_detail->minimal_dp,
-                    'agent_com' => $d->itinerary_detail->agent_com,
-                    'staff_com' => $d->itinerary_detail->staff_com,
-                    'agent_tip' => $d->itinerary_detail->agent_tip,
-                    'agent_visa' => $d->itinerary_detail->agent_visa,
-                    'agent_tax' => $d->itinerary_detail->agent_tax,
-                    'created_by' => $d->itinerary_detail->created_by,
-                    'updated_by' => $d->itinerary_detail->updated_by,
-                );
+        // $data = array(
+        //             'id' => $id_log,
+        //             'booking_id' => $d->id,
+        //             'code' => $d->itinerary_detail->code,
+        //             'seat' => $d->itinerary_detail->seat,
+        //             'seat_remain' => $d->itinerary_detail->seat_remain,
+        //             'start' => $d->itinerary_detail->start,
+        //             'end' =>  $d->itinerary_detail->end,
+        //             'adult_price' => $d->itinerary_detail->adult_price,
+        //             'child_price' => $d->itinerary_detail->child_price,
+        //             'child_bed_price' => $d->itinerary_detail->child_bed_price,
+        //             'infant_price' => $d->itinerary_detail->infant_price,
+        //             'minimal_dp' => $d->itinerary_detail->minimal_dp,
+        //             'agent_com' => $d->itinerary_detail->agent_com,
+        //             'staff_com' => $d->itinerary_detail->staff_com,
+        //             'agent_tip' => $d->itinerary_detail->agent_tip,
+        //             'agent_visa' => $d->itinerary_detail->agent_visa,
+        //             'agent_tax' => $d->itinerary_detail->agent_tax,
+        //             'created_by' => $d->itinerary_detail->created_by,
+        //             'updated_by' => $d->itinerary_detail->updated_by,
+        //         );
 
-        $this->model->log_itinerary_detail()->create($data);
+        // $this->model->log_itinerary_detail()->create($data);
 		DB::commit();
 
         return Response::json(['status'=>1,'message'=>'Success Saving Data','code'=>$kode,'id'=>$id]);
