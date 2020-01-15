@@ -132,7 +132,7 @@
 		@foreach($d->booking_d as $i1 => $d1)
 			@foreach($d1->booking_pax as $i2 => $d2)
 				<div style="display: inline-block;width: 30%;padding: 10px;">
-					<img style="width: 100%;" src="{{ asset($d2->passport_image) }}">
+					<img style="width: 250px;height: 100px" src="{{ asset($d2->passport_image) }}">
 				</div>
 			@endforeach
 		@endforeach
