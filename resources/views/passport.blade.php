@@ -260,8 +260,8 @@
 			@foreach($data->itinerary_detail->booking as $i => $d)
 				@foreach($d->booking_d as $i1 => $d1)
 					@foreach($d1->booking_pax as $i2 => $d2)
-						<div class="col-sm-3">
-							<img style="width: 150px;height: 75px" src="{{ asset($d2->passport_image) }}">
+						<div class="col-sm-3 mb-3">
+							<img style="width: 250px;height: 150px" src="{{ asset($d2->passport_image) }}">
 						</div>
 					@endforeach
 				@endforeach
