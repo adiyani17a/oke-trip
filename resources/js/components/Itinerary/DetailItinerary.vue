@@ -133,13 +133,13 @@
               <v-flex xs12 style="padding: 10px">
                <ul>
                  <li>
-                  <a href="http://panel.oke-trip.com/api/v1/get-booking-list/pdf/pax/29">Rooming List & Passport List</a>
+                  <a :href="$root.url+'get-booking-list/pdf/pax/'+idBooking">Rooming List & Passport List</a>
                  </li>
                  <li>
-                  <a href="http://panel.oke-trip.com/api/v1/get-booking-list/pdf/pax/29">Pembagian Kamar</a>
+                  <a :href="$root.url+'get-booking-list/pdf/room/'+idBooking">Pembagian Kamar</a>
                  </li>
                  <li>
-                  <a href="http://panel.oke-trip.com/api/v1/get-booking-list/pdf/pax/29">Foto Passport</a>
+                  <a :href="$root.url+'get-booking-list/pdf/passport/'+idBooking">Foto Passport</a>
                  </li>
                </ul>
               </v-flex>
@@ -269,7 +269,7 @@
     validations: {
       tourLeader: { required},
       tourLeaderTips: { required},
-      flightDetailErrors: { required},
+      flightDetails: { required},
     },
     mounted(){
       let breadcrumb = 'Itinerary <router-link to="/additional">/ Detail</router-link>';
@@ -308,6 +308,7 @@
       flayerActive:false,
       finalName:false,
       tatibName:false,
+      idBooking:null,
       flayerName:false,
       snackbar:false,
       timeout: 6000,
@@ -337,6 +338,12 @@
         if (!this.$v.tourLeaderTips.$dirty) return errors
         !this.$v.tourLeaderTips.required && errors.push('Tour Leader Tips is required')
         return errors
+      },
+      flightDetailErrors () {
+        const errors = []
+        if (!this.$v.flightDetails.$dirty) return errors
+        !this.$v.flightDetails.required && errors.push('Flight Detail is required')
+        return errors
       }
     },
     watch: {
@@ -364,6 +371,7 @@
               this.isBooked = response.data.data.booked_by;
               this.flightDetail = response.data.data.flight_detail;
               this.payment_history = response.data.data.payment_history;
+              this.idBooking = response.data.data.booking[0].id;
               if (this.payment_history.length != 0) { 
                 if (this.payment_history[0].status_payment == 'Approve') {
                   this.isPaid = true;

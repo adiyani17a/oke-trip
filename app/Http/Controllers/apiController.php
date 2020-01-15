@@ -830,7 +830,9 @@ class apiController extends Controller
     // Itinerary
     public function datatableItinerary(Request $req)
     {
-        $data =  $this->model->itinerary()->paginate($req->showing);
+        $data =  $this->model->itinerary()
+                      ->with(['create'])
+                      ->paginate($req->showing);
         foreach ($data as $i => $d) {
             if (count($d->itinerary_destination) != 0) {
                 foreach ($d->itinerary_destination as $i1 => $d1) {
@@ -1446,7 +1448,7 @@ class apiController extends Controller
         $data = $this->model->itinerary_detail()
                     ->with(['payment_history'=>function($q){
                         $q->with(['payment_history_d']);
-                    }])
+                    },'booking'])
                     ->where('id',$req->id)
                     ->where('dt',$req->dt)
                     ->first();

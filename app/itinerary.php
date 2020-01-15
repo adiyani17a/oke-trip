@@ -41,4 +41,8 @@ class itinerary extends Model
         return $this->hasMany('App\itinerary_additional', 'id', 'id');
     }
 
+    public function create()
+    {
+        return $this->belongsTo('App\User', 'created_by', 'id');
+    }
 }

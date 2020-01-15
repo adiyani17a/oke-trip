@@ -548,6 +548,47 @@ class apiV1Controller extends Controller
 		return $pdf->stream();
 	}
 
+	public function bookingListPdfRoom($id)
+	{
+		$data = $this->model->booking()	
+					 ->where('id',$id)
+					 ->with(['booking_d'=>function($q){
+					 	$q->with(['booking_pax'=>function($q1){
+					 		$q1->with(['booking_additional'=>function($q2){
+					 			$q2->with(['additional']);
+					 		}]);
+					 	}]);
+					 },'payment_history'=>function($q){
+					 	$q->with(['payment_history_d']);
+					 },'users','handle','itinerary_detail'=>function($q){
+					 	$q->with(['itinerary']);
+					 }])
+					 ->first();
+		$data->flight_detail = str_replace('|', '<br>', $data->itinerary_detail->flight_detail);
+		$pdf = PDF::loadView('room', ['data' => $data])->setPaper('a4', 'landscape');
+		return $pdf->stream();
+	}
+
+	public function bookingListPdfPassport($id)
+	{
+		$data = $this->model->booking()	
+					 ->where('id',$id)
+					 ->with(['booking_d'=>function($q){
+					 	$q->with(['booking_pax'=>function($q1){
+					 		$q1->with(['booking_additional'=>function($q2){
+					 			$q2->with(['additional']);
+					 		}]);
+					 	}]);
+					 },'payment_history'=>function($q){
+					 	$q->with(['payment_history_d']);
+					 },'users','handle','itinerary_detail'=>function($q){
+					 	$q->with(['itinerary']);
+					 }])
+					 ->first();
+		$data->flight_detail = str_replace('|', '<br>', $data->itinerary_detail->flight_detail);
+		return view('passport',compact('data'));
+	}
+
 	public function bookingListPdfInvoice($id)
 	{
 		$data['data'] = $this->model->booking()	

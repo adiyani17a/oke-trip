@@ -305,6 +305,7 @@
                     { text: 'Flight By', value: 'flight_by' ,type:'default'},
                     { text: 'Active', value: 'active' ,type:'switch',class:'text-xs-center'},
                     { text: 'Created At', value: 'created_at',type:'default' },
+                    { text: 'Created By', value: 'created_by',type:'default' },
                     { text: 'is Hot Deals', value: 'hot_deals',type:'hot deals' },
                 ],
                 loadingDataTable:false,
@@ -389,6 +390,9 @@
                         }
 
                         this.dataItem[i].image = '.'+this.dataItem[i].image;
+                        if (this.dataItem[i].create != null) {
+                          this.dataItem[i].created_by = this.dataItem[i].create.name;
+                        }
                     }
 
                   })

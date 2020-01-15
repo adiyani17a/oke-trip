@@ -466,6 +466,16 @@ Route::group(['middleware' => 'cors'], function () {
         'as' => "bookingListPdfPax"
       ]);
 
+      Route::get('/get-booking-list/pdf/room/{id}', [
+        'uses' => "apiV1Controller@bookingListPdfRoom",
+        'as' => "bookingListPdfRoom"
+      ]);
+
+      Route::get('/get-booking-list/pdf/passport/{id}', [
+        'uses' => "apiV1Controller@bookingListPdfPassport",
+        'as' => "bookingListPdfPassport"
+      ]);
+
       Route::get('/get-booking-list/pdf/invoice/{id}', [
         'uses' => "apiV1Controller@bookingListPdfInvoice",
         'as' => "bookingListPdfInvoice"

@@ -284,6 +284,7 @@ let app = new Vue({
     data() {
         return {
             url_image: process.env.MIX_URL_IMAGE,
+            url: process.env.MIX_URL,
             mailBox: [],
             idMailBox:0,
         }

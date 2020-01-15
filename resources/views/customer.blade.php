@@ -146,7 +146,12 @@
 			<th class="px-2 py-2 border">Date</th>
 		</tr>
 		@php
-			$count = 1;
+			if ($data->itinerary_detail->tour_leader != null) {
+				$count = 2;
+			}else{
+				$count = 1;
+			}
+
 			$single = 0;
 			$double = 0;
 			$twin = 0;
@@ -157,6 +162,43 @@
 			$infant = 0;
 			$child = 0;
 		@endphp
+		@if ($data->itinerary_detail->tour_leader != null)
+			@php
+				$single+=1;
+			@endphp
+			<tr>
+				<td class="px-2 py-2 border" style="background-color: yellow;" colspan="10">
+					Booking Code : TOUR LEADER
+				</td>
+			</tr>
+			<tr class="border">
+				<td  class="text-center px-2 py-2 border-l">1</td>
+				<td  class="px-2 py-2">{{ $data->itinerary_detail->tour_leader->name }}</td>
+				<td  class="px-2 py-2">{{ ucwords($data->itinerary_detail->tour_leader->gender) }}</td>
+				<td  class="px-2 py-2">Single Bed</td>
+				<td  class="px-2 py-2">
+					{{ $data->itinerary_detail->tour_leader->passport }}
+				</td>
+				<td  class="px-2 py-2">
+					{{ $data->itinerary_detail->tour_leader->issuing }}
+				</td>
+				<td  class="px-2 py-2">
+					{{ carbon\carbon::parse($data->itinerary_detail->tour_leader->passport_exp_date)->format('d-M-y') }}
+				</td>
+				<td  class="px-2 py-2">
+					{{ $data->itinerary_detail->tour_leader->birth_place}}
+				</td>
+				<td  class="px-2 py-2">
+					{{ carbon\carbon::parse($data->itinerary_detail->tour_leader->birth_date)->format('d-M-Y') }}
+				</td>
+				<td  class="px-2 py-2 border-r">
+					{{ $data->itinerary_detail->tour_leader->phone }}
+				</td>
+				@php
+					$adult += 1;
+				@endphp
+			</tr>
+		@endif
 		@foreach($data->itinerary_detail->booking as $i => $d)
 			<tr>
 				<td class="px-2 py-2 border" style="background-color: #efef;" colspan="10">

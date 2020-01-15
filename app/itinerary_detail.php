@@ -37,4 +37,9 @@ class itinerary_detail extends Model
     {
         return $this->belongsTo('App\user', 'booked_by', 'id');
     }
+
+    public function tour_leader()
+    {
+        return $this->belongsTo('App\tour_leader', 'tour_leader_id', 'id');
+    }
 }
