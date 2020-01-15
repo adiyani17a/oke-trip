@@ -240,7 +240,7 @@
 			<nav class="navbar navbar-light" style="width: 100%">
 				<div class="col-md-4">
 					<a class="navbar-brand" href="{{ url('/') }}" style="color: white !important">
-				    PT Jawa Pratama Mandiri
+				    Oke-Trip.com
 				  </a>
 				</div>
 				<div class="col-md-4 d-flex btn-group">
