@@ -2258,7 +2258,7 @@ class apiController extends Controller
 
     public function about(Request $req)
     {
-        $data = $this->model->term_condition()->first();
+        $data = $this->model->about()->first();
         return response::json(['status'=>1,'data'=>$data]);
     }
 
