@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>DBoard | Print Berita Acara</title>
+    <title>Oke-trip.com | Passport</title>
     <link rel="shortcut icon" type="image/png" href="{{ asset('assets/img/dboard/logo/faveicon.png') }}"/>
     {{-- <link href="{{ asset('assets/vendors/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet"> --}}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -9,9 +9,8 @@
     <link href="{{ asset('assets/css/chosen/chosen.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/vendors/datapicker/datepicker3.css') }}" rel="stylesheet">
     <style type="text/css">
-
 		.height{
-	    background: white;
+	    	background: white;
 			height: 100%;
 		}
 		.pt-2{

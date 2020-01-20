@@ -1525,6 +1525,7 @@ class apiController extends Controller
             $input['tour_leader_id'] = $req->tour_leader_id;
             $input['tour_leader_tips'] = filter_var($req->tour_leader_tips,FILTER_SANITIZE_NUMBER_INT);
             $input['flight_detail'] = $req->flight_detail;
+            $input['gross_per_pax'] = filter_var($req->gross_per_pax,FILTER_SANITIZE_NUMBER_INT);
             $input['updated_by'] = Auth::user()->id;
             $input['updated_at'] = carbon::now();
 
@@ -1542,8 +1543,6 @@ class apiController extends Controller
             $data[$i]->action = '';
             $data[$i]->image = $data[$i]->image.'?'.time(); 
         }
- 
-
 
         return Response::json(['data'=>$data]);
     }

@@ -121,6 +121,9 @@
                   >
                 </v-select>
               </v-flex>
+              <v-flex xs12 md6 style="padding: 10px">
+                <v-text-field ref="grossPerPax" label="Gross Per Pax*" v-money="money" v-model="grossPerPax" @blur="$v.grossPerPax.$touch()" :error-messages="grossPerPaxErrors" ></v-text-field>
+              </v-flex>
               <v-flex xs12 md6 style="padding: 10px" v-if="payment_history.length != 0">
                 <v-btn color="success" @click="dialog = true" v-if="payment_history[0].status_payment == 'Pending'">
                   Approve DP Payment
@@ -270,6 +273,7 @@
       tourLeader: { required},
       tourLeaderTips: { required},
       flightDetails: { required},
+      grossPerPax:{required}
     },
     mounted(){
       let breadcrumb = 'Itinerary <router-link to="/additional">/ Detail</router-link>';
@@ -292,6 +296,7 @@
     },
     data: () => ({
       tourLeader: '',
+      grossPerPax:'',
       tourLeaderTips: '',
       isBooked: '',
       flightDetail:'',
@@ -344,6 +349,12 @@
         if (!this.$v.flightDetails.$dirty) return errors
         !this.$v.flightDetails.required && errors.push('Flight Detail is required')
         return errors
+      },
+      grossPerPaxErrors () {
+        const errors = []
+        if (!this.$v.grossPerPax.$dirty) return errors
+        !this.$v.grossPerPax.required && errors.push('Gross Per Pax is required')
+        return errors
       }
     },
     watch: {
@@ -365,6 +376,8 @@
               this.tourLeader = response.data.data.tour_leader_id;
               this.tourLeaderTips = response.data.data.tour_leader_tips;
               this.$refs.tourLeaderTips.$el.getElementsByTagName('input')[0].value =  accounting.formatNumber(response.data.data.tour_leader_tips);
+              this.grossPerPax = response.data.data.gross_per_pax;
+              this.$refs.grossPerPax.$el.getElementsByTagName('input')[0].value =  accounting.formatNumber(response.data.data.gross_per_pax);
               this.finalConfirmation = response.data.data.final_pdf;
               this.tataTertib = response.data.data.term_pdf;
               this.flayer = response.data.data.flayer_jpg;
@@ -468,6 +481,7 @@
         formData.append('flayer', this.flayer)
         formData.append('booked_by', this.isBooked)
         formData.append('flight_detail', this.flightDetail)
+        formData.append('gross_per_pax', this.grossPerPax)
         axios.post('/api/itinerary/save-detail',
                 formData, {
                     headers: {
