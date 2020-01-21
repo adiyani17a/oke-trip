@@ -34,6 +34,7 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('destination', 'HomeController@index');
   Route::get('additional', 'HomeController@index');
   Route::get('itinerary', 'HomeController@index');
+  Route::get('archive', 'HomeController@index');
   Route::get('tour-leader', 'HomeController@index');
 
   Route::get('{path}', 'HomeController@index')->where('all', '^(?!api).*$');
@@ -214,6 +215,7 @@ Route::group(['middleware' => 'check-token'], function () {
     });
 
     Route::group(["prefix" => "itinerary"], function(){
+
       Route::get('/datatable', [
         'uses' => "apiController@datatableItinerary",
         'as' => "datatableItinerary"
@@ -263,7 +265,6 @@ Route::group(['middleware' => 'check-token'], function () {
         'uses' => "apiController@editItinerary",
         'as' => "editItinerary"
       ]);
-
     });
 
     Route::group(["prefix" => "tour-leader"], function(){
@@ -342,6 +343,34 @@ Route::group(['middleware' => 'check-token'], function () {
       ]);
     });
 
+    Route::group(["prefix" => "archive"], function(){
+      Route::get('/datatable', [
+        'uses' => "apiController@datatableArchive",
+        'as' => "datatableArchive"
+      ]);
+
+      Route::post('/delete', [
+        'uses' => "apiController@deleteArchive",
+        'as' => "deleteArchive"
+      ]);
+    });
+
+    Route::group(["prefix" => "income-report"], function(){
+      Route::get('/get-data', [
+        'uses' => "apiController@getDataIncomeReport",
+        'as' => "getDataIncomeReport"
+      ]);
+
+      Route::post('/save', [
+        'uses' => "apiController@saveMenuList",
+        'as' => "saveMenuList"
+      ]);
+
+      Route::post('/delete', [
+        'uses' => "apiController@deleteMenuList",
+        'as' => "deleteMenuList"
+      ]);
+    });
 
     Route::group(["prefix" => "booking-list"], function(){
       Route::get('/datatable', [

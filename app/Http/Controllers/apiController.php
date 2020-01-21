@@ -831,6 +831,7 @@ class apiController extends Controller
     public function datatableItinerary(Request $req)
     {
         $data =  $this->model->itinerary()
+                      ->where('archive','true')
                       ->with(['create'])
                       ->paginate($req->showing);
         foreach ($data as $i => $d) {
@@ -1416,14 +1417,11 @@ class apiController extends Controller
         foreach ($req->data['data'] as $i => $d) {
             $checking = $this->model->itinerary()->where('id',$req->data['data'][$i]['id'])->first();
             $validate = 0;
-            foreach ($checking->itinerary_detail as $i1 => $d1) {
-            	if (count($checking->booking) != 0) {
-            		$validate += 1;
-	            }
-            }
-	        
 	        if ($validate == 0) {
-	           	$this->model->itinerary()->where('id',$req->data['data'][$i]['id'])->delete();
+	           	$this->model->itinerary()->where('id',$req->data['data'][$i]['id'])
+                     ->update([
+                        'archive'=>'false'
+                     ]);
 	        }else{
 	        	DB::rollBack();
             	return Response::json(['status'=>0,'message'=>'Failed deleting data, some itinerary has booking data already. If you want force delete, call developer']);
@@ -2400,6 +2398,46 @@ class apiController extends Controller
         }
     }
 
+    public function datatableArchive(Request $req)
+    {
+        $data =  $this->model->itinerary()
+                      ->where('archive','false')
+                      ->with(['create'])
+                      ->paginate($req->showing);
+        foreach ($data as $i => $d) {
+            if (count($d->itinerary_destination) != 0) {
+                foreach ($d->itinerary_destination as $i1 => $d1) {
+                    if (count($d->itinerary_destination)-1 == $i1) {
+                        $data[$i]->destination .= $d1->destination->name;
+                    }else{
+                        $data[$i]->destination .= $d1->destination->name.', ';
+                    }
+                }
+            }
+        }
+
+        return Response::json(['data'=>$data]);
+    }
+
+    public function deleteArchive(Request $req)
+    {
+        DB::beginTransaction();
+        if(!Auth::user()->hasAccess('Archive','delete')){
+            DB::rollBack();
+            return Response::json(['status'=>0,'message'=>'You Dont Have Authority To Delete This Data']);
+        }
+
+        foreach ($req->data['data'] as $i => $d) {
+            $this->model->itinerary()->where('id',$req->data['data'][$i]['id'])
+                     ->update([
+                        'archive'=>'true'
+                     ]);
+        }
+        
+        DB::commit();
+        return Response::json(['status'=>1,'message'=>'Success deleting data']);
+    }
+
     public function tes()
     {
         $control = $this->model->system_control()->find(1);
@@ -2422,5 +2460,14 @@ class apiController extends Controller
         }else{
             return 'Failure';
         }
+    }
+
+    public function getDataIncomeReport(Request $req)
+    {
+        $booking = $this->model->booking()
+                        ->orderBy('id','ASC')
+                        ->get();
+
+        dd($booking[1]->payment_history_done);
     }
 }

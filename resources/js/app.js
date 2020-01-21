@@ -131,6 +131,13 @@ let routes = [{
     },
     component: require('./components/Itinerary/Itinerary.vue').default
 }, {
+    path: '/archive',
+    name: 'Archive',
+    meta: {
+        breadcrumb: 'archive',
+    },
+    component: require('./components/Archive/Archive.vue').default
+}, {
     path: '/itinerary/create',
     name: 'Create Itinerary',
     meta: {

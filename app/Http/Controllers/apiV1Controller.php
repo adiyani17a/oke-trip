@@ -51,6 +51,7 @@ class apiV1Controller extends Controller
 								})
 								->where('hot_deals','Y')
 								->where('active','true')
+								->where('archive','true')
 								->take(4)
 								->get();
 		$data['destination'] = $this->model->destination()
@@ -907,6 +908,7 @@ class apiV1Controller extends Controller
 		$users_id = $req->users_id;
 		$data = $this->model->itinerary()
 				->where('active','true')
+				->where('archive','true')
 				->with(['itinerary_detail'])
 				->whereHas('itinerary_destination',function($q) use ($country){
 					if (count($country) != 0) {
