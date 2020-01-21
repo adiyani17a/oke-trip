@@ -54,7 +54,7 @@ class SendUserEmail extends Command
             foreach ($booking as $i => $d) {
                 if ($d->total >= $d->payment_history->sum('total_payment')) {
                     $date = (strtotime($d->itinerary_detail->start) - strtotime(carbon::now()->format('Y-m-d')))/86400;
-                    if ( $date == 42 ) {
+                    if ( $date == 21 or $date == 14 or $date == 7 ) {
                         $details['email'] = $d->users->email;
                         dispatch(new App\Jobs\SendEmail($details,$d));
                     }

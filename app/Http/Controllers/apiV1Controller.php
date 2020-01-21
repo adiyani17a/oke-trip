@@ -38,7 +38,8 @@ class apiV1Controller extends Controller
 
 		$users_id = $req->users_id;
 		$now = carbon::now()->format('Y-m-d');
-		$data['hotDeal'] = $this->model->itinerary()->with(['itinerary_detail'=>function($q) use ($now){
+		$data['hotDeal'] = $this->model->itinerary()
+								->with(['itinerary_detail'=>function($q) use ($now){
 									$q->where('start','>=',$now);
 								}])
 								->whereHas('itinerary_detail',function($q) use ($now,$users_id){
@@ -48,8 +49,13 @@ class apiV1Controller extends Controller
 										$q->orWhere('booked_by',$users_id);
 									}
 								})
-								->where('hot_deals','Y')->where('active','true')->take(4)->get();
-		$data['destination'] = $this->model->destination()->with(['itinerary_destination'])->take(6)->get();
+								->where('hot_deals','Y')
+								->where('active','true')
+								->take(4)
+								->get();
+		$data['destination'] = $this->model->destination()
+									->where('active','true')
+									->with(['itinerary_destination'])->take(6)->get();
 		$data['carousel'] = $this->model->carousel()->first();
         $data['blog'] = $this->model->blog()->get();
 
@@ -900,6 +906,7 @@ class apiV1Controller extends Controller
 		$country = $req->country;
 		$users_id = $req->users_id;
 		$data = $this->model->itinerary()
+				->where('active','true')
 				->with(['itinerary_detail'])
 				->whereHas('itinerary_destination',function($q) use ($country){
 					if (count($country) != 0) {
