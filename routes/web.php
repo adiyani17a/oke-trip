@@ -54,7 +54,22 @@ Route::group(['middleware' => 'auth'], function () {
     
 });
 
+Route::group(['middleware' => 'auth'], function () {
+  Route::group(["prefix" => "report/income-report"], function(){
+    Route::get('/', [
+      'uses' => "ReportController@incomeReport",
+      'as' => "incomeReport"
+    ]);
+  });
+});
+
+  
+
 Route::group(['middleware' => 'check-token'], function () {
+
+
+
+
 	Route::group(["prefix" => "api"], function(){
     Route::get('/convert-image-base-64', [
       'uses' => "apiController@convertImageBase64",
@@ -355,20 +370,10 @@ Route::group(['middleware' => 'check-token'], function () {
       ]);
     });
 
-    Route::group(["prefix" => "income-report"], function(){
-      Route::get('/get-data', [
-        'uses' => "apiController@getDataIncomeReport",
-        'as' => "getDataIncomeReport"
-      ]);
-
-      Route::post('/save', [
-        'uses' => "apiController@saveMenuList",
-        'as' => "saveMenuList"
-      ]);
-
-      Route::post('/delete', [
-        'uses' => "apiController@deleteMenuList",
-        'as' => "deleteMenuList"
+    Route::group(["prefix" => "report/income-report"], function(){
+      Route::get('/', [
+        'uses' => "ReportController@incomeReport",
+        'as' => "incomeReport"
       ]);
     });
 

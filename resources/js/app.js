@@ -184,9 +184,6 @@ let routes = [{
     name: 'Tour Leader',
     component: require('./components/TourLeader/tourLeader.vue').default
 }, {
-    path: '/income-report',
-    component: require('./components/Finance/incomeReport.vue').default
-}, {
     path: '/income-statement',
     component: require('./components/Finance/incomeStatement.vue').default
 }, {

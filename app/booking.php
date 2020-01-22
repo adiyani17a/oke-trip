@@ -38,9 +38,9 @@ class booking extends Model
         $data = new \App\payment_history();
         $sum = $data->where('booking_id',$id)->where('status_payment','Approve')->sum('total_payment');
         if ($total == $sum) {
-            return true;
+            return $sum;
         }else{
-            return false;
+            return 0;
         }
     }
 

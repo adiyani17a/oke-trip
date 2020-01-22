@@ -167,16 +167,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
-                  @foreach ($d->menuList as $i1 => $d1)
-                    @if (Auth::user()->hasAccess($d1->id,'view'))
-                      <li class="nav-item">
-                        <router-link to="/{{ $d1->url }}" class="nav-link ">
-                          <i class="far fa-circle nav-icon"></i>
-                          <p>{{ $d1->name }}</p>
-                        </router-link>
-                      </li>
-                    @endif
-                  @endforeach
+                  @if ($d->id == 4 or $d->id == 5)
+                    @foreach ($d->menuList as $i1 => $d1)
+                      @if (Auth::user()->hasAccess($d1->id,'view'))
+                        <li class="nav-item">
+                          <a class="nav-link " href="{{ url('/report/'.$d1->url) }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>{{ $d1->name }}</p>
+                          </a>
+                        </li>
+                      @endif
+                    @endforeach
+                  @else
+                    @foreach ($d->menuList as $i1 => $d1)
+                      @if (Auth::user()->hasAccess($d1->id,'view'))
+                        <li class="nav-item">
+                          <router-link to="/{{ $d1->url }}" class="nav-link ">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>{{ $d1->name }}</p>
+                          </router-link>
+                        </li>
+                      @endif
+                    @endforeach
+                  @endif
                 </ul>
               </li>
             @endif

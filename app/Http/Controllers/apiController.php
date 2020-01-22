@@ -2468,6 +2468,12 @@ class apiController extends Controller
                         ->orderBy('id','ASC')
                         ->get();
 
-        dd($booking[1]->payment_history_done);
+        
+        foreach ($booking as $i => $d) {
+            if (!$d->payment_history_done()) {
+                unset($booking[$i]);
+            }
+        }
+        return Response::json(['booking'=>$booking]);
     }
 }
