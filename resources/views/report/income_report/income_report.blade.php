@@ -273,7 +273,6 @@
 		pie['value'].push('{{ $dataSets[$i]['data'] }}')
 		pie['color'].push(dynamicColors());
 	@endforeach
-	console.log(pie);
 	function dynamicColors() {
 	    var r = Math.floor(Math.random() * 255);
 	    var g = Math.floor(Math.random() * 255);
@@ -284,7 +283,6 @@
 	var ctx = document.getElementById('myChart').getContext('2d');
 	var chart = new Chart(ctx, {
 	    // The type of chart we want to create
-	    title:'Penjualan Ticket Berdasarkan Destinasi'
 	    type: 'doughnut',
 	    // The data for our dataset
 	    data: {
@@ -296,14 +294,30 @@
 	    },
 	    // Configuration options go here
 	    options: {
-	        scales: {
-	            yAxes: [{
-	                ticks: {
-	                    callback: function(value) {
-	                        return accounting.formatNumber(value, 2, " ")
-	                    }
+	    	tooltips:{
+	            callbacks: {
+	                labelColor: function(tooltipItem, chart) {
+	                    return {
+	                        borderColor: 'rgb(255, 255, 255)',
+	                        backgroundColor: 'rgb(255, 255, 255)'
+	                    };
+	                },
+	                labelTextColor: function(tooltipItem, chart) {
+	                    return '#fff';
+	                },
+	                label: function(tooltipItem, data) {
+	                    var value = data.datasets[0].data[tooltipItem.index];
+	                    if(parseInt(value) >= 1000){
+                           return 'Rp. ' + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        } else {
+                           return 'Rp. ' + value;
+                        }
 	                }
-	            }]
+	            }
+	    	},
+	        title: {
+	            display: true,
+	            text: 'Penjualan Berdasarkan Destinasi'
 	        },
 	        responsive: true,
 	        maintainAspectRatio: false,
