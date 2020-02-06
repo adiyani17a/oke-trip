@@ -60,6 +60,16 @@ Route::group(['middleware' => 'auth'], function () {
       'uses' => "ReportController@incomeReport",
       'as' => "incomeReport"
     ]);
+
+    Route::get('/datatable-agen', [
+      'uses' => "ReportController@datatableAgen",
+      'as' => "datatableAgen"
+    ]);
+
+    Route::get('/get-data-destination', [
+      'uses' => "ReportController@getDataDestination",
+      'as' => "getDataDestination"
+    ]);
   });
 });
 

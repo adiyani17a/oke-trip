@@ -43,6 +43,11 @@ class User extends Authenticatable
       return $this->belongsTo('App\role', 'role_id', 'id');
     }
 
+    public function booking()
+    {
+      return $this->hasMany('App\booking', 'users_id', 'id');
+    }
+
     public function company()
     {
         return $this->hasOne('App\company', 'id', 'company_id');

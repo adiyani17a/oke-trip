@@ -19,4 +19,9 @@ class company extends Model
     	return $this->hasOne('App\city', 'id', 'city_id');
     }
 
+    public function agen()
+    {
+        return $this->hasMany('App\User', 'company_id', 'id');
+    }
+
 }

@@ -5,9 +5,10 @@
     <link rel="shortcut icon" type="image/png" href="{{ asset('assets/img/dboard/logo/faveicon.png') }}"/>
     {{-- <link href="{{ asset('assets/vendors/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet"> --}}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
     <link href="{{ asset('assets/css/chosen/chosen.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/vendors/datapicker/datepicker3.css') }}" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <style type="text/css">
 		.height{
 	    	background: white;
@@ -174,6 +175,7 @@
 			background: white;
 			font-size: 10px;
 			padding: 5px;
+			padding-top: 20px;
 		}
 
 		@media print
@@ -196,6 +198,7 @@
 
 	        .table-margin{
 				margin-top: 0px;
+				padding-top: 0px;
 			}
 		}
 
@@ -219,11 +222,16 @@
 			font-size: 20px;
 			font-weight: 800
 		}
+		.hidden{
+			display: none;
+		}
     </style>
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-	<!-- datepicker  --> 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.full.min.js" integrity="sha256-vucLmrjdfi9YwjGY/3CQ7HnccFSS/XRS1M/3k/FDXJw=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/fontawesome.min.css" integrity="sha256-mM6GZq066j2vkC2ojeFbLCcjVzpsrzyMVUnRnEQ5lGw=" crossorigin="anonymous" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/fontawesome.min.js" integrity="sha256-7zqZLiBDNbfN3W/5aEI1OX/5uvck9V0yhwKOA9Oe49M=" crossorigin="anonymous"></script>
 </head>
 <body style="background: grey">
 	<header id="navigation" style="padding: 0px 0px;height: 60px;vertical-align: middle;background: rgba(0, 0, 0, 0.8); box-shadow: 0px 2px 5px #444; z-index:2;width: 100%;position: fixed;top: 0px;">
@@ -249,8 +257,32 @@
 	</header>
 	<div id="isi" class="container">
 		<div class="row table-margin">
+			<div class="col-sm-12">
+				<div class="col-sm-3">
+					<label><b>Tanggal</b></label>
+					<input type="text" class="daterange form-control" name="daterange" value="{{ carbon\carbon::now()->startOfMonth()->format('d/m/Y') }} - {{ carbon\carbon::now()->endOfMonth()->format('d/m/Y') }}" />
+					<input type="hidden" id="start" value="{{ carbon\carbon::now()->startOfMonth()->format('Y-m-d') }}">
+					<input type="hidden" id="end" value="{{ carbon\carbon::now()->endOfMonth()->format('Y-m-d') }}">
+				</div>
+			</div>
 			<div class="col-sm-6">
+				<div class="col-sm-12 text-center loading hidden">
+	                <i class="fas fa-circle-notch fa-spin"  style="font-size: 38px;margin-top: 20px;color: hotpink"></i>
+	            </div>
 				<canvas id="myChart"></canvas>
+			</div>
+			<div class="col-sm-6">
+				<table id="datatable" class="table table-bordered">
+					<caption>Jumlah Penjualan Berdasarkan Agen</caption>
+					<thead>
+						<th>Nama Agen</th>
+						<th>Jumlah Pax</th>
+						<th>Total Net</th>
+					</thead>
+					<tbody>
+					
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
@@ -259,20 +291,29 @@
 <script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.js" integrity="sha256-3D7ReNwPUpz68bIJ/oCK/SS06yw2x5MXNNj6tysVUGs=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css" integrity="sha256-FdatTf20PQr/rWg+cAKfl6j4/IY3oohFAJ7gVC3M34E=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.min.css" integrity="sha256-nbyata2PJRjImhByQzik2ot6gSHSU4Cqdz5bNYL2zcU=" crossorigin="anonymous" />
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script type="text/javascript">
-	var pie = [];
-	var pie = [];
-	var pie = [];
+	var chart;
+	$(function() {
+	    $('.daterange').daterangepicker({
+	        autoclose: true,
+	          "opens": "right",
+	          locale: {
+	          format: 'DD/MM/YYYY'
+	      }     
+	    }, function(start, end, label) {
+	        getDataDestination(start.format('YYYY-MM-DD'),end.format('YYYY-MM-DD'));
+	        $('#start').val(start);
+	        $('#end').val(end);
+	        table.ajax.reload(null,false);
+	    });
+	});
 
-	var color = [];
-	pie['labels'] = [];
-	pie['value']= [];
-	pie['color']= [];
-	@foreach ($dataSets as $i=>$d)
-		pie['labels'].push('{{ $dataSets[$i]['labels'] }}')
-		pie['value'].push('{{ $dataSets[$i]['data'] }}')
-		pie['color'].push(dynamicColors());
-	@endforeach
 	function dynamicColors() {
 	    var r = Math.floor(Math.random() * 255);
 	    var g = Math.floor(Math.random() * 255);
@@ -280,60 +321,131 @@
 	    return "rgba(" + r + "," + g + "," + b + ")";
 	}
 
-	var ctx = document.getElementById('myChart').getContext('2d');
-	var chart = new Chart(ctx, {
-	    // The type of chart we want to create
-	    type: 'doughnut',
-	    // The data for our dataset
-	    data: {
-	        datasets: [{
-	            data: pie['value'],
-	            backgroundColor: pie['color']
-	        }],
-	        labels: pie['labels']
-	    },
-	    // Configuration options go here
-	    options: {
-	    	tooltips:{
-	            callbacks: {
-	                labelColor: function(tooltipItem, chart) {
-	                    return {
-	                        borderColor: 'rgb(255, 255, 255)',
-	                        backgroundColor: 'rgb(255, 255, 255)'
-	                    };
+	setTimeout(function() {
+		try{
+	    	chart.update();
+		}catch(err){
+
+		}
+	}, 0);
+
+	function getDataDestination(start = `{{ carbon\carbon::now()->startOfMonth()->format('Y-m-d') }}`,end = `{{ carbon\carbon::now()->endOfMonth()->format('Y-m-d') }}`) {
+		$('.loading').removeClass('hidden');
+	    $.ajax({
+	        url: '{{ route('getDataDestination') }}',
+	        data: {
+	            start,
+	            end
+	        },
+	        type: 'get',
+	        success: function(data) {
+				$('.loading').addClass('hidden');
+	            var pie = [];
+	            var pie = [];
+	            var pie = [];
+	            var table;
+	            var color = [];
+	            pie['labels'] = [];
+	            pie['value'] = [];
+	            pie['color'] = [];
+
+	            data.data.forEach((d,i)=>{
+	            	pie['value'].push(d.data);
+	            	pie['labels'].push(d.labels);
+		            pie['color'].push(dynamicColors());
+	            });
+	   
+	            ctx = document.getElementById('myChart').getContext('2d');
+	            chart = new Chart(ctx, {
+	                // The type of chart we want to create
+	                type: 'doughnut',
+	                // The data for our dataset
+	                data: {
+	                    datasets: [{
+	                        data: pie['value'],
+	                        backgroundColor: pie['color']
+	                    }],
+	                    labels: pie['labels']
 	                },
-	                labelTextColor: function(tooltipItem, chart) {
-	                    return '#fff';
-	                },
-	                label: function(tooltipItem, data) {
-	                    var value = data.datasets[0].data[tooltipItem.index];
-	                    if(parseInt(value) >= 1000){
-                           return 'Rp. ' + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                        } else {
-                           return 'Rp. ' + value;
-                        }
+	                // Configuration options go here
+	                options: {
+	                    tooltips: {
+	                        callbacks: {
+	                            label: function(tooltipItem, data) {
+	                                var value = data.datasets[0].data[tooltipItem.index];
+	                                if (parseInt(value) >= 1000) {
+	                                    return 'Rp. ' + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	                                } else {
+	                                    return 'Rp. ' + value;
+	                                }
+	                            }
+	                        }
+	                    },
+	                    title: {
+	                        display: true,
+	                        text: 'Penjualan Berdasarkan Destinasi'
+	                    },
+	                    responsive: true,
+	                    maintainAspectRatio: false,
+	                    legend: {
+	                        position: 'bottom',
+	                        labels: {
+	                            boxWidth: 12,
+	                            fontSize: 11,
+	                        }
+	                    },
+	                    animation: {
+	                        animateScale: true,
+	                        animateRotate: false,
+	                    },
 	                }
-	            }
-	    	},
-	        title: {
-	            display: true,
-	            text: 'Penjualan Berdasarkan Destinasi'
+	            });
+	            chart.canvas.parentNode.style.height = '256px';
+	            chart.canvas.parentNode.style.width = '256px';
 	        },
-	        responsive: true,
-	        maintainAspectRatio: false,
-	        legend: {
-	            position: 'bottom',
-	            labels: {
-	                boxWidth: 12,
-	                fontSize: 11,
-	            }
-	        },
-	        animation: {
-	            animateScale: true,
-	            animateRotate: false,
-	        },
-	    }
+	        error: function(data) {
+
+	        }
+	    });
+	}
+
+	$('.select2').select2({
+	    theme: "bootstrap4",
+	    width:'100%'
 	});
+
+	$(document).ready(function() {
+	    table = $('#datatable').DataTable({
+	        processing: true,
+	        serverSide: true,
+	        ajax: {
+	            url: '{{ route('datatableAgen') }}',
+	            data:{
+	            	awal(){
+	            		return $('#start').val();
+	            	},
+	            	akhir(){
+	            		return $('#end').val();
+	            	}
+	            }
+	        },
+	        columns: [{
+	            data: 'name',
+	            name: 'name',
+	            class: 'text-left'
+	        }, {
+	            data: 'pax',
+	            name: 'pax',
+	            class: 'text-center'
+	        }, {
+	            data: 'total',
+	            name: 'total',
+	            render: $.fn.dataTable.render.number(',', '.', 2),
+	            class: 'text-right'
+	        }]
+	    });
+		getDataDestination();
+	})
 	function excel(argument) {
 	    var blob = b64toBlob(btoa($('div[id=isi]').html().replace(/[\u00A0-\u2666]/g, function(c) {
 	        return '&#' + c.charCodeAt(0) + ';';
