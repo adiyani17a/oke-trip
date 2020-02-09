@@ -195,10 +195,6 @@
 	        body{
 	        	background-color: white !important;
 	        }
-	        
-	        .mb-3{
-	        	visibility: none;
-	        }
 
 	        .table-margin{
 				margin-top: 0px;
@@ -277,69 +273,32 @@
 			<div class="col-sm-12">
 				<table class="table table-bordered">
 					<thead>
+						<th>Payment Code</th>
 						<th>Booking Code</th>
-						<th>Pax</th>
-						<th>Adult (Rp)</th>
-						<th>CnB (Rp)</th>
-						<th>CwB (Rp)</th>
-						<th>Infant (Rp)</th>
-						<th>Add (Rp)</th>
-						<th>Tax (Rp)</th>
-						<th>Agent Com</th>
-						<th>Staff Com</th>
-						<th>Tips</th>
-						<th>Total Net</th>
-						<th>Total Gross</th>
-						<th>Profit</th>
+						<th>Payment Method</th>
+						<th>Status Payment</th>
+						<th>Total Payment</th>
 					</thead>
 					<tbody>
-						@php
-							$gross_total = 0;
-							$pax_total = 0;
-						@endphp
-						@forelse($data as $i => $d)	
-							@php
-								$gross = $d->itinerary_detail->gross_per_pax*count($d->booking_pax);
-								$gross_total += $d->itinerary_detail->gross_per_pax*count($d->booking_pax);
-								$pax_total += count($d->booking_pax);
-							@endphp		
+						@forelse($data as $i => $d)			
 							<tr>
-								<td class="bg-gray">{{ $d->kode }}</td>	
-								<td class="bg-gray text-center">{{ count($d->booking_pax)}}</td>	
-								<td class="bg-gray text-right">{{ number_format($d->total_adult) }}</td>	
-								<td class="bg-gray text-right">{{ number_format($d->total_child_no_bed) }}</td>	
-								<td class="bg-gray text-right">{{ number_format($d->total_child_with_bed) }}</td>	
-								<td class="text-right bg-gray">{{ number_format($d->total_infant) }}</td>	
-								<td class="text-right bg-gray">{{ number_format($d->total_additional) }}</td>	
-								<td class="text-right bg-gray">{{ number_format($d->tax) }}</td>	
-								<td class="text-right bg-gray">{{ number_format($d->visa) }}</td>	
-								<td class="text-right bg-gray">{{ number_format($d->staff_com) }}</td>	
-								<td class="text-right bg-gray">{{ number_format($d->tips) }}</td>	
-								<td class="text-right bg-gray">{{ number_format($d->total) }}</td>	
-								<td class="text-right bg-gray">{{ number_format($gross) }}</td>	
-								<td class="text-right bg-gray">{{ number_format($d->total-$gross) }}</td>	
+								<td class="bg-gray">{{ $d->code }}</td>	
+								<td class="bg-gray">{{ $d->booking->kode }}</td>	
+								<td class="bg-gray">{{ $d->payment_method }}</td>	
+								<td class="text-center bg-gray">
+									@if ($d->status_payment == 'Approve')
+										<span class="badge badge-pill badge-primary">{{ $d->status_payment }}</span>
+									@else
+										<span class="badge badge-pill badge-danger">{{ $d->status_payment }}</span>
+									@endif
+								</td>	
+								<td class="text-right bg-gray">{{ number_format($d->total_payment) }}</td>	
 							</tr>
 						@empty
 							<tr>
 								<td colspan="5" class="text-center">Data Not Found</td>
 							</tr>
 						@endforelse
-						<tr>
-							<th>Total</th>
-							<th class="text-center">{{ $pax_total }}</th>
-							<th class="text-right">{{ number_format($data->sum('total_adult')) }}</th>
-							<th class="text-right">{{ number_format($data->sum('total_child_no_bed')) }}</th>
-							<th class="text-right">{{ number_format($data->sum('total_child_with_bed')) }}</th>
-							<th class="text-right">{{ number_format($data->sum('total_infant')) }}</th>
-							<th class="text-right">{{ number_format($data->sum('total_additional')) }}</th>
-							<th class="text-right">{{ number_format($data->sum('tax')) }}</th>
-							<th class="text-right">{{ number_format($data->sum('visa')) }}</th>
-							<th class="text-right">{{ number_format($data->sum('staff_com')) }}</th>
-							<th class="text-right">{{ number_format($data->sum('tips')) }}</th>
-							<th class="text-right">{{ number_format($data->sum('total')) }}</th>
-							<th class="text-right">{{ number_format($gross_total) }}</th>
-							<th class="text-right">{{ number_format($data->sum('total') - $gross_total) }}</th>
-						</tr>
 					</tbody>
 				</table>
 			</div>

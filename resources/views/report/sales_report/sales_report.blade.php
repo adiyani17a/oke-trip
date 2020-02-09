@@ -195,10 +195,6 @@
 	        body{
 	        	background-color: white !important;
 	        }
-	        
-	        .mb-3{
-	        	visibility: none;
-	        }
 
 	        .table-margin{
 				margin-top: 0px;
@@ -228,9 +224,6 @@
 		}
 		.hidden{
 			display: none;
-		}
-		.bg-gray{
-			background: white;
 		}
     </style>
   	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
@@ -264,82 +257,30 @@
 	</header>
 	<div id="isi" class="container">
 		<div class="row table-margin">
-			<div class="col-sm-3 mb-3">
-				<label><b>Tanggal</b></label>
-				<input type="text" class="daterange form-control" name="daterange" value="{{ carbon\carbon::now()->startOfMonth()->format('d/m/Y') }} - {{ carbon\carbon::now()->endOfMonth()->format('d/m/Y') }}" />
-				<input type="hidden" id="start" value="{{ carbon\carbon::now()->startOfMonth()->format('Y-m-d') }}">
-				<input type="hidden" id="end" value="{{ carbon\carbon::now()->endOfMonth()->format('Y-m-d') }}">
-			</div>
-			<div class="col-sm-3 mb-3">
-				<label class="d-block"><b>&nbsp;&nbsp;&nbsp;&nbsp;</b></label>
-				<button class="btn btn-primary" onclick="searching()"><i class="fas fa-search"></i> Search</button>
-			</div>
 			<div class="col-sm-12">
-				<table class="table table-bordered">
+				<div class="col-sm-3">
+					<label><b>Tanggal</b></label>
+					<input type="text" class="daterange form-control" name="daterange" value="{{ carbon\carbon::now()->startOfMonth()->format('d/m/Y') }} - {{ carbon\carbon::now()->endOfMonth()->format('d/m/Y') }}" />
+					<input type="hidden" id="start" value="{{ carbon\carbon::now()->startOfMonth()->format('Y-m-d') }}">
+					<input type="hidden" id="end" value="{{ carbon\carbon::now()->endOfMonth()->format('Y-m-d') }}">
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="col-sm-12 text-center loading hidden">
+	                <i class="fas fa-circle-notch fa-spin"  style="font-size: 38px;margin-top: 20px;color: hotpink"></i>
+	            </div>
+				<canvas id="myChart"></canvas>
+			</div>
+			<div class="col-sm-6">
+				<table id="datatable" class="table table-bordered">
+					<caption>Jumlah Penjualan Berdasarkan Agen</caption>
 					<thead>
-						<th>Booking Code</th>
-						<th>Pax</th>
-						<th>Adult (Rp)</th>
-						<th>CnB (Rp)</th>
-						<th>CwB (Rp)</th>
-						<th>Infant (Rp)</th>
-						<th>Add (Rp)</th>
-						<th>Tax (Rp)</th>
-						<th>Agent Com</th>
-						<th>Staff Com</th>
-						<th>Tips</th>
+						<th>Nama Agen</th>
+						<th>Jumlah Pax</th>
 						<th>Total Net</th>
-						<th>Total Gross</th>
-						<th>Profit</th>
 					</thead>
 					<tbody>
-						@php
-							$gross_total = 0;
-							$pax_total = 0;
-						@endphp
-						@forelse($data as $i => $d)	
-							@php
-								$gross = $d->itinerary_detail->gross_per_pax*count($d->booking_pax);
-								$gross_total += $d->itinerary_detail->gross_per_pax*count($d->booking_pax);
-								$pax_total += count($d->booking_pax);
-							@endphp		
-							<tr>
-								<td class="bg-gray">{{ $d->kode }}</td>	
-								<td class="bg-gray text-center">{{ count($d->booking_pax)}}</td>	
-								<td class="bg-gray text-right">{{ number_format($d->total_adult) }}</td>	
-								<td class="bg-gray text-right">{{ number_format($d->total_child_no_bed) }}</td>	
-								<td class="bg-gray text-right">{{ number_format($d->total_child_with_bed) }}</td>	
-								<td class="text-right bg-gray">{{ number_format($d->total_infant) }}</td>	
-								<td class="text-right bg-gray">{{ number_format($d->total_additional) }}</td>	
-								<td class="text-right bg-gray">{{ number_format($d->tax) }}</td>	
-								<td class="text-right bg-gray">{{ number_format($d->visa) }}</td>	
-								<td class="text-right bg-gray">{{ number_format($d->staff_com) }}</td>	
-								<td class="text-right bg-gray">{{ number_format($d->tips) }}</td>	
-								<td class="text-right bg-gray">{{ number_format($d->total) }}</td>	
-								<td class="text-right bg-gray">{{ number_format($gross) }}</td>	
-								<td class="text-right bg-gray">{{ number_format($d->total-$gross) }}</td>	
-							</tr>
-						@empty
-							<tr>
-								<td colspan="5" class="text-center">Data Not Found</td>
-							</tr>
-						@endforelse
-						<tr>
-							<th>Total</th>
-							<th class="text-center">{{ $pax_total }}</th>
-							<th class="text-right">{{ number_format($data->sum('total_adult')) }}</th>
-							<th class="text-right">{{ number_format($data->sum('total_child_no_bed')) }}</th>
-							<th class="text-right">{{ number_format($data->sum('total_child_with_bed')) }}</th>
-							<th class="text-right">{{ number_format($data->sum('total_infant')) }}</th>
-							<th class="text-right">{{ number_format($data->sum('total_additional')) }}</th>
-							<th class="text-right">{{ number_format($data->sum('tax')) }}</th>
-							<th class="text-right">{{ number_format($data->sum('visa')) }}</th>
-							<th class="text-right">{{ number_format($data->sum('staff_com')) }}</th>
-							<th class="text-right">{{ number_format($data->sum('tips')) }}</th>
-							<th class="text-right">{{ number_format($data->sum('total')) }}</th>
-							<th class="text-right">{{ number_format($gross_total) }}</th>
-							<th class="text-right">{{ number_format($data->sum('total') - $gross_total) }}</th>
-						</tr>
+					
 					</tbody>
 				</table>
 			</div>
@@ -357,6 +298,7 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script type="text/javascript">
+	var chart;
 	$(function() {
 	    $('.daterange').daterangepicker({
 	        autoclose: true,
@@ -365,22 +307,145 @@
 	          format: 'DD/MM/YYYY'
 	      }     
 	    }, function(start, end, label) {
-	        $('#start').val(start.format('YYYY-MM-DD'));
-	        $('#end').val(end.format('YYYY-MM-DD'));
+	        getDataDestination(start.format('YYYY-MM-DD'),end.format('YYYY-MM-DD'));
+	        $('#start').val(start);
+	        $('#end').val(end);
+	        table.ajax.reload(null,false);
 	    });
 	});
+
+	function dynamicColors() {
+	    var r = Math.floor(Math.random() * 255);
+	    var g = Math.floor(Math.random() * 255);
+	    var b = Math.floor(Math.random() * 255);
+	    return "rgba(" + r + "," + g + "," + b + ")";
+	}
+
+	setTimeout(function() {
+		try{
+	    	chart.update();
+		}catch(err){
+
+		}
+	}, 0);
+
+	function getDataDestination(start = `{{ carbon\carbon::now()->startOfMonth()->format('Y-m-d') }}`,end = `{{ carbon\carbon::now()->endOfMonth()->format('Y-m-d') }}`) {
+		$('.loading').removeClass('hidden');
+	    $.ajax({
+	        url: '{{ route('getDataDestinationSalesReport') }}',
+	        data: {
+	            start,
+	            end
+	        },
+	        type: 'get',
+	        success: function(data) {
+				$('.loading').addClass('hidden');
+	            var pie = [];
+	            var pie = [];
+	            var pie = [];
+	            var table;
+	            var color = [];
+	            pie['labels'] = [];
+	            pie['value'] = [];
+	            pie['color'] = [];
+
+	            data.data.forEach((d,i)=>{
+	            	pie['value'].push(d.data);
+	            	pie['labels'].push(d.labels);
+		            pie['color'].push(dynamicColors());
+	            });
+	   
+	            ctx = document.getElementById('myChart').getContext('2d');
+	            chart = new Chart(ctx, {
+	                // The type of chart we want to create
+	                type: 'doughnut',
+	                // The data for our dataset
+	                data: {
+	                    datasets: [{
+	                        data: pie['value'],
+	                        backgroundColor: pie['color']
+	                    }],
+	                    labels: pie['labels']
+	                },
+	                // Configuration options go here
+	                options: {
+	                    tooltips: {
+	                        callbacks: {
+	                            label: function(tooltipItem, data) {
+	                                var value = data.datasets[0].data[tooltipItem.index];
+	                                if (parseInt(value) >= 1000) {
+	                                    return 'Rp. ' + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	                                } else {
+	                                    return 'Rp. ' + value;
+	                                }
+	                            }
+	                        }
+	                    },
+	                    title: {
+	                        display: true,
+	                        text: 'Penjualan Berdasarkan Destinasi'
+	                    },
+	                    responsive: true,
+	                    maintainAspectRatio: false,
+	                    legend: {
+	                        position: 'bottom',
+	                        labels: {
+	                            boxWidth: 12,
+	                            fontSize: 11,
+	                        }
+	                    },
+	                    animation: {
+	                        animateScale: true,
+	                        animateRotate: false,
+	                    },
+	                }
+	            });
+	            chart.canvas.parentNode.style.height = '256px';
+	            chart.canvas.parentNode.style.width = '256px';
+	        },
+	        error: function(data) {
+
+	        }
+	    });
+	}
 
 	$('.select2').select2({
 	    theme: "bootstrap4",
 	    width:'100%'
 	});
 
-	function searching(argument) {
-		var start = $('#start').val();
-        var end = $('#end').val();
-		location.href = '{{ route('paymentReport') }}?start='+start+'&end='+end;
-	}
-
+	$(document).ready(function() {
+	    table = $('#datatable').DataTable({
+	        processing: true,
+	        serverSide: true,
+	        ajax: {
+	            url: '{{ route('datatableSalesReport') }}',
+	            data:{
+	            	awal(){
+	            		return $('#start').val();
+	            	},
+	            	akhir(){
+	            		return $('#end').val();
+	            	}
+	            }
+	        },
+	        columns: [{
+	            data: 'name',
+	            name: 'name',
+	            class: 'text-left'
+	        }, {
+	            data: 'pax',
+	            name: 'pax',
+	            class: 'text-center'
+	        }, {
+	            data: 'total',
+	            name: 'total',
+	            render: $.fn.dataTable.render.number(',', '.', 2),
+	            class: 'text-right'
+	        }]
+	    });
+		getDataDestination();
+	})
 	function excel(argument) {
 	    var blob = b64toBlob(btoa($('div[id=isi]').html().replace(/[\u00A0-\u2666]/g, function(c) {
 	        return '&#' + c.charCodeAt(0) + ';';

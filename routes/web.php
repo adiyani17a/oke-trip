@@ -71,6 +71,30 @@ Route::group(['middleware' => 'auth'], function () {
       'as' => "getDataDestination"
     ]);
   });
+
+  Route::group(["prefix" => "report/sales-report"], function(){
+    Route::get('/', [
+      'uses' => "ReportController@salesReport",
+      'as' => "salesReport"
+    ]);
+
+    Route::get('/datatable-agen', [
+      'uses' => "ReportController@datatableSalesReport",
+      'as' => "datatableSalesReport"
+    ]);
+
+    Route::get('/get-data-destination', [
+      'uses' => "ReportController@getDataDestinationSalesReport",
+      'as' => "getDataDestinationSalesReport"
+    ]);
+  });
+
+  Route::group(["prefix" => "report/payment-report"], function(){
+    Route::get('/', [
+      'uses' => "ReportController@paymentReport",
+      'as' => "paymentReport"
+    ]);
+  });
 });
 
   
