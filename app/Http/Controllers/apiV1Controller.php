@@ -63,7 +63,7 @@ class apiV1Controller extends Controller
 		$data['carousel'][0] = ['id'=>1,'img'=>'http://panel.oke-trip.com'.$carousel->carousel_1,'caption'=>$carousel->note_1];
 		$data['carousel'][1] = ['id'=>2,'img'=>'http://panel.oke-trip.com'.$carousel->carousel_2,'caption'=>$carousel->note_2];
 		$data['carousel'][2] = ['id'=>3,'img'=>'http://panel.oke-trip.com'.$carousel->carousel_3,'caption'=>$carousel->note_3];
-		
+
         $data['blog'] = $this->model->blog()->get();
 
 
@@ -933,10 +933,16 @@ class apiV1Controller extends Controller
 						$q->where('adult_price','<=',filter_var($price[1],FILTER_SANITIZE_NUMBER_INT));
 					}
 
-					if ($date['startDate'] != null) {
+					if ($date['startDate'] >= carbon::now()->format('Y-m-d')) {
 						$q->where('start','>=',$date['startDate']);
-						$q->where('end','<=',$date['endDate']);
+					}else{
+						$q->where('start','>=',carbon::now()->format('Y-m-d'));
 					}
+
+					if ($date['endDate'] != null) {
+						$q->where('start','<=',$date['endDate']);
+					}
+
 					$q->where('seat_remain','>',0);
 					$q->where(function($q1) use ($users_id){
 						$q1->Where('booked_by',null);
