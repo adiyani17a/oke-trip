@@ -57,7 +57,13 @@ class apiV1Controller extends Controller
 		$data['destination'] = $this->model->destination()
 									->where('active','true')
 									->with(['itinerary_destination'])->take(6)->get();
-		$data['carousel'] = $this->model->carousel()->first();
+
+		$carousel = $this->model->carousel()->first();
+
+		$data['carousel'][0] = ['id'=>1,'img'=>'http://panel.oke-trip.com'.$carousel->carousel_1,'caption'=>$carousel->note_1];
+		$data['carousel'][1] = ['id'=>2,'img'=>'http://panel.oke-trip.com'.$carousel->carousel_2,'caption'=>$carousel->note_2];
+		$data['carousel'][2] = ['id'=>3,'img'=>'http://panel.oke-trip.com'.$carousel->carousel_3,'caption'=>$carousel->note_3];
+		
         $data['blog'] = $this->model->blog()->get();
 
 
