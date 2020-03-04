@@ -29,6 +29,7 @@ class HomeController extends Controller
     {
         $token = generateToken();
         $groupMenu = $this->model->groupMenu()->get();
+        dd($groupMenu);
         return view('home',compact('token','groupMenu'));
     }
 }
