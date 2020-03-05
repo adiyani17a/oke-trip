@@ -951,7 +951,7 @@ class apiV1Controller extends Controller
 				})
 				->get();
 		
-
+		dd($data);
 		$country = $this->model->destination()->where('active','true')->get();
 
 		$carousel[0] = ['id'=>1,'img'=>'http://panel.oke-trip.com'.$data[0]->carousel_1,'caption'=>$data[0]->note_1];
