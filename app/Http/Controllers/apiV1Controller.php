@@ -954,8 +954,11 @@ class apiV1Controller extends Controller
 
 		$country = $this->model->destination()->where('active','true')->get();
 
+		$carousel[0] = ['id'=>1,'img'=>'http://panel.oke-trip.com'.$data[0]->carousel_1,'caption'=>$data[0]->note_1];
+		$carousel[1] = ['id'=>2,'img'=>'http://panel.oke-trip.com'.$data[0]->carousel_2,'caption'=>$data[0]->note_2];
+		$carousel[2] = ['id'=>3,'img'=>'http://panel.oke-trip.com'.$data[0]->carousel_3,'caption'=>$data[0]->note_3];
 
-		return response::json(['status'=>200,'data'=>$data,'country'=>$country]);
+		return response::json(['status'=>200,'data'=>$data,'country'=>$country,'carousel'=>$carousel]);
 	}
 
 	public function getPartner(Request $req)
