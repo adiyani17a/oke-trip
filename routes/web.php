@@ -569,7 +569,7 @@ Route::group(['middleware' => 'cors'], function () {
         'as' => "getData"
       ]);
 
-      Route::post('/get-data-itinerary', [
+      Route::get('/get-data-itinerary', [
         'uses' => "apiV1Controller@getDataItinerary",
         'as' => "getDataItinerary"
       ]);
