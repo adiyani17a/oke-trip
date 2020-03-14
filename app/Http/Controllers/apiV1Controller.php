@@ -113,9 +113,9 @@ class apiV1Controller extends Controller
 										}])->where('id',$id)
 										->first();
 
-		$carousel[0] = ['id'=>1,'img'=>'http://panel.oke-trip.com'.$data->carousel_1,'caption'=>$data->note_1];
-		$carousel[1] = ['id'=>2,'img'=>'http://panel.oke-trip.com'.$data->carousel_2,'caption'=>$data->note_2];
-		$carousel[2] = ['id'=>3,'img'=>'http://panel.oke-trip.com'.$data->carousel_3,'caption'=>$data->note_3];
+		$carousel[0] = ['id'=>1,'img'=>'http://panel.oke-trip.com/'.$data->carousel_1,'caption'=>$data->note_1];
+		$carousel[1] = ['id'=>2,'img'=>'http://panel.oke-trip.com/'.$data->carousel_2,'caption'=>$data->note_2];
+		$carousel[2] = ['id'=>3,'img'=>'http://panel.oke-trip.com/'.$data->carousel_3,'caption'=>$data->note_3];
 
 		return response::json(['status'=>200,'data'=>$data,'carousel'=>$carousel]);
 	}
