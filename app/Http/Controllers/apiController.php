@@ -1038,6 +1038,7 @@ class apiController extends Controller
             $this->model->itinerary()->create($data);
 
             for ($i=0; $i < count($formDetail->itineraryItems); $i++) { 
+
                 $data = array(
                     'id' => $id,
                     'dt' => $i+1,
@@ -1060,6 +1061,7 @@ class apiController extends Controller
                     'updated_by' => Auth::user()->id,
                 );
 
+                $data['gross_per_pax'] = 0;
                 $this->model->itinerary_detail()->create($data);
             }
 
@@ -1246,6 +1248,7 @@ class apiController extends Controller
             			array_push($notDelete, $dt);
 	                    $data['code'] = $form->code.'/'.str_pad($dt,3,'0',STR_PAD_LEFT);
 	                    $data['created_by'] = Auth::user()->id;
+                        $data['gross_per_pax'] = 0;
 	                    $this->model->itinerary_detail()->create($data);
 	                }else{
                         $dataBooking = $this->model->itinerary_detail()->where('id',$id)->where('dt',$formDetail->itineraryItems[$i]->dt)->first();
