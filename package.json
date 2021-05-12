@@ -30,7 +30,7 @@
     "accounting": "^0.4.1",
     "admin-lte": "^3.0.0-alpha.2",
     "bootstrap-vue": "^2.0.0-rc.23",
-    "chart.js": "^2.9.3",
+    "chart.js": "^2.9.4",
     "moment": "^2.24.0",
     "tiptap-vuetify": "^1.4.1",
     "v-money": "^0.8.1",
